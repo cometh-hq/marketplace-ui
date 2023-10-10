@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+
+  /* 
+   * Main colors used for backgrounds and text.
+   * "foreground" is used for text and icons in these states.
+   *
+   * You can consult this link to understand impact of each variable.
+   * ==> https://www.figma.com/file/Zu4BtlBGkkDfCULfrPmYsk/Alembic-Marketplace-CSS?type=design&t=G8sE3G9G6kDVz4UK-6
+   */
+
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+
+  /* Background for NFTs and actions */
+  --muted: 0 0% 96%;
+  --muted-foreground: 240 1% 46.9%;
+
+  /* Background colors for dropdown */
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 47.4% 11.2%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+
+  /* Background for Attributes and Last activities */
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 47.4% 11.2%;
+
+
+  /* 
+   * Main colors used for ui buttons, badges, links, and other elements that need to stand out.
+   * "foreground" is used for text and icons in these states.
+   */
+
+  --primary: 0 0% 14%;
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  --accent: 0 0% 96%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+
+  --pending: 30 100% 50%;
+  --pending-foreground: 0 0% 100%;
+
+  --success: 120 40% 50%;
+  --success-foreground: 0 0% 100%;
+
+  --destructive: 0 60% 50%;
+  --destructive-foreground: 210 40% 98%;
+
+  --info: 194 78% 97%;
+  --info-foreground: 195 35% 60%;
+
+  --ring: 215 20.2% 65.1%;
+
+  --radius: 8px;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1 "calt" 1;
+  }
+}
