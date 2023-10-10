@@ -43,7 +43,7 @@ The **NEXT_PUBLIC_COMETH_API_URL** is set by default and shouldn't be changed un
 
 ### 3. Customizing Your Marketplace
 
-# **Manifest:**
+#### **Manifest:**
 Use the manifest.ts file to configure essential aspects of your marketplace. It lets you set:
 - The name of your marketplace.
 - Contract addresses.
@@ -53,7 +53,7 @@ Use the manifest.ts file to configure essential aspects of your marketplace. It 
 
 🔧 **Important:** It's crucial to customize the `manifest.ts` file to align with the specifics of your marketplace.
 
-# **Global configuration:**
+#### **Global configuration:**
 You can manage the configuration of your site directly from the `site.ts` file. This allows you to update site name, metadatas and links.
 
 ```
@@ -77,7 +77,7 @@ export const siteConfig = {
 }
 ```
 
-# **Theming:**
+#### **Theming:**
 The appearance of your marketplace is fully customizable via the provided CSS file. Customize the `styles/globals.css` and `tailwind.config.js` files to define colors, fonts, etc.
 
 Additionally, for a deeper dive into theming and styling, we invite you to consult the [shacdn documentation](https://ui.shadcn.com/docs/theming).
