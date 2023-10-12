@@ -159,7 +159,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
               {
                 asset.lowestSalePrice 
                   ? <Price amount={asset.lowestSalePrice} />
-                  : (owner ? <SellAssetButton asset={asset as unknown as AssetWithTradeData} isVariantLink /> : 'No listed yet')
+                  : (owner ? <SellAssetButton asset={asset as unknown as AssetWithTradeData} isVariantLink /> : 'Not listed yet')
               }
             </div>
             <div className="text-sm">

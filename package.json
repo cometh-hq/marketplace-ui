@@ -14,7 +14,6 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache"
   },
   "dependencies": {
-    "@alembic/account-abstraction-sdk": "^0.2.1",
     "@alembic/nft-api-sdk@develop": "^1.1.2",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",
@@ -66,15 +65,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.1",
-    "react-indiana-drag-scroll": "^2.2.0",
     "react-intersection-observer": "^9.5.2",
     "react-spring": "^9.7.2",
-    "rxjs": "^7.8.1",
     "server-only": "^0.0.1",
     "sharp": "^0.31.3",
     "superjson": "^1.12.4",
     "tailwind-merge": "^1.13.2",
     "tailwindcss-animate": "^1.0.6",
+    "usehooks-ts": "^2.9.1",
     "viem": "^1.2.6",
     "wagmi": "^1.4.2",
     "zod": "^3.21.4"

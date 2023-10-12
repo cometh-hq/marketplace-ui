@@ -17,7 +17,7 @@ First, install the required dependencies and start application.
 
 ```bash
 # Install dependencies
-yarn
+yarn install
 
 # Start the application
 yarn dev
@@ -34,7 +34,7 @@ NEXT_PUBLIC_NODE_ENV=development
 NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS=<CONTRACT_ADDRESS>
 
 # Cometh
-NEXT_PUBLIC_COMETH_API_URL:"https://api.marketplace.prod.core.cometh.tech/v1"
+NEXT_PUBLIC_COMETH_API_URL="https://api.marketplace.prod.core.cometh.tech/v1"
 ```
 
 🔧 Please replace `<CONTRACT_ADDRESS>` with the appropriate Zero Ex contract address.

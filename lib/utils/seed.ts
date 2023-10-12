@@ -24,11 +24,6 @@ export const marketplaceFiltersDescription = new Map<
   MarketplaceFilterKey, { values: Set<string> }
 >()
 
-type Attribute = {
-  type?: string
-  value?: string
-}
-
 export const seedFilters = async (): Promise<typeof marketplaceFiltersDescription> => {
   const filters = new Map<MarketplaceFilterKey, { values: Set<string> }>()
   let attributes: any[] = [];
