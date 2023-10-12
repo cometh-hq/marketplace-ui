@@ -2,7 +2,6 @@ import { useNFTFilters } from "@/lib/utils/nft-filters"
 
 import { Button } from "../../ui/button"
 import { usePathname, useSearchParams } from "next/navigation"
-import { useCallback } from "react"
 import Link from "next/link"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 
@@ -37,7 +36,7 @@ export function NFTStateFilters() {
     <div className="flex gap-2">
       <NFTStateFilterItem label="All" isSelected={!get('isOnSale')} />
       <NFTStateFilterItem label="On Sale" isOnSale isSelected={Boolean(get('isOnSale'))}  />
-      {!isOnProfilePage && (
+      {!isOnProfilePage || !viewerAddress && (
         <Link href={`/profile/${viewerAddress}`}>
           <NFTStateFilterItem label="Owned" />
         </Link>
