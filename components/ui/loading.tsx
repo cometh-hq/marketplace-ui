@@ -1,5 +1,4 @@
 import { Loader } from "lucide-react"
-import cx from 'classnames'
 
 export const Loading = () => {
   return (
