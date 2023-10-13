@@ -2,7 +2,7 @@ import { Manifest } from "@/types/manifest"
 
 const manifest: Manifest = {
   name: "Brand",
-  contractAddress: "0x2014ff34f615B811d784a7947492482Ca2E8A016",
+  contractAddress: "0x85bc2e8aaad5dbc347db49ea45d95486279ed918",
   themeClass: "theme-base",
 
   pages: {
