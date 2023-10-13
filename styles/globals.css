@@ -4,14 +4,7 @@
 
 :root {
 
-  /* 
-   * Main colors used for backgrounds and text.
-   * "foreground" is used for text and icons in these states.
-   *
-   * You can consult this link to understand impact of each variable.
-   * ==> https://www.figma.com/file/Zu4BtlBGkkDfCULfrPmYsk/Alembic-Marketplace-CSS?type=design&t=G8sE3G9G6kDVz4UK-6
-   */
-
+  /* Main colors used for backgrounds and text. */
   --background: 0 0% 100%;
   --foreground: 222.2 47.4% 11.2%;
 
@@ -23,27 +16,22 @@
   --popover: 0 0% 100%;
   --popover-foreground: 222.2 47.4% 11.2%;
 
-  --border: 214.3 31.8% 91.4%;
+  --border: 234 11.3% 98.6%;
   --input: 214.3 31.8% 91.4%;
 
   /* Background for Attributes and Last activities */
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 47.4% 11.2%;
+  --card: 234 11.3% 98.6%;
+  --card-foreground: 0 0% 0%;
 
+  /* Main colors used for ui buttons, badges, links, etc. */
+  --primary: 231 92.1% 52.9%;
+  --primary-foreground: 0 0% 100%;
 
-  /* 
-   * Main colors used for ui buttons, badges, links, and other elements that need to stand out.
-   * "foreground" is used for text and icons in these states.
-   */
+  --secondary: 73.7 88.5% 66.3%;
+  --secondary-foreground: 0 0% 0%;
 
-  --primary: 0 0% 14%;
-  --primary-foreground: 210 40% 98%;
-
-  --secondary: 0 0% 96%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-
-  --accent: 0 0% 96%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --accent: 243.3 63.1% 11.2%;
+  --accent-foreground: 0 0% 100%;
 
   --pending: 30 100% 50%;
   --pending-foreground: 0 0% 100%;
