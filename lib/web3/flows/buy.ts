@@ -37,7 +37,7 @@ export const fetchRequiredBuyingSteps = async ({
   address,
   wrappedContractAddress,
 }: FetchRequiredBuyingStepsOptions) => {
-  const _price = asset.lowestSalePrice
+  const _price = asset.orderbookStats.lowestSalePrice
   if (!_price) {
     throw new Error(
       `Asset has an invalid price, expected BigNumber, got '${_price}'`
