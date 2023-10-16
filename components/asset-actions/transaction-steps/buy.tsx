@@ -46,7 +46,7 @@ export function BuyStep({ asset, onValid, setTxHash }: BuyStepProps) {
           <ButtonLoading />
         ) : (
           <Button className="flex gap-1" onClick={onSubmit}>
-            Buy now for <Price amount={asset.lowestSalePrice} />
+            Buy now for <Price amount={asset.orderbookStats.lowestSalePrice} />
           </Button>
         )}
       </SwitchNetwork>
