@@ -1,16 +1,16 @@
 import { Manifest } from "@/types/manifest"
 
 const manifest: Manifest = {
-  name: "The Big Whale",
-  contractAddress: "0xe7c96dbdef402eac651ede6330f46fbbdd97f175",
+  name: "Brand",
+  contractAddress: "0x2014ff34f615B811d784a7947492482Ca2E8A016",
   themeClass: "theme-base",
 
   pages: {
     asset: {
       // if you want to exclude some attributes from the filters, add them here
-      excludedAttributesInFilters: ["Border,Spout"],
+      excludedAttributesInFilters: [],
       // main attributes shown in the asset page under the asset name
-      mainAttributes: ["Grade", "Event", "Whale"],
+      mainAttributes: ["League", "Club", "Season"],
     },
   },
 
