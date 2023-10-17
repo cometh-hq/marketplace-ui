@@ -13,6 +13,7 @@ import {
 import Link from "next/link"
 import qs from 'qs'
 import { shortenTokenId } from "@/lib/utils/token"
+import { useNFTFilters } from "@/lib/utils/nft-filters"
 
 export type AssetDetailsProps = {
   asset: AssetWithTradeData
@@ -22,15 +23,17 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
   const attributes = useMemo(() => {
     const mainAttributes = manifest.pages?.asset?.mainAttributes ?? []
     return asset.metadata.attributes?.reduce((p, c) => {
-      if (mainAttributes.includes(c.trait_type)) p.push(`${c.value}`)
+      if (mainAttributes.includes(c.trait_type)) {
+        p.push({ trait_type: c.trait_type, value: c.value })
+      }
       return p
-    }, [] as string[])
+    }, [] as { trait_type: string, value: string | number | boolean }[])
   }, [asset])
 
   const links = useMemo(() => {
-    return attributes?.map((attributeValue, index) => {
-      const property = manifest.pages?.asset?.mainAttributes?.[index].toLowerCase()
-      const value = `${attributeValue}`
+    return attributes?.map((attribute, index) => {
+      const property = attribute.trait_type
+      const value = `${attribute.value}`
       const href = `/marketplace?${qs.stringify({
         [property as string]: `${value}`,
       })}`
