@@ -26,12 +26,12 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
         <AssetStatusBadge status="listed" />
-        <Price amount={asset.lowestSalePrice} size="xl" />
+        <Price amount={asset.orderbookStats.lowestSalePrice} size="xl" />
       </ProductBlockDividedColumn>
 
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Best Offer</ProductBlockLabel>
-        <Price amount={asset.highestOfferPrice} size="xl" />
+        <Price amount={asset.orderbookStats.highestOfferPrice} size="xl" />
       </ProductBlockDividedColumn>
 
       <Connected>

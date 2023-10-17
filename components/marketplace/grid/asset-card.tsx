@@ -157,8 +157,8 @@ export function AssetCard({ asset, children }: AssetCardProps) {
             <div className="text-sm">
               <div className="text-[12px] font-medium">Price</div>
               {
-                asset.lowestSalePrice 
-                  ? <Price amount={asset.lowestSalePrice} />
+                asset.orderbookStats.lowestSalePrice 
+                  ? <Price amount={asset.orderbookStats.lowestSalePrice} />
                   : (owner ? <SellAssetButton asset={asset as unknown as AssetWithTradeData} isVariantLink /> : 'Not listed yet')
               }
             </div>
@@ -166,8 +166,8 @@ export function AssetCard({ asset, children }: AssetCardProps) {
               <div className="text-[12px] font-medium">Highest bid</div>
               <div className="text-end">
                 {
-                  asset.lowestSalePrice 
-                    ? <Price amount={asset.lowestSalePrice} />
+                  asset.orderbookStats.lowestSalePrice 
+                    ? <Price amount={asset.orderbookStats.lowestSalePrice} />
                     : (!owner ? <MakeBuyOfferButton asset={asset as unknown as AssetWithTradeData} isVariantLink /> : 'No offers yet')
                 }
               </div>

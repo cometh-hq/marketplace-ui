@@ -19,7 +19,7 @@ export const BestOfferColumn = ({ asset }: BestOfferColumnProps) => {
           Best Offer
         </span>
       </ProductBlockLabel>
-      <Price amount={asset.highestOfferPrice} size="lg" />
+      <Price amount={asset.orderbookStats.highestOfferPrice} size="lg" />
     </ProductBlockDividedColumn>
   )
 }

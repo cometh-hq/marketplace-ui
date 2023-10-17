@@ -28,7 +28,7 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
 
   return (
     <TransactionDialogButton
-      label={<span>Buy now for <Price amount={asset.lowestSalePrice} /></span>}
+      label={<span>Buy now for <Price amount={asset.orderbookStats.lowestSalePrice} /></span>}
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
@@ -37,7 +37,7 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
       <Switch value={currentStep.value}>
         <Case value="add-funds">
           <FundsStep
-            price={BigNumber.from(asset.highestOfferPrice ?? 0)}
+            price={BigNumber.from(asset.orderbookStats.highestOfferPrice ?? 0)}
             onValid={nextStep}
           />
         </Case>

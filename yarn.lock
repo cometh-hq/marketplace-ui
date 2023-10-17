@@ -12,10 +12,10 @@
   resolved "https://registry.npmjs.org/@adraffy/ens-normalize/-/ens-normalize-1.9.0.tgz"
   integrity sha512-iowxq3U30sghZotgl4s/oJRci6WPBfNO5YYgk2cIOMCHr3LeGPcsZjCEr+33Q4N+oV3OABDAtA+pyvWjbvBifQ==
 
-"@alembic/nft-api-sdk@develop@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@alembic/nft-api-sdk/-/nft-api-sdk-1.1.2.tgz#ade025d6f5dec3c7364203dd6aeda9748a0bed88"
-  integrity sha512-XM9VvBeHW1NeY3WJc8HqDvF0J3wM8CGeNhnmniWGSvqNTFdV/d5bOCHzytsz+FXVC7gmo+6Ru5He2xwWhwDLcw==
+"@alembic/nft-api-sdk@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@alembic/nft-api-sdk/-/nft-api-sdk-1.1.4.tgz#683bcec4e633622dfa8a3f4ffee649d72f668c8b"
+  integrity sha512-fPYH8kqGi+TTe4b2cBx/cHFWdOHNgmWe2GwPtg6/hRcJQRmqjOeqfQuuVL87gf6cfJ+S2rnmzGx5Tmwp8+0zKg==
   dependencies:
     axios "^1.4.0"
     form-data "4.x"
