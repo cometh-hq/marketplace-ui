@@ -11,7 +11,7 @@ import { DateTime } from "luxon"
 
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { calculateFeesAmount } from "@/lib/utils/fees"
+import { calculateFeesAmount, totalFeesFromCollection } from "@/lib/utils/fees"
 
 export type BuildBuyOfferOrderOptions = {
   asset: AssetWithTradeData
@@ -44,11 +44,9 @@ export const useBuildBuyOfferOrder = () => {
         type: "ERC721",
       }
 
-      const totalFees = fees.reduce((total, fee) => total.add(fee.amount), BigNumber.from(0))
-
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
         tokenAddress: manifest.currency.wrapped.address,
-        amount: price.sub(totalFees).toString(),
+        amount: price.sub(totalFeesFromCollection(fees)).toString(),
         type: "ERC20",
       }
 
