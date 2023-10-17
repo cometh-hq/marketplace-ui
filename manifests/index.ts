@@ -8,7 +8,7 @@ const manifest: Manifest = {
   pages: {
     asset: {
       // if you want to exclude some attributes from the filters, add them here
-      excludedAttributesInFilters: ["Border,Spout"],
+      excludedAttributesInFilters: ["Border", "Spout"],
       // main attributes shown in the asset page under the asset name
       mainAttributes: ["Grade", "Event", "Whale"],
     },
