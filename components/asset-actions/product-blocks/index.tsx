@@ -14,7 +14,7 @@ export type ProductBlockProps = {
 
 export function ProductBlock({ asset }: ProductBlockProps) {
   const viewerAddress = useCurrentViewerAddress()
-  const isOnSale = !!asset.lowestListingPrice
+  const isOnSale = !!asset.orderbookStats.lowestListingPrice
   // const isListed = !!asset.highestOfferPrice
 
   const viewerIsOwner =

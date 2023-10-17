@@ -23,7 +23,7 @@ export type BuyProductBlockProps = {
 
 export function BuyProductBlock({ asset }: BuyProductBlockProps) {
   // const listing = asset.listings?.[0]
-  const listingPrice = asset.lowestSalePrice
+  const listingPrice = asset.orderbookStats.lowestSalePrice
   // if (!listing) return null
 
   return (
