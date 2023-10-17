@@ -4,17 +4,17 @@ import debounce from 'lodash/debounce'
 import { Search } from "lucide-react";
 
 type SearchAssetProps = {
-  onNameChange: (name: string) => void
+  onChange: (name: string) => void
 }
 
-export function SearchAsset({ onNameChange }: SearchAssetProps) {
-  const SearchRef = useRef<HTMLInputElement>(null);
+export function SearchAsset({ onChange }: SearchAssetProps) {
+  const SearchRef = useRef<HTMLInputElement>(null)
 
   const handleChange = useCallback(
     debounce(() => {
-      onNameChange(SearchRef?.current?.value as string)
+      onChange(SearchRef?.current?.value as string)
     }, 300),
-    [SearchRef, onNameChange],
+    [SearchRef, onChange],
   )
 
   return (
@@ -24,7 +24,7 @@ export function SearchAsset({ onNameChange }: SearchAssetProps) {
       placeholder="Search NFT"
       className="h-[40px]"
       icon={
-        <Search size="16" className={"opacity-40 min-w-[17px]"} />
+        <Search size="16" className={"min-w-[17px] opacity-40"} />
       }
       onChange={handleChange}
     />
