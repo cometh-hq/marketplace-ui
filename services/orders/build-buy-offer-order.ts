@@ -31,22 +31,24 @@ export const useBuildBuyOfferOrder = () => {
         .plus({ days: parseInt(validity) })
         .toJSDate()
 
-      const fees: UserFacingFeeStruct[] = [
-        {
-          amount: calculateFeesAmount(price, collection.collectionFees[0].feePercentage),
-          recipient: collection.collectionFees[0].recipientAddress,
-        },
-      ]
-
+      const fees: UserFacingFeeStruct[] = collection.collectionFees.map(fee => {
+        return {
+          amount: calculateFeesAmount(price, fee.feePercentage),
+          recipient: fee.recipientAddress,
+        }
+      })
+    
       const erc721Asset: UserFacingERC721AssetDataSerializedV4 = {
         tokenAddress: asset.contractAddress,
         tokenId: asset.tokenId,
         type: "ERC721",
       }
 
+      const totalFees = fees.reduce((total, fee) => total.add(fee.amount), BigNumber.from(0))
+
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
         tokenAddress: manifest.currency.wrapped.address,
-        amount: price.sub(fees[0].amount).toString(),
+        amount: price.sub(totalFees).toString(),
         type: "ERC20",
       }
 
