@@ -16,33 +16,65 @@ import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { findAssetInSearchResults } from "@/lib/utils/search"
 
 import { comethMarketplaceClient } from "./client"
-
-const ALEMBIC_PAGE_SIZE = 24
+import { manifest } from "@/manifests"
 
 export type SearchOptions = {
-  filters: AssetSearchFilters
+  filters?: Omit<AssetSearchFilters, 'contractAddress'>
   page: number
+  assetsPerPage: number
 }
 
 export type UseSearchOptions = {
-  filters: AssetSearchFilters
+  persistentFilters?: AssetSearchFilters
+  search?: string
+  page?: number
 }
 
-export const search = async ({ filters, page }: SearchOptions) => {
-  const { limit, skip } = {
-    limit: ALEMBIC_PAGE_SIZE,
-    skip: (page - 1) * ALEMBIC_PAGE_SIZE,
+const defaultFilters = {
+  contractAddress: manifest.contractAddress,
+  limit: 200,
+}
+
+const ASSETS_PER_PAGE = 20
+
+export async function getAssetsPaginated(
+  filters?: Omit<AssetSearchFilters, 'contractAddress'>,
+  page: number = 1,
+  assetsPerPage: number = ASSETS_PER_PAGE
+) {
+  const nfts = await comethMarketplaceClient.asset.searchAssets({
+    ...defaultFilters,
+    ...filters,
+    skip: (page - 1) * assetsPerPage,
+    limit: assetsPerPage
+  })
+
+  await Promise.all(
+    nfts.assets.map(async (asset: any) => {
+      if (!asset.metadata.attributes) {
+        const metadata = await fetchAsset({
+          contractAddress: manifest.contractAddress,
+          assetId: asset.tokenId,
+        })
+
+        if (metadata) {
+          asset.metadata.attributes = metadata.metadata.attributes
+        }
+      }
+    }))
+
+  const total = nfts.total
+  const totalPages = Math.ceil(total / assetsPerPage)
+
+  if (page && page >= totalPages) {
+    return { nfts, total, nextPage: false }
   }
 
-  return comethMarketplaceClient.asset.searchAssets({
-    limit,
-    skip,
-    ...filters,
-  })
+  return { nfts, total, nextPage: page + 1 }
 }
 
-export const useSearchAssets = ({ filters }: UseSearchOptions) => {
-  const { filters: qs } = useNFTFilters()
+export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
+  const { filters } = useNFTFilters()
 
   const upperKey = (key: string) => key.charAt(0).toUpperCase() + key.slice(1)
 
@@ -58,9 +90,9 @@ export const useSearchAssets = ({ filters }: UseSearchOptions) => {
 
   const parsedAttributes: [Record<string, string[]>] = [{}]
 
-  Object.keys(qs).forEach((key) => {
+  Object.keys(filters).forEach((key) => {
     if (excludedKeys(key)) {
-      const value = qs[key]
+      const value = filters[key]
       if (value) {
         parsedAttributes[0][upperKey(key)] =
           typeof value === "string" ? [value] : value
@@ -72,29 +104,46 @@ export const useSearchAssets = ({ filters }: UseSearchOptions) => {
     parsedAttributes.pop()
   }
 
-  return useInfiniteQuery(
-    ["alembic", "search", filters],
+  const {
+    data,
+    refetch,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
+    ["alembic", "search", filters, options?.page, options?.search],
     ({ pageParam = 1 }) => {
-      return search({
-        filters: {
-          ...filters,
-          isOnSale: (qs.isOnSale),
-          orderBy: (qs.orderBy) ?? FilterOrderBy.PRICE,
-          direction: (qs.direction) ?? FilterDirection.ASC,
+      return getAssetsPaginated(
+        {
+          isOnSale: (filters.isOnSale),
+          orderBy: (filters.orderBy) ?? FilterOrderBy.PRICE,
+          direction: (filters.direction) ?? FilterDirection.ASC,
           ...(parsedAttributes.length > 0
             ? { attributes: parsedAttributes }
             : {}),
+          name: options?.search,
         },
-        page: pageParam
-      })
+        pageParam,
+        ASSETS_PER_PAGE,
+     )
     },
     {
       cacheTime: 0,
-      getNextPageParam: (lastPage, allPages) => {
-        return allPages.length + 1
+      getNextPageParam: (_, lastPage) => {
+        return lastPage.length + 1
       },
     }
   )
+
+  return {
+    data,
+    refetch,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  }
 }
 
 export type FetchAssetOptions = {
