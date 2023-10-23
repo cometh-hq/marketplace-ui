@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
-import { manifest } from "@/manifests"
-import { useSearchAssets } from "@/services/alembic/search-assets"
+import { useFilterableNFTsQuery } from "@/services/alembic/search-assets"
 import { AssetSearchFilters } from "@alembic/nft-api-sdk"
 
 import { SerializedMarketplacePanelFilters, deserializeFilters } from "@/lib/utils/seed"
@@ -15,7 +14,6 @@ import { NFTStateFilters } from "./nft-state-filters"
 import { MarketplaceSortDropdown } from "./sort-dropdown"
 import { AssetsSearchEmpty } from "./asset-search-empty"
 import { Loading } from "@/components/ui/loading"
-import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { SearchAsset } from "./search-asset"
 
 export type AssetsSearchGridProps = {
@@ -27,42 +25,36 @@ export const AssetsSearchGrid = ({
   filters: filtersRaw,
   filteredBy = {},
 }: any) => {
+  const { ref: loadMoreRef, inView } = useInView({ threshold: 1 })
+  const [search, setSearch] = useState('')
+
   const filtersDefinition = useMemo(
     () => deserializeFilters(filtersRaw), 
     [filtersRaw]
   )
-  const { filters } = useNFTFilters()
 
-  const [isLoadingMore, setIsLoadingMore] = useState(false)
-
-  const [searchName, setSearchName] = useState('')
-
-  const search = useSearchAssets({
-    filters: {
-      contractAddress: manifest.contractAddress,
-      name: searchName,
-      ...filteredBy,
-    },
+  const {
+    data: nfts,
+    refetch,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFilterableNFTsQuery({
+    search,
+    ...filteredBy,
   })
 
-  const assets = useMemo(
-    () => (search.data?.pages ?? []).map((r) => r.assets).flat(),
-    [search.data?.pages]
-  )
-
-  const { ref: loadMoreRef, inView} = useInView({ threshold: 1 })
+  const assets = useMemo(() => {
+    return (nfts?.pages ?? []).map((r) => r?.nfts.assets).flat()
+  }, [nfts?.pages])
 
   useEffect(() => {
-    if (search.data) search.refetch()
-  }, [filters])
+    if (nfts) refetch()
+  }, [nfts])
 
   useEffect(() => {
-    if (inView && !isLoadingMore && search.hasNextPage) {
-      setIsLoadingMore(true)
-      search.fetchNextPage().then(() => {
-        setIsLoadingMore(false)
-      });
-    }
+    if (inView) fetchNextPage()
   }, [inView])
 
   return (
@@ -70,17 +62,17 @@ export const AssetsSearchGrid = ({
       <div className="mb-10 flex flex-wrap gap-4 w-full items-center justify-between">
         <NFTStateFilters />
         <div className="max-md:flex-1 flex items-center gap-x-3">
-          <SearchAsset onNameChange={setSearchName} />
+          <SearchAsset onChange={setSearch} />
           <MarketplaceFiltersDropdown filters={filtersDefinition} />
           <MarketplaceSortDropdown />
         </div>
       </div>
 
-      {search.isLoading && (
+      {isLoading && (
         <Loading />
       )}
 
-      {!search.isLoading && assets.length === 0 ? (
+      {!isLoading && assets.length === 0 ? (
         <AssetsSearchEmpty />
         ) : (
           <>
@@ -90,9 +82,9 @@ export const AssetsSearchGrid = ({
               ))}
             </AssetCardsList>
             <div ref={loadMoreRef} className="mt-10">
-              {search.isFetchingNextPage
+              {isFetchingNextPage
                 ? "Loading more..."
-                : search.hasNextPage
+                : hasNextPage
               }
             </div>
           </>
