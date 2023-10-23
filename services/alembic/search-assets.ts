@@ -28,6 +28,7 @@ export type UseSearchOptions = {
   persistentFilters?: AssetSearchFilters
   search?: string
   page?: number
+  owner?: string
 }
 
 const defaultFilters = {
@@ -83,7 +84,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
       key !== "isOnSale" &&
       key !== "orderBy" &&
       key !== "direction" &&
-      key !== "ownerAddress" &&
+      key !== "owner" &&
       key !== "contractAddress"
     )
   }
@@ -123,6 +124,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
             ? { attributes: parsedAttributes }
             : {}),
           name: options?.search,
+          owner: options?.owner,
         },
         pageParam,
         ASSETS_PER_PAGE,
