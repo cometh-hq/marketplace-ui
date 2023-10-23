@@ -36,7 +36,7 @@ export function NFTStateFilters() {
     <div className="flex gap-2">
       <NFTStateFilterItem label="All" isSelected={!get('isOnSale')} />
       <NFTStateFilterItem label="On Sale" isOnSale isSelected={Boolean(get('isOnSale'))}  />
-      {!isOnProfilePage || !viewerAddress && (
+      {!isOnProfilePage && viewerAddress && (
         <Link href={`/profile/${viewerAddress}`}>
           <NFTStateFilterItem label="Owned" />
         </Link>
