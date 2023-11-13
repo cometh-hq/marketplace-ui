@@ -1,4 +1,7 @@
-import { AssetWithTradeData, SearchAssetWithTradeData } from "@alembic/nft-api-sdk"
+import {
+  AssetWithTradeData,
+  SearchAssetWithTradeData,
+} from "@alembic/nft-api-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 
@@ -27,20 +30,20 @@ const defaultSteps = [
 export type FetchRequiredSellingStepsOptions = {
   asset: AssetWithTradeData
   address: Address
-  sdk: NonNullable<ReturnType<typeof useNFTSwapv4>>
+  nftSwapSdk: NonNullable<ReturnType<typeof useNFTSwapv4>>
 }
 
 export const fetchRequiredSellingSteps = async ({
   asset,
   address,
-  sdk,
+  nftSwapSdk,
 }: FetchRequiredSellingStepsOptions) => {
   const hasApprovedCollection = await fetchHasApprovedCollection({
     address,
     tokenId: asset.tokenId,
-    sdk,
+    nftSwapSdk,
     contractAddress: asset.contractAddress as Address,
-  });
+  })
 
   const sellingSteps = [
     !hasApprovedCollection && { value: "token-approval", label: "Permissions" },
@@ -54,22 +57,22 @@ export const useRequiredSellingSteps = ({
   asset,
 }: UseRequiredSellingStepsOptions) => {
   const viewerAddress = useCurrentViewerAddress()
-  const sdk = useNFTSwapv4()
+  const nftSwapSdk = useNFTSwapv4()
 
   return useQuery(
     ["requiredSellingSteps", asset],
     async () => {
-      if (!sdk || !viewerAddress) return defaultSteps
+      if (!nftSwapSdk || !viewerAddress) return defaultSteps
       return fetchRequiredSellingSteps({
         asset,
         address: viewerAddress,
-        sdk,
+        nftSwapSdk,
       })
     },
     {
       staleTime: Infinity,
       refetchOnWindowFocus: false,
-      enabled: !!sdk && !!viewerAddress,
+      enabled: !!nftSwapSdk && !!viewerAddress,
     }
   )
 }

@@ -16,3 +16,5 @@ export const siteConfig = {
     },
   ],
 }
+
+export const COMETH_CONNECT_LABEL = "Connect SDK"

@@ -18,6 +18,7 @@ const client = z.object({
   NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS: z.string().min(1),
 
   // Cometh
+  NEXT_PUBLIC_ALEMBIC_API_KEY: z.string().min(1),
   NEXT_PUBLIC_COMETH_API_URL: z.string().url(),
 })
 
@@ -33,6 +34,7 @@ const processEnv: Record<
   NEXT_PUBLIC_NODE_ENV: process.env.NEXT_PUBLIC_NODE_ENV,
   NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
     process.env.NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS,
+  NEXT_PUBLIC_ALEMBIC_API_KEY: process.env.NEXT_PUBLIC_ALEMBIC_API_KEY,
   NEXT_PUBLIC_COMETH_API_URL: process.env.NEXT_PUBLIC_COMETH_API_URL,
 }
 

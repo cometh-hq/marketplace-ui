@@ -1,20 +1,23 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { useInView } from "react-intersection-observer"
 import { useFilterableNFTsQuery } from "@/services/alembic/search-assets"
 import { AssetSearchFilters } from "@alembic/nft-api-sdk"
+import { useInView } from "react-intersection-observer"
 
-import { SerializedMarketplacePanelFilters, deserializeFilters } from "@/lib/utils/seed"
+import {
+  SerializedMarketplacePanelFilters,
+  deserializeFilters,
+} from "@/lib/utils/seed"
+import { Loading } from "@/components/ui/loading"
 
 import { AssetCard } from "./asset-card"
 import { AssetCardsList } from "./asset-cards-list"
+import { AssetsSearchEmpty } from "./asset-search-empty"
 import { MarketplaceFiltersDropdown } from "./filters-dropdown"
 import { NFTStateFilters } from "./nft-state-filters"
-import { MarketplaceSortDropdown } from "./sort-dropdown"
-import { AssetsSearchEmpty } from "./asset-search-empty"
-import { Loading } from "@/components/ui/loading"
 import { SearchAsset } from "./search-asset"
+import { MarketplaceSortDropdown } from "./sort-dropdown"
 
 export type AssetsSearchGridProps = {
   filters: SerializedMarketplacePanelFilters
@@ -26,13 +29,12 @@ export const AssetsSearchGrid = ({
   filteredBy = {},
 }: any) => {
   const { ref: loadMoreRef, inView } = useInView({ threshold: 1 })
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("")
 
   const filtersDefinition = useMemo(
-    () => deserializeFilters(filtersRaw), 
+    () => deserializeFilters(filtersRaw),
     [filtersRaw]
   )
-
   const {
     data: nfts,
     refetch,
@@ -49,6 +51,10 @@ export const AssetsSearchGrid = ({
     return (nfts?.pages ?? []).map((r) => r?.nfts.assets).flat()
   }, [nfts?.pages])
 
+  const results = useMemo(() => {
+    return nfts?.pages[0]?.total ?? 0
+  }, [nfts?.pages])
+
   useEffect(() => {
     if (nfts) refetch()
   }, [nfts])
@@ -59,37 +65,31 @@ export const AssetsSearchGrid = ({
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <div className="mb-10 flex flex-wrap gap-4 w-full items-center justify-between">
-        <NFTStateFilters />
-        <div className="max-md:flex-1 flex items-center gap-x-3">
+      <div className="relative mb-10 flex w-full flex-wrap items-center justify-between gap-4">
+        <NFTStateFilters assets={assets} results={results} />
+        <div className="flex items-center gap-x-3">
           <SearchAsset onChange={setSearch} />
           <MarketplaceFiltersDropdown filters={filtersDefinition} />
           <MarketplaceSortDropdown />
         </div>
       </div>
 
-      {isLoading && (
-        <Loading />
-      )}
+      {isLoading && <Loading />}
 
       {!isLoading && assets.length === 0 ? (
         <AssetsSearchEmpty />
-        ) : (
-          <>
-            <AssetCardsList>
-              {assets.map((asset, index) => (
-                <AssetCard key={index} asset={asset} />
-              ))}
-            </AssetCardsList>
-            <div ref={loadMoreRef} className="mt-10">
-              {isFetchingNextPage
-                ? "Loading more..."
-                : hasNextPage
-              }
-            </div>
-          </>
-        )
-      }
+      ) : (
+        <>
+          <AssetCardsList>
+            {assets.map((asset, index) => (
+              <AssetCard key={index} asset={asset} />
+            ))}
+          </AssetCardsList>
+          <div ref={loadMoreRef} className="mt-10">
+            {isFetchingNextPage ? "Loading more..." : hasNextPage}
+          </div>
+        </>
+      )}
     </div>
   )
 }

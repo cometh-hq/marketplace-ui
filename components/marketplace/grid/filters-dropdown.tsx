@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react"
 import { manifest } from "@/manifests"
-import { CheckIcon, ChevronDown, SlidersHorizontal } from "lucide-react"
+import { CheckIcon, ChevronDown } from "lucide-react"
 
 import { CardFiltersRaw } from "@/types/assets"
 import { useNFTFilters } from "@/lib/utils/nft-filters"
@@ -91,14 +91,16 @@ const FilterMultiCombobox = ({
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {[...values].map((value, index) => (
-                <CheckboxFilter
-                  key={index}
-                  label={value}
-                  queryKey={label as keyof CardFiltersRaw}
-                  queryValue={value}
-                />
-              ))}
+              {[...values]
+                .sort((a, b) => a.localeCompare(b))
+                .map((value, index) => (
+                  <CheckboxFilter
+                    key={index}
+                    label={value}
+                    queryKey={label as keyof CardFiltersRaw}
+                    queryValue={value}
+                  />
+                ))}
             </CommandGroup>
           </CommandList>
         </Command>
@@ -127,8 +129,8 @@ export const CheckboxFilter = ({
     let newValues = Array.isArray(currentValues)
       ? [...currentValues]
       : currentValues
-        ? [currentValues]
-        : []
+      ? [currentValues]
+      : []
 
     if (!newValues.includes(queryValue)) {
       newValues.push(queryValue)
@@ -158,8 +160,8 @@ type MarketplaceFiltersDropdownProps = {
 export const MarketplaceFiltersDropdown = ({
   filters,
 }: MarketplaceFiltersDropdownProps) => {
-  const ref = manifest.pages.asset.excludedAttributesInFilters.map((attr: string) =>
-    attr.toLowerCase()
+  const ref = manifest.pages.asset.excludedAttributesInFilters.map(
+    (attr: string) => attr.toLowerCase()
   )
   const { reset, filtersCounter } = useNFTFilters()
 
@@ -170,12 +172,7 @@ export const MarketplaceFiltersDropdown = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          id="radix-:R1irb9ipj9:"
-          variant="outline"
-          className="relative font-semibold"
-        >
-          {/* <SlidersHorizontal size="12" className="mr-2" /> */}
+        <Button id="radix-:R1irb9ipj9:" variant="outline" className="relative">
           Filters
           <FiltersBadgeCounter counter={filtersCounter} />
         </Button>
@@ -190,7 +187,7 @@ export const MarketplaceFiltersDropdown = ({
         <DropdownMenuSeparator className="mb-1" />
         <Button
           variant="secondary"
-          className="w-full mt-2"
+          className="mt-2 w-full"
           onClick={reset}
           disabled={filtersCounter === 0}
         >

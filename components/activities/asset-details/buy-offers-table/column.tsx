@@ -4,10 +4,10 @@ import { ColumnDef } from "@tanstack/react-table"
 
 import { BuyOffer } from "@/types/buy-offers"
 
-import { AmountCell } from "./cells/amount"
-import { CTACell } from "./cells/cta"
-import { DateCell } from "./cells/date"
-import { EmitterCell } from "./cells/emitter"
+import { AmountCell } from "../../cells/amount"
+import { CTACell } from "../../cells/cta"
+import { DateCell } from "../../cells/date"
+import { EmitterCell } from "../../cells/emitter"
 
 export const columns: ColumnDef<BuyOffer>[] = [
   {

@@ -1,6 +1,6 @@
-import { TabsList, TabsTrigger } from "../../ui/tabs"
+import { TabsList, TabsTrigger } from "../../../ui/tabs"
 
-export const ActivitiesTabBar = () => {
+export const TabBar = () => {
   return (
     <TabsList className="mb-8 h-auto gap-x-5">
       <TabsTrigger value="overview">Overview</TabsTrigger>

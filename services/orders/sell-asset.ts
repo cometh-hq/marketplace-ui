@@ -6,15 +6,19 @@ import {
   TradeDirection,
 } from "@alembic/nft-api-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { ERC721OrderStruct } from "@traderxyz/nft-swap-sdk"
 import { BigNumber } from "ethers"
 import { DateTime } from "luxon"
 
+import { IZeroEx__factory } from "@/lib/generated/contracts/factories/IZeroEx__factory"
+import { useIsComethWallet, useSigner } from "@/lib/web3/auth"
+import { toast } from "@/components/ui/toast/use-toast"
+
 import { comethMarketplaceClient } from "../alembic/client"
+import { useGetCollection } from "../alembic/collection"
+import { handleOrderbookError } from "../errors"
 import { useBuildSellOrder } from "./build-sell-order"
 import { useSignSellOrder } from "./sign-sell-order"
-import { handleOrderbookError } from "../errors"
-import { toast } from "@/components/ui/toast/use-toast"
-import { useGetCollection } from "../alembic/collection"
 
 export type SellAssetOptions = {
   asset: AssetWithTradeData
@@ -26,6 +30,8 @@ export const useSellAsset = () => {
   const buildSignSellOrder = useBuildSellOrder()
   const signSellOrder = useSignSellOrder()
   const client = useQueryClient()
+  const signer = useSigner()
+  const isComethWallet = useIsComethWallet()
 
   const { data: collection } = useGetCollection()
 
@@ -37,7 +43,17 @@ export const useSellAsset = () => {
       const order = buildSignSellOrder({ asset, price, validity, collection })
       if (!order) throw new Error("Could not build order")
 
-      try {
+      if (isComethWallet) {
+        const contract = IZeroEx__factory.connect(
+          process.env.NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS!,
+          signer
+        )
+
+        const tx = await contract.preSignERC721Order(order as ERC721OrderStruct)
+        const txResponse = await tx.wait()
+
+        return txResponse
+      } else {
         const signedOrder = await signSellOrder({ order })
 
         const sellOrder: NewOrder = {
@@ -59,25 +75,26 @@ export const useSellAsset = () => {
         }
 
         return await comethMarketplaceClient.order.createOrder(sellOrder)
-      } catch (e) {
-        handleOrderbookError(e, {
-          400: "Bad request",
-          500: "Internal orderbook server error",
-        })
       }
     },
     {
       onSuccess: (_, { asset }) => {
+        client.invalidateQueries(["alembic", "search"]) // TODO: optimize this, just invalidate the asset
         client.invalidateQueries(["alembic", "assets", asset.tokenId])
+        toast({
+          title: "Your asset is now listed for sale.",
+        })
       },
-      onError: (error: any) => {
-        console.error(error)
+      onError: (error: Error) => {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: error.message,
+          description: handleOrderbookError(error, {
+            400: "Bad request",
+            500: "Internal orderbook server error",
+          }),
         })
-      }
+      },
     }
   )
 }

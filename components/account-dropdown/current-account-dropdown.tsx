@@ -1,12 +1,11 @@
 "use client"
 
 import Image from "next/image"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
+import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button, ButtonProps } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -24,6 +23,7 @@ import { User } from "lucide-react"
 import { AccountWallet } from "./account-wallet"
 import { CopyButton } from "../ui/copy-button"
 import { useWindowSize } from 'usehooks-ts'
+// import { useUser } from "@/services/user/use-user"
 
 export type AccountDropdownProps = {
   buttonVariant?: ButtonProps["variant"]
@@ -33,10 +33,16 @@ export type AccountDropdownProps = {
 export function CurrentAccountDropdown({
   buttonVariant,
 }: AccountDropdownProps) {
+  // const { profile } = useUser()
+  const isComethWallet = useIsComethWallet()
   const viewerAddress = useCurrentViewerAddress()
-  const { width, height } = useWindowSize()
+  const { width } = useWindowSize()
 
   const isMobile = width < 640
+  // const isComethWallet = profile?.isAlembicKeyStore || false
+  const walletIcon = isComethWallet 
+    ? `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/cometh-connect.png`
+    : `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`
 
   if (!viewerAddress?.length) return <ButtonLoading />
 
@@ -53,28 +59,21 @@ export function CurrentAccountDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
         <Card className="p-4" style={{ width: "324px" }}>
-          <CardHeader className="space-y-0 p-0 mb-2">
+          <CardHeader className="mb-2 space-y-0 p-0">
             <AccountLogAction />
             <div className="flex items-center gap-2">
-              <Image
-                src="/icons/metamask.svg"
-                alt=""
-                width={40}
-                height={40}
-              />
+              <Image src={walletIcon} alt="" width={40} height={40} />
               <div>
-                <CardTitle className="relative text-sm font-semibold -mb-2">Account</CardTitle>
-                <CardDescription>
-                  <span className="flex items-center">
-                    <UserLink
-                      user={{ address: viewerAddress }}
-                      className="mr-2 text-sm"
-                      hideIcon
-                      forceDisplayAddress
-                    />
-                    <CopyButton textToCopy={viewerAddress} />
-                  </span>
-                </CardDescription>
+                <CardTitle className="relative -mb-2 text-sm font-semibold">Account</CardTitle>
+                <div className="flex items-center">
+                  <UserLink
+                    user={{ address: viewerAddress }}
+                    className="mr-2 text-sm"
+                    hideIcon
+                    forceDisplayAddress
+                  />
+                  <CopyButton textToCopy={viewerAddress} />
+                </div>
               </div>
             </div>
           </CardHeader>

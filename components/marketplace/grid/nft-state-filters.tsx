@@ -1,9 +1,10 @@
+import Link from "next/link"
+import { usePathname, useSearchParams } from "next/navigation"
+
 import { useNFTFilters } from "@/lib/utils/nft-filters"
+import { useCurrentViewerAddress } from "@/lib/web3/auth"
 
 import { Button } from "../../ui/button"
-import { usePathname, useSearchParams } from "next/navigation"
-import Link from "next/link"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 
 export type NFTStateFilterItemProps = {
   label: string
@@ -11,7 +12,11 @@ export type NFTStateFilterItemProps = {
   isSelected?: boolean
 }
 
-const NFTStateFilterItem = ({ label, isOnSale, isSelected = false }: NFTStateFilterItemProps) => {
+const NFTStateFilterItem = ({
+  label,
+  isOnSale,
+  isSelected = false,
+}: NFTStateFilterItemProps) => {
   const { update } = useNFTFilters()
 
   return (
@@ -25,18 +30,34 @@ const NFTStateFilterItem = ({ label, isOnSale, isSelected = false }: NFTStateFil
   )
 }
 
-export function NFTStateFilters() {
+type NFTStateFiltersProps = {
+  assets: any[]
+  results: number
+}
+
+export function NFTStateFilters({ results }: NFTStateFiltersProps) {
   const { get } = useSearchParams()
   const pathname = usePathname()
   const viewerAddress = useCurrentViewerAddress()
 
-  const isOnProfilePage = pathname.startsWith("/profile")
+  const isOnProfilePage = pathname.includes(
+    `${process.env.NEXT_PUBLIC_BASE_PATH}/profile`
+  )
+
+  const result = results > 0 ? `(${results})` : ""
 
   return (
-    <div className="flex gap-2">
-      <NFTStateFilterItem label="All" isSelected={!get('isOnSale')} />
-      <NFTStateFilterItem label="On Sale" isOnSale isSelected={Boolean(get('isOnSale'))}  />
-      {!isOnProfilePage && viewerAddress && (
+    <div className="flex gap-5">
+       <NFTStateFilterItem
+        label={`All items ${result}`}
+        isSelected={!get("isOnSale")}
+      />
+      <NFTStateFilterItem
+        label="Buy now"
+        isOnSale
+        isSelected={Boolean(get("isOnSale"))}
+      />
+      {viewerAddress && !isOnProfilePage && (
         <Link href={`/profile/${viewerAddress}`}>
           <NFTStateFilterItem label="Owned" />
         </Link>

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@alembic/nft-api-sdk": "^1.1.4",
+    "@cometh/connect-sdk": "^1.2.1",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
@@ -49,7 +50,6 @@
     "@types/qs": "^6.9.8",
     "@web3-onboard/core": "^2.20.4",
     "@web3-onboard/injected-wallets": "^2.10.1",
-    "@web3-onboard/react": "^2.8.9",
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",

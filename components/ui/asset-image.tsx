@@ -33,7 +33,7 @@ export function AssetImage({ src, name, fallback, ...props }: AssetImageProps) {
       src={_src}
       alt={name ?? "Asset image"}
       onError={onError}
-      quality={100}
+      quality={80}
       onLoad={props.onLoad}
       {...props}
     />

@@ -16,7 +16,7 @@ export default async function ProfilePage({
 
   return (
     <div className="container mx-auto flex w-full flex-col items-start gap-4 py-10">
-      <div className="flex items-center justify-between w-full">
+      <div className="flex w-full items-center justify-between">
         <div className="flex items-end gap-2">
           <h1 className="scroll-m-20 text-3xl font-bold tracking-tight lg:text-4xl">
             Profile ({shortenAddress(params.address)})

@@ -13,22 +13,22 @@ import { columns } from "./column"
 
 export type BuyOffersTableProps = {
   offers: BuyOffer[]
-  highlight?: Row<BuyOffer>["id"]
 }
 
-export function BuyOffersTable({ offers, highlight }: BuyOffersTableProps) {
+export function BuyOffersTable({ offers }: BuyOffersTableProps) {
   const viewer = useCurrentViewerAddress()
 
   const data = useMemo(() => {
     return offers
-    .filter((offer) => {
-        if (!viewer) return true
-
+      .filter((offer) => {
         if (offer.trade.tokenId !== offer.asset?.tokenId) return false
-
         if (
+          viewer &&
           isAddressEqual(offer.emitter.address, viewer) &&
-          isAddressEqual(offer.asset?.owner as Address ?? offer.owner.address, viewer)
+          isAddressEqual(
+            (offer.asset?.owner as Address) ?? offer.owner.address,
+            viewer
+          )
         )
           return false
         return true
@@ -44,5 +44,5 @@ export function BuyOffersTable({ offers, highlight }: BuyOffersTableProps) {
       })
   }, [offers, viewer])
 
-  return <DataTable highlight={highlight} columns={columns} data={data} />
+  return <DataTable columns={columns} data={data} />
 }

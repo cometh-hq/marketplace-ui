@@ -5,6 +5,9 @@ import { Address } from "viem"
 
 import { IWETH__factory } from "@/lib/generated/contracts/weth/IWETH__factory"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
+import { toast } from "@/components/ui/toast/use-toast"
+
+import { handleOrderbookError } from "../errors"
 
 export type UnwrapTokenOptions = {
   amount: BigNumber
@@ -19,16 +22,10 @@ export async function unwrapToken({
   signer,
   wrapContractAddress,
 }: UnwrapTokenOptions) {
-  if (!signer._isSigner) throw new Error("Signer not initialized")
   const contract = IWETH__factory.connect(wrapContractAddress, signer)
-
-  const transaction = await contract?.withdraw(amount, {
-    from: account ?? undefined,
+  return await contract?.withdraw(amount, {
+    from: account,
   })
-
-  await transaction.wait()
-
-  return transaction
 }
 
 export type UnwrapTokenMutationOptions = {
@@ -39,16 +36,36 @@ export const useUnwrapToken = () => {
   const viewerAddress = useCurrentViewerAddress()
   const signer = useSigner()
 
-  return useMutation(["unwrap"], async ({ amount }: UnwrapTokenMutationOptions) => {
-    if (!viewerAddress || !signer || !manifest?.currency?.wrapped?.address) {
-      throw new Error("Could not unwrap token")
-    }
+  return useMutation(
+    ["unwrap"],
+    async ({ amount }: UnwrapTokenMutationOptions) => {
+      if (!viewerAddress || !signer || !manifest?.currency?.wrapped?.address) {
+        throw new Error("Could not unwrap token")
+      }
 
-    return unwrapToken({
-      amount,
-      account: viewerAddress,
-      signer: signer,
-      wrapContractAddress: manifest.currency.wrapped.address,
-    })
-  })
+      return unwrapToken({
+        amount,
+        account: viewerAddress,
+        signer,
+        wrapContractAddress: manifest.currency.wrapped.address,
+      })
+    },
+    {
+      onSuccess: () => {
+        toast({
+          title: "Token unwrapped!",
+        })
+      },
+      onError: (error: Error) => {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: handleOrderbookError(error, {
+            400: "Bad request",
+            500: "Internal orderbook server error",
+          }),
+        })
+      },
+    }
+  )
 }

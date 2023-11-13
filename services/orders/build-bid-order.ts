@@ -1,41 +1,73 @@
 import { useCallback } from "react"
 import { manifest } from "@/manifests"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
-import { ERC721OrderStruct } from "@traderxyz/nft-swap-sdk"
+import {
+  AssetWithTradeData,
+  Collection,
+  CollectionFees,
+} from "@alembic/nft-api-sdk"
+import {
+  UserFacingERC20AssetDataSerializedV4,
+  UserFacingERC721AssetDataSerializedV4,
+  UserFacingFeeStruct,
+} from "@traderxyz/nft-swap-sdk"
 import { BigNumber, ethers } from "ethers"
+import { DateTime } from "luxon"
 
+import { calculateFeesAmount, totalFeesFromCollection } from "@/lib/utils/fees"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
-export type BuildBidOrderOptions = {
+export type BuildBuyOfferOrderOptions = {
   asset: AssetWithTradeData
   price: BigNumber
-  nonce: string
+  validity: string
+  collection: Collection & { collectionFees: CollectionFees }
 }
-
-export const useBuildBidOrder = () => {
+export const useBuildBuyOfferOrder = () => {
   const viewer = useCurrentViewerAddress()
-  const sdk = useNFTSwapv4()
+  const nftSwapSdk = useNFTSwapv4()
 
   return useCallback(
-    ({ asset, nonce, price }: BuildBidOrderOptions) => {
-      if (!sdk || !viewer) return null
-      const order: ERC721OrderStruct = {
-        direction: 1,
-        maker: viewer.toLowerCase(),
-        taker: ethers.constants.AddressZero,
-        nonce,
-        erc721Token: manifest.contractAddress,
-        erc721TokenId: asset.tokenId,
-        erc721TokenProperties: [],
-        erc20Token: manifest.currency.wrapped.address,
-        erc20TokenAmount: price,
-        expiry: Math.floor(Date.now() / 1_000) + 60 * 60 * 24 * 30, // in 30 days from now // TODO auction unmock
-        fees: [],
+    ({ asset, price, validity, collection }: BuildBuyOfferOrderOptions) => {
+      if (!nftSwapSdk || !viewer || !collection.collectionFees) return null
+
+      const expiry = DateTime.now()
+        .plus({ days: parseInt(validity) })
+        .toJSDate()
+
+      const fees: UserFacingFeeStruct[] = collection.collectionFees.map(
+        (fee) => {
+          return {
+            amount: calculateFeesAmount(price, fee.feePercentage),
+            recipient: fee.recipientAddress,
+          }
+        }
+      )
+
+      const erc721Asset: UserFacingERC721AssetDataSerializedV4 = {
+        tokenAddress: asset.contractAddress,
+        tokenId: asset.tokenId,
+        type: "ERC721",
       }
 
-      return order
+      const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
+        tokenAddress: manifest.currency.wrapped.address,
+        amount: price.sub(totalFeesFromCollection(fees)).toString(),
+        type: "ERC20",
+      }
+
+      return nftSwapSdk.buildNftAndErc20Order(
+        erc721Asset,
+        erc20Asset,
+        "buy",
+        viewer,
+        {
+          fees,
+          expiry,
+          taker: ethers.constants.AddressZero,
+        }
+      )
     },
-    [sdk, viewer]
+    [nftSwapSdk, viewer]
   )
 }

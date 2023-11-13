@@ -17,11 +17,11 @@ export const FILTERS_SORT = [
   {
     label: "Sort by Newest Listings",
     orderBy: FilterOrderBy.LISTING_DATE,
-    direction: FilterDirection.ASC,
+    direction: FilterDirection.DESC,
   },
   {
     label: "Sort by Oldest Listings",
     orderBy: FilterOrderBy.LISTING_DATE,
-    direction: FilterDirection.DESC,
+    direction: FilterDirection.ASC,
   },
 ]

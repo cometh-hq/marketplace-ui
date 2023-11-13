@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Step, Stepper } from "@/components/ui/stepper"
 
-import { ButtonLoading } from "./button-loading"
 import { useCorrectNetwork } from "@/lib/web3/network"
 import { cn } from "@/lib/utils/utils"
 
@@ -32,16 +31,15 @@ export function TransactionDialogButton<T extends Step>({
 }: TransactionDialogProps<T>) {
   const { isChainSupported } = useCorrectNetwork()
   
-  if (isLoading) return <ButtonLoading />
-
   return (
     <Dialog open={open} modal onOpenChange={(v) => !v && onClose()}>
       <DialogTrigger asChild>
         <Button
-          size="lg"
+          size={isVariantLink ? "default" : "lg"}
           variant={isVariantLink ? "link" : "default"}
-          className={cn(isVariantLink && "p-0 h-auto")}
-          disabled={!isChainSupported}
+          className={cn(isVariantLink && "h-auto p-0")}
+          disabled={!isChainSupported || isDisabled}
+          isLoading={isLoading}
           {...props}
         >
           {label}

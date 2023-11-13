@@ -8,14 +8,16 @@ export type SignBuyOfferOrderOptions = {
 }
 
 export const useSignBuyOfferOrder = () => {
-  const sdk = useNFTSwapv4()
+  const nftSwapSdk = useNFTSwapv4()
 
   const signOrder = useCallback(
     async ({ order }: SignBuyOfferOrderOptions) => {
-      if (!sdk) throw new Error("SDK not initialized")
-      return sdk.signOrder(order)
+      if (!nftSwapSdk) throw new Error("SDK not initialized")
+      return nftSwapSdk.signOrder(order, {
+        autodetectSignatureType: true,
+      })
     },
-    [sdk]
+    [nftSwapSdk]
   )
 
   return signOrder

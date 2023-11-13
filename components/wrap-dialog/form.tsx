@@ -1,9 +1,19 @@
 "use client"
 
+import { useEffect } from "react"
+import { manifest } from "@/manifests"
+import { useFormatMainBalance } from "@/services/balance/main"
+import { useFormatWrappedBalance } from "@/services/balance/wrapped"
+import { useUnwrapToken } from "@/services/exchange/unwrap-token"
+import { useWrapToken } from "@/services/exchange/wrap-token"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { parseUnits } from "ethers/lib/utils"
+import { ArrowDownUp } from "lucide-react"
 import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-import { Button } from "../../components/ui/button"
+import { useCorrectNetwork } from "@/lib/web3/network"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -11,27 +21,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../components/ui/form"
-import { Input } from "../../components/ui/input"
-import { useWrapToken } from "@/services/exchange/wrap-token"
-import { useUnwrapToken } from "@/services/exchange/unwrap-token"
-import { manifest } from "@/manifests"
-import { SwitchNetwork } from "../asset-actions/buttons/switch-network"
-import { useCorrectNetwork } from "@/lib/web3/network"
-import { ButtonLoading } from "../button-loading"
-import { parseUnits } from "ethers/lib/utils"
-import { useEffect } from "react"
-import { useFormatWrappedBalance } from "@/services/balance/wrapped"
-import { useFormatMainBalance } from "@/services/balance/main"
-import { z } from "zod"
-import { ArrowDownUp } from "lucide-react"
-
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+
+import { SwitchNetwork } from "../asset-actions/buttons/switch-network"
 
 export type WrapDialogFormProps = {
   onClose: () => void
@@ -45,10 +44,14 @@ type TokenInputFieldProps = {
   value?: string
   disabled?: boolean
   tokenName: string
-  useFieldProps?: boolean,
+  useFieldProps?: boolean
 }
 
-export function WrapDialogForm({ onClose, isUnwrap = false, onToggleMode }: WrapDialogFormProps) {
+export function WrapDialogForm({
+  onClose,
+  isUnwrap = false,
+  onToggleMode,
+}: WrapDialogFormProps) {
   const { isChainSupported } = useCorrectNetwork()
   const wrapToken = useWrapToken()
   const unwrapToken = useUnwrapToken()
@@ -57,43 +60,49 @@ export function WrapDialogForm({ onClose, isUnwrap = false, onToggleMode }: Wrap
 
   const tokenAction = isUnwrap ? unwrapToken : wrapToken
   const maxBalance = isUnwrap ? wBalance : balance
-  
+
   useEffect(() => {
-    if (tokenAction.isSuccess)
-      onClose()
-  }, [tokenAction.isSuccess, onClose])
+    if (tokenAction.isSuccess) onClose()
+  }, [tokenAction, onClose])
 
-
-  const WrapFormSchema = z.object({
-    amount: z.string().refine(
-      (value) => parseFloat(value) <= parseFloat(maxBalance), 
-      { message: `The amount exceeds your ${isUnwrap ? "wrapped" : "main"} balance` }
-    ),
+  const schema = z.object({
+    amount: z
+      .string()
+      .refine((value) => parseFloat(value) <= parseFloat(maxBalance), {
+        message: `The amount exceeds your ${
+          isUnwrap ? "wrapped" : "main"
+        } balance`,
+      }),
   })
-  
+
   const form = useForm({
-    resolver: zodResolver(WrapFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: { amount: "" },
-  });
+  })
 
-  const receivedAmount = form.watch('amount')
+  const receivedAmount = form.watch("amount")
 
-  const handleSubmitForm = async (values: {
-    amount: string
-  }) => {
-    const parsedAmount = parseUnits(values.amount, 18);
+  const handleSubmitForm = async (values: { amount: string }) => {
+    const parsedAmount = parseUnits(values.amount, 18)
     tokenAction.mutate({ amount: parsedAmount })
-  };
+  }
 
   const renderTokenName = (isMain = true) => {
-    return isMain 
-      ? (isUnwrap ? manifest.currency.wrapped.name : manifest.currency.main.name)
-      : (isUnwrap ? manifest.currency.main.name : manifest.currency.wrapped.name)
+    return isMain
+      ? isUnwrap
+        ? manifest.currency.wrapped.name
+        : manifest.currency.main.name
+      : isUnwrap
+      ? manifest.currency.main.name
+      : manifest.currency.wrapped.name
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmitForm)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(handleSubmitForm)}
+        className="space-y-6"
+      >
         <TokenInputField
           label={`Amount of ${renderTokenName()} to convert`}
           placeholder="Enter a amount"
@@ -122,7 +131,7 @@ export function WrapDialogForm({ onClose, isUnwrap = false, onToggleMode }: Wrap
             </Tooltip>
           </TooltipProvider>
         </div>
-        
+
         <TokenInputField
           label={`You receive ${renderTokenName(false)}`}
           value={receivedAmount}
@@ -131,18 +140,15 @@ export function WrapDialogForm({ onClose, isUnwrap = false, onToggleMode }: Wrap
           name="receivedAmount"
         />
         <SwitchNetwork>
-          {tokenAction.isLoading ? (
-            <ButtonLoading size="lg" className="w-full" />
-          ) : (
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full"
-              disabled={!isChainSupported}
-            >
-              Convert
-            </Button>
-          )}
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            disabled={!isChainSupported || tokenAction.isLoading}
+            isLoading={tokenAction.isLoading}
+          >
+            Convert
+          </Button>
         </SwitchNetwork>
       </form>
       <Button
@@ -154,7 +160,7 @@ export function WrapDialogForm({ onClose, isUnwrap = false, onToggleMode }: Wrap
         Cancel
       </Button>
     </Form>
-  );
+  )
 }
 
 const TokenInputField = ({
@@ -163,7 +169,7 @@ const TokenInputField = ({
   value,
   disabled,
   tokenName,
-  name
+  name,
 }: TokenInputFieldProps & { name: string }) => (
   <FormField
     name={name}
@@ -172,15 +178,15 @@ const TokenInputField = ({
         <FormLabel>{label}</FormLabel>
         <FormControl>
           <span className="relative block">
-            <Input 
-              type="number" 
-              placeholder={placeholder} 
-              className="pr-20" 
-              {...field} 
+            <Input
+              type="number"
+              placeholder={placeholder}
+              className="pr-20"
+              {...field}
               value={value || field.value}
               disabled={disabled}
             />
-            <span className="font-semibold text-sm absolute top-1/2 right-4 -translate-y-1/2">
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-semibold">
               {tokenName}
             </span>
           </span>

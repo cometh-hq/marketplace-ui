@@ -36,26 +36,24 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable
-          )}
-        >
-          <AppProviders>
-            <div className="relative flex min-h-screen w-full flex-col">
-              <SiteHeader />
-              <AppContent>{children}</AppContent>
-            </div>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
+        <AppProviders>
+          <div className="relative flex min-h-screen w-full flex-col">
+            <SiteHeader />
+            <AppContent>{children}</AppContent>
+          </div>
 
-            <TailwindIndicator />
-          </AppProviders>
-          <Toaster />
-        </body>
-      </html>
-    </>
+          <TailwindIndicator />
+        </AppProviders>
+        <Toaster />
+      </body>
+    </html>
   )
 }

@@ -16,7 +16,7 @@ export function SiteHeader() {
 
   return (
     <div className="container mx-auto py-5 sm:py-10">
-      <header className="flex items-center md:justify-between gap-x-5">
+      <header className="flex items-center gap-x-5 md:justify-between">
         <div
           onClick={() => !isOpen && setIsOpen(true)}
           className={cx('w-[20px] cursor-pointer md:hidden', {
@@ -31,10 +31,10 @@ export function SiteHeader() {
               isOpen ? 'fixed' : 'hidden',
             )}
           >
-            <div className="flex flex-col h-full">
+            <div className="flex h-full flex-col">
               <div
                 onClick={toggleMenu}
-                className="md:hidden w-[20px] mr-5 mt-2 cursor-pointer"
+                className="mr-5 mt-2 w-[20px] cursor-pointer md:hidden"
               >
                 <X className="" />
               </div>
@@ -47,8 +47,8 @@ export function SiteHeader() {
         </div>
             
         <Link href="/" className={cx("flex items-center space-x-2 z-[100]", isOpen && "text-primary-foreground")}>
-          <Icons.logo className="text-current h-6 w-6" />
-          <span className="text-base font-bold md:inline mr-10 opacity-90">{siteConfig.name}</span>
+          <Icons.logo className="h-6 w-6 text-current" />
+          <span className="mr-10 text-base font-bold opacity-90 md:inline">{siteConfig.name}</span>
         </Link>
         
         <div className="max-md:hidden">

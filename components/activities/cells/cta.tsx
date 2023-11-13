@@ -1,7 +1,4 @@
-import {
-  useAcceptBuyOffer,
-  useCanAcceptBuyOffer,
-} from "@/services/orders/accept-buy-offer"
+import { useCanAcceptBuyOffer } from "@/services/orders/accept-buy-offer"
 import {
   useCanCancelBuyOffer,
   useCancelBuyOffer,
@@ -17,10 +14,15 @@ export type CTACellProps = {
 }
 
 const CancelBuyOfferCell = ({ row }: CTACellProps) => {
-  const { mutateAsync: cancel } = useCancelBuyOffer()
+  const { mutateAsync: cancel, isLoading } = useCancelBuyOffer()
 
   return (
-    <Button variant="link" onClick={async () => await cancel({ offer: row.original })}>
+    <Button
+      variant="link"
+      onClick={async () => await cancel({ offer: row.original })}
+      isLoading={isLoading}
+      disabled={isLoading}
+    >
       Cancel
     </Button>
   )

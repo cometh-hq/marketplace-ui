@@ -89,7 +89,7 @@ export const useRequiredMakeBuyOfferSteps = ({
   price,
 }: UseRequiredMakeBuyOfferSteps) => {
   const viewerAddress = useCurrentViewerAddress()
-  const sdk = useNFTSwapv4()
+  const nftSwapSdk = useNFTSwapv4()
 
   return useQuery(
     ["requiredBuyingSteps", asset, price],
@@ -99,7 +99,7 @@ export const useRequiredMakeBuyOfferSteps = ({
         price: price!,
         address: viewerAddress,
         wrappedContractAddress: manifest.currency.wrapped.address,
-        spender: sdk?.exchangeProxyContractAddress! as Address,
+        spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
       })
     },
     {
@@ -119,23 +119,27 @@ export const useMakeBuyOfferAssetButton = ({
   const [price, setPrice] = useState<BigNumber | null>(null)
   const [validity, setValidity] = useState<string | null>(null)
 
-  const { data: requiredSteps, isLoading, refetch } = useRequiredMakeBuyOfferSteps({
+  const {
+    data: requiredSteps,
+    isLoading,
+    refetch,
+  } = useRequiredMakeBuyOfferSteps({
     asset,
     price,
-    validity
+    validity,
   })
   const { nextStep, currentStep, reset } = useStepper({ steps: requiredSteps })
 
   return {
+    isLoading,
     requiredSteps,
     currentStep,
-    isLoading,
     nextStep,
     reset,
     price,
     setPrice,
     validity,
     setValidity,
-    refetch
+    refetch,
   }
 }

@@ -15,7 +15,7 @@ export function AccountWallet() {
 
   return (
     <div>
-      <div className="mb-3 rounded-md border p-3 space-y-3">
+      <div className="mb-3 space-y-3 rounded-md border border-border p-3">
         <div className="flex items-center justify-between">
           <AccountBalanceLine
             balance={balance}
