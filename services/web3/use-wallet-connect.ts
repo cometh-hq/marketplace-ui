@@ -31,10 +31,11 @@ export function useWalletConnect(): {
     isAlembicWallet = false,
   }: ConnectParams): Promise<WalletState> {
     setConnecting(true)
-    console.log('in useWalletConnect connect', onboard)
+    console.log('in useWalletConnect connect', isAlembicWallet)
     if (!onboard) throw new Error("Cannot connect to wallet")
-
+    console.log("after !onboard ", onboard)
     try {
+      console.log('in try ')
       // const wallets = await onboard?.connectWallet(options)
       const wallets = await onboard?.connectWallet(
         isAlembicWallet
@@ -46,7 +47,7 @@ export function useWalletConnect(): {
             }
           : undefined
       )
-
+      console.log('wallets', wallets)
       if (wallets?.[0]) {
         console.log('wallets?.[0]', wallets?.[0])
         await _selectdCorrectChain(onboard, wallets[0])

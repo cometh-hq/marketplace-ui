@@ -31,15 +31,14 @@ export function useComethConnect() {
     existingWalletAddress?: string
   }) {
     try {
+      console.log("isAlembicWallet :>> ", isAlembicWallet)
       if (isAlembicWallet) {
         toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: "You need to connect your wallet first",
+          title: "Logging your Cometh Wallet",
           duration: Infinity,
         })
       }
-      await initOnboard({
+      initOnboard({
         isComethWallet: isAlembicWallet,
         ...(existingWalletAddress && { walletAddress: existingWalletAddress }),
       })

@@ -54,7 +54,7 @@ export function Web3OnboardProvider({
   const [onboard, setOnboard] = useState<OnboardAPI | null>(null)
   const [isConnected, setIsconnected] = useState<boolean>(false)
   const [reconnecting, setReconnecting] = useState<boolean>(false)
-  const isComethWallet = useIsComethWallet()
+  // const isComethWallet = useIsComethWallet()
   const viewerAddress = useCurrentViewerAddress()
 
   const initOnboard = useCallback((options: SetOnboardOptions) => {
@@ -112,7 +112,6 @@ export function Web3OnboardProvider({
   }, [])
 
   useEffect(() => {
-    // const isComethWallet = profile?.isAlembicKeyStore || false
     const isComethWallet =
       localStorage.getItem("selectedWallet") === COMETH_CONNECT_LABEL
 
@@ -120,7 +119,6 @@ export function Web3OnboardProvider({
       initOnboard({
         isComethWallet,
         ...(isComethWallet && {
-          // walletAddress: profile.walletAddress?.toString(),
           walletAddress: viewerAddress?.toString(),
         }),
       })
@@ -143,7 +141,7 @@ export function Web3OnboardProvider({
           }
         })
     }
-  }, [initOnboard, isComethWallet, onboard, viewerAddress])
+  }, [initOnboard, onboard, viewerAddress])
 
   return (
     <Web3OnboardContext.Provider
