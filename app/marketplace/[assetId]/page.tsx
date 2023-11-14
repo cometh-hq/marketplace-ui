@@ -4,7 +4,7 @@ import { manifest } from "@/manifests"
 import { useAssetDetails } from "@/services/alembic/search-assets"
 import { useAssetTransfers } from "@/services/alembic/transfers"
 
-import { AssetActivitiesDialog } from "@/components/activities/account/tabs"
+import { AssetActivities } from "@/components/activities/asset-details/tabs"
 import AssetDetails from "@/components/marketplace/asset/header"
 import { Loading } from "@/components/ui/loading"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
@@ -31,7 +31,7 @@ export default function DetailsPage({
           <AssetHeaderImage asset={asset} />
           <AssetDetails asset={asset} />
           {assetTransfers && (
-            <AssetActivitiesDialog
+            <AssetActivities
               asset={asset}
               assetTransfers={assetTransfers}
             />

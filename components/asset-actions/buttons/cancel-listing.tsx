@@ -19,7 +19,6 @@ export function CancelListingButton({ asset }: CancelListingButtonProps) {
 
   return (
     <Button
-      variant="brand"
       className="w-full"
       size="lg"
       onClick={onConfirm}

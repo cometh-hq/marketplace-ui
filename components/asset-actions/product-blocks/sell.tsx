@@ -5,12 +5,15 @@ import {
   ProductBlockCenteredColumn,
   ProductBlockContainer,
   ProductBlockDividedColumn,
+  ProductBlockLabel
 } from "@/components/product-block"
 
-// import { AuctionAssetButton } from "../buttons/auction"
 import { SellAssetButton } from "../buttons/sell"
 import { BestOfferColumn } from "./columns/best-offer-column"
 import { SwitchNetwork } from "../buttons/switch-network"
+import { ConnectButton } from "@/components/connect-button"
+import { UserLink } from "@/components/ui/user-button"
+import { Address } from "viem"
 
 export type SellProductBlockProps = {
   asset: AssetWithTradeData
@@ -25,14 +28,22 @@ export function SellProductBlock({ asset }: SellProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <BestOfferColumn asset={asset} />
+
+      <ProductBlockDividedColumn>
+        <ProductBlockLabel>Owned by</ProductBlockLabel>
+        <UserLink
+          variant="link"
+          className="mt-0.5"
+          user={{ address: asset.owner as Address }}
+        />
+      </ProductBlockDividedColumn>
+
       <ProductBlockCenteredColumn>
-        <SwitchNetwork>
-          <SellAssetButton asset={asset} />
-        </SwitchNetwork>
-        {/* <Connected>
-          <AuctionAssetButton asset={asset} />
-          <SellAssetButton asset={asset} />
-        </Connected> */}
+        <ConnectButton>
+          <SwitchNetwork>
+            <SellAssetButton asset={asset} />
+          </SwitchNetwork>
+        </ConnectButton>
       </ProductBlockCenteredColumn>
     </ProductBlockContainer>
   )

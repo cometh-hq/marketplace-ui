@@ -5,7 +5,7 @@ import { AssetsSearchGrid } from "@/components/marketplace/grid/asset-search-gri
 import { seedFilters, serializeFilters } from "@/lib/utils/seed"
 import { ShareButton } from "@/components/ui/share-button"
 import { CopyButton } from "@/components/ui/copy-button"
-import { AccountAssetActivities } from "@/components/account-activities/tabs"
+import { AccountAssetActivities } from "@/components/activities/account/tabs"
 
 export default async function ProfilePage({
   params,

@@ -1,9 +1,8 @@
 import { AssetWithTradeData } from "@alembic/nft-api-sdk"
 import { Address } from "viem"
 
-import { Card } from "@/components/ui/card"
 import { UserLink } from "@/components/ui/user-button"
-import { Connected } from "@/components/connected"
+import { ConnectButton } from "@/components/connect-button"
 import { AssetStatusBadge } from "@/components/marketplace/asset/asset-status-badge"
 import {
   ProductBlockCenteredColumn,
@@ -39,11 +38,11 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
-        <Connected>
+        <ConnectButton>
           <SwitchNetwork>
             <MakeBuyOfferButton asset={asset} />
           </SwitchNetwork>
-        </Connected>
+        </ConnectButton>
       </ProductBlockCenteredColumn>
     </ProductBlockContainer>
   )

@@ -4,9 +4,11 @@
  */
 
 import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { Address } from "viem"
 
 import { Price } from "@/components/ui/price"
-import { Connected } from "@/components/connected"
+import { UserLink } from "@/components/ui/user-button"
+import { ConnectButton } from "@/components/connect-button"
 import { AssetStatusBadge } from "@/components/marketplace/asset/asset-status-badge"
 import {
   ProductBlockCenteredColumn,
@@ -16,6 +18,7 @@ import {
 } from "@/components/product-block"
 
 import { CancelListingButton } from "../buttons/cancel-listing"
+import { SwitchNetwork } from "../buttons/switch-network"
 
 export type SellProductBlockProps = {
   asset: AssetWithTradeData
@@ -26,19 +29,30 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
         <AssetStatusBadge status="listed" />
-        <Price amount={asset.orderbookStats.lowestSalePrice} size="xl" />
+        <Price amount={asset.orderbookStats.lowestSalePrice} />
       </ProductBlockDividedColumn>
 
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Best Offer</ProductBlockLabel>
-        <Price amount={asset.orderbookStats.highestOfferPrice} size="xl" />
+        <Price amount={asset.orderbookStats.highestOfferPrice} />
       </ProductBlockDividedColumn>
 
-      <Connected>
-        <ProductBlockCenteredColumn>
-          <CancelListingButton asset={asset} />
-        </ProductBlockCenteredColumn>
-      </Connected>
+      <ProductBlockDividedColumn>
+        <ProductBlockLabel>Listed by</ProductBlockLabel>
+        <UserLink
+          variant="link"
+          className="mt-1"
+          user={{ address: asset.owner as Address }}
+        />
+      </ProductBlockDividedColumn>
+
+      <ProductBlockCenteredColumn>
+        <ConnectButton>
+          <SwitchNetwork>
+            <CancelListingButton asset={asset} />
+          </SwitchNetwork>
+        </ConnectButton>
+      </ProductBlockCenteredColumn>
     </ProductBlockContainer>
   )
 }

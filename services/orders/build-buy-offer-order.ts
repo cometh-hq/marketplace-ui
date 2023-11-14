@@ -17,20 +17,19 @@ import { calculateFeesAmount, totalFeesFromCollection } from "@/lib/utils/fees"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
-export type BuildSellOrderOptions = {
+export type BuildBuyOfferOrderOptions = {
   asset: AssetWithTradeData
   price: BigNumber
   validity: string
   collection: Collection & { collectionFees: CollectionFees }
 }
-
-export const useBuildSellOrder = () => {
+export const useBuildBuyOfferOrder = () => {
   const viewer = useCurrentViewerAddress()
   const nftSwapSdk = useNFTSwapv4()
 
   return useCallback(
-    ({ asset, price, validity, collection }: BuildSellOrderOptions) => {
-      if (!nftSwapSdk || !viewer || !collection.collectionFees) return null
+    ({ asset, price, validity, collection }: BuildBuyOfferOrderOptions) => {
+      if (!nftSwapSdk || !viewer || !collection.collectionFees ) return null
 
       const expiry = DateTime.now()
         .plus({ days: parseInt(validity) })
@@ -52,22 +51,16 @@ export const useBuildSellOrder = () => {
       }
 
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
-        tokenAddress: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        tokenAddress: manifest.currency.wrapped.address,
         amount: price.sub(totalFeesFromCollection(fees)).toString(),
         type: "ERC20",
       }
 
-      return nftSwapSdk.buildNftAndErc20Order(
-        erc721Asset,
-        erc20Asset,
-        "sell",
-        viewer,
-        {
-          fees,
-          expiry,
-          taker: ethers.constants.AddressZero,
-        }
-      )
+      return nftSwapSdk.buildNftAndErc20Order(erc721Asset, erc20Asset, "buy", viewer, {
+        fees,
+        expiry,
+        taker: ethers.constants.AddressZero,
+      })
     },
     [nftSwapSdk, viewer]
   )
