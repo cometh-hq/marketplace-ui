@@ -40,8 +40,7 @@ export function useConnect() {
       }
 
       toast({
-        title: "Wallet connected",
-        description: "Your wallet is connected",
+        title: "Your wallet is connected",
       })
 
       return true

@@ -36,7 +36,7 @@ export function SigninDropdown({ buttonVariant, handleConnect }: SigninDropdownP
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
         <Card className="p-4" style={{ width: "324px" }}>
-          <CardHeader className="mb-4 p-0">
+          <CardHeader className="mb-3 p-0">
             <CardTitle className="text-xl">Signin</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 p-0">

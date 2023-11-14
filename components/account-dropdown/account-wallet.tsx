@@ -1,10 +1,6 @@
-import { useState } from "react"
 import Image from "next/image"
-import { manifest } from "@/manifests"
-import { useFormatMainBalance } from "@/services/balance/main"
-import { useFormatWrappedBalance } from "@/services/balance/wrapped"
+import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu"
 
-import { WrapButton } from "../asset-actions/buttons/wrap"
 import { Button } from "../ui/button"
 
 type AccountWalletProps = {
@@ -21,7 +17,7 @@ export function AccountWallet({
   handleConnect,
 }: AccountWalletProps) {
   return (
-    <div>
+    <DropdownMenuItem>
       {!isComethWallet && (
         <div className="mb-1 text-sm font-semibold">External wallet</div>
       )}
@@ -39,6 +35,6 @@ export function AccountWallet({
         />
         <span className="text-base font-semibold">{name}</span>
       </Button>
-    </div>
+    </DropdownMenuItem>
   )
 }
