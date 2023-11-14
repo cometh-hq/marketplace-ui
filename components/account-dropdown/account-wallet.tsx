@@ -1,64 +1,44 @@
+import { useState } from "react"
 import Image from "next/image"
 import { manifest } from "@/manifests"
 import { useFormatMainBalance } from "@/services/balance/main"
 import { useFormatWrappedBalance } from "@/services/balance/wrapped"
 
 import { WrapButton } from "../asset-actions/buttons/wrap"
-import { useState } from "react"
 import { Button } from "../ui/button"
 
-export function AccountWallet() {
-  const balance = useFormatMainBalance()
-  const wBalance = useFormatWrappedBalance()
+type AccountWalletProps = {
+  name: string
+  icon: string
+  isComethWallet: boolean
+  handleConnect?: (isAlembicWallet: boolean) => Promise<void>
+}
 
-  const [isUnwrap, setIsUnwrap] = useState(false);
-
+export function AccountWallet({
+  name,
+  icon,
+  isComethWallet,
+  handleConnect,
+}: AccountWalletProps) {
   return (
     <div>
-      <div className="mb-3 space-y-3 rounded-md border border-border p-3">
-        <div className="flex items-center justify-between">
-          <AccountBalanceLine
-            balance={balance}
-            currency={manifest.currency.main.name}
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <AccountBalanceLine
-            balance={wBalance}
-            currency={manifest.currency.wrapped.name}
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <WrapButton isUnwrap={isUnwrap} onToggleMode={() => setIsUnwrap(!isUnwrap)} />
-        <Button variant="secondary">
-          Add found
-        </Button>
-      </div>
-    </div>
-  )
-}
-
-type AccountBalanceLineProps = {
-  balance: string
-  currency: string
-}
-
-export function AccountBalanceLine({
-  balance,
-  currency,
-}: AccountBalanceLineProps) {
-  return (
-    <div className="text-[15px] font-semibold">
-      <Image
-        src="/icons/chains/polygon.svg"
-        alt=""
-        width={24}
-        height={24}
-        className="inline-block"
-      />
-      {balance} {currency}
+      {!isComethWallet && (
+        <div className="mb-1 text-sm font-semibold">External wallet</div>
+      )}
+      <Button
+        variant="secondary"
+        className="h-12 w-full justify-start gap-2 font-extrabold"
+        onClick={() => handleConnect && handleConnect(name === "Cometh")}
+      >
+        <Image
+          src={icon}
+          width={30}
+          height={30}
+          alt={name}
+          className="rounded-full"
+        />
+        <span className="text-base font-semibold">{name}</span>
+      </Button>
     </div>
   )
 }

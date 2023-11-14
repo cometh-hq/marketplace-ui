@@ -1,23 +1,28 @@
 "use client"
 
-import { useAvailableAccounts } from "@/lib/web3/auth"
 import { ButtonProps } from "@/components/ui/button"
 
 import { CurrentAccountDropdown } from "./current-account-dropdown"
+import { SigninDropdown } from "./signin-dropdown"
 
 export type AccountDropdownButtonProps = {
   variant?: ButtonProps["variant"]
+  isLogged?: boolean
+  handleConnect?: (isAlembicWallet: boolean) => Promise<void>
 }
 
-export function AccountDropdownButton({ variant }: AccountDropdownButtonProps) {
-  const availableAccounts = useAvailableAccounts()
-
+export function AccountDropdownButton({
+  variant,
+  isLogged,
+  handleConnect,
+}: AccountDropdownButtonProps) {
   return (
     <div className="relative flex gap-3">
-      <CurrentAccountDropdown
-        buttonVariant={variant}
-        isolated={availableAccounts.length === 1}
-      />
+      {isLogged ? (
+        <CurrentAccountDropdown buttonVariant={variant} />
+      ) : (
+        <SigninDropdown buttonVariant={variant} handleConnect={handleConnect} />
+      )}
     </div>
   )
 }

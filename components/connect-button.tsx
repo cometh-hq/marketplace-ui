@@ -6,6 +6,7 @@ import { useIsConnecting } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 
 import { AccountDropdownButton } from "./account-dropdown/button"
+import { SigninDropdown } from "./account-dropdown/signin-dropdown"
 
 export function ConnectButton({ children }: { children?: React.ReactNode }) {
   const { isConnected, setIsconnected, reconnecting, storeWalletAddress } =
@@ -15,7 +16,7 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false)
 
   if (isConnected && !children)
-    return <AccountDropdownButton variant="default" />
+    return <AccountDropdownButton variant="default" isLogged={isConnected} />
 
   async function handleConnect(isAlembicWallet = false) {
     setIsLoading(true)
@@ -47,20 +48,11 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
 
     return (
       <div className="flex items-center gap-2">
-        <Button
-          size="default"
-          onClick={() => handleConnect()}
-          disabled={isLoading}
-        >
-          {label}
-        </Button>
-        <Button
-          size="default"
-          onClick={() => handleConnect(true)}
-          disabled={isLoading}
-        >
-          Connect with cometh
-        </Button>
+        <AccountDropdownButton
+          variant="default"
+          isLogged={isConnected}
+          handleConnect={handleConnect}
+        />
       </div>
     )
   }

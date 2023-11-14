@@ -16,7 +16,7 @@ import { UserLink } from "@/components/ui/user-button"
 import { ButtonLoading } from "@/components/button-loading"
 
 import { CopyButton } from "../ui/copy-button"
-import { AccountWallet } from "./account-wallet"
+import { AccountBalance } from "./account-balance"
 import { AccountLogAction } from "./log-actions"
 
 export type AccountDropdownProps = {
@@ -69,7 +69,7 @@ export function CurrentAccountDropdown({
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <AccountWallet />
+            <AccountBalance />
           </CardContent>
         </Card>
       </DropdownMenuContent>
