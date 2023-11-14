@@ -1,10 +1,7 @@
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
-import { useQueryClient } from "@tanstack/react-query"
 import { ethers } from "ethers"
 
-import { COMETH_CONNECT_LABEL } from "@/config/site"
-import { useConnect } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
 
 import { handleOrderbookError } from "../errors"
@@ -15,13 +12,11 @@ export type RegisterFields = {
   userName: string
 }
 
-export function useComethConnect() {
+export function useConnect() {
   const { connect: connectWallet } = useWalletConnect()
-  const [shouldRegister, setShouldRegister] = useState(false)
   const walletAddress = useRef<string | null>(null)
   const walletState = useRef<any | null>(null)
   const { initOnboard } = useWeb3OnboardContext()
-  // const isComethWallet = localStorage.getItem("selectedWallet") === COMETH_CONNECT_LABEL
 
   async function connect({
     isAlembicWallet = false,
@@ -31,26 +26,15 @@ export function useComethConnect() {
     existingWalletAddress?: string
   }) {
     try {
-      console.log("isAlembicWallet :>> ", isAlembicWallet)
-      if (isAlembicWallet) {
-        toast({
-          title: "Logging your Cometh Wallet",
-          duration: Infinity,
-        })
-      }
       initOnboard({
         isComethWallet: isAlembicWallet,
         ...(existingWalletAddress && { walletAddress: existingWalletAddress }),
       })
-      console.log("isAlembicWallet ", isAlembicWallet)
       const wallet = await connectWallet({ isAlembicWallet })
       walletState.current = wallet
-      console.log("wallet :>> ", walletState.current)
 
       const walletAddr = ethers.utils.getAddress(wallet.accounts[0].address)
       walletAddress.current = walletAddr
-      console.log("walletAddr :>> ", walletAddress.current)
-
       if (!walletAddr) {
         throw new Error("No wallet address")
       }
@@ -61,18 +45,20 @@ export function useComethConnect() {
       })
 
       return true
-    } catch (e) {
-      console.log("e :>> ", e)
-      // _handleError(e as Error)
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: handleOrderbookError(error, {
+          400: "Bad request",
+          500: "Internal orderbook server error",
+        }),
+      })
       return false
-    } finally {
-      // toast.dismiss("cometh-connect");
     }
   }
 
   return {
     connect,
-    shouldRegister,
-    setShouldRegister,
   }
 }

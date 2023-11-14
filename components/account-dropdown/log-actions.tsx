@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+
 export function AccountLogAction() {
   const wallet = useWallet()
   const logout = useDisconnect()
@@ -26,7 +27,11 @@ export function AccountLogAction() {
       <TooltipProvider delayDuration={200}>
         <Tooltip defaultOpen={false}>
           <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" onClick={handleLogout}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleLogout}
+            >
               <LogOut size="14" />
             </Button>
           </TooltipTrigger>

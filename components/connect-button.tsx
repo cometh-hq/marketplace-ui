@@ -1,30 +1,30 @@
 import { useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
-import { useComethConnect } from "@/services/web3/use-cometh-connect"
+import { useConnect } from "@/services/web3/use-connect"
 
-import { COMETH_CONNECT_LABEL } from "@/config/site"
 import { useIsConnecting } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 
 import { AccountDropdownButton } from "./account-dropdown/button"
 
 export function ConnectButton({ children }: { children?: React.ReactNode }) {
-  const { isConnected, reconnecting } = useWeb3OnboardContext()
-  const { connect } = useComethConnect()
+  const { isConnected, setIsconnected, reconnecting, storeWalletAddress } =
+    useWeb3OnboardContext()
+  const { connect } = useConnect()
   const isConnecting = useIsConnecting()
   const [isLoading, setIsLoading] = useState(false)
 
   if (isConnected && !children)
     return <AccountDropdownButton variant="default" />
 
-  // if (isFetching) return <ButtonLoading />
-
   async function handleConnect(isAlembicWallet = false) {
     setIsLoading(true)
     try {
       await connect({
         isAlembicWallet,
+        existingWalletAddress: storeWalletAddress,
       })
+      setIsconnected(true)
     } catch (e) {
       console.error("Erreur lors de la connexion au portefeuille:", e)
     } finally {
@@ -33,7 +33,7 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
   }
 
   if (reconnecting) {
-    return <div>Reconnecting...</div>
+    return <Button>Reconnecting...</Button>
   }
 
   if (!isConnected || isLoading) {
@@ -48,15 +48,19 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
     return (
       <div className="flex items-center gap-2">
         <Button
-          size={children ? "lg" : "default"}
-          className="w-full"
-          onClick={() => handleConnect(false)}
+          size="default"
+          onClick={() => handleConnect()}
+          disabled={isLoading}
         >
           {label}
         </Button>
-        <button type="button" onClick={() => handleConnect(true)}>
+        <Button
+          size="default"
+          onClick={() => handleConnect(true)}
+          disabled={isLoading}
+        >
           Connect with cometh
-        </button>
+        </Button>
       </div>
     )
   }

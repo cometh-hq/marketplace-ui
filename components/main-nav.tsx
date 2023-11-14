@@ -27,7 +27,7 @@ export function MainNav({ items, onLinkClick }: MainNavProps) {
   return (
     <>
       {items?.length ? (
-        <nav className="flex flex-col gap-6 max-md:mt-12 max-md:flex-1 max-md:overflow-y-auto md:flex-row">
+        <nav className="flex flex-col md:flex-row gap-6 max-md:mt-12 max-md:flex-1 max-md:overflow-y-auto">
           {items?.map(
             (item, index) =>
               item.href && (
@@ -35,7 +35,7 @@ export function MainNav({ items, onLinkClick }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={
-                    cn(`font-bold opacity-50 max-md:text-2xl ${isActiveLink(item.href) && 'opacity-100 max-md:text-primary-foreground'}`)
+                    cn(`max-md:text-2xl opacity-50 font-bold ${isActiveLink(item.href) && 'max-md:text-primary-foreground opacity-100'}`)
                   }
                   onClick={onLinkClick}
                 >
