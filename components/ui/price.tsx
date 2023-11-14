@@ -67,7 +67,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {!hideIcon && (
           <span className={cn("relative -ml-1", iconVariants({ size }))}>
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
+              src="/icons/chains/polygon.svg"
               alt={formattedAmount.toString()}
               fill
             />

@@ -28,7 +28,7 @@ export function ConfirmationStep({ asset, txHash, onValid }: ConfirmationStepPro
             </Button>
           </Link>
           )}
-          <ShareButton asset={asset} />
+          <ShareButton asset={asset} size="lg" />
       </div>
     </div>
   )

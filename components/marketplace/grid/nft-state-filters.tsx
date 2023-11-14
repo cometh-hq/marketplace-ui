@@ -41,7 +41,7 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
   const viewerAddress = useCurrentViewerAddress()
 
   const isOnProfilePage = pathname.includes(
-    `${process.env.NEXT_PUBLIC_BASE_PATH}/profile`
+    `/profile`
   )
 
   const result = results > 0 ? `(${results})` : ""

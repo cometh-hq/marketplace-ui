@@ -23,7 +23,7 @@ export function AccountWallet({
       )}
       <Button
         variant="secondary"
-        className="h-12 w-full justify-start gap-2 font-extrabold"
+        className="h-12 w-full justify-start gap-2 text-[15px]"
         onClick={() => handleConnect && handleConnect(name === "Cometh")}
       >
         <Image
@@ -33,7 +33,7 @@ export function AccountWallet({
           alt={name}
           className="rounded-full"
         />
-        <span className="text-base font-semibold">{name}</span>
+        {name}
       </Button>
     </DropdownMenuItem>
   )

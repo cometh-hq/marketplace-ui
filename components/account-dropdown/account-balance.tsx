@@ -1,17 +1,17 @@
+import { useState } from "react"
 import Image from "next/image"
 import { manifest } from "@/manifests"
 import { useFormatMainBalance } from "@/services/balance/main"
 import { useFormatWrappedBalance } from "@/services/balance/wrapped"
 
 import { WrapButton } from "../asset-actions/buttons/wrap"
-import { useState } from "react"
 import { Button } from "../ui/button"
 
 export function AccountBalance() {
   const balance = useFormatMainBalance()
   const wBalance = useFormatWrappedBalance()
 
-  const [isUnwrap, setIsUnwrap] = useState(false);
+  const [isUnwrap, setIsUnwrap] = useState(false)
 
   return (
     <div>
@@ -31,10 +31,11 @@ export function AccountBalance() {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <WrapButton isUnwrap={isUnwrap} onToggleMode={() => setIsUnwrap(!isUnwrap)} />
-        <Button variant="secondary">
-          Add found
-        </Button>
+        <WrapButton
+          isUnwrap={isUnwrap}
+          onToggleMode={() => setIsUnwrap(!isUnwrap)}
+        />
+        <Button variant="secondary">Add found</Button>
       </div>
     </div>
   )
