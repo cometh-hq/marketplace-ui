@@ -18,11 +18,11 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
   if (isConnected && !children)
     return <AccountDropdownButton variant="default" isLogged={isConnected} />
 
-  async function handleConnect(isAlembicWallet = false) {
+  async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
     try {
       await connect({
-        isAlembicWallet,
+        isComethWallet,
         existingWalletAddress: storeWalletAddress,
       })
       setIsconnected(true)

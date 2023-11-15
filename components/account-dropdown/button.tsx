@@ -8,7 +8,7 @@ import { SigninDropdown } from "./signin-dropdown"
 export type AccountDropdownButtonProps = {
   variant?: ButtonProps["variant"]
   isLogged?: boolean
-  handleConnect?: (isAlembicWallet: boolean) => Promise<void>
+  handleConnect?: (isComethWallet: boolean) => Promise<void>
 }
 
 export function AccountDropdownButton({

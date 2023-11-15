@@ -7,7 +7,7 @@ type AccountWalletProps = {
   name: string
   icon: string
   isComethWallet: boolean
-  handleConnect?: (isAlembicWallet: boolean) => Promise<void>
+  handleConnect?: (isComethWallet: boolean) => Promise<void>
 }
 
 export function AccountWallet({

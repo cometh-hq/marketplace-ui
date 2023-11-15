@@ -12,7 +12,7 @@ import { useWalletConnect } from "./use-wallet-connect";
 
 export function useConnectWallet(): [
   { wallet: WalletState | null; connecting: boolean },
-  ({ isAlembicWallet = false }) => Promise<WalletState>,
+  ({ isComethWallet = false }) => Promise<WalletState>,
   (wallet: DisconnectOptions) => Promise<WalletState[] | undefined>,
 ] {
   const getWalletState = useGetWalletState()

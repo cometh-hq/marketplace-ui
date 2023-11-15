@@ -12,7 +12,7 @@ import { AccountWallet } from "./account-wallet"
 
 export type SigninDropdownProps = {
   buttonVariant?: ButtonProps["variant"]
-  handleConnect?: (isAlembicWallet: boolean) => Promise<void>
+  handleConnect?: (isComethWallet: boolean) => Promise<void>
 }
 
 export function SigninDropdown({ buttonVariant, handleConnect }: SigninDropdownProps) {

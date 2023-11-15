@@ -19,18 +19,18 @@ export function useConnect() {
   const { initOnboard } = useWeb3OnboardContext()
 
   async function connect({
-    isAlembicWallet = false,
+    isComethWallet = false,
     existingWalletAddress,
   }: {
-    isAlembicWallet?: boolean
+    isComethWallet?: boolean
     existingWalletAddress?: string
   }) {
     try {
       initOnboard({
-        isComethWallet: isAlembicWallet,
+        isComethWallet,
         ...(existingWalletAddress && { walletAddress: existingWalletAddress }),
       })
-      const wallet = await connectWallet({ isAlembicWallet })
+      const wallet = await connectWallet({ isComethWallet })
       walletState.current = wallet
 
       const walletAddr = ethers.utils.getAddress(wallet.accounts[0].address)

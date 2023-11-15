@@ -12,7 +12,7 @@ export type RegisterFields = {
 }
 
 export interface ConnectParams {
-  isAlembicWallet?: boolean
+  isComethWallet?: boolean
 }
 
 async function _selectdCorrectChain(onboard: OnboardAPI, wallet: WalletState) {
@@ -23,14 +23,14 @@ async function _selectdCorrectChain(onboard: OnboardAPI, wallet: WalletState) {
 }
 
 export function useWalletConnect(): {
-  connect: ({ isAlembicWallet }: ConnectParams) => Promise<WalletState>
+  connect: ({ isComethWallet }: ConnectParams) => Promise<WalletState>
   connecting: boolean
 } {
   const { onboard } = useWeb3OnboardContext()
   const [connecting, setConnecting] = useState(false)
 
   async function connect({
-    isAlembicWallet = false,
+    isComethWallet = false,
   }: ConnectParams): Promise<WalletState> {
     setConnecting(true)
 
@@ -38,7 +38,7 @@ export function useWalletConnect(): {
 
     try {
       const wallets = await onboard.connectWallet(
-        isAlembicWallet
+        isComethWallet
           ? {
               autoSelect: {
                 label: COMETH_CONNECT_STORAGE_LABEL,
