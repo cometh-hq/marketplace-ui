@@ -11,11 +11,12 @@ import {
 import { AccountWallet } from "./account-wallet"
 
 export type SigninDropdownProps = {
-  buttonVariant?: ButtonProps["variant"]
+  label: string
   handleConnect?: (isComethWallet: boolean) => Promise<void>
 }
 
-export function SigninDropdown({ buttonVariant, handleConnect }: SigninDropdownProps) {
+export function SigninDropdown({ label, handleConnect }: SigninDropdownProps) {
+  // TODO: get this list dynamically from web3-onboard ?
   const wallets = [
     {
       name: "Cometh",
@@ -32,7 +33,7 @@ export function SigninDropdown({ buttonVariant, handleConnect }: SigninDropdownP
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={buttonVariant}>Signin</Button>
+        <Button variant="default">{label}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
         <Card className="p-4" style={{ width: "324px" }}>

@@ -5,7 +5,7 @@ import { useConnect } from "@/services/web3/use-connect"
 import { useIsConnecting } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 
-import { AccountDropdownButton } from "./account-dropdown/button"
+import { CurrentAccountDropdown } from "./account-dropdown/current-account-dropdown"
 import { SigninDropdown } from "./account-dropdown/signin-dropdown"
 
 export function ConnectButton({ children }: { children?: React.ReactNode }) {
@@ -15,8 +15,7 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
   const isConnecting = useIsConnecting()
   const [isLoading, setIsLoading] = useState(false)
 
-  if (isConnected && !children)
-    return <AccountDropdownButton variant="default" isLogged={isConnected} />
+  if (isConnected && !children) return <CurrentAccountDropdown />
 
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
@@ -27,7 +26,7 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
       })
       setIsconnected(true)
     } catch (e) {
-      console.error("Erreur lors de la connexion au portefeuille:", e)
+      console.error("Error connecting wallet", e)
     } finally {
       setIsLoading(false)
     }
@@ -38,23 +37,9 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
   }
 
   if (!isConnected || isLoading) {
-    const label = isConnecting ? (
-      "Connecting..."
-    ) : (
-      <>
-        Connect&nbsp;<span className="max-md:hidden">wallet</span>
-      </>
-    )
+    const label = isConnecting ? "Connecting..." : "Signin"
 
-    return (
-      <div className="flex items-center gap-2">
-        <AccountDropdownButton
-          variant="default"
-          isLogged={isConnected}
-          handleConnect={handleConnect}
-        />
-      </div>
-    )
+    return <SigninDropdown label={label} handleConnect={handleConnect} />
   }
 
   return <>{children}</>

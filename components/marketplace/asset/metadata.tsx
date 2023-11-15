@@ -35,8 +35,8 @@ export function AssetMetadata({ asset }: { asset: AssetWithTradeData }) {
             <TableBody>
               {attributes?.map((attribute, index) => (
                 <TableRow key={index}>
-                  <TableCell className="py-1 pl-6">{attribute.trait_type}</TableCell>
-                  <TableCell className="py-1 text-right font-medium">
+                  <TableCell className="py-3 pl-6">{attribute.trait_type}</TableCell>
+                  <TableCell className="py-3 text-right font-medium">
                     <Button asChild variant="link">
                       <Link href={`/marketplace?trait=${attribute.value}`}>
                         {attribute.value}
