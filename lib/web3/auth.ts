@@ -44,7 +44,7 @@ export const useWalletProvider = () => {
         : wallet?.provider
         ? new ethers.providers.Web3Provider(wallet?.provider, "any")
         : null,
-    [wallet]
+    [isComethWallet, wallet?.provider]
   )
 
   return provider
