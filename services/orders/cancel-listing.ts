@@ -1,3 +1,4 @@
+import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { AssetWithTradeData } from "@alembic/nft-api-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
@@ -7,10 +8,9 @@ import { toast } from "@/components/ui/toast/use-toast"
 import { useSigner } from "../../lib/web3/auth"
 import { getFirstListing } from "../cometh-marketplace/offers"
 import { handleOrderbookError } from "../errors"
-import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 
 export const useCancelListing = () => {
-  const sdk = useNFTSwapv4()
+  const nftSwapSdk = useNFTSwapv4()
   const signer = useSigner()
   const client = useQueryClient()
   const { getWalletTxs } = useWeb3OnboardContext()
@@ -22,7 +22,7 @@ export const useCancelListing = () => {
       const nonce = (await getFirstListing(asset.tokenId)).nonce
       if (!nonce) throw new Error("No nonce found on asset")
 
-      return await walletAdapter?.cancelListing({nonce, signer, sdk})
+      return await walletAdapter?.cancelListing({ nonce, signer, nftSwapSdk })
     },
     {
       onSuccess: (_, asset) => {

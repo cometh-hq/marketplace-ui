@@ -30,7 +30,7 @@ export type CancelBuyOfferParams = {
 export const useCancelBuyOffer = () => {
   const signer = useSigner()
   const client = useQueryClient()
-  const sdk = useNFTSwapv4()
+  const nftSwapSdk = useNFTSwapv4()
   const { getWalletTxs } = useWeb3OnboardContext()
   const walletAdapter = getWalletTxs()
 
@@ -39,7 +39,12 @@ export const useCancelBuyOffer = () => {
     async ({ offer }: CancelBuyOfferParams) => {
       const nonce = offer.trade.nonce
 
-      return await walletAdapter?.cancelBuyOffer({ nonce, signer, offer, sdk })
+      return await walletAdapter?.cancelBuyOffer({
+        nonce,
+        signer,
+        offer,
+        nftSwapSdk,
+      })
     },
     {
       onSuccess: (_, { offer }) => {
