@@ -26,7 +26,7 @@ export const useMakeBuyOfferAsset = () => {
   const { data: collection } = useGetCollection()
   const { getWalletTxs } = useWeb3OnboardContext()
   const walletAdapter = getWalletTxs()
-
+  
   return useMutation(
     ["make-buy-offer-asset"],
     async ({ asset, price, validity }: MakeBuyOfferOptions) => {
@@ -48,7 +48,7 @@ export const useMakeBuyOfferAsset = () => {
       onSuccess: (_, { asset }) => {
         client.invalidateQueries(["cometh", "search"]) // TODO: optimize this, just invalidate current asset
         client.invalidateQueries(["cometh", "assets", asset.tokenId])
-        client.invalidateQueries(["cometh", "ReceivedBuyoffers", asset.owner])
+        client.invalidateQueries(["cometh", "received-buy-offers", asset.owner])
       },
       onError: (error) => {
         toast({

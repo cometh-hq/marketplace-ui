@@ -50,16 +50,16 @@ export const useCancelBuyOffer = () => {
         client.refetchQueries(["cometh", "assets", offer.asset?.tokenId])
         client.invalidateQueries([
           "cometh",
-          "ReceivedBuyoffers",
+          "received-buy-offers",
           offer.owner.address,
         ])
         client.invalidateQueries([
           "cometh",
-          "SentBuyoffers",
+          "sent-buy-offers",
           offer.emitter.address,
         ])
       },
-      onError: (error: Error) => {
+      onError: (error) => {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",

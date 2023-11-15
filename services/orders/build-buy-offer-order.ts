@@ -29,7 +29,7 @@ export const useBuildBuyOfferOrder = () => {
 
   return useCallback(
     ({ asset, price, validity, collection }: BuildBuyOfferOrderOptions) => {
-      if (!nftSwapSdk || !viewer || !collection.collectionFees ) return null
+      if (!nftSwapSdk || !viewer || !collection.collectionFees) return null
 
       const expiry = DateTime.now()
         .plus({ days: parseInt(validity) })
@@ -56,11 +56,17 @@ export const useBuildBuyOfferOrder = () => {
         type: "ERC20",
       }
 
-      return nftSwapSdk.buildNftAndErc20Order(erc721Asset, erc20Asset, "buy", viewer, {
-        fees,
-        expiry,
-        taker: ethers.constants.AddressZero,
-      })
+      return nftSwapSdk.buildNftAndErc20Order(
+        erc721Asset,
+        erc20Asset,
+        "buy",
+        viewer,
+        {
+          fees,
+          expiry,
+          taker: ethers.constants.AddressZero,
+        }
+      )
     },
     [nftSwapSdk, viewer]
   )

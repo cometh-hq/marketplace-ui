@@ -22,7 +22,7 @@ export function AccountBuyOffersTable({ offers }: AccountBuyOffersTableProps) {
         if (!viewer) return true
         if (
           isAddressEqual(offer.emitter.address, viewer) &&
-          isAddressEqual(offer.owner.address as Address, viewer)
+          isAddressEqual(offer.owner.address, viewer)
         )
           return false
         return true
