@@ -30,6 +30,7 @@ export const AssetsSearchGrid = ({
 }: any) => {
   const { ref: loadMoreRef, inView } = useInView({ threshold: 1 })
   const [search, setSearch] = useState("")
+  const [initialResults, setInitialResults] = useState<number | null>(null)
 
   const filtersDefinition = useMemo(
     () => deserializeFilters(filtersRaw),
@@ -56,6 +57,12 @@ export const AssetsSearchGrid = ({
   }, [nfts?.pages])
 
   useEffect(() => {
+    if (results && initialResults === null) {
+      setInitialResults(results)
+    }
+  }, [results])
+
+  useEffect(() => {
     if (nfts) refetch()
   }, [nfts])
 
@@ -66,7 +73,7 @@ export const AssetsSearchGrid = ({
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <div className="relative mb-10 flex w-full flex-wrap items-center justify-between gap-4">
-        <NFTStateFilters assets={assets} results={results} />
+        <NFTStateFilters assets={assets} results={initialResults} />
         <div className="flex items-center gap-x-3">
           <SearchAsset onChange={setSearch} />
           <MarketplaceFiltersDropdown filters={filtersDefinition} />

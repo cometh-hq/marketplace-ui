@@ -32,7 +32,7 @@ const NFTStateFilterItem = ({
 
 type NFTStateFiltersProps = {
   assets: any[]
-  results: number
+  results: number | null
 }
 
 export function NFTStateFilters({ results }: NFTStateFiltersProps) {
@@ -44,7 +44,7 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
     `/profile`
   )
 
-  const result = results > 0 ? `(${results})` : ""
+  const result = results && results > 0 ? `(${results})` : ""
 
   return (
     <div className="flex gap-5">
