@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { useFilterableNFTsQuery } from "@/services/alembic/search-assets"
+import { useFilterableNFTsQuery } from "@/services/cometh-marketplace/search-assets"
 import { AssetSearchFilters } from "@alembic/nft-api-sdk"
 import { useInView } from "react-intersection-observer"
 

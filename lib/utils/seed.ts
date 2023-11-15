@@ -1,5 +1,5 @@
 import { manifest } from "@/manifests"
-import { fetchCollectionAttributes } from "@/services/alembic/collection-attributes"
+import { fetchCollectionAttributes } from "@/services/cometh-marketplace/collection-attributes"
 import { type CollectionAttributes } from "@alembic/nft-api-sdk"
 
 export type SerializedMarketplacePanelFilters = {

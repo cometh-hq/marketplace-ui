@@ -6,8 +6,8 @@ import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
 import { useIsComethWallet, useSigner } from "../../lib/web3/auth"
-import { comethMarketplaceClient } from "../alembic/client"
-import { getFirstListing } from "../alembic/offers"
+import { comethMarketplaceClient } from "../cometh-marketplace/client"
+import { getFirstListing } from "../cometh-marketplace/offers"
 import { handleOrderbookError } from "../errors"
 
 export const useCancelListing = () => {
@@ -46,7 +46,7 @@ export const useCancelListing = () => {
     },
     {
       onSuccess: (_, asset) => {
-        client.refetchQueries(["alembic", "assets", asset.tokenId])
+        client.refetchQueries(["cometh", "assets", asset.tokenId])
         toast({
           title: "Your order has been canceled.",
         })

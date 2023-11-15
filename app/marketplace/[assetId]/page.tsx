@@ -1,8 +1,8 @@
 "use client"
 
 import { manifest } from "@/manifests"
-import { useAssetDetails } from "@/services/alembic/search-assets"
-import { useAssetTransfers } from "@/services/alembic/transfers"
+import { useAssetDetails } from "@/services/cometh-marketplace/search-assets"
+import { useAssetTransfers } from "@/services/cometh-marketplace/transfers"
 
 import { AssetActivities } from "@/components/activities/asset-details/tabs"
 import AssetDetails from "@/components/marketplace/asset/header"

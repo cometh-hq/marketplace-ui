@@ -7,7 +7,7 @@ import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
-import { getFirstListing } from "../alembic/offers"
+import { getFirstListing } from "../cometh-marketplace/offers"
 import { handleOrderbookError } from "../errors"
 
 export type BuyAssetOptions = {
@@ -63,7 +63,7 @@ export const useBuyAsset = () => {
     },
     {
       onSuccess: (_, { asset }) => {
-        client.invalidateQueries(["alembic", "assets", asset.tokenId])
+        client.invalidateQueries(["cometh", "assets", asset.tokenId])
         toast({
           title: "NFT bought!",
         })

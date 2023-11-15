@@ -80,9 +80,9 @@ export const useAcceptBuyOffer = () => {
     },
     {
       onSuccess: (_, { offer }) => {
-        client.invalidateQueries(["alembic", "assets", offer.asset?.tokenId])
+        client.invalidateQueries(["cometh", "assets", offer.asset?.tokenId])
         client.invalidateQueries([
-          "alembic",
+          "cometh",
           "ReceivedBuyoffers",
           offer.owner.address,
         ])

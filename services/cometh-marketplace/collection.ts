@@ -13,7 +13,7 @@ export const fetchGetCollection = async (contractAddress: Address) => {
 export const useGetCollection = () => {
   const contractAddress = manifest.contractAddress
 
-  return useQuery(["alembic", "collection", contractAddress], () => {
+  return useQuery(["cometh", "collection", contractAddress], () => {
     return fetchGetCollection(contractAddress)
   })
 }

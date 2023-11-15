@@ -18,7 +18,7 @@ export const fetchAssetTransfers = async ({
 
 export const useAssetTransfers = (contractAddress: Address, tokenId: string) => {
   return useQuery(
-    ["alembic", "assetTransfers", tokenId],
+    ["cometh", "assetTransfers", tokenId],
     () => {
       return fetchAssetTransfers({ contractAddress, tokenId })
     },

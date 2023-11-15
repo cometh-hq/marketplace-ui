@@ -113,7 +113,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery(
-    ["alembic", "search", filters, options?.page, options?.search],
+    ["cometh", "search", filters, options?.page, options?.search],
     ({ pageParam = 1 }) => {
       return getAssetsPaginated(
         {
@@ -164,13 +164,13 @@ export const useAssetDetails = (contractAddress: Address, assetId: string) => {
   const client = useQueryClient()
 
   return useQuery(
-    ["alembic", "assets", assetId],
+    ["cometh", "assets", assetId],
     () => fetchAsset({ contractAddress, assetId }),
     {
       initialData: () => {
         const search = client.getQueriesData<
           UseInfiniteQueryResult<AssetWithTradeData[]>
-        >(["alembic", "search"])
+        >(["cometh", "search"])
         return findAssetInSearchResults(search, assetId)
       },
     }

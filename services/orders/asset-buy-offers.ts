@@ -4,7 +4,7 @@ import { Address } from "viem"
 
 import { UnknownUser } from "@/types/user"
 
-import { useReceivedBuyOffers, useSentBuyOffers } from "../alembic/offers"
+import { useReceivedBuyOffers, useSentBuyOffers } from "../cometh-marketplace/offers"
 
 export type UseMakerBuyOffersOptions = {
   maker: Address

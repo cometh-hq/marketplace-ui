@@ -5,7 +5,7 @@ import { comethMarketplaceClient } from "./client"
 
 export function useReceivedBuyOffers(userAddress: string) {
   const { data, isLoading } = useQuery(
-    ["alembic", "ReceivedBuyoffers", userAddress.toLowerCase()],
+    ["cometh", "ReceivedBuyoffers", userAddress.toLowerCase()],
     async () => {
       const response =
         await comethMarketplaceClient.order.getOffersReceivedByAddress(
@@ -27,7 +27,7 @@ export function useReceivedBuyOffers(userAddress: string) {
 
 export function useSentBuyOffers(userAddress: string) {
   const { data, isLoading } = useQuery(
-    ["alembic", "SentBuyoffers", userAddress.toLowerCase()],
+    ["cometh", "SentBuyoffers", userAddress.toLowerCase()],
     async () => {
       const response =
         await comethMarketplaceClient.order.getOffersSentByAddress(
@@ -49,7 +49,7 @@ export function useSentBuyOffers(userAddress: string) {
 
 export function useListings(tokenId: string) {
   const { data, isLoading } = useQuery(
-    ["alembic", "listings", tokenId],
+    ["cometh", "listings", tokenId],
     async () => {
       const response = await comethMarketplaceClient.order.searchOrders({
         tokenIds: [tokenId],

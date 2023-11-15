@@ -14,8 +14,8 @@ import { IZeroEx__factory } from "@/lib/generated/contracts/factories/IZeroEx__f
 import { useIsComethWallet, useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
 
-import { comethMarketplaceClient } from "../alembic/client"
-import { useGetCollection } from "../alembic/collection"
+import { comethMarketplaceClient } from "../cometh-marketplace/client"
+import { useGetCollection } from "../cometh-marketplace/collection"
 import { handleOrderbookError } from "../errors"
 import { useBuildSellOrder } from "./build-sell-order"
 import { useSignSellOrder } from "./sign-sell-order"
@@ -79,8 +79,8 @@ export const useSellAsset = () => {
     },
     {
       onSuccess: (_, { asset }) => {
-        client.invalidateQueries(["alembic", "search"]) // TODO: optimize this, just invalidate the asset
-        client.invalidateQueries(["alembic", "assets", asset.tokenId])
+        client.invalidateQueries(["cometh", "search"]) // TODO: optimize this, just invalidate the asset
+        client.invalidateQueries(["cometh", "assets", asset.tokenId])
         toast({
           title: "Your asset is now listed for sale.",
         })

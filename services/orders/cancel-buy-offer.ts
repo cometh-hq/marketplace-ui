@@ -14,7 +14,7 @@ import {
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
-import { comethMarketplaceClient } from "../alembic/client"
+import { comethMarketplaceClient } from "../cometh-marketplace/client"
 import { handleOrderbookError } from "../errors"
 
 export type UseCanCancelBuyOfferParams = {
@@ -66,14 +66,14 @@ export const useCancelBuyOffer = () => {
     },
     {
       onSuccess: (_, { offer }) => {
-        client.refetchQueries(["alembic", "assets", offer.asset?.tokenId])
+        client.refetchQueries(["cometh", "assets", offer.asset?.tokenId])
         client.invalidateQueries([
-          "alembic",
+          "cometh",
           "ReceivedBuyoffers",
           offer.owner.address,
         ])
         client.invalidateQueries([
-          "alembic",
+          "cometh",
           "SentBuyoffers",
           offer.emitter.address,
         ])
