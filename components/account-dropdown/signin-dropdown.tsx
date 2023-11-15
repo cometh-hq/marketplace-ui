@@ -11,11 +11,16 @@ import {
 import { AccountWallet } from "./account-wallet"
 
 export type SigninDropdownProps = {
+  children
   disabled: boolean
   handleConnect?: (isComethWallet: boolean) => Promise<void>
 }
 
-export function SigninDropdown({ disabled, handleConnect }: SigninDropdownProps) {
+export function SigninDropdown({
+  children,
+  disabled,
+  handleConnect,
+}: SigninDropdownProps) {
   // TODO: get this list dynamically from web3-onboard ?
   const wallets = [
     {
@@ -33,7 +38,13 @@ export function SigninDropdown({ disabled, handleConnect }: SigninDropdownProps)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="default" disabled={disabled}>Signin</Button>
+        <Button
+          size={children ? "lg" : "default"}
+          variant="default"
+          disabled={disabled}
+        >
+          Signin
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
         <Card className="p-4" style={{ width: "324px" }}>
