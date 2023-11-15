@@ -1,24 +1,17 @@
 import { manifest } from "@/manifests"
 import {
   AssetWithTradeData,
-  NewOrder,
-  TokenType,
-  TradeDirection,
 } from "@alembic/nft-api-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { ERC721OrderStruct } from "@traderxyz/nft-swap-sdk"
 import { BigNumber } from "ethers"
-import { DateTime } from "luxon"
 
-import { IZeroEx__factory } from "@/lib/generated/contracts/factories/IZeroEx__factory"
-import { useIsComethWallet, useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
 
-import { comethMarketplaceClient } from "../cometh-marketplace/client"
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { handleOrderbookError } from "../errors"
 import { useBuildBuyOfferOrder } from "./build-buy-offer-order"
-import { useSignBuyOfferOrder } from "./sign-buy-offer-order"
+import { useWeb3OnboardContext } from "@/providers/web3-onboard"
+import { useSigner } from "@/lib/web3/auth"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -28,12 +21,12 @@ export type MakeBuyOfferOptions = {
 
 export const useMakeBuyOfferAsset = () => {
   const buildSignBuyOfferOrder = useBuildBuyOfferOrder()
-  const signBuyOfferOrder = useSignBuyOfferOrder()
   const client = useQueryClient()
   const signer = useSigner()
-  const isComethWallet = useIsComethWallet()
-
   const { data: collection } = useGetCollection()
+  const { getWalletTxs } = useWeb3OnboardContext()
+  const walletAdapter = getWalletTxs()
+  if (!walletAdapter) throw new Error("Could not get wallet adapter")
 
   return useMutation(
     ["make-buy-offer-asset"],
@@ -47,40 +40,8 @@ export const useMakeBuyOfferAsset = () => {
         collection,
       })
       if (!order) throw new Error("Could not build order")
-
-      if (isComethWallet) {
-        const contract = IZeroEx__factory.connect(
-          process.env.NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS!,
-          signer
-        )
-
-        const tx = await contract.preSignERC721Order(order as ERC721OrderStruct)
-        const txResponse = await tx.wait()
-
-        return txResponse
-      } else {
-        const signedOrder = await signBuyOfferOrder({ order })
-
-        const buyOffer: NewOrder = {
-          tokenAddress: manifest.contractAddress,
-          tokenId: asset.tokenId,
-          tokenProperties: [],
-          tokenQuantity: BigNumber.from(1).toString(),
-          tokenType: TokenType.ERC721,
-          direction: TradeDirection.BUY,
-          erc20Token: order.erc20Token,
-          erc20TokenAmount: order.erc20TokenAmount,
-          expiry: DateTime.fromSeconds(+order.expiry).toString(),
-          fees: order.fees,
-          maker: order.maker,
-          nonce: order.nonce,
-          signature: signedOrder.signature,
-          signedAt: DateTime.now().toString(),
-          taker: order.taker,
-        }
-
-        return await comethMarketplaceClient.order.createOrder(buyOffer)
-      }
+      
+      await walletAdapter.makeBuyOffer({ asset, signer, order })
     },
     {
       onSuccess: (_, { asset }) => {
