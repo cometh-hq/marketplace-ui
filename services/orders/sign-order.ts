@@ -7,7 +7,7 @@ export type SignBuyOfferOrderOptions = {
   order: NftOrderV4Serialized
 }
 
-export const useSignBuyOfferOrder = () => {
+export const useSignOrder = () => {
   const nftSwapSdk = useNFTSwapv4()
 
   const signOrder = useCallback(

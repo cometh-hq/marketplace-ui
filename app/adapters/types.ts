@@ -1,7 +1,10 @@
-import { BuyOffer } from "@/types/buy-offers"
 import { AssetWithTradeData } from "@alembic/nft-api-sdk"
 import { Provider } from "@ethersproject/providers"
-import { NftOrderV4Serialized, NftSwapV4, SignedNftOrderV4 } from "@traderxyz/nft-swap-sdk"
+import {
+  NftOrderV4Serialized,
+  NftSwapV4,
+  SignedNftOrderV4,
+} from "@traderxyz/nft-swap-sdk"
 import { Signer } from "ethers"
 
 export type OrderParams = {

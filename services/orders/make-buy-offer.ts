@@ -10,7 +10,7 @@ import { toast } from "@/components/ui/toast/use-toast"
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { handleOrderbookError } from "../errors"
 import { useBuildBuyOfferOrder } from "./build-buy-offer-order"
-import { useSignBuyOfferOrder } from "./sign-buy-offer-order"
+import { useSignOrder } from "./sign-order"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -21,7 +21,7 @@ export type MakeBuyOfferOptions = {
 export const useMakeBuyOfferAsset = () => {
   const client = useQueryClient()
   const buildSignBuyOfferOrder = useBuildBuyOfferOrder()
-  const signBuyOfferOrder = useSignBuyOfferOrder()
+  const signBuyOfferOrder = useSignOrder()
   const signer = useSigner()
   const { data: collection } = useGetCollection()
   const { getWalletTxs } = useWeb3OnboardContext()
@@ -40,13 +40,13 @@ export const useMakeBuyOfferAsset = () => {
       })
       if (!order) throw new Error("Could not build order")
 
-      const signedOrder = await signBuyOfferOrder({ order }) // don't do this here, do it in the adapter instead
+      const signedOrder = await signBuyOfferOrder({ order })
 
-      await walletAdapter?.makeBuyOffer({ asset, signer, signedOrder, order })
+      return await walletAdapter?.makeBuyOffer({ asset, signer, signedOrder, order })
     },
     {
       onSuccess: (_, { asset }) => {
-        client.invalidateQueries(["cometh", "search"]) // TODO: optimize this, just invalidate the asset
+        client.invalidateQueries(["cometh", "search"]) // TODO: optimize this, just invalidate current asset
         client.invalidateQueries(["cometh", "assets", asset.tokenId])
         client.invalidateQueries(["cometh", "ReceivedBuyoffers", asset.owner])
       },

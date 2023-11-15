@@ -19,15 +19,11 @@ import {
 import { WalletAdapter } from "./wallet-adapter"
 
 export function useEOATxs(): WalletAdapter {
-  // const signBuyOfferOrder = useSignBuyOfferOrder() // doesn't work, i don't know why
-
   async function makeBuyOffer({
     asset,
     signedOrder,
     order,
   }: MakeBuyOfferParams) {
-    // const signedOrder = await signBuyOfferOrder({ order })
-
     const buyOffer: NewOrder = {
       tokenAddress: manifest.contractAddress,
       tokenId: asset.tokenId,
