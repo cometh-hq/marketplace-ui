@@ -1,20 +1,13 @@
 import { useMemo } from "react"
-import { CancelOrderRequest } from "@alembic/nft-api-sdk"
+import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { splitSignature } from "ethers/lib/utils"
 import { isAddressEqual } from "viem"
 
 import { BuyOffer } from "@/types/buy-offers"
-import {
-  useCurrentViewerAddress,
-  useIsComethWallet,
-  useSigner,
-  useWalletProvider,
-} from "@/lib/web3/auth"
+import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
-import { comethMarketplaceClient } from "../cometh-marketplace/client"
 import { handleOrderbookError } from "../errors"
 
 export type UseCanCancelBuyOfferParams = {
@@ -38,31 +31,15 @@ export const useCancelBuyOffer = () => {
   const signer = useSigner()
   const client = useQueryClient()
   const sdk = useNFTSwapv4()
-  const isComethWallet = useIsComethWallet()
+  const { getWalletTxs } = useWeb3OnboardContext()
+  const walletAdapter = getWalletTxs()
 
   return useMutation(
     ["cancelBuyOffer"],
     async ({ offer }: CancelBuyOfferParams) => {
       const nonce = offer.trade.nonce
 
-      if (isComethWallet) {
-        const tx = await sdk?.cancelOrder(nonce, "ERC721")
-        return await tx?.wait()
-      } else {
-        const signedPrefix = await signer!.signMessage(`Nonce: ${nonce}`)
-        const signature = splitSignature(signedPrefix)
-        const { r, s, v } = signature
-        const body: CancelOrderRequest = {
-          signature: {
-            signatureType: 2,
-            r,
-            s,
-            v,
-          },
-        }
-
-        return await comethMarketplaceClient.order.cancelOrder(nonce, body)
-      }
+      return await walletAdapter?.cancelBuyOffer({ nonce, signer, offer, sdk })
     },
     {
       onSuccess: (_, { offer }) => {

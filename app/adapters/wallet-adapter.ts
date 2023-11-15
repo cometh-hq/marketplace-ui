@@ -19,7 +19,15 @@ export type CancelListingParams = {
   sdk: any
 }
 
+export type CancelBuyOfferParams = {
+  nonce: string
+  offer: any
+  signer: any
+  sdk: any
+}
+
 export interface WalletAdapter {
   makeBuyOffer: ({ asset, signer, signedOrder, order }: MakeBuyOfferParams) => Promise<any> // TODO: return ContractReceipt ?
   cancelListing: ({ nonce, signer, sdk }: CancelListingParams) => Promise<any>
+  cancelBuyOffer: ({ nonce, offer, signer, sdk }: CancelBuyOfferParams) => Promise<any> // TODO: return ContractReceipt ?
 }

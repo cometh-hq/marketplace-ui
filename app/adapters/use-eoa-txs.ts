@@ -1,4 +1,4 @@
-import { CancelListingParams, MakeBuyOfferParams, WalletAdapter } from "./wallet-adapter";
+import { CancelBuyOfferParams, CancelListingParams, MakeBuyOfferParams, WalletAdapter } from "./wallet-adapter";
 import { useSignBuyOfferOrder } from "@/services/orders/sign-buy-offer-order";
 import { comethMarketplaceClient } from "@/services/cometh-marketplace/client";
 import { AssetWithTradeData, CancelOrderRequest, NewOrder, TokenType, TradeDirection } from "@alembic/nft-api-sdk";
@@ -51,5 +51,22 @@ export function useEOATxs(): WalletAdapter {
     return await comethMarketplaceClient.order.cancelOrder(nonce, body)
   }
 
-  return { makeBuyOffer, cancelListing }
+  async function cancelBuyOffer({ nonce, offer, signer }: CancelBuyOfferParams) {
+    const signedPrefix = await signer!.signMessage(`Nonce: ${nonce}`)
+    const signature = splitSignature(signedPrefix)
+    const { r, s, v } = signature
+
+    const body: CancelOrderRequest = {
+      signature: {
+        signatureType: 2,
+        r,
+        s,
+        v,
+      },
+    }
+
+    return await comethMarketplaceClient.order.cancelOrder(nonce, body)
+  }
+
+  return { makeBuyOffer, cancelListing, cancelBuyOffer }
 }

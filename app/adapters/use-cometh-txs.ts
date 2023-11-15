@@ -3,7 +3,7 @@ import { ERC721OrderStruct } from "@traderxyz/nft-swap-sdk"
 
 import { IZeroEx__factory } from "@/lib/generated/contracts/factories/IZeroEx__factory"
 
-import { CancelListingParams, MakeBuyOfferParams, WalletAdapter } from "./wallet-adapter"
+import { CancelBuyOfferParams, CancelListingParams, MakeBuyOfferParams, WalletAdapter } from "./wallet-adapter"
 
 export const useComethConnectTxs = (): WalletAdapter => {
   async function makeBuyOffer({
@@ -23,5 +23,12 @@ export const useComethConnectTxs = (): WalletAdapter => {
     return await tx?.wait()
   }
 
-  return { makeBuyOffer, cancelListing }
+  async function cancelBuyOffer({ nonce, offer, sdk }: CancelBuyOfferParams) {
+    const tx = await sdk?.cancelOrder(nonce, "ERC721")
+    const txReceipt = await tx?.wait()
+
+    return txReceipt
+  }
+
+  return { makeBuyOffer, cancelListing, cancelBuyOffer }
 }
