@@ -38,11 +38,9 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
-        <ConnectButton>
-          <SwitchNetwork>
-            <MakeBuyOfferButton asset={asset} />
-          </SwitchNetwork>
-        </ConnectButton>
+        <SwitchNetwork>
+          <MakeBuyOfferButton asset={asset} />
+        </SwitchNetwork>
       </ProductBlockCenteredColumn>
     </ProductBlockContainer>
   )

@@ -39,9 +39,7 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
 
   if (!isConnected || isLoading || connecting) {
     return (
-      <SigninDropdown handleConnect={handleConnect} disabled={isLoading || connecting}>
-        {children}
-      </SigninDropdown>
+      <SigninDropdown handleConnect={handleConnect} disabled={isLoading || connecting} />
     )
   }
 

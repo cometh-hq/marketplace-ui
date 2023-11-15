@@ -11,13 +11,11 @@ import {
 import { AccountWallet } from "./account-wallet"
 
 export type SigninDropdownProps = {
-  children
   disabled: boolean
   handleConnect?: (isComethWallet: boolean) => Promise<void>
 }
 
 export function SigninDropdown({
-  children,
   disabled,
   handleConnect,
 }: SigninDropdownProps) {
@@ -38,11 +36,7 @@ export function SigninDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          size={children ? "lg" : "default"}
-          variant="default"
-          disabled={disabled}
-        >
+        <Button variant="default" disabled={disabled}>
           Signin
         </Button>
       </DropdownMenuTrigger>
