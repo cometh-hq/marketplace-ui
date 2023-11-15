@@ -115,12 +115,12 @@ export function Web3OnboardProvider({
   useEffect(() => {
     const currentWalletInStorage = localStorage.getItem("selectedWallet")
 
-    /* If currentWalletInStorage is null, it means that the user has never logged into the site or has cleared their localstorage (manually or with logout)
-     * then, check if there is a cometh wallet in the localstorage
-     * if there is one, set the currentWalletInStorage to the cometh wallet
+    /* If currentWalletInStorage is null, it means that the user has never logged into the site or has cleared their localstorage (on logout for example)
+     * Check if there is a Cometh Connect keys in the localstorage
+     * If there is one, set the currentWalletInStorage to the cometh wallet
      */
-    const keys = Object.keys(localStorage)
-    for (let key of keys) {
+    const connectKeys = Object.keys(localStorage)
+    for (let key of connectKeys) {
       if (key.startsWith("cometh-connect-")) {
         setStoreWalletAddress(key.split("-")[2])
         break
@@ -128,9 +128,8 @@ export function Web3OnboardProvider({
     }
 
     const isComethWallet =
-      !currentWalletInStorage &&
       currentWalletInStorage === `"${COMETH_CONNECT_STORAGE_LABEL}"` &&
-      keys !== null
+      connectKeys !== null
 
     if (isComethWallet) {
       initOnboard({
@@ -144,9 +143,7 @@ export function Web3OnboardProvider({
       onboard
         ?.connectWallet({
           autoSelect: {
-            label: isComethWallet
-              ? COMETH_CONNECT_STORAGE_LABEL
-              : JSON.parse(currentWalletInStorage),
+            label: currentWalletInStorage,
             disableModals: true,
           },
         })

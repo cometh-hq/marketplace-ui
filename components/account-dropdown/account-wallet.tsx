@@ -17,7 +17,7 @@ export function AccountWallet({
   handleConnect,
 }: AccountWalletProps) {
   return (
-    <DropdownMenuItem>
+    <DropdownMenuItem className="outline-none">
       {!isComethWallet && (
         <div className="mb-1 text-sm font-semibold">External wallet</div>
       )}
