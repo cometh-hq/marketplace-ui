@@ -14,15 +14,8 @@ export type MakeBuyOfferParams = {
   asset: AssetWithTradeData
 } & OrderParams
 
-export type CancelListingParams = {
+export type CancelOrderParams = {
   nonce: string
-  signer: Signer
-  nftSwapSdk: NftSwapV4 | null
-}
-
-export type CancelBuyOfferParams = {
-  nonce: string
-  offer: BuyOffer
   signer: Signer
   nftSwapSdk: NftSwapV4 | null
 }

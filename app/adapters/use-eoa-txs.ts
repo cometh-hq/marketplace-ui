@@ -1,6 +1,7 @@
 import { manifest } from "@/manifests"
 import { comethMarketplaceClient } from "@/services/cometh-marketplace/client"
 import {
+  AssetWithTradeData,
   CancelOrderRequest,
   NewOrder,
   TokenType,
@@ -11,8 +12,7 @@ import { splitSignature } from "ethers/lib/utils"
 import { DateTime } from "luxon"
 
 import {
-  CancelBuyOfferParams,
-  CancelListingParams,
+  CancelOrderParams,
   MakeBuyOfferParams,
   SellAssetOptions,
 } from "./types"
@@ -49,24 +49,7 @@ export function useEOATxs(): WalletAdapter {
     return await comethMarketplaceClient.order.createOrder(buyOffer)
   }
 
-  async function cancelListing({ nonce, signer }: CancelListingParams) {
-    const signedPrefix = await signer!.signMessage(`Nonce: ${nonce}`)
-    const signature = splitSignature(signedPrefix)
-    const { r, s, v } = signature
-
-    const body: CancelOrderRequest = {
-      signature: {
-        signatureType: 2,
-        r,
-        s,
-        v,
-      },
-    }
-
-    return await comethMarketplaceClient.order.cancelOrder(nonce, body)
-  }
-
-  async function cancelBuyOffer({ nonce, signer }: CancelBuyOfferParams) {
+  async function cancelOrder({ nonce, signer }: CancelOrderParams) {
     const signedPrefix = await signer!.signMessage(`Nonce: ${nonce}`)
     const signature = splitSignature(signedPrefix)
     const { r, s, v } = signature
@@ -105,5 +88,5 @@ export function useEOATxs(): WalletAdapter {
     return await comethMarketplaceClient.order.createOrder(sellOrder)
   }
 
-  return { makeBuyOffer, cancelListing, cancelBuyOffer, sellAsset }
+  return { makeBuyOffer, cancelOrder, sellAsset }
 }

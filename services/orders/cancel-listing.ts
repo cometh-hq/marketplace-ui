@@ -22,7 +22,7 @@ export const useCancelListing = () => {
       const nonce = (await getFirstListing(asset.tokenId)).nonce
       if (!nonce) throw new Error("No nonce found on asset")
 
-      return await walletAdapter?.cancelListing({ nonce, signer, nftSwapSdk })
+      return await walletAdapter?.cancelOrder({ nonce, signer, nftSwapSdk })
     },
     {
       onSuccess: (_, asset) => {

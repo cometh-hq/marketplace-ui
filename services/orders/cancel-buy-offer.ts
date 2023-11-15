@@ -39,10 +39,9 @@ export const useCancelBuyOffer = () => {
     async ({ offer }: CancelBuyOfferParams) => {
       const nonce = offer.trade.nonce
 
-      return await walletAdapter?.cancelBuyOffer({
+      return await walletAdapter?.cancelOrder({
         nonce,
         signer,
-        offer,
         nftSwapSdk,
       })
     },
