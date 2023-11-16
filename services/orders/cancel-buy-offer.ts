@@ -1,5 +1,4 @@
 import { useMemo } from "react"
-import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { isAddressEqual } from "viem"
 
@@ -9,7 +8,7 @@ import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
 import { handleOrderbookError } from "../errors"
-import { useWalletsAdapterContext } from "@/providers/wallets-adapter"
+import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 export type UseCanCancelBuyOfferParams = {
   offer: BuyOffer
@@ -32,15 +31,15 @@ export const useCancelBuyOffer = () => {
   const signer = useSigner()
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
-  const { getWalletTxs } = useWalletsAdapterContext()
-  const walletAdapter = getWalletTxs()
-
+  
+  const { getWalletTxs } = useWalletAdapter()
+  
   return useMutation(
     ["cancelBuyOffer"],
     async ({ offer }: CancelBuyOfferParams) => {
       const nonce = offer.trade.nonce
 
-      return await walletAdapter?.cancelOrder({
+      return await getWalletTxs()?.cancelOrder({
         nonce,
         signer,
         nftSwapSdk,

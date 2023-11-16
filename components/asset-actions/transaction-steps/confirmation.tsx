@@ -3,7 +3,6 @@ import { ExternalLinkIcon } from "lucide-react"
 import { AssetWithTradeData, SearchAssetWithTradeData } from "@alembic/nft-api-sdk"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ShareButton } from "@/components/ui/share-button"
 
 export type ConfirmationStepProps = {
   asset?: AssetWithTradeData | SearchAssetWithTradeData
@@ -28,7 +27,6 @@ export function ConfirmationStep({ asset, txHash, onValid }: ConfirmationStepPro
             </Button>
           </Link>
           )}
-          <ShareButton asset={asset} size="lg" />
       </div>
     </div>
   )

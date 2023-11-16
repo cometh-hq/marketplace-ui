@@ -24,9 +24,7 @@ export const useComethConnectTxs = (): WalletAdapter => {
 
   async function cancelOrder({ nonce, nftSwapSdk }: CancelOrderParams) {
     const tx = await nftSwapSdk?.cancelOrder(nonce, "ERC721")
-    const txReceipt = await tx?.wait()
-
-    return txReceipt
+    return await tx?.wait()
   }
 
   async function sellAsset({ order, signer }: SellAssetOptions) {

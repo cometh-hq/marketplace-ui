@@ -33,14 +33,14 @@ const Web3OnboardContext = createContext<{
   isConnected: boolean
   setIsconnected: Dispatch<SetStateAction<boolean>>
   reconnecting: boolean
-  storeWalletAddress: string | undefined
+  comethWalletAddress: string | undefined
 }>({
   onboard: null,
   initOnboard: () => {},
   isConnected: false,
   setIsconnected: () => {},
   reconnecting: false,
-  storeWalletAddress: undefined,
+  comethWalletAddress: undefined,
 })
 
 export function useWeb3OnboardContext() {
@@ -55,7 +55,7 @@ export function Web3OnboardProvider({
   const [onboard, setOnboard] = useState<OnboardAPI | null>(null)
   const [isConnected, setIsconnected] = useState<boolean>(false)
   const [reconnecting, setReconnecting] = useState<boolean>(false)
-  const [storeWalletAddress, setStoreWalletAddress] = useState<string>()
+  const [comethWalletAddress, setComethWalletAddress] = useState<string>()
 
   const initOnboard = useCallback(
     ({ isComethWallet, walletAddress }: SetOnboardOptions) => {
@@ -121,22 +121,22 @@ export function Web3OnboardProvider({
      * Check if there is a Cometh Connect keys in the localstorage
      * If there is one, set the currentWalletInStorage to the cometh wallet
      */
-    const connectKeys = Object.keys(localStorage)
-    for (let key of connectKeys) {
+    const keysInStorage = Object.keys(localStorage)
+    for (let key of keysInStorage) {
       if (key.startsWith("cometh-connect-")) {
-        setStoreWalletAddress(key.split("-")[2])
+        setComethWalletAddress(key.split("-")[2])
         break
       }
     }
 
     const isComethWallet =
       currentWalletInStorage === COMETH_CONNECT_STORAGE_LABEL &&
-      connectKeys !== null
+      !!comethWalletAddress
 
     if (isComethWallet) {
       initOnboard({
         isComethWallet,
-        walletAddress: storeWalletAddress,
+        walletAddress: comethWalletAddress,
       })
     }
 
@@ -156,7 +156,7 @@ export function Web3OnboardProvider({
           }
         })
     }
-  }, [initOnboard, onboard, storeWalletAddress])
+  }, [initOnboard, onboard, comethWalletAddress])
 
   return (
     <Web3OnboardContext.Provider
@@ -166,7 +166,7 @@ export function Web3OnboardProvider({
         isConnected,
         setIsconnected,
         reconnecting,
-        storeWalletAddress
+        comethWalletAddress,
       }}
     >
       {children}

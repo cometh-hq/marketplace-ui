@@ -1,4 +1,3 @@
-import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { AssetWithTradeData } from "@alembic/nft-api-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
@@ -10,6 +9,7 @@ import { useGetCollection } from "../cometh-marketplace/collection"
 import { handleOrderbookError } from "../errors"
 import { useBuildSellOrder } from "./build-sell-order"
 import { useSignOrder } from "./sign-order"
+import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 export type SellAssetOptions = {
   asset: AssetWithTradeData
@@ -22,11 +22,9 @@ export const useSellAsset = () => {
   const signSellOrder = useSignOrder()
   const client = useQueryClient()
   const signer = useSigner()
-
-  const { getWalletTxs } = useWeb3OnboardContext()
-  const walletAdapter = getWalletTxs()
-
   const { data: collection } = useGetCollection()
+
+  const { getWalletTxs } = useWalletAdapter()
 
   return useMutation(
     ["sell-asset"],
@@ -38,7 +36,7 @@ export const useSellAsset = () => {
 
       const signedOrder = await signSellOrder({ order })
 
-      return await walletAdapter?.sellAsset({
+      return await getWalletTxs()?.sellAsset({
         asset,
         signer,
         signedOrder,

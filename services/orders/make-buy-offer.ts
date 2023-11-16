@@ -1,17 +1,16 @@
 import { manifest } from "@/manifests"
-import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { AssetWithTradeData } from "@alembic/nft-api-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 
 import { useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
+import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { handleOrderbookError } from "../errors"
 import { useBuildBuyOfferOrder } from "./build-buy-offer-order"
 import { useSignOrder } from "./sign-order"
-import { useWalletsAdapterContext } from "@/providers/wallets-adapter"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -25,9 +24,9 @@ export const useMakeBuyOfferAsset = () => {
   const signBuyOfferOrder = useSignOrder()
   const signer = useSigner()
   const { data: collection } = useGetCollection()
-  const { getWalletTxs } = useWalletsAdapterContext()
-  const walletAdapter = getWalletTxs()
-  
+
+  const { getWalletTxs } = useWalletAdapter()
+
   return useMutation(
     ["make-buy-offer-asset"],
     async ({ asset, price, validity }: MakeBuyOfferOptions) => {
@@ -43,7 +42,12 @@ export const useMakeBuyOfferAsset = () => {
 
       const signedOrder = await signBuyOfferOrder({ order })
 
-      return await walletAdapter?.makeBuyOffer({ asset, signer, signedOrder, order })
+      return await getWalletTxs()?.makeBuyOffer({
+        asset,
+        signer,
+        signedOrder,
+        order,
+      })
     },
     {
       onSuccess: (_, { asset }) => {

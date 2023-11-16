@@ -9,7 +9,7 @@ import { CurrentAccountDropdown } from "./account-dropdown/current-account-dropd
 import { useWalletConnect } from "@/services/web3/use-wallet-connect"
 
 export function ConnectButton({ children }: { children?: React.ReactNode }) {
-  const { initOnboard, isConnected, setIsconnected, reconnecting, storeWalletAddress } =
+  const { initOnboard, isConnected, setIsconnected, reconnecting, comethWalletAddress } =
     useWeb3OnboardContext()
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
@@ -22,7 +22,7 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
     try {
       initOnboard({
         isComethWallet,
-        ...(storeWalletAddress && { walletAddress: storeWalletAddress }),
+        ...(comethWalletAddress && { walletAddress: comethWalletAddress }),
       })
       await connectWallet({ isComethWallet })
       setIsconnected(true)
