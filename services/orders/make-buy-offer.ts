@@ -11,6 +11,7 @@ import { useGetCollection } from "../cometh-marketplace/collection"
 import { handleOrderbookError } from "../errors"
 import { useBuildBuyOfferOrder } from "./build-buy-offer-order"
 import { useSignOrder } from "./sign-order"
+import { useWalletsAdapterContext } from "@/providers/wallets-adapter"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -24,7 +25,7 @@ export const useMakeBuyOfferAsset = () => {
   const signBuyOfferOrder = useSignOrder()
   const signer = useSigner()
   const { data: collection } = useGetCollection()
-  const { getWalletTxs } = useWeb3OnboardContext()
+  const { getWalletTxs } = useWalletsAdapterContext()
   const walletAdapter = getWalletTxs()
   
   return useMutation(

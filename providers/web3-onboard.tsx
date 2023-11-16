@@ -7,7 +7,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react"
 import { manifest } from "@/manifests"
@@ -22,9 +21,6 @@ import Onboard, { OnboardAPI } from "@web3-onboard/core"
 import injectedModule from "@web3-onboard/injected-wallets"
 
 import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
-import { useComethConnectTxs } from "@/app/adapters/use-cometh-txs"
-import { useEOATxs } from "@/app/adapters/use-eoa-txs"
-import { WalletAdapter } from "@/app/adapters/wallet-adapter"
 
 export interface SetOnboardOptions {
   isComethWallet: boolean
@@ -38,8 +34,6 @@ const Web3OnboardContext = createContext<{
   setIsconnected: Dispatch<SetStateAction<boolean>>
   reconnecting: boolean
   storeWalletAddress: string | undefined
-  setWalletTxs: () => void
-  getWalletTxs: () => WalletAdapter | null
 }>({
   onboard: null,
   initOnboard: () => {},
@@ -47,8 +41,6 @@ const Web3OnboardContext = createContext<{
   setIsconnected: () => {},
   reconnecting: false,
   storeWalletAddress: undefined,
-  setWalletTxs: () => {},
-  getWalletTxs: () => null
 })
 
 export function useWeb3OnboardContext() {
@@ -64,17 +56,6 @@ export function Web3OnboardProvider({
   const [isConnected, setIsconnected] = useState<boolean>(false)
   const [reconnecting, setReconnecting] = useState<boolean>(false)
   const [storeWalletAddress, setStoreWalletAddress] = useState<string>()
-  const walletTxs = useRef<WalletAdapter | null>(null)
-  const comethConnectTxs = useComethConnectTxs()
-  const eoaTxs = useEOATxs()
-
-  function setWalletTxs() {
-    walletTxs.current = null
-  }
-
-  function getWalletTxs() {
-    return walletTxs.current
-  }
 
   const initOnboard = useCallback(
     ({ isComethWallet, walletAddress }: SetOnboardOptions) => {
@@ -172,7 +153,6 @@ export function Web3OnboardProvider({
           if (res?.length) {
             setIsconnected(true)
             setReconnecting(false)
-            walletTxs.current = isComethWallet ? comethConnectTxs : eoaTxs
           }
         })
     }
@@ -186,9 +166,7 @@ export function Web3OnboardProvider({
         isConnected,
         setIsconnected,
         reconnecting,
-        storeWalletAddress,
-        setWalletTxs,
-        getWalletTxs
+        storeWalletAddress
       }}
     >
       {children}

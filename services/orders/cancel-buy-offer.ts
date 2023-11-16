@@ -9,6 +9,7 @@ import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
 import { handleOrderbookError } from "../errors"
+import { useWalletsAdapterContext } from "@/providers/wallets-adapter"
 
 export type UseCanCancelBuyOfferParams = {
   offer: BuyOffer
@@ -31,7 +32,7 @@ export const useCancelBuyOffer = () => {
   const signer = useSigner()
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
-  const { getWalletTxs } = useWeb3OnboardContext()
+  const { getWalletTxs } = useWalletsAdapterContext()
   const walletAdapter = getWalletTxs()
 
   return useMutation(
