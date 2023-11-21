@@ -19,7 +19,7 @@ export function AcceptBuyOfferButton({ offer }: AcceptBuyOfferButtonProps) {
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useAcceptBuyOfferAssetButton({ offer })
 
-  if (isLoading) return <ButtonLoading size="lg" />
+  // if (isLoading) return <ButtonLoading size="lg" />
   if (!requiredSteps?.length || !currentStep) return null
 
   return (
@@ -28,8 +28,7 @@ export function AcceptBuyOfferButton({ offer }: AcceptBuyOfferButtonProps) {
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
-      variant="link"
-      className="px-0"
+      isVariantLink={true}
     >
       <Switch value={currentStep.value}>
         <Case value="token-approval">

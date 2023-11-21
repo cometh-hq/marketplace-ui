@@ -14,18 +14,18 @@ export const useApproveCollection = ({
   tokenId,
   onSuccess,
 }: UseApproveCollectionParams) => {
-  const sdk = useNFTSwapv4()
+  const nftSwapSdk = useNFTSwapv4()
   const address = useCurrentViewerAddress()
 
   return useMutation(
     async () => {
-      if (!sdk || !address) throw new Error("SDK not initialized")
+      if (!nftSwapSdk || !address) throw new Error("SDK not initialized")
       const item: UserFacingERC721AssetDataSerializedV4 = {
         tokenAddress: manifest.contractAddress,
         tokenId: tokenId.toString(),
         type: "ERC721",
       }
-      return sdk.approveTokenOrNftByAsset(item, address)
+      return nftSwapSdk.approveTokenOrNftByAsset(item, address)
     },
     {
       onSuccess,
