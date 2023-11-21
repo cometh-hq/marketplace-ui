@@ -1,4 +1,4 @@
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from '@cometh/marketplace-sdk'
 import { Address } from "viem"
 
 import { Card } from "@/components/ui/card"

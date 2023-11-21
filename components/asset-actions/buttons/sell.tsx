@@ -1,4 +1,4 @@
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from '@cometh/marketplace-sdk'
 
 import { useSellAssetButton } from "@/lib/web3/flows/sell"
 import { TransactionDialogButton } from "@/components/dialog-button"

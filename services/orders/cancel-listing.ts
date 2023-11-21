@@ -8,7 +8,7 @@ import { comethMarketplaceClient } from "../alembic/client"
 import {
   AssetWithTradeData,
   CancelOrderRequest,
-} from "@alembic/nft-api-sdk"
+} from '@cometh/marketplace-sdk'
 import { toast } from "@/components/ui/toast/use-toast"
 import { handleOrderbookError } from "../errors"
 

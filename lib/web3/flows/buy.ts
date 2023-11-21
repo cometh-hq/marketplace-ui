@@ -1,6 +1,6 @@
 import { manifest } from "@/manifests"
 // import { useLoader } from "@/services/loaders"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from '@cometh/marketplace-sdk'
 import { useQuery } from "@tanstack/react-query"
 import { parseUnits } from "ethers/lib/utils"
 import { Address } from "viem"

@@ -7,7 +7,7 @@ import { BuyOffer } from "@/types/buy-offers"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 
 import { comethMarketplaceClient } from "../alembic/client"
-import { CancelOrderRequest } from "@alembic/nft-api-sdk"
+import { CancelOrderRequest } from '@cometh/marketplace-sdk'
 import { toast } from "@/components/ui/toast/use-toast"
 import { handleOrderbookError } from "../errors"
 

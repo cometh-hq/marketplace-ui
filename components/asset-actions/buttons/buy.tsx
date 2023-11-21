@@ -1,4 +1,4 @@
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from '@cometh/marketplace-sdk'
 import { BigNumber } from "ethers"
 
 import { useBuyAssetButton } from "@/lib/web3/flows/buy"

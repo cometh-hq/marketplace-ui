@@ -1,6 +1,6 @@
 "use client"
 
-import { AssetWithTradeData, SearchAssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from '@cometh/marketplace-sdk'
 import { cn } from "@/lib/utils/utils"
 import { AssetImage } from "@/components/ui/asset-image"
 import { Card } from "@/components/ui/card"

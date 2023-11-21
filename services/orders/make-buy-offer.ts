@@ -12,7 +12,7 @@ import {
   NewOrder,
   TokenType,
   TradeDirection,
-} from "@alembic/nft-api-sdk"
+} from '@cometh/marketplace-sdk'
 import { handleOrderbookError } from "../errors"
 import { toast } from "@/components/ui/toast/use-toast"
 import { useGetCollection } from "../alembic/collection"

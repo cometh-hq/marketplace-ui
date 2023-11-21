@@ -1,4 +1,4 @@
-import { TradeDirection, TradeStatus } from "@alembic/nft-api-sdk"
+import { TradeDirection, TradeStatus } from '@cometh/marketplace-sdk'
 import { useQuery } from "@tanstack/react-query"
 
 import { comethMarketplaceClient } from "./client"

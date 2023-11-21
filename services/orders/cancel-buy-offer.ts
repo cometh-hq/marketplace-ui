@@ -9,7 +9,7 @@ import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { comethMarketplaceClient } from "../alembic/client"
 import {
   CancelOrderRequest,
-} from "@alembic/nft-api-sdk"
+} from '@cometh/marketplace-sdk'
 import { handleOrderbookError } from "../errors"
 import { toast } from "@/components/ui/toast/use-toast"
 

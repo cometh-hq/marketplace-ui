@@ -1,4 +1,4 @@
-import { AssetWithTradeData, AssetTransfers } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData, AssetTransfers } from '@cometh/marketplace-sdk'
 
 import { Tabs } from "../../ui/tabs"
 import { ActivitiesTabBar } from "./tab-bar"

@@ -1,6 +1,6 @@
 "use client"
 
-import { AssetTransfers } from "@alembic/nft-api-sdk"
+import { AssetTransfers } from '@cometh/marketplace-sdk'
 
 import { Card } from "@/components/ui/card"
 import { TabsContent } from "@/components/ui/tabs"

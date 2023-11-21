@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
 import { UserButton } from "../ui/user-button"
 
-import { AssetTransfers } from "@alembic/nft-api-sdk"
+import { AssetTransfers } from '@cometh/marketplace-sdk'
 import { CopyButton } from "../ui/copy-button"
 import { Address, isAddressEqual } from "viem"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
