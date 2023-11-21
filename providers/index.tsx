@@ -3,18 +3,16 @@
 import { ReactQueryProvider } from "./react-query"
 import { AppThemeProvider } from "./theme"
 import { WagmiProvider } from "./wagmi"
-import { Web3Onboard } from "./web3-onboard"
+import { Web3OnboardProvider } from "./web3-onboard"
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
-    <Web3Onboard>
-      <ReactQueryProvider>
+    <ReactQueryProvider>
+      <Web3OnboardProvider>
         <AppThemeProvider>
-          <WagmiProvider>
-            {children}
-          </WagmiProvider>
+          <WagmiProvider>{children}</WagmiProvider>
         </AppThemeProvider>
-      </ReactQueryProvider>
-    </Web3Onboard>
+      </Web3OnboardProvider>
+    </ReactQueryProvider>
   )
 }

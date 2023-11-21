@@ -6,7 +6,7 @@ export type AssetCardsListProps = {
 
 export function AssetCardsList({ children }: AssetCardsListProps) {
   return (
-    <div className="grid sm:grid-cols-[repeat(auto-fill,minmax(250px,_1fr))] w-full gap-4 md:gap-y-10">
+    <div className="grid w-full gap-4 sm:grid-cols-[repeat(auto-fill,minmax(300px,_1fr))] md:gap-12">
       {children}
     </div>
   )

@@ -1,21 +1,16 @@
 import { manifest } from "@/manifests"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
-import { DateTime } from "luxon"
 
-import { useBuildBuyOfferOrder } from "./build-buy-offer-order"
-import { useSignBuyOfferOrder } from "./sign-buy-offer-order"
-
-import { comethMarketplaceClient } from "../alembic/client"
-import {
-  AssetWithTradeData,
-  NewOrder,
-  TokenType,
-  TradeDirection,
-} from "@alembic/nft-api-sdk"
-import { handleOrderbookError } from "../errors"
+import { useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
-import { useGetCollection } from "../alembic/collection"
+import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
+
+import { useGetCollection } from "../cometh-marketplace/collection"
+import { handleOrderbookError } from "../errors"
+import { useBuildBuyOfferOrder } from "./build-buy-offer-order"
+import { useSignOrder } from "./sign-order"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -24,60 +19,52 @@ export type MakeBuyOfferOptions = {
 }
 
 export const useMakeBuyOfferAsset = () => {
-  const buildSignBuyOfferOrder = useBuildBuyOfferOrder()
-  const signBuyOfferOrder = useSignBuyOfferOrder()
   const client = useQueryClient()
-
+  const buildSignBuyOfferOrder = useBuildBuyOfferOrder()
+  const signBuyOfferOrder = useSignOrder()
+  const signer = useSigner()
   const { data: collection } = useGetCollection()
-  
+
+  const { getWalletTxs } = useWalletAdapter()
+
   return useMutation(
     ["make-buy-offer-asset"],
     async ({ asset, price, validity }: MakeBuyOfferOptions) => {
       if (!collection) throw new Error("Could not get collection")
-      
-      const order = buildSignBuyOfferOrder({ asset, price, validity, collection })
+
+      const order = buildSignBuyOfferOrder({
+        asset,
+        price,
+        validity,
+        collection,
+      })
       if (!order) throw new Error("Could not build order")
 
-      try {
-        const signedOrder = await signBuyOfferOrder({ order })
+      const signedOrder = await signBuyOfferOrder({ order })
 
-        const buyOffer: NewOrder = {
-          tokenAddress: manifest.contractAddress,
-          tokenId: asset.tokenId,
-          tokenProperties: [],
-          tokenQuantity: BigNumber.from(1).toString(),
-          tokenType: TokenType.ERC721,
-          direction: TradeDirection.BUY,
-          erc20Token: order.erc20Token,
-          erc20TokenAmount: order.erc20TokenAmount,
-          expiry: DateTime.fromSeconds(+order.expiry).toString(),
-          fees: order.fees,
-          maker: order.maker,
-          nonce: order.nonce,
-          signature: signedOrder.signature,
-          signedAt: DateTime.now().toString(),
-          taker: order.taker,
-        }
-
-        return await comethMarketplaceClient.order.createOrder(buyOffer)
-      } catch (e) {
-        handleOrderbookError(e, {
-          400: "Bad request",
-          500: "Internal orderbook server error",
-        })
-      }
+      return await getWalletTxs()?.makeBuyOffer({
+        asset,
+        signer,
+        signedOrder,
+        order,
+      })
     },
     {
       onSuccess: (_, { asset }) => {
-        client.invalidateQueries(["alembic", "assets", asset.tokenId])
+        client.invalidateQueries(["cometh", "search"]) // TODO: optimize this, just invalidate current asset
+        client.invalidateQueries(["cometh", "assets", asset.tokenId])
+        client.invalidateQueries(["cometh", "received-buy-offers", asset.owner])
       },
-      onError: (error: any) => {
+      onError: (error) => {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: error.message,
+          description: handleOrderbookError(error, {
+            400: "Bad request",
+            500: "Internal orderbook server error",
+          }),
         })
-      }
+      },
     }
   )
 }

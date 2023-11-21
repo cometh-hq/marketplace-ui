@@ -1,10 +1,10 @@
-import { AssetWithTradeData, Auction, Order, OrderWithAsset } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData, OrderWithAsset } from "@cometh/marketplace-sdk"
 import { DateTime } from "luxon"
 
 import { AnyUser } from "./user"
 
 export type BuyOffer = {
-  trade: Order | OrderWithAsset | Auction
+  trade: OrderWithAsset
   asset?: AssetWithTradeData
   owner: AnyUser
   emitter: AnyUser

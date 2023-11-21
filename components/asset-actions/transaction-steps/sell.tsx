@@ -1,15 +1,22 @@
 import { useCallback, useMemo, useState } from "react"
 import { useSellAsset } from "@/services/orders/sell-asset"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { parseUnits } from "ethers/lib/utils"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Price } from "@/components/ui/price"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
+
 import { SwitchNetwork } from "../buttons/switch-network"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export type SellStepProps = {
   asset: AssetWithTradeData
@@ -30,7 +37,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
   const bnPrice = useMemo(() => {
     try {
       const parsedPrice = parseUnits(price, 18)
-      return { price: parsedPrice, validity}
+      return { price: parsedPrice, validity }
     } catch (e) {
       return null
     }
@@ -51,7 +58,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
         <AssetHeaderImage asset={asset} />
       </div>
 
-      <div className="w-full flex gap-4 mt-4">
+      <div className="mt-4 flex w-full gap-4">
         <div className="flex flex-col gap-3 md:w-2/3">
           <Label htmlFor="selling-price">Selling price</Label>
           <Input
@@ -69,7 +76,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="" />
             </SelectTrigger>
-            <SelectContent >
+            <SelectContent>
               <SelectItem value="1">24h</SelectItem>
               <SelectItem value="2">48h</SelectItem>
               <SelectItem value="3">72h</SelectItem>
@@ -78,14 +85,8 @@ export function SellStep({ asset, onValid }: SellStepProps) {
         </div>
       </div>
 
-      <SwitchNetwork
-        callbackChildren={
-          <Button className="mt-4 flex gap-1 w-full" size="lg" disabled>
-            Sell for <Price amount={bnPrice?.price} />
-          </Button>
-        }
-      >
-        <Button className="mt-4 flex gap-1 w-full" size="lg" onClick={onSubmit}>
+      <SwitchNetwork>
+        <Button className="mt-4 flex w-full gap-1" size="lg" onClick={onSubmit}>
           Sell for <Price amount={bnPrice?.price} />
         </Button>
       </SwitchNetwork>
