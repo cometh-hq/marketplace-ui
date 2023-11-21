@@ -64,10 +64,10 @@ export function Web3OnboardProvider({
       if (isComethWallet && walletAddress) {
         wallets.push(
           ConnectOnboardConnector({
-            apiKey: process.env.NEXT_PUBLIC_ALEMBIC_API_KEY!,
+            apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
             authAdapter: new ConnectAdaptor({
               chainId: SupportedNetworks.POLYGON,
-              apiKey: process.env.NEXT_PUBLIC_ALEMBIC_API_KEY!,
+              apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
             }),
             ...(walletAddress && { walletAddress }),
           })
