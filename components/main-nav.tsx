@@ -1,10 +1,11 @@
+"use client"
+
 import * as React from "react"
 import Link from "next/link"
 
 import { NavItem } from "@/types/nav"
+import { usePathname } from "@/lib/utils/router"
 import { cn } from "@/lib/utils/utils"
-
-import { usePathname } from "next/navigation"
 
 interface MainNavProps {
   items?: NavItem[]
@@ -15,10 +16,12 @@ export function MainNav({ items, onLinkClick }: MainNavProps) {
   const pathname = usePathname()
 
   const isActiveLink = (href: string) => {
-    if (pathname === href) return true;
-  
-    const nextChar = pathname[href.length];
-    return pathname.startsWith(href) && (nextChar === '/' || nextChar === undefined);
+    if (pathname === href) return true
+
+    const nextChar = pathname[href.length]
+    return (
+      pathname.startsWith(href) && (nextChar === "/" || nextChar === undefined)
+    )
   }
 
   return (

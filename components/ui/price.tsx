@@ -65,13 +65,13 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         className="relative inline-flex items-center align-middle"
       >
         {!hideIcon && (
-          <Image
-            src="/icons/chains/polygon.svg"
-            alt={formattedAmount.toString()}
-            width={16}
-            height={16}
-            className={cn(iconVariants({ size }))}
-          />
+          <span className={cn("relative -ml-1", iconVariants({ size }))}>
+            <Image
+              src="/icons/chains/polygon.svg"
+              alt={formattedAmount.toString()}
+              fill
+            />
+          </span>
         )}
         <span className={cn(priceTriggerVariants({ size, variant, className }))}>
           {formattedAmount.toString()}
@@ -93,20 +93,8 @@ export const Price = ({ amount, ...rest }: PriceProps) => {
   if (!amount) return "-"
 
   const formattedAmount = (+formatUnits(amount.toString(), 18)).toString()
-  const convertedPrice = 103
 
   return (
-    <TooltipProvider delayDuration={200}>
-      <Tooltip defaultOpen={false}>
-        <TooltipTrigger asChild>
-          <PriceTrigger {...rest} formattedAmount={formattedAmount} />
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className="text-sm font-bold text-gray-500">
-            ≈ {convertedPrice} USD
-          </p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  )
+    <PriceTrigger {...rest} formattedAmount={formattedAmount} />
+    )
 }

@@ -1,6 +1,6 @@
 import { manifest } from "@/manifests"
 // import { useLoader } from "@/services/loaders"
-import { AssetWithTradeData } from '@cometh/marketplace-sdk'
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { parseUnits } from "ethers/lib/utils"
 import { Address } from "viem"
@@ -82,7 +82,7 @@ export const useRequiredBuyingSteps = ({
       return steps
     },
     {
-      // enabled: !!viewerAddress,
+      enabled: !!viewerAddress,
     }
   )
 }

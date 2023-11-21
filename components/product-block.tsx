@@ -12,7 +12,7 @@ export function ProductBlockContainer({
   return (
     <Card>
       <CardContent className="py-[22px]">
-        <div className="flex h-full flex-wrap items-start justify-between gap-4">
+        <div className="flex h-full flex-wrap items-stretch justify-between gap-4">
           {children}
         </div>
       </CardContent>
@@ -48,7 +48,7 @@ export type ProductBlockCenteredColumnProps = {
 export function ProductBlockCenteredColumn({
   children,
 }: ProductBlockCenteredColumnProps) {
-  return <div className="flex w-full flex-col gap-2">{children}</div>
+  return <div className="flex w-full flex-col gap-3">{children}</div>
 }
 
 export type ProductBlockColumnLabel = {

@@ -1,4 +1,4 @@
-import type { AssetWithTradeData } from '@cometh/marketplace-sdk'
+import type { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { QueryKey, UseInfiniteQueryResult } from "@tanstack/react-query"
 
 /**

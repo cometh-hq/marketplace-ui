@@ -1,36 +1,38 @@
 "use client"
 
 import { useMemo } from "react"
+import Link from "next/link"
+import { AssetTransfers } from "@cometh/marketplace-sdk"
 import { ArrowRightIcon, ExternalLink } from "lucide-react"
 import { DateTime } from "luxon"
+import { Address, isAddressEqual } from "viem"
 
 import { TransferListLine } from "@/types/transfers"
+import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
-import { UserButton } from "../ui/user-button"
-
-import { AssetTransfers } from '@cometh/marketplace-sdk'
 import { CopyButton } from "../ui/copy-button"
-import { Address, isAddressEqual } from "viem"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
-import Link from "next/link"
+import { UserButton } from "../ui/user-button"
 
 type TransfersListProps = {
   assetTransfers: AssetTransfers
   maxTransfersToShow?: number
 }
 
-export function TransfersList({ assetTransfers, maxTransfersToShow }: TransfersListProps) {
+export function TransfersList({
+  assetTransfers,
+  maxTransfersToShow,
+}: TransfersListProps) {
   const viewerAddress = useCurrentViewerAddress()
 
   const getUsername = (address: Address) => {
     if (viewerAddress && isAddressEqual(address, viewerAddress)) {
-      return "You";
+      return "You"
     }
   }
 
   const data = useMemo(() => {
-      return (assetTransfers ?? [])
+    return (assetTransfers ?? [])
       .slice(0, maxTransfersToShow ?? assetTransfers?.length - 1)
       .map((asset) => ({
         id: asset.id.toString(),
@@ -45,8 +47,7 @@ export function TransfersList({ assetTransfers, maxTransfersToShow }: TransfersL
         },
         txHash: asset.transactionHash,
       })) as TransferListLine[]
-    }, [assetTransfers]
-  )
+  }, [assetTransfers, maxTransfersToShow])
 
   return (
     <Table>
@@ -76,9 +77,7 @@ export function TransfersList({ assetTransfers, maxTransfersToShow }: TransfersL
           ))
         ) : (
           <TableRow>
-            <TableCell className="h-24 text-center">
-              No results.
-            </TableCell>
+            <TableCell className="h-24 text-center">No results.</TableCell>
           </TableRow>
         )}
       </TableBody>

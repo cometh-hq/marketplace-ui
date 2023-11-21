@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { useConnectWallet } from "@web3-onboard/react"
+import { useConnectWallet } from "@/services/web3/use-connect-wallet"
 import { ethers } from "ethers"
 import { atom, useAtom, useSetAtom } from "jotai"
 import { Address } from "viem"
@@ -34,11 +34,20 @@ export const useIsConnecting = () => {
 }
 
 export const useWalletProvider = () => {
-  const provider = useWallet()?.provider
-  return useMemo(() => {
-    if (!provider) return null
-    return new ethers.providers.Web3Provider(provider, "any")
-  }, [provider])
+  const wallet = useWallet()
+  const isComethWallet = wallet?.label === "Connect SDK" ?? false
+
+  const provider: any = useMemo(
+    () =>
+      isComethWallet
+        ? wallet?.provider
+        : wallet?.provider
+        ? new ethers.providers.Web3Provider(wallet?.provider, "any")
+        : null,
+    [isComethWallet, wallet?.provider]
+  )
+
+  return provider
 }
 
 export const useSigner = () => {
@@ -59,11 +68,11 @@ export const useCurrentViewerAddress = () => {
   return availableAccounts[currentAccountIndex]?.address as Address | undefined
 }
 
-// export const useViewerBalance = () => {
-//   const currentAccountIndex = useCurrentAccountIndexValue()
-//   return useAvailableAccounts()[currentAccountIndex]?.balance
-// }
-
 export const useIsConnected = () => {
   return !!useCurrentViewerAddress()
+}
+
+export const useIsComethWallet = () => {
+  const wallet = useWallet()
+  return wallet?.label === "Connect SDK" ?? false
 }

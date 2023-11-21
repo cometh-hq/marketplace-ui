@@ -5,7 +5,6 @@ import { Address, useBalance } from "wagmi"
 
 import { balanceToBigNumber, balanceToString } from "./format"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
-import { formatUnits } from "ethers/lib/utils"
 
 export const fetchWrappedBalance = async (
   address: Address,

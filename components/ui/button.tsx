@@ -1,11 +1,12 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
+import { Loader } from "lucide-react"
 
 import { cn } from "@/lib/utils/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center text-sm font-bold transition-all duration-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none ring-offset-background whitespace-nowrap",
+  "inline-flex items-center justify-center text-sm font-bold transition-colors transition-opacity duration-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none ring-offset-background whitespace-nowrap",
   {
     variants: {
       variant: {
@@ -25,7 +26,7 @@ const buttonVariants = cva(
         default: "h-10 py-2 px-4",
         sm: "h-10 px-3 font-medium",
         lg: "h-12 px-8",
-        icon: "h-[36px] w-[36px] active:scale-95",
+        icon: "h-10 w-10 active:scale-95",
       },
       groupPosition: {
         isolated: "rounded-lg",
@@ -46,11 +47,20 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  isLoading?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, groupPosition, variant, size, asChild = false, ...props },
+    {
+      className,
+      groupPosition,
+      variant,
+      size,
+      asChild = false,
+      isLoading,
+      ...props
+    },
     ref
   ) => {
     const Comp = asChild ? Slot : "button"
@@ -61,7 +71,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         ref={ref}
         {...props}
-      />
+      >
+        <>
+          {isLoading && <Loader size={16} className="mr-1.5 animate-spin" />}
+          {props.children}
+        </>
+      </Comp>
     )
   }
 )

@@ -5,6 +5,9 @@ import { Address } from "viem"
 
 import { IWETH__factory } from "@/lib/generated/contracts/weth/IWETH__factory"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
+import { toast } from "@/components/ui/toast/use-toast"
+
+import { handleOrderbookError } from "../errors"
 
 export type WrapTokenOptions = {
   amount: BigNumber
@@ -13,22 +16,17 @@ export type WrapTokenOptions = {
   wrapContractAddress: Address
 }
 
-export async function wrapToken({
+export function wrapToken({
   amount,
   account,
   signer,
   wrapContractAddress,
 }: WrapTokenOptions) {
-  if (!signer._isSigner) throw new Error("Signer not initialized")
   const contract = IWETH__factory.connect(wrapContractAddress, signer)
-  const transaction = await contract?.deposit({
-    from: account ?? undefined,
+  return contract?.deposit({
+    from: account,
     value: amount,
   })
-  
-  await transaction.wait()
-
-  return transaction
 }
 
 export type WrapTokenMutationOptions = {
@@ -39,16 +37,37 @@ export const useWrapToken = () => {
   const viewerAddress = useCurrentViewerAddress()
   const signer = useSigner()
 
-  return useMutation(["wrap"], async ({ amount }: WrapTokenMutationOptions) => {
-    if (!viewerAddress || !signer || !manifest?.currency?.wrapped?.address) {
-      throw new Error("Could not wrap token")
-    }
+  return useMutation(
+    ["wrap"],
+    async ({ amount }: WrapTokenMutationOptions) => {
+      if (!viewerAddress || !signer || !manifest.currency.wrapped.address) {
+        throw new Error("Could not wrap token")
+      }
 
-    return wrapToken({
-      amount,
-      account: viewerAddress!,
-      signer: signer!,
-      wrapContractAddress: manifest.currency.wrapped.address,
-    })
-  })
+      return wrapToken({
+        amount,
+        account: viewerAddress!,
+        signer,
+        wrapContractAddress: manifest.currency.wrapped.address,
+      })
+    },
+    {
+      onSuccess: () => {
+        toast({
+          title: "Token wrapped!",
+          description: "Your token has been wrapped.",
+        })
+      },
+      onError: (error) => {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: handleOrderbookError(error, {
+            400: "Bad request",
+            500: "Internal orderbook server error",
+          }),
+        })
+      },
+    }
+  )
 }

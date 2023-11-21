@@ -1,4 +1,4 @@
-import { AssetWithTradeData } from '@cometh/marketplace-sdk'
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 
 import { useSellAssetButton } from "@/lib/web3/flows/sell"
 import { TransactionDialogButton } from "@/components/dialog-button"
@@ -24,9 +24,9 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
 
   if (isLoading) return (
     <ButtonLoading
-      size="lg"
+      size={isVariantLink ? "default" : "lg"}
       variant={isVariantLink ? "link" : "default"}
-      className={cn(isVariantLink && "p-0 h-auto")}
+      className={cn(isVariantLink && "h-auto p-0")}
     />
   )
   if (!requiredSteps?.length || !currentStep) return null

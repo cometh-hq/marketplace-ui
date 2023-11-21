@@ -1,7 +1,6 @@
 import { manifest } from "@/manifests"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
-import { formatUnits } from "ethers/lib/utils"
 import { Address } from "viem"
 
 import { fetchMainBalance } from "./main"

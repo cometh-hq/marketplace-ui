@@ -1,7 +1,10 @@
 import { useMemo } from "react"
+import Link from "next/link"
 import { manifest } from "@/manifests"
-import { AssetWithTradeData } from '@cometh/marketplace-sdk'
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import qs from "qs"
 
+import { shortenTokenId } from "@/lib/utils/token"
 import { Badge } from "@/components/ui/badge"
 import { ShareButton } from "@/components/ui/share-button"
 import { ProductBlock } from "@/components/asset-actions/product-blocks"
@@ -9,11 +12,6 @@ import {
   BreadcrumbContainer,
   BreadcrumbElement,
 } from "@/components/bread-crumb"
-
-import Link from "next/link"
-import qs from 'qs'
-import { shortenTokenId } from "@/lib/utils/token"
-import { useNFTFilters } from "@/lib/utils/nft-filters"
 
 export type AssetDetailsProps = {
   asset: AssetWithTradeData
@@ -27,7 +25,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
         p.push({ trait_type: c.trait_type, value: c.value })
       }
       return p
-    }, [] as { trait_type: string, value: string | number | boolean }[])
+    }, [] as { trait_type: string; value: string | number | boolean }[])
   }, [asset])
 
   const links = useMemo(() => {
@@ -39,21 +37,18 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
       })}`
 
       return (
-        <Link
-          key={index}
-          href={href}
-        >
-          <Badge variant="secondary" size="xs">
-            {value}
+        <Link key={index} href={href}>
+          <Badge variant="outline" size="default">
+            <span className="mr-1 opacity-60">{property}:</span> {value}
           </Badge>
         </Link>
       )
     })
-  }, [attributes, asset])
+  }, [attributes])
 
   return (
-    <div className="flex-1 lg:w-[45%] lg:pt-[100px] lg:sticky lg:top-[5%] lg:left-0">
-      <div className="flex items-center justify-between mb-2">
+    <div className="flex-1 lg:sticky lg:left-0 lg:top-[5%] lg:w-[45%] lg:pt-[100px]">
+      <div className="mb-2 flex items-center justify-between">
         <BreadcrumbContainer>
           <BreadcrumbElement href="/marketplace">
             Marketplace
@@ -66,14 +61,14 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
         <ShareButton />
       </div>
       <div className="text-2xl font-bold opacity-90">#{shortenTokenId(asset.tokenId, 2)}</div>
-      <h1 className="text-3xl md:text-[48px] leading-[1.15] font-extrabold">
+      <h1 className="text-3xl font-bold leading-[1.15] md:text-[48px]">
         {asset.metadata.name}
       </h1>
-      <div className="mt-2 mb-8 flex flex-wrap items-center gap-2">
+      <div className="mb-8 mt-2 flex flex-wrap items-center gap-2">
         {links}
       </div>
       <ProductBlock asset={asset} />
-      <p className="max-md:pb-0 py-6 text-base font-medium text-muted-foreground">{asset.metadata.description}</p>
+      <p className="py-6 text-base font-medium text-muted-foreground max-md:pb-0">{asset.metadata.description}</p>
     </div>
   )
 }

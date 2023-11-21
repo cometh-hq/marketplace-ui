@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useMakeBuyOfferAsset } from "@/services/orders/make-buy-offer"
-import { AssetWithTradeData } from '@cometh/marketplace-sdk'
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 
 import { Button } from "@/components/ui/button"

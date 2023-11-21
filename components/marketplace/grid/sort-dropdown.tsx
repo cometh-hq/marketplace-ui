@@ -44,14 +44,14 @@ export function MarketplaceSortDropdown({
   return (
     <Popover open={open} onOpenChange={setOpen} {...props}>
       <PopoverTrigger asChild>
-        <Button
+      <Button
           variant="outline"
           size={isSmallScreen ? "icon" : "default"}
           role="combobox"
           aria-label="Load a sort..."
           aria-expanded={open}
           aria-controls="radix-:Rirb9ipj9:"
-          className="shrink-0 md:justify-between max-w-[300px] font-semibold"
+          className="shrink-0"
         >
           {isSmallScreen ? (
             <ListFilter size="16" />

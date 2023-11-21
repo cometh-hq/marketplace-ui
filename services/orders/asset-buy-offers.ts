@@ -1,23 +1,26 @@
-import { AssetWithTradeData } from '@cometh/marketplace-sdk'
+import { AssetWithTradeData, OrderWithAsset } from "@cometh/marketplace-sdk"
 import { DateTime } from "luxon"
 import { Address } from "viem"
 
 import { UnknownUser } from "@/types/user"
 
-import { useReceivedBuyOffers, useSentBuyOffers } from "../alembic/offers"
+import {
+  useReceivedBuyOffers,
+  useSentBuyOffers,
+} from "../cometh-marketplace/offers"
 
 export type UseMakerBuyOffersOptions = {
   maker: Address
 }
 
-export type useAssetReceivedOffersOptions = {
+export type UseAssetBuyOffersOptions = {
   asset?: AssetWithTradeData
   owner?: Address
 }
 
 export type UseBuyOffersOptions =
   | UseMakerBuyOffersOptions
-  | useAssetReceivedOffersOptions
+  | UseAssetBuyOffersOptions
 
 export const isMakerBuyOffersOptions = (
   options: UseBuyOffersOptions
@@ -25,64 +28,38 @@ export const isMakerBuyOffersOptions = (
   return (options as UseMakerBuyOffersOptions).maker !== undefined
 }
 
-export const useAssetReceivedOffers = (props: UseBuyOffersOptions) => {
+const skeletonTrade = (trade: OrderWithAsset, asset?: AssetWithTradeData) => {
+  const { asset: tradeAsset, maker, erc20TokenAmount, signedAt } = trade
+
+  return {
+    trade,
+    owner: { address: tradeAsset.owner } as UnknownUser,
+    emitter: { address: maker } as UnknownUser,
+    amount: erc20TokenAmount,
+    date: DateTime.fromISO(signedAt),
+    ...(asset && { asset }),
+  }
+}
+
+export const useAssetOffers = (
+  props: UseBuyOffersOptions,
+  useOffers: (address: Address) => {
+    data: OrderWithAsset[]
+    isLoading: boolean
+  }
+) => {
   if (isMakerBuyOffersOptions(props)) {
     return []
   }
 
-  const { data: trades, isLoading } = useReceivedBuyOffers(
-    props.asset?.owner as Address
-  )
+  const address = props.asset?.owner || props.owner
+  const { data: trades } = useOffers(address as Address)
 
-  if (isLoading) {
-    return []
-  }
-
-  return trades.map((trade) => ({
-    trade,
-    owner: { address: trade.asset.owner } as UnknownUser,
-    emitter: { address: trade.maker } as UnknownUser,
-    amount: trade.erc20TokenAmount,
-    date: DateTime.fromISO(trade.signedAt),
-    asset: props?.asset,
-  }))
+  return trades.map((trade) => skeletonTrade(trade, props.asset))
 }
 
-export const useAccountReceivedOffers = (props: any) => {
-  const { data: trades, isLoading } = useReceivedBuyOffers(
-    props.owner as Address
-  )
+export const useAssetReceivedOffers = (props: UseBuyOffersOptions) =>
+  useAssetOffers(props, useReceivedBuyOffers)
 
-  if (isLoading) {
-    return []
-  }
-
-  return trades.map((trade) => ({
-    trade,
-    owner: { address: trade.asset.owner } as UnknownUser,
-    emitter: { address: trade.maker } as UnknownUser,
-    amount: trade.erc20TokenAmount,
-    date: DateTime.fromISO(trade.signedAt),
-  }))
-}
-
-export const useAssetSentOffers = (props: UseBuyOffersOptions) => {
-  if (isMakerBuyOffersOptions(props)) {
-    return []
-  }
-  const { data: trades, isLoading } = useSentBuyOffers(
-    props.owner as Address
-  )
-
-  if (isLoading) {
-    return []
-  }
-
-  return trades.map((trade) => ({
-    trade,
-    owner: { address: trade.asset.owner } as UnknownUser,
-    emitter: { address: trade.maker } as UnknownUser,
-    amount: trade.erc20TokenAmount,
-    date: DateTime.fromISO(trade.signedAt),
-  }))
-}
+export const useAssetSentOffers = (props: UseBuyOffersOptions) =>
+  useAssetOffers(props, useSentBuyOffers)

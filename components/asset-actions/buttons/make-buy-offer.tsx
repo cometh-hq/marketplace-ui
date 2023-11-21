@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from "react"
-import { AssetWithTradeData, SearchAssetWithTradeData } from '@cometh/marketplace-sdk'
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 import { parseUnits } from "ethers/lib/utils"
+import { Loader } from "lucide-react"
 
+import { cn } from "@/lib/utils/utils"
 import { useMakeBuyOfferAssetButton } from "@/lib/web3/flows/make-buy-offer"
+import { useCorrectNetwork } from "@/lib/web3/network"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -15,6 +18,14 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Price } from "@/components/ui/price"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { ButtonLoading } from "@/components/button-loading"
 import { TransactionDialogButton } from "@/components/dialog-button"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 import { Case, Switch } from "@/components/utils/Switch"
@@ -24,9 +35,6 @@ import { ConfirmMakeBuyOfferStep } from "../transaction-steps/confirm-make-buy-o
 import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { FundsStep } from "../transaction-steps/funds"
 import { WrapStep } from "../transaction-steps/wrap"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useCorrectNetwork } from "@/lib/web3/network"
-import { cn } from "@/lib/utils/utils"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
@@ -36,10 +44,10 @@ export type MakeBuyOfferProps = {
 export function MakeBuyOfferPriceDialog({
   onSubmit,
   asset,
-  isVariantLink
+  isVariantLink,
 }: {
   onSubmit: (price: BigNumber, validity: string) => void
-  asset: AssetWithTradeData,
+  asset: AssetWithTradeData
   isVariantLink?: boolean
 }) {
   const [price, setPrice] = useState("")
@@ -59,9 +67,9 @@ export function MakeBuyOfferPriceDialog({
     <Dialog modal>
       <DialogTrigger asChild>
         <Button
-          size="lg"
+          size={isVariantLink ? "default" : "lg"}
           variant={isVariantLink ? "link" : "default"}
-          className={cn(isVariantLink && "p-0 h-auto")}
+          className={cn(isVariantLink ? "h-auto p-0" : "")}
           disabled={!isChainSupported}
         >
           Make offer
@@ -76,7 +84,7 @@ export function MakeBuyOfferPriceDialog({
           <AssetHeaderImage asset={asset} />
         </div>
 
-        <div className="flex gap-4 mt-4">
+        <div className="mt-4 flex gap-4">
           <div className="flex flex-col gap-3 md:w-2/3">
             <Label htmlFor="make-buy-offer-price">Offer price</Label>
             <Input
@@ -88,11 +96,11 @@ export function MakeBuyOfferPriceDialog({
           </div>
           <div className="flex flex-col gap-3 md:w-1/3">
             <Label htmlFor="make-buy-offer-price">Validity time</Label>
-            <Select onValueChange={(v) => setValidity(v)} >
+            <Select onValueChange={(v) => setValidity(v)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="" />
               </SelectTrigger>
-              <SelectContent >
+              <SelectContent>
                 <SelectItem value="1">24h</SelectItem>
                 <SelectItem value="2">48h</SelectItem>
                 <SelectItem value="3">72h</SelectItem>
@@ -100,32 +108,62 @@ export function MakeBuyOfferPriceDialog({
             </Select>
           </div>
         </div>
-        <Button className="mt-4" size="lg" disabled={!bn} onClick={() => onSubmit(bn!.price, bn!.validity)}>
-          Make offer for <Price amount={bn?.price} />
+        <Button
+          size="lg"
+          disabled={!bn}
+          onClick={() => onSubmit(bn!.price, bn!.validity)}
+        >
+          Make offer for&nbsp;<Price amount={bn?.price} />
         </Button>
       </DialogContent>
     </Dialog>
   )
 }
 
-export function MakeBuyOfferButton({ asset, isVariantLink }: MakeBuyOfferProps) {
+export function MakeBuyOfferButton({
+  asset,
+  isVariantLink,
+}: MakeBuyOfferProps) {
   const [open, setOpen] = useState(false)
-  const { requiredSteps, currentStep, nextStep, reset, price, setPrice, validity, setValidity, refetch } =
-    useMakeBuyOfferAssetButton({ asset })
+  const {
+    isLoading,
+    requiredSteps,
+    currentStep,
+    nextStep,
+    reset,
+    price,
+    setPrice,
+    validity,
+    setValidity,
+  } = useMakeBuyOfferAssetButton({ asset })
 
   useEffect(() => {
     if (price && validity) {
       setOpen(true)
     }
-  }, [price])
+  }, [price, validity])
 
   if (!price) {
-    return <MakeBuyOfferPriceDialog isVariantLink={isVariantLink} asset={asset} onSubmit={(newPrice, newValidity) => { setPrice(newPrice), setValidity(newValidity) }} />
+    return (
+      <MakeBuyOfferPriceDialog
+        isVariantLink={isVariantLink}
+        asset={asset}
+        onSubmit={(newPrice, newValidity) => {
+          setPrice(newPrice), setValidity(newValidity)
+        }}
+      />
+    )
   }
 
-  if (!requiredSteps?.length || !currentStep) {
-    return null
-  }
+  if (isLoading)
+    return (
+      <ButtonLoading
+        size={isVariantLink ? "default" : "lg"}
+        variant={isVariantLink ? "link" : "default"}
+        className={cn(isVariantLink && "h-auto p-0")}
+      />
+    )
+  if (!requiredSteps?.length || !currentStep) return null
 
   const onClose = () => {
     reset()
@@ -137,10 +175,13 @@ export function MakeBuyOfferButton({ asset, isVariantLink }: MakeBuyOfferProps) 
   return (
     <TransactionDialogButton
       open={open}
-      label="Make an offer"
+      label="Make offer"
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={onClose}
+      isVariantLink={isVariantLink}
+      isLoading={isLoading}
+      isDisabled={isLoading}
     >
       <Switch value={currentStep.value}>
         <Case value="add-funds">
@@ -156,7 +197,7 @@ export function MakeBuyOfferButton({ asset, isVariantLink }: MakeBuyOfferProps) 
           <ConfirmMakeBuyOfferStep
             asset={asset}
             price={price}
-            validity={validity ?? '1'}
+            validity={validity ?? "1"}
             onValid={nextStep}
           />
         </Case>

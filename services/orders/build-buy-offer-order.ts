@@ -1,6 +1,10 @@
 import { useCallback } from "react"
 import { manifest } from "@/manifests"
-import { AssetWithTradeData, Collection, CollectionFees } from '@cometh/marketplace-sdk'
+import {
+  AssetWithTradeData,
+  Collection,
+  CollectionFees,
+} from "@cometh/marketplace-sdk"
 import {
   UserFacingERC20AssetDataSerializedV4,
   UserFacingERC721AssetDataSerializedV4,
@@ -9,9 +13,9 @@ import {
 import { BigNumber, ethers } from "ethers"
 import { DateTime } from "luxon"
 
+import { calculateFeesAmount, totalFeesFromCollection } from "@/lib/utils/fees"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { calculateFeesAmount, totalFeesFromCollection } from "@/lib/utils/fees"
 
 export type BuildBuyOfferOrderOptions = {
   asset: AssetWithTradeData
@@ -21,23 +25,25 @@ export type BuildBuyOfferOrderOptions = {
 }
 export const useBuildBuyOfferOrder = () => {
   const viewer = useCurrentViewerAddress()
-  const sdk = useNFTSwapv4()
+  const nftSwapSdk = useNFTSwapv4()
 
   return useCallback(
     ({ asset, price, validity, collection }: BuildBuyOfferOrderOptions) => {
-      if (!sdk || !viewer || !collection.collectionFees ) return null
+      if (!nftSwapSdk || !viewer || !collection.collectionFees) return null
 
       const expiry = DateTime.now()
         .plus({ days: parseInt(validity) })
         .toJSDate()
 
-      const fees: UserFacingFeeStruct[] = collection.collectionFees.map(fee => {
-        return {
-          amount: calculateFeesAmount(price, fee.feePercentage),
-          recipient: fee.recipientAddress,
+      const fees: UserFacingFeeStruct[] = collection.collectionFees.map(
+        (fee) => {
+          return {
+            amount: calculateFeesAmount(price, fee.feePercentage),
+            recipient: fee.recipientAddress,
+          }
         }
-      })
-    
+      )
+
       const erc721Asset: UserFacingERC721AssetDataSerializedV4 = {
         tokenAddress: asset.contractAddress,
         tokenId: asset.tokenId,
@@ -50,12 +56,18 @@ export const useBuildBuyOfferOrder = () => {
         type: "ERC20",
       }
 
-      return sdk.buildNftAndErc20Order(erc721Asset, erc20Asset, "buy", viewer, {
-        fees,
-        expiry,
-        taker: ethers.constants.AddressZero,
-      })
+      return nftSwapSdk.buildNftAndErc20Order(
+        erc721Asset,
+        erc20Asset,
+        "buy",
+        viewer,
+        {
+          fees,
+          expiry,
+          taker: ethers.constants.AddressZero,
+        }
+      )
     },
-    [manifest, sdk, viewer]
+    [nftSwapSdk, viewer]
   )
 }

@@ -1,4 +1,4 @@
-import { AssetWithTradeData } from '@cometh/marketplace-sdk'
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address, isAddressEqual } from "viem"
 
 import { useCurrentViewerAddress } from "@/lib/web3/auth"

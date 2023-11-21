@@ -1,9 +1,9 @@
-import { AssetWithTradeData } from '@cometh/marketplace-sdk'
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
 import { Price } from "@/components/ui/price"
 import { UserLink } from "@/components/ui/user-button"
-import { Connected } from "@/components/connected"
+import { ConnectButton } from "@/components/connect-button"
 import { AssetStatusBadge } from "@/components/marketplace/asset/asset-status-badge"
 import {
   ProductBlockCenteredColumn,
@@ -14,17 +14,15 @@ import {
 
 import { BuyAssetButton } from "../buttons/buy"
 import { MakeBuyOfferButton } from "../buttons/make-buy-offer"
-import { BestOfferColumn } from "./columns/best-offer-column"
 import { SwitchNetwork } from "../buttons/switch-network"
+import { BestOfferColumn } from "./columns/best-offer-column"
 
 export type BuyProductBlockProps = {
   asset: AssetWithTradeData
 }
 
 export function BuyProductBlock({ asset }: BuyProductBlockProps) {
-  // const listing = asset.listings?.[0]
   const listingPrice = asset.orderbookStats.lowestSalePrice
-  // if (!listing) return null
 
   return (
     <ProductBlockContainer>
@@ -44,12 +42,12 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
         />
       </ProductBlockDividedColumn>
       <ProductBlockCenteredColumn>
-        <Connected>
+        <ConnectButton>
           <SwitchNetwork>
             <MakeBuyOfferButton asset={asset} />
             <BuyAssetButton asset={asset} />
           </SwitchNetwork>
-        </Connected>
+        </ConnectButton>
       </ProductBlockCenteredColumn>
     </ProductBlockContainer>
   )
