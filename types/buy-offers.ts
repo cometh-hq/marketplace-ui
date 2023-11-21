@@ -1,4 +1,4 @@
-import { AssetWithTradeData, Auction, Order, OrderWithAsset } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData, Auction, Order, OrderWithAsset } from '@cometh/marketplace-sdk'
 import { DateTime } from "luxon"
 
 import { AnyUser } from "./user"

@@ -17,13 +17,14 @@ steps:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
         - NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS
-        - NEXT_PUBLIC_COMETH_API_URL
+        - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
+        - NEXT_PUBLIC_MARKETPLACE_API_KEY
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
       NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
         from_secret: zero_ex_contract_address
-      NEXT_PUBLIC_COMETH_API_URL:
+      NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: dev_cometh_api_url
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
@@ -81,13 +82,13 @@ steps:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
         - NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS
-        - NEXT_PUBLIC_COMETH_API_URL
+        - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
       NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
         from_secret: zero_ex_contract_address
-      NEXT_PUBLIC_COMETH_API_URL:
+      NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: staging_cometh_api_url
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
@@ -145,13 +146,13 @@ steps:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
         - NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS
-        - NEXT_PUBLIC_COMETH_API_URL
+        - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
       NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
         from_secret: zero_ex_contract_address
-      NEXT_PUBLIC_COMETH_API_URL:
+      NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: prod_cometh_api_url
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest

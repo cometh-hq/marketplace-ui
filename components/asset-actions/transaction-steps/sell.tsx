@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react"
 import { useSellAsset } from "@/services/orders/sell-asset"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from '@cometh/marketplace-sdk'
 import { parseUnits } from "ethers/lib/utils"
 
 import { Button } from "@/components/ui/button"

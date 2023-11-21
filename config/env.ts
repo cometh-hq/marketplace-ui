@@ -5,7 +5,7 @@ import { z } from "zod"
  * This way you can ensure the app isn't built with invalid env vars.
  */
 const server = z.object({
-  NODE_ENV: z.enum(["development", "test", "production"])
+  NODE_ENV: z.enum(["development", "test", "production"]),
 })
 
 /**
@@ -18,7 +18,8 @@ const client = z.object({
   NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS: z.string().min(1),
 
   // Cometh
-  NEXT_PUBLIC_COMETH_API_URL: z.string().url(),
+  NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL: z.string().url(),
+  NEXT_PUBLIC_MARKETPLACE_API_KEY: z.string().min(1),
 })
 
 /**
@@ -33,7 +34,9 @@ const processEnv: Record<
   NEXT_PUBLIC_NODE_ENV: process.env.NEXT_PUBLIC_NODE_ENV,
   NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
     process.env.NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS,
-  NEXT_PUBLIC_COMETH_API_URL: process.env.NEXT_PUBLIC_COMETH_API_URL,
+  NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
+    process.env.NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL,
+  NEXT_PUBLIC_MARKETPLACE_API_KEY: process.env.NEXT_PUBLIC_MARKETPLACE_API_KEY,
 }
 
 // Don't touch the part below

@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { manifest } from "@/manifests"
-import { AssetWithTradeData, Collection, CollectionFees } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData, Collection, CollectionFees } from '@cometh/marketplace-sdk'
 import {
   UserFacingERC20AssetDataSerializedV4,
   UserFacingERC721AssetDataSerializedV4,

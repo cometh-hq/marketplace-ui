@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { manifest } from "@/manifests"
 import { fetchNeedsToWrap } from "@/services/exchange/needs-to-wrap"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from '@cometh/marketplace-sdk'
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"

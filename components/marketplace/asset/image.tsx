@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import Image, { ImageProps } from "next/image"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from '@cometh/marketplace-sdk'
 
 import { cn } from "@/lib/utils/utils"
 import { AspectRatio } from "@/components/ui/aspect-ratio"

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { useFilterableNFTsQuery } from "@/services/alembic/search-assets"
-import { AssetSearchFilters } from "@alembic/nft-api-sdk"
+import { AssetSearchFilters } from '@cometh/marketplace-sdk'
 
 import { SerializedMarketplacePanelFilters, deserializeFilters } from "@/lib/utils/seed"
 

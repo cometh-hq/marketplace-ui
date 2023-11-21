@@ -4,7 +4,7 @@ import {
   NewOrder,
   TokenType,
   TradeDirection,
-} from "@alembic/nft-api-sdk"
+} from '@cometh/marketplace-sdk'
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { DateTime } from "luxon"

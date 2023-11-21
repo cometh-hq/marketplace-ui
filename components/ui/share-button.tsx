@@ -13,7 +13,7 @@ import { useClipboard } from "@/lib/utils/clipboard"
 
 import { useTwitterShare } from "@/lib/utils/twitter"
 import { manifest } from "@/manifests"
-import { AssetWithTradeData, SearchAssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from '@cometh/marketplace-sdk'
 
 import {
   Tooltip,
