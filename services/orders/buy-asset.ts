@@ -42,13 +42,13 @@ export const useBuyAsset = () => {
         nonce: order.nonce,
         erc20Token: order.erc20Token,
         erc20TokenAmount: order.erc20TokenAmount,
-        fees: [
-          {
-            recipient: order.fees[0].recipient,
-            amount: order.fees[0].amount,
-            feeData: order.fees[0].feeData!,
-          },
-        ],
+        fees: order.fees.map((fee) => {
+          return {
+            recipient: fee.recipient,
+            amount: fee.amount,
+            feeData: fee.feeData || '0x',
+          }
+        }),
         erc721Token: manifest.contractAddress,
         erc721TokenId: order.tokenId,
         erc721TokenProperties: [],

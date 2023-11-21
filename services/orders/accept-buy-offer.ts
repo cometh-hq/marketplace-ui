@@ -59,13 +59,13 @@ export const useAcceptBuyOffer = () => {
         nonce: offer.trade.nonce,
         erc20Token: offer.trade.erc20Token,
         erc20TokenAmount: offer.trade.erc20TokenAmount,
-        fees: [
-          {
-            recipient: offer.trade.fees[0].recipient,
-            amount: offer.trade.fees[0].amount,
-            feeData: offer.trade.fees[0].feeData!,
-          },
-        ],
+        fees: offer.trade.fees.map((fee) => {
+          return {
+            recipient: fee.recipient,
+            amount: fee.amount,
+            feeData: fee.feeData || '0x',
+          }
+        }),
         erc721Token: manifest.contractAddress,
         erc721TokenId: offer.trade.tokenId,
         erc721TokenProperties: [],
