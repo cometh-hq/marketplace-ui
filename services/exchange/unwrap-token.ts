@@ -56,7 +56,7 @@ export const useUnwrapToken = () => {
           title: "Token unwrapped!",
         })
       },
-      onError: (error: Error) => {
+      onError: (error) => {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",

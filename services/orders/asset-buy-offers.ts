@@ -4,7 +4,10 @@ import { Address } from "viem"
 
 import { UnknownUser } from "@/types/user"
 
-import { useReceivedBuyOffers, useSentBuyOffers } from "../cometh-marketplace/offers"
+import {
+  useReceivedBuyOffers,
+  useSentBuyOffers,
+} from "../cometh-marketplace/offers"
 
 export type UseMakerBuyOffersOptions = {
   maker: Address
@@ -50,11 +53,7 @@ export const useAssetOffers = (
   }
 
   const address = props.asset?.owner || props.owner
-  const { data: trades, isLoading } = useOffers(address as Address)
-
-  // if (isLoading) {
-  //   return []
-  // }
+  const { data: trades } = useOffers(address as Address)
 
   return trades.map((trade) => skeletonTrade(trade, props.asset))
 }

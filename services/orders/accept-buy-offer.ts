@@ -83,19 +83,19 @@ export const useAcceptBuyOffer = () => {
         client.invalidateQueries(["cometh", "assets", offer.asset?.tokenId])
         client.invalidateQueries([
           "cometh",
-          "ReceivedBuyoffers",
+          "received-buy-offers",
           offer.owner.address,
         ])
         toast({
           title: "Order filled!",
         })
       },
-      onError: (error: Error) => {
+      onError: (error) => {
         console.error(error)
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: handleOrderbookError(error.message, {
+          description: handleOrderbookError(error, {
             400: "Bad request",
             404: "Order not found",
             401: "Unauthorized",

@@ -6,7 +6,7 @@ import { AnyUser } from "./user"
 export type BuyOffer = {
   trade: OrderWithAsset
   asset?: AssetWithTradeData
-  owner: AnyUser & { address: string }
+  owner: AnyUser
   emitter: AnyUser
   amount: string
   date: DateTime
