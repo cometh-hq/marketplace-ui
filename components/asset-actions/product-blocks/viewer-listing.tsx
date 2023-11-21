@@ -3,7 +3,7 @@
  * listed the asset for sale.
  */
 
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
 import { Price } from "@/components/ui/price"

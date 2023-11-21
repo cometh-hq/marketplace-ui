@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 
 import { Button } from "@/components/ui/button"
 import {

@@ -1,7 +1,7 @@
 "use client"
 
 import { useAssetReceivedOffers } from "@/services/orders/asset-buy-offers"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
 import { TabsContent } from "@/components/ui/tabs"

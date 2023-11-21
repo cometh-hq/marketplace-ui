@@ -1,6 +1,6 @@
 import { manifest } from "@/manifests"
 import { fetchCollectionAttributes } from "@/services/cometh-marketplace/collection-attributes"
-import { type CollectionAttributes } from "@alembic/nft-api-sdk"
+import { type CollectionAttributes } from "@cometh/marketplace-sdk"
 
 export type SerializedMarketplacePanelFilters = {
   values: Record<MarketplaceFilterKey, { values: string[] }>

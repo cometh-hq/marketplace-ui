@@ -4,7 +4,7 @@ import { manifest } from "@/manifests"
 import {
   AssetWithTradeData,
   SearchAssetWithTradeData,
-} from "@alembic/nft-api-sdk"
+} from "@cometh/marketplace-sdk"
 import { Share } from "lucide-react"
 
 import { useClipboard } from "@/lib/utils/clipboard"

@@ -2,7 +2,7 @@
 
 import { useCallback } from "react"
 import { useCancelListing } from "@/services/orders/cancel-listing"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 
 import { Button } from "@/components/ui/button"
 

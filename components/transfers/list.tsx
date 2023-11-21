@@ -2,7 +2,7 @@
 
 import { useMemo } from "react"
 import Link from "next/link"
-import { AssetTransfers } from "@alembic/nft-api-sdk"
+import { AssetTransfers } from "@cometh/marketplace-sdk"
 import { ArrowRightIcon, ExternalLink } from "lucide-react"
 import { DateTime } from "luxon"
 import { Address, isAddressEqual } from "viem"

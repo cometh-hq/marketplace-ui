@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { useFilterableNFTsQuery } from "@/services/cometh-marketplace/search-assets"
-import { AssetSearchFilters } from "@alembic/nft-api-sdk"
+import { AssetSearchFilters } from "@cometh/marketplace-sdk"
 import { useInView } from "react-intersection-observer"
 
 import {

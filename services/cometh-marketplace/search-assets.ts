@@ -3,7 +3,7 @@ import {
   FilterDirection,
   FilterOrderBy,
   type AssetSearchFilters,
-} from "@alembic/nft-api-sdk"
+} from "@cometh/marketplace-sdk"
 import {
   UseInfiniteQueryResult,
   useInfiniteQuery,

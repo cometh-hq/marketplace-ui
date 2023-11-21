@@ -1,6 +1,6 @@
 import { ExternalLinkIcon } from "lucide-react"
 
-import { AssetWithTradeData, SearchAssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 

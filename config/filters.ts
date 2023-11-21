@@ -1,7 +1,7 @@
 import {
   FilterDirection,
   FilterOrderBy,
-} from "@alembic/nft-api-sdk"
+} from "@cometh/marketplace-sdk"
 
 export const FILTERS_SORT = [
   {

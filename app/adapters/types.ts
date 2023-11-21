@@ -1,4 +1,4 @@
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Provider } from "@ethersproject/providers"
 import {
   NftOrderV4Serialized,

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 import { parseUnits } from "ethers/lib/utils"
 import { Loader } from "lucide-react"

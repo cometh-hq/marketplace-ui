@@ -12,14 +12,6 @@
   resolved "https://registry.npmjs.org/@adraffy/ens-normalize/-/ens-normalize-1.9.0.tgz"
   integrity sha512-iowxq3U30sghZotgl4s/oJRci6WPBfNO5YYgk2cIOMCHr3LeGPcsZjCEr+33Q4N+oV3OABDAtA+pyvWjbvBifQ==
 
-"@alembic/nft-api-sdk@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@alembic/nft-api-sdk/-/nft-api-sdk-1.1.4.tgz#683bcec4e633622dfa8a3f4ffee649d72f668c8b"
-  integrity sha512-fPYH8kqGi+TTe4b2cBx/cHFWdOHNgmWe2GwPtg6/hRcJQRmqjOeqfQuuVL87gf6cfJ+S2rnmzGx5Tmwp8+0zKg==
-  dependencies:
-    axios "^1.4.0"
-    form-data "4.x"
-
 "@alembic/ui@1.5.3":
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/@alembic/ui/-/ui-1.5.3.tgz#1e04200fac109857a067a510cc4b340be8031ae9"
@@ -423,6 +415,14 @@
     react-dom "^18.0.0"
     siwe "^1.1.6"
     uuid "^9.0.0"
+
+"@cometh/marketplace-sdk@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@cometh/marketplace-sdk/-/marketplace-sdk-1.0.5.tgz#17bd7ad6a18457b5fb8243c8f5e9e5bbdfbe3753"
+  integrity sha512-NYnjZJxClR6tdswvb1hyPCzONUCM907OR2yOWJZ+KWYXAFOf6w3DZaXt/4DmjcCGcgm7sZzmvK/T6DHIUa3wYA==
+  dependencies:
+    axios "^1.6.2"
+    form-data "4.x"
 
 "@emotion/is-prop-valid@^1.1.0":
   version "1.2.1"
@@ -3544,6 +3544,15 @@ axios@^1.3.4:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.1.tgz#76550d644bf0a2d469a01f9244db6753208397d7"
   integrity sha512-vfBmhDpKafglh0EldBEbVuoe7DyAavGSLWhuSm5ZSEKQnHhBf0xAAwybbNH1IkrJNGnS/VG4I5yxig1pCEXE4g==
+  dependencies:
+    follow-redirects "^1.15.0"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
+axios@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.2.tgz#de67d42c755b571d3e698df1b6504cde9b0ee9f2"
+  integrity sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"

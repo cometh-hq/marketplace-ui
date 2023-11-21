@@ -1,7 +1,7 @@
 import {
   AssetWithTradeData,
   SearchAssetWithTradeData,
-} from "@alembic/nft-api-sdk"
+} from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 

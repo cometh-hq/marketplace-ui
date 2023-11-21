@@ -1,4 +1,4 @@
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 
 import { cn } from "@/lib/utils/utils"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"

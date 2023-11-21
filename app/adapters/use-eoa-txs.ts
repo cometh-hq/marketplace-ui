@@ -6,7 +6,7 @@ import {
   NewOrder,
   TokenType,
   TradeDirection,
-} from "@alembic/nft-api-sdk"
+} from "@cometh/marketplace-sdk"
 import { BigNumber } from "@ethersproject/bignumber"
 import { splitSignature } from "ethers/lib/utils"
 import { DateTime } from "luxon"

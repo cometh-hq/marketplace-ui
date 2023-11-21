@@ -4,7 +4,7 @@ import {
   AssetWithTradeData,
   Collection,
   CollectionFees,
-} from "@alembic/nft-api-sdk"
+} from "@cometh/marketplace-sdk"
 import {
   UserFacingERC20AssetDataSerializedV4,
   UserFacingERC721AssetDataSerializedV4,

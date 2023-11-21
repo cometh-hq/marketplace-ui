@@ -6,7 +6,7 @@ import {
   AssetAttribute,
   AssetWithTradeData,
   SearchAssetWithTradeData,
-} from "@alembic/nft-api-sdk"
+} from "@cometh/marketplace-sdk"
 import { animated, config, useSpring } from "react-spring"
 import { useBoolean } from "usehooks-ts"
 

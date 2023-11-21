@@ -3,7 +3,7 @@ import {
   AssetAttribute,
   AssetWithTradeData,
   SearchAssetWithTradeData,
-} from "@alembic/nft-api-sdk"
+} from "@cometh/marketplace-sdk"
 
 const COLORS: Record<string, string> = {
   Limited: "!bg-gradient-to-r !from-[#64FF9E]/20 !to-[#2B6F85]/20",

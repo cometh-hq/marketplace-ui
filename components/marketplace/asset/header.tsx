@@ -1,7 +1,7 @@
 import { useMemo } from "react"
 import Link from "next/link"
 import { manifest } from "@/manifests"
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import qs from "qs"
 
 import { shortenTokenId } from "@/lib/utils/token"
