@@ -28,7 +28,7 @@ export function MainNav({ items, onLinkClick }: MainNavProps) {
     <>
       {items?.length ? (
         <nav className="
-        flex flex-col gap-6 max-md:mt-12 max-md:flex-1 max-md:overflow-y-auto md:!flex-row">
+        flex flex-col gap-6 max-md:mt-12 max-md:flex-1 max-md:overflow-y-auto md:flex-row">
           {items?.map(
             (item, index) =>
               item.href && (
