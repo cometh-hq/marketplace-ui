@@ -12,23 +12,23 @@
    * ==> https://www.figma.com/file/Zu4BtlBGkkDfCULfrPmYsk/Alembic-Marketplace-CSS?type=design&t=G8sE3G9G6kDVz4UK-6
    */
 
-  --background: 0 0% 100%;
-  --foreground: 222.2 47.4% 11.2%;
+  --background: 249.60 45.45% 10.78%;
+  --foreground: 0 0% 100%;
 
   /* Background for NFTs and actions */
-  --muted: 0 0% 96%;
-  --muted-foreground: 240 1% 46.9%;
+  --muted: 250.34 34.94% 16.27%;
+  --muted-foreground: 0 0% 100%;
 
   /* Background colors for dropdown */
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 47.4% 11.2%;
+  --popover: 250.34 34.94% 16.27%;
+  --popover-foreground: 0 0% 100%;
 
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
+  --border: 50.94 96.84% 49.61%;
+  --input: 50.94 96.84% 49.61%;
 
   /* Background for Attributes and Last activities */
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 47.4% 11.2%;
+  --card: 250.34 34.94% 16.27%;
+  --card-foreground: 0 0% 100%;
 
 
   /* 
@@ -36,11 +36,11 @@
    * "foreground" is used for text and icons in these states.
    */
 
-  --primary: 0 0% 14%;
-  --primary-foreground: 210 40% 98%;
+  --primary: 50.94 96.84% 49.61%;
+  --primary-foreground: 0 0% 0%;
 
-  --secondary: 0 0% 96%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 271.60 100.0% 63.14%;
+  --secondary-foreground: 0 0% 100%;
 
   --accent: 0 0% 96%;
   --accent-foreground: 222.2 47.4% 11.2%;

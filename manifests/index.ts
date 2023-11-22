@@ -1,16 +1,16 @@
 import { Manifest } from "@/types/manifest"
 
 const manifest: Manifest = {
-  name: "Brand",
-  contractAddress: "0xFB1a1788471f86399f4bdb1eCFD88c774E21dB27",
-  themeClass: "theme-base",
+  name: "Dolz",
+  contractAddress:"0xd27029e4ebc3c4c55fcfadddc54fa0b911829afc",
+  themeClass:"theme-base",
 
   pages: {
     asset: {
       // if you want to exclude some attributes from the filters, add them here
       excludedAttributesInFilters: [],
       // main attributes shown in the asset page under the asset name
-      mainAttributes: ["League", "Club", "Season"],
+      mainAttributes: ["Rarity", "Nationality"],
     },
   },
 

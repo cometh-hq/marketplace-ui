@@ -47,7 +47,7 @@ export function SiteHeader() {
         </div>
             
         <Link href="/" className={cx("flex items-center space-x-2 z-[100]", isOpen && "text-primary-foreground")}>
-          <Icons.logo className="h-6 w-6 text-current" />
+          <img src="https://dolz.io/logo512.png" width="25px" />
           <span className="mr-10 text-base font-bold opacity-90 md:inline">{siteConfig.name}</span>
         </Link>
         
