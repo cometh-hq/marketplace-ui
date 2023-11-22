@@ -36,7 +36,7 @@ export function SigninDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="default" disabled={disabled}>
+        <Button variant="default" disabled={disabled} isLoading={disabled}>
           Signin
         </Button>
       </DropdownMenuTrigger>

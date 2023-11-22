@@ -14,9 +14,6 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
 
-  if (isConnected && !children)
-    return <CurrentAccountDropdown />
-
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
     try {
@@ -33,8 +30,11 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
     }
   }
 
+  if (isConnected && !children)
+    return <CurrentAccountDropdown />
+
   if (reconnecting) {
-    return <Button>Reconnecting...</Button>
+    return <Button isLoading={reconnecting} disabled={reconnecting}>Reconnecting</Button>
   }
 
   if (!isConnected || isLoading || connecting) {

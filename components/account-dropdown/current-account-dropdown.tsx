@@ -36,8 +36,6 @@ export function CurrentAccountDropdown({
     ? `/icons/cometh-connect.png`
     : `/icons/metamask.svg`
 
-  if (!viewerAddress?.length) return <ButtonLoading />
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -57,13 +55,17 @@ export function CurrentAccountDropdown({
                   Account
                 </CardTitle>
                 <div className="flex items-center">
-                  <UserLink
-                    user={{ address: viewerAddress }}
-                    className="mr-2 text-sm"
-                    hideIcon
-                    forceDisplayAddress
-                  />
-                  <CopyButton textToCopy={viewerAddress} />
+                  {viewerAddress && (
+                  <>
+                    <UserLink
+                      user={{ address: viewerAddress }}
+                      className="mr-2 text-sm"
+                      hideIcon
+                      forceDisplayAddress
+                    />
+                    <CopyButton textToCopy={viewerAddress} />
+                    </>
+                  )}
                 </div>
               </div>
             </div>
