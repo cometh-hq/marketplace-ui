@@ -5,12 +5,8 @@ import { User } from "lucide-react"
 import { useWindowSize } from "usehooks-ts"
 
 import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
-import { User } from "lucide-react"
-import { useWindowSize } from "usehooks-ts"
 
-import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button, ButtonProps } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   DropdownMenu,
@@ -20,8 +16,6 @@ import {
 import { UserLink } from "@/components/ui/user-button"
 import { ButtonLoading } from "@/components/button-loading"
 
-import { CopyButton } from "../ui/copy-button"
-import { AccountBalance } from "./account-balance"
 import { CopyButton } from "../ui/copy-button"
 import { AccountBalance } from "./account-balance"
 import { AccountLogAction } from "./log-actions"
@@ -35,9 +29,7 @@ export function CurrentAccountDropdown({
   buttonVariant,
 }: AccountDropdownProps) {
   const isComethWallet = useIsComethWallet()
-  const isComethWallet = useIsComethWallet()
   const viewerAddress = useCurrentViewerAddress()
-  const { width } = useWindowSize()
   const { width } = useWindowSize()
 
   const isMobile = width < 640
