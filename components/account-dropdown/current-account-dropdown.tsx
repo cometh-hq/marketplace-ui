@@ -5,7 +5,12 @@ import { User } from "lucide-react"
 import { useWindowSize } from "usehooks-ts"
 
 import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
+import { User } from "lucide-react"
+import { useWindowSize } from "usehooks-ts"
+
+import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button, ButtonProps } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   DropdownMenu,
@@ -15,6 +20,8 @@ import {
 import { UserLink } from "@/components/ui/user-button"
 import { ButtonLoading } from "@/components/button-loading"
 
+import { CopyButton } from "../ui/copy-button"
+import { AccountBalance } from "./account-balance"
 import { CopyButton } from "../ui/copy-button"
 import { AccountBalance } from "./account-balance"
 import { AccountLogAction } from "./log-actions"
@@ -28,15 +35,15 @@ export function CurrentAccountDropdown({
   buttonVariant,
 }: AccountDropdownProps) {
   const isComethWallet = useIsComethWallet()
+  const isComethWallet = useIsComethWallet()
   const viewerAddress = useCurrentViewerAddress()
+  const { width } = useWindowSize()
   const { width } = useWindowSize()
 
   const isMobile = width < 640
   const walletIcon = isComethWallet
     ? `/icons/cometh-connect.png`
     : `/icons/metamask.svg`
-
-  if (!viewerAddress?.length) return <ButtonLoading />
 
   return (
     <DropdownMenu>
@@ -57,13 +64,17 @@ export function CurrentAccountDropdown({
                   Account
                 </CardTitle>
                 <div className="flex items-center">
-                  <UserLink
-                    user={{ address: viewerAddress }}
-                    className="mr-2 text-sm"
-                    hideIcon
-                    forceDisplayAddress
-                  />
-                  <CopyButton textToCopy={viewerAddress} />
+                  {viewerAddress && (
+                  <>
+                    <UserLink
+                      user={{ address: viewerAddress }}
+                      className="mr-2 text-sm"
+                      hideIcon
+                      forceDisplayAddress
+                    />
+                    <CopyButton textToCopy={viewerAddress} />
+                    </>
+                  )}
                 </div>
               </div>
             </div>

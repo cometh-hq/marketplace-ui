@@ -17,6 +17,7 @@ export function SiteHeader() {
   return (
     <div className="container mx-auto py-5 sm:py-10">
       <header className="flex items-center gap-x-5 md:justify-between">
+      <header className="flex items-center gap-x-5 md:justify-between">
         <div
           onClick={() => !isOpen && setIsOpen(true)}
           className={cx('w-[20px] cursor-pointer md:hidden', {
@@ -32,8 +33,10 @@ export function SiteHeader() {
             )}
           >
             <div className="flex h-full flex-col">
+            <div className="flex h-full flex-col">
               <div
                 onClick={toggleMenu}
+                className="mr-5 mt-2 w-[20px] cursor-pointer md:hidden"
                 className="mr-5 mt-2 w-[20px] cursor-pointer md:hidden"
               >
                 <X className="" />

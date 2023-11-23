@@ -60,16 +60,16 @@ export function Web3OnboardProvider({
   const initOnboard = useCallback(
     ({ isComethWallet, walletAddress }: SetOnboardOptions) => {
       const wallets = [injectedModule()]
-
-      if (isComethWallet && walletAddress) {
+      
+      if (isComethWallet) {
         wallets.push(
           ConnectOnboardConnector({
             apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+            walletAddress,
             authAdapter: new ConnectAdaptor({
               chainId: SupportedNetworks.POLYGON,
               apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
             }),
-            ...(walletAddress && { walletAddress }),
           })
         )
       }
@@ -130,8 +130,7 @@ export function Web3OnboardProvider({
     }
 
     const isComethWallet =
-      currentWalletInStorage === COMETH_CONNECT_STORAGE_LABEL &&
-      !!comethWalletAddress
+      currentWalletInStorage === COMETH_CONNECT_STORAGE_LABEL
 
     if (isComethWallet) {
       initOnboard({

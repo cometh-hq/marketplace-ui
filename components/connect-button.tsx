@@ -1,9 +1,15 @@
 import { useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
+import { useState } from "react"
+import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 
+import { useIsConnecting } from "@/lib/web3/auth"
 import { useIsConnecting } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 
+import { SigninDropdown } from "./account-dropdown/signin-dropdown"
+import { CurrentAccountDropdown } from "./account-dropdown/current-account-dropdown"
+import { useWalletConnect } from "@/services/web3/use-wallet-connect"
 import { SigninDropdown } from "./account-dropdown/signin-dropdown"
 import { CurrentAccountDropdown } from "./account-dropdown/current-account-dropdown"
 import { useWalletConnect } from "@/services/web3/use-wallet-connect"
@@ -13,9 +19,6 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
     useWeb3OnboardContext()
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
-
-  if (isConnected && !children)
-    return <CurrentAccountDropdown />
 
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
@@ -33,8 +36,11 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
     }
   }
 
+  if (isConnected && !children)
+    return <CurrentAccountDropdown />
+
   if (reconnecting) {
-    return <Button>Reconnecting...</Button>
+    return <Button isLoading={reconnecting} disabled={reconnecting}>Reconnecting</Button>
   }
 
   if (!isConnected || isLoading || connecting) {
