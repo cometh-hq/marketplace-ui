@@ -17,7 +17,7 @@ First, install the required dependencies and start application.
 
 ```bash
 # Install dependencies
-yarn install
+yarn
 
 # Start the application
 yarn dev
@@ -34,16 +34,18 @@ NEXT_PUBLIC_NODE_ENV=development
 NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS=<CONTRACT_ADDRESS>
 
 # Cometh
-NEXT_PUBLIC_COMETH_API_URL="https://api.marketplace.prod.core.cometh.tech/v1"
+NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL="https://api.marketplace.prod.core.cometh.tech/v1"
+NEXT_PUBLIC_COMETH_CONNECT_API_KEY=<API_KEY> // optional
+NEXT_PUBLIC_MARKETPLACE_API_KEY=<API_KEY>
 ```
-
-🔧 Please replace `<CONTRACT_ADDRESS>` with the appropriate Zero Ex contract address.
-The **NEXT_PUBLIC_COMETH_API_URL** is set by default and shouldn't be changed unless otherwise noted.
-
+ 
+🔧 Please replace `<CONTRACT_ADDRESS>` and `NEXT_PUBLIC_MARKETPLACE_API_KEY` with the appropriate Zero Ex contract address.
+The **NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL** is set by default and shouldn't be changed unless otherwise noted.
+👉 To add *Cometh Connect* in your marketplace, you need to generate an API key here: [Cometh Connect](https://docs.cometh.io/connect/quickstart/getting-started).
 
 ### 3. Customizing Your Marketplace
 
-#### **Manifest:**
+#### **Manifest:** 
 Use the `manifest.ts` file to configure essential aspects of your marketplace. It lets you set:
 - The name of your marketplace.
 - Contract addresses.
@@ -52,7 +54,6 @@ Use the `manifest.ts` file to configure essential aspects of your marketplace. I
 - Currency settings.
 
 🔧 **Important:** It's crucial to customize the `manifest.ts` file to align with the specifics of your marketplace.
-
 
 #### **Global configuration:**
 You can manage the configuration of your site directly from the `site.ts` file. This allows you to update site name, metadatas and links.
