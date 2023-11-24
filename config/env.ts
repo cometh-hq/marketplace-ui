@@ -20,7 +20,7 @@ const client = z.object({
   // Cometh
   NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL: z.string().url(),
   NEXT_PUBLIC_MARKETPLACE_API_KEY: z.string().min(1),
-  NEXT_PUBLIC_COMETH_CONNECT_API_KEY: z.string().min(1),
+  NEXT_PUBLIC_COMETH_CONNECT_API_KEY: z.string().min(1).optional(),
 })
 
 /**
