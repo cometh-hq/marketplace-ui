@@ -10,6 +10,8 @@ import {
 
 import { AccountWallet } from "./account-wallet"
 
+import { env } from "@/config/env"
+
 export type SigninDropdownProps = {
   disabled: boolean
   handleConnect?: (isComethWallet: boolean) => Promise<void>
@@ -19,13 +21,16 @@ export function SigninDropdown({
   disabled,
   handleConnect,
 }: SigninDropdownProps) {
-  // TODO: get this list dynamically from web3-onboard ?
   const wallets = [
-    {
-      name: "Cometh",
-      icon: "/icons/cometh-connect.png",
-      isComethWallet: true,
-    },
+    ...(env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY
+      ? [
+          {
+            name: "Cometh",
+            icon: "/icons/cometh-connect.png",
+            isComethWallet: true,
+          },
+        ]
+      : []),
     {
       name: "Metamask",
       icon: "/icons/metamask.svg",
@@ -36,7 +41,7 @@ export function SigninDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="default" disabled={disabled}>
+        <Button variant="default" disabled={disabled} isLoading={disabled}>
           Signin
         </Button>
       </DropdownMenuTrigger>
