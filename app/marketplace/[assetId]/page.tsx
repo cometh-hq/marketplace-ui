@@ -1,10 +1,10 @@
 "use client"
 
 import { manifest } from "@/manifests"
-import { useAssetDetails } from "@/services/alembic/search-assets"
-import { useAssetTransfers } from "@/services/alembic/transfers"
+import { useAssetDetails } from "@/services/cometh-marketplace/search-assets"
+import { useAssetTransfers } from "@/services/cometh-marketplace/transfers"
 
-import { AssetActivitiesDialog } from "@/components/activities/dialog"
+import { AssetActivities } from "@/components/activities/asset-details/tabs"
 import AssetDetails from "@/components/marketplace/asset/header"
 import { Loading } from "@/components/ui/loading"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
@@ -27,11 +27,11 @@ export default function DetailsPage({
     <div className="container py-10">
       {loading && <Loading />}
       {asset && (
-        <div className="w-full flex flex-col lg:flex-row flex-wrap lg:items-center gap-6">
+        <div className="flex w-full flex-col flex-wrap gap-6 md:gap-12 lg:flex-row lg:items-center">
           <AssetHeaderImage asset={asset} />
           <AssetDetails asset={asset} />
           {assetTransfers && (
-            <AssetActivitiesDialog
+            <AssetActivities
               asset={asset}
               assetTransfers={assetTransfers}
             />

@@ -1,5 +1,6 @@
 import { manifest } from "@/manifests"
-import { fetchCollectionAttributes } from "@/services/alembic/collection-attributes"
+import { fetchCollectionAttributes } from "@/services/cometh-marketplace/collection-attributes"
+import { type CollectionAttributes } from "@cometh/marketplace-sdk"
 
 export type SerializedMarketplacePanelFilters = {
   values: Record<MarketplaceFilterKey, { values: string[] }>
@@ -21,15 +22,17 @@ export const formattedAttributes =
   ) ?? []
 
 export const marketplaceFiltersDescription = new Map<
-  MarketplaceFilterKey, { values: Set<string> }
+  MarketplaceFilterKey,
+  { values: Set<string> }
 >()
 
-export const seedFilters = async (): Promise<typeof marketplaceFiltersDescription> => {
+export const seedFilters = async (): Promise<
+  typeof marketplaceFiltersDescription
+> => {
   const filters = new Map<MarketplaceFilterKey, { values: Set<string> }>()
-  let attributes: any[] = [];
+  let attributes: CollectionAttributes = {}
 
   try {
-    // @ts-ignore
     attributes = await fetchCollectionAttributes()
   } catch (e) {
     console.error("Cannot fetch collection attributes")

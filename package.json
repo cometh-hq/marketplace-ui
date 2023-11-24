@@ -14,7 +14,8 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache"
   },
   "dependencies": {
-    "@alembic/nft-api-sdk": "^1.1.4",
+    "@cometh/connect-sdk": "^1.2.1",
+    "@cometh/marketplace-sdk": "^1.0.5",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
@@ -48,8 +49,7 @@
     "@types/luxon": "^3.3.0",
     "@types/qs": "^6.9.8",
     "@web3-onboard/core": "^2.20.4",
-    "@web3-onboard/injected-wallets": "^2.10.1",
-    "@web3-onboard/react": "^2.8.9",
+    "@web3-onboard/injected-wallets": "^2.10.9",
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
@@ -91,10 +91,10 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-tailwindcss": "^3.12.0",
-    "postcss": "^8.4.24",
+    "postcss": "^8.4.31",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
-    "tailwindcss": "^3.3.2",
+    "tailwindcss": "^3.3.5",
     "typescript": "^5.0.4"
   }
 }

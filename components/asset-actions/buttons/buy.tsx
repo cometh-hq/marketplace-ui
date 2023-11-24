@@ -1,15 +1,15 @@
-import { AssetWithTradeData } from "@alembic/nft-api-sdk"
+import { useState } from "react"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 
 import { useBuyAssetButton } from "@/lib/web3/flows/buy"
+import { Price } from "@/components/ui/price"
 import { TransactionDialogButton } from "@/components/dialog-button"
 import { Case, Switch } from "@/components/utils/Switch"
 
 import { BuyStep } from "../transaction-steps/buy"
 import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { FundsStep } from "../transaction-steps/funds"
-import { Price } from "@/components/ui/price"
-import { useState } from "react"
 
 export type BuyAssetButtonProps = {
   asset: AssetWithTradeData
@@ -24,11 +24,14 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useBuyAssetButton({ asset })
   if (!requiredSteps?.length || !currentStep) return null
-  
 
   return (
     <TransactionDialogButton
-      label={<span>Buy now for <Price amount={asset.orderbookStats.lowestSalePrice} /></span>}
+      label={
+        <>
+          Buy now for <Price amount={asset.orderbookStats.lowestSalePrice} />
+        </>
+      }
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
@@ -42,7 +45,7 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
           />
         </Case>
         <Case value="buy">
-          <BuyStep asset={asset} setTxHash={setTxHash} onValid={nextStep} />
+          <BuyStep asset={asset} onValid={nextStep} setTxHash={setTxHash} />
         </Case>
         <Case value="confirmation">
           <ConfirmationStep txHash={txHash} />
