@@ -6,25 +6,27 @@ import { Button } from "@/components/ui/button"
 
 import { CurrentAccountDropdown } from "./account-dropdown/current-account-dropdown"
 import { useWalletConnect } from "@/services/web3/use-wallet-connect"
+import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import { SigninDropdown } from "./account-dropdown/signin-dropdown"
 
 export function ConnectButton({ children }: { children?: React.ReactNode }) {
-  const { initOnboard, isConnected, setIsconnected, reconnecting, comethWalletAddress } =
+  const { initOnboard, isConnected, setIsconnected, reconnecting } =
     useWeb3OnboardContext()
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
-
+  const { comethWalletAddressInStorage } = useStorageWallet()
+  
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
     try {
       initOnboard({
         isComethWallet,
-        ...(comethWalletAddress && { walletAddress: comethWalletAddress }),
+        ...(comethWalletAddressInStorage && { walletAddress: comethWalletAddressInStorage }),
       })
       await connectWallet({ isComethWallet })
       setIsconnected(true)
-    } catch (e) {
-      console.error("Error connecting wallet", e)
+    } catch (error) {
+      console.error("Error connecting wallet", error)
     } finally {
       setIsLoading(false)
     }

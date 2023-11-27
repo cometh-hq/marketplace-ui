@@ -56,6 +56,7 @@ export function useWalletConnect(): {
         throw new Error("No wallet selected")
       }
     } catch (error) {
+      console.log(error)
       throw new Error("Failed to connect wallet")
     } finally {
       setConnecting(false)

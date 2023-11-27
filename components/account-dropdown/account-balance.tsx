@@ -35,7 +35,7 @@ export function AccountBalance() {
           isUnwrap={isUnwrap}
           onToggleMode={() => setIsUnwrap(!isUnwrap)}
         />
-        <Button variant="secondary">Add found</Button>
+        <Button variant="secondary">Add funds</Button>
       </div>
     </div>
   )
