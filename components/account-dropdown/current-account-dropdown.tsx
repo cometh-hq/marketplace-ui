@@ -1,16 +1,10 @@
 "use client"
 
 import Image from "next/image"
-import { User } from "lucide-react"
-import { useWindowSize } from "usehooks-ts"
-
 import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { User } from "lucide-react"
 import { useWindowSize } from "usehooks-ts"
-
-import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button, ButtonProps } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   DropdownMenu,
@@ -20,8 +14,6 @@ import {
 import { UserLink } from "@/components/ui/user-button"
 import { ButtonLoading } from "@/components/button-loading"
 
-import { CopyButton } from "../ui/copy-button"
-import { AccountBalance } from "./account-balance"
 import { CopyButton } from "../ui/copy-button"
 import { AccountBalance } from "./account-balance"
 import { AccountLogAction } from "./log-actions"
@@ -47,14 +39,12 @@ export function CurrentAccountDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size={isMobile ? "icon" : "default"} variant={buttonVariant}>
-        <Button size={isMobile ? "icon" : "default"} variant={buttonVariant}>
           <User size="18" className="md:mr-1" />
           {!isMobile && "Account"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
         <Card className="p-4" style={{ width: "324px" }}>
-          <CardHeader className="mb-2 space-y-0 p-0">
           <CardHeader className="mb-2 space-y-0 p-0">
             <AccountLogAction />
             <div className="flex items-center gap-2">
