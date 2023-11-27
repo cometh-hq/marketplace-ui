@@ -105,8 +105,8 @@ export function Web3OnboardProvider({
   const initOnboard = useCallback(
     ({ isComethWallet, walletAddress }: SetOnboardOptions) => {
       const wallets = [injectedModule()]
-      
-      if (isComethWallet) {
+
+      if (isComethWallet && walletAddress) {
         wallets.push(
           ConnectOnboardConnector({
             apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
