@@ -21,6 +21,7 @@ import Onboard, { OnboardAPI } from "@web3-onboard/core"
 import injectedModule from "@web3-onboard/injected-wallets"
 
 import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
+import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 
 export interface SetOnboardOptions {
   isComethWallet: boolean
@@ -33,14 +34,12 @@ const Web3OnboardContext = createContext<{
   isConnected: boolean
   setIsconnected: Dispatch<SetStateAction<boolean>>
   reconnecting: boolean
-  comethWalletAddress: string | undefined
 }>({
   onboard: null,
   initOnboard: () => {},
   isConnected: false,
   setIsconnected: () => {},
   reconnecting: false,
-  comethWalletAddress: undefined,
 })
 
 export function useWeb3OnboardContext() {
@@ -55,87 +54,67 @@ export function Web3OnboardProvider({
   const [onboard, setOnboard] = useState<OnboardAPI | null>(null)
   const [isConnected, setIsconnected] = useState<boolean>(false)
   const [reconnecting, setReconnecting] = useState<boolean>(false)
-  const [comethWalletAddress, setComethWalletAddress] = useState<string>()
+  const { comethWalletAddressInStorage } = useStorageWallet()
 
-  const initOnboard = useCallback(
-    ({ isComethWallet, walletAddress }: SetOnboardOptions) => {
-      const wallets = [injectedModule()]
-
-      if (isComethWallet && walletAddress) {
-        wallets.push(
-          ConnectOnboardConnector({
+  const initOnboard = useCallback((options: SetOnboardOptions) => {
+    const wallets = [injectedModule()]
+    if (options.isComethWallet) {
+      wallets.push(
+        ConnectOnboardConnector({
+          apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+          authAdapter: new ConnectAdaptor({
+            chainId: SupportedNetworks.POLYGON,
             apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
-            walletAddress,
-            authAdapter: new ConnectAdaptor({
-              chainId: SupportedNetworks.POLYGON,
-              apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
-            }),
-          })
-        )
-      }
+          }),
+          ...(options.walletAddress && { walletAddress: options.walletAddress })
+        })
+      )
+    }
 
-      const web3OnboardInstance = Onboard({
-        wallets,
-        chains: [
-          {
-            id: "0x89",
-            token: "MATIC",
-            label: "Polygon",
-          },
+    const web3OnboardInstance = Onboard({
+      wallets,
+      chains: [
+        {
+          id: "0x89",
+          token: "MATIC",
+          label: "Polygon",
+        },
+      ],
+      appMetadata: {
+        name: manifest.name,
+        description: "Description",
+        icon: `/icons/un.svg`,
+        logo: `/icons/metamask.svg`,
+        recommendedInjectedWallets: [
+          { name: "MetaMask", url: "https://metamask.io" },
         ],
-        appMetadata: {
-          name: manifest.name,
-          description: "Description",
-          icon: `/icons/un.svg`,
-          logo: `/icons/metamask.svg`,
-          recommendedInjectedWallets: [
-            { name: "MetaMask", url: "https://metamask.io" },
-          ],
+      },
+      theme: manifest.web3Onboard?.theme,
+      accountCenter: {
+        desktop: {
+          enabled: false,
         },
-        theme: manifest.web3Onboard?.theme,
-        accountCenter: {
-          desktop: {
-            enabled: false,
-          },
-          mobile: {
-            enabled: false,
-          },
+        mobile: {
+          enabled: false,
         },
-      })
+      },
+    })
 
-      setOnboard(web3OnboardInstance)
-    },
-    []
-  )
+    setOnboard(web3OnboardInstance)
+  }, [])
 
   useEffect(() => {
     initOnboard({ isComethWallet: false })
   }, [])
 
   useEffect(() => {
-    const currentWalletInStorage = JSON.parse(
-      localStorage.getItem("selectedWallet")!
-    )
-
-    /* If currentWalletInStorage is null, it means that the user has never logged into the site or has cleared their localstorage (on logout for example)
-     * Check if there is a Cometh Connect keys in the localstorage
-     * If there is one, set the currentWalletInStorage to the cometh wallet
-     */
-    const keysInStorage = Object.keys(localStorage)
-    for (let key of keysInStorage) {
-      if (key.startsWith("cometh-connect-")) {
-        setComethWalletAddress(key.split("-")[2])
-        break
-      }
-    }
-
+    const currentWalletInStorage = localStorage.getItem("selectedWallet")
     const isComethWallet =
-      currentWalletInStorage === COMETH_CONNECT_STORAGE_LABEL
-
+      currentWalletInStorage === `"${COMETH_CONNECT_STORAGE_LABEL}"`
     if (isComethWallet) {
       initOnboard({
         isComethWallet,
-        walletAddress: comethWalletAddress,
+        walletAddress: comethWalletAddressInStorage!,
       })
     }
 
@@ -144,7 +123,7 @@ export function Web3OnboardProvider({
       onboard
         ?.connectWallet({
           autoSelect: {
-            label: currentWalletInStorage,
+            label: JSON.parse(currentWalletInStorage),
             disableModals: true,
           },
         })
@@ -155,7 +134,7 @@ export function Web3OnboardProvider({
           }
         })
     }
-  }, [initOnboard, onboard, comethWalletAddress])
+  }, [initOnboard, onboard, comethWalletAddressInStorage])
 
   return (
     <Web3OnboardContext.Provider
@@ -165,7 +144,6 @@ export function Web3OnboardProvider({
         isConnected,
         setIsconnected,
         reconnecting,
-        comethWalletAddress,
       }}
     >
       {children}

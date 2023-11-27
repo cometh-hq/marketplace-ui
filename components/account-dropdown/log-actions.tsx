@@ -18,7 +18,7 @@ export function AccountLogAction() {
 
   async function handleLogout() {
     await logout({
-      label: wallet?.label ?? "",
+      label: wallet!.label,
     })
   }
 
