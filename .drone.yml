@@ -20,6 +20,7 @@ steps:
         - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
         - NEXT_PUBLIC_MARKETPLACE_API_KEY
         - NEXT_PUBLIC_COMETH_CONNECT_API_KEY
+        - NEXT_PUBLIC_BASE_PATH
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
@@ -31,6 +32,7 @@ steps:
         from_secret: cometh_api_key
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: cometh_connect_api_key
+      NEXT_PUBLIC_BASE_PATH: "/marketplace"
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
     environment:
@@ -90,6 +92,7 @@ steps:
         - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
         - NEXT_PUBLIC_MARKETPLACE_API_KEY
         - NEXT_PUBLIC_COMETH_CONNECT_API_KEY
+        - NEXT_PUBLIC_BASE_PATH
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
@@ -101,6 +104,7 @@ steps:
         from_secret: cometh_api_key
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: cometh_connect_api_key
+      NEXT_PUBLIC_BASE_PATH: "/marketplace"
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
     environment:
@@ -160,6 +164,7 @@ steps:
         - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
         - NEXT_PUBLIC_MARKETPLACE_API_KEY
         - NEXT_PUBLIC_COMETH_CONNECT_API_KEY
+        - NEXT_PUBLIC_BASE_PATH
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
@@ -171,6 +176,7 @@ steps:
         from_secret: cometh_api_key
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: cometh_connect_api_key
+      NEXT_PUBLIC_BASE_PATH: "/marketplace"
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
     environment:

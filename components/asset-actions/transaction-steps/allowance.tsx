@@ -10,10 +10,15 @@ import { ButtonLoading } from "@/components/button-loading"
 export type AllowanceStepProps = {
   price: BigNumberish
   onValid: () => void
+  refetchSteps?: () => void
 }
 
-export function AllowanceStep({ price, onValid }: AllowanceStepProps) {
-  const { mutateAsync: approveToken, isLoading } = useWrappedTokenAllow(price)
+export function AllowanceStep({ price, onValid, refetchSteps }: AllowanceStepProps) {
+  const { mutateAsync: approveToken, isLoading } = useWrappedTokenAllow(price, {
+    onSuccess: () => {
+      refetchSteps?.()
+    }
+  })
 
   const approve = useCallback(async () => {
     await approveToken()

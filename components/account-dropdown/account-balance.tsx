@@ -53,7 +53,7 @@ export function AccountBalanceLine({
   return (
     <div className="text-[15px] font-semibold">
       <Image
-        src="/icons/chains/polygon.svg"
+        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
         alt=""
         width={24}
         height={24}
