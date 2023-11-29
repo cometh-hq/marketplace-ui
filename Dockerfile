@@ -28,6 +28,7 @@ ARG DATABASE_URL
 ARG NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
 ARG NEXT_PUBLIC_MARKETPLACE_API_KEY
 ARG NEXT_PUBLIC_COMETH_CONNECT_API_KEY
+ARG NEXT_PUBLIC_BASE_PATH
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
