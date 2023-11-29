@@ -15,6 +15,7 @@ const server = z.object({
  */
 const client = z.object({
   NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"]),
+  NEXT_PUBLIC_BASE_PATH: z.string(),
   NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS: z.string().min(1),
 
   // Cometh
@@ -33,12 +34,14 @@ const processEnv: Record<
 > = {
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_NODE_ENV: process.env.NEXT_PUBLIC_NODE_ENV,
+  NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH,
   NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
     process.env.NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS,
   NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
     process.env.NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL,
   NEXT_PUBLIC_MARKETPLACE_API_KEY: process.env.NEXT_PUBLIC_MARKETPLACE_API_KEY,
-  NEXT_PUBLIC_COMETH_CONNECT_API_KEY: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY,
+  NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
+    process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY,
 }
 
 // Don't touch the part below

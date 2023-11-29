@@ -31,6 +31,7 @@ Based on the provided `.env.example`, here's an example of how your `.env` file 
 
 ```
 NEXT_PUBLIC_NODE_ENV=development
+NEXT_PUBLIC_BASE_PATH="/"
 NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS=<CONTRACT_ADDRESS>
 
 # Cometh

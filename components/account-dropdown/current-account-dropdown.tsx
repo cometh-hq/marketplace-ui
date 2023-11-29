@@ -32,9 +32,10 @@ export function CurrentAccountDropdown({
   const { width } = useWindowSize()
 
   const isMobile = width < 640
-  const walletIcon = isComethWallet
-    ? `/icons/cometh-connect.png`
-    : `/icons/metamask.svg`
+
+  const walletIcon = isComethWallet 
+  ? `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/cometh-connect.png`
+  : `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`
 
   return (
     <DropdownMenu>
