@@ -41,6 +41,7 @@ NEXT_PUBLIC_MARKETPLACE_API_KEY=<API_KEY>
  
 🔧 Please replace `<CONTRACT_ADDRESS>` and `NEXT_PUBLIC_MARKETPLACE_API_KEY` with the appropriate Zero Ex contract address.
 The **NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL** is set by default and shouldn't be changed unless otherwise noted.
+
 👉 To add *Cometh Connect* in your marketplace, you need to generate an API key here: [Cometh Connect](https://docs.cometh.io/connect/quickstart/getting-started).
 
 ### 3. Customizing Your Marketplace
