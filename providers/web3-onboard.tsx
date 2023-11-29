@@ -83,8 +83,8 @@ export function Web3OnboardProvider({
       appMetadata: {
         name: manifest.name,
         description: "Description",
-        icon: `/icons/un.svg`,
-        logo: `/icons/metamask.svg`,
+        icon: `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/un.svg`,
+        logo: `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`,
         recommendedInjectedWallets: [
           { name: "MetaMask", url: "https://metamask.io" },
         ],

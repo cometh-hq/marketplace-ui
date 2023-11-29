@@ -26,14 +26,14 @@ export function SigninDropdown({
       ? [
           {
             name: "Cometh",
-            icon: "/icons/cometh-connect.png",
+            icon: `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/cometh-connect.png`,
             isComethWallet: true,
           },
         ]
       : []),
     {
       name: "Metamask",
-      icon: "/icons/metamask.svg",
+      icon: `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`,
       isComethWallet: false,
     },
   ]
