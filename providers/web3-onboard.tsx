@@ -62,9 +62,11 @@ export function Web3OnboardProvider({
       wallets.push(
         ConnectOnboardConnector({
           apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+          baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_URL,
           authAdapter: new ConnectAdaptor({
             chainId: SupportedNetworks.POLYGON,
             apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+            baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_URL,
           }),
           ...(options.walletAddress && {
             walletAddress: options.walletAddress,

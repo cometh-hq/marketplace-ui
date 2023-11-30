@@ -49,6 +49,7 @@ export function useWalletConnect(): {
       )
 
       if (wallets?.[0]) {
+        console.log("wallet0", wallets?.[0])
         await _selectdCorrectChain(onboard, wallets[0])
         localStorage.setItem("selectedWallet", wallets[0].label)
         return wallets[0]
