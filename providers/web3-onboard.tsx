@@ -62,9 +62,11 @@ export function Web3OnboardProvider({
       wallets.push(
         ConnectOnboardConnector({
           apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+          baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_URL,
           authAdapter: new ConnectAdaptor({
             chainId: SupportedNetworks.POLYGON,
             apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+            baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_URL,
           }),
           ...(options.walletAddress && {
             walletAddress: options.walletAddress,
@@ -110,7 +112,8 @@ export function Web3OnboardProvider({
   }, [])
 
   useEffect(() => {
-    const currentWalletInStorage = localStorage.getItem("walletSelected")
+    const currentWalletInStorage = localStorage.getItem("selectedWallet")
+    console.log("currentWalletInStorage ", currentWalletInStorage)
     const isComethWallet =
       currentWalletInStorage === COMETH_CONNECT_STORAGE_LABEL
     if (isComethWallet) {
