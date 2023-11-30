@@ -9,7 +9,7 @@ export function useWalletDisconnect() {
   const { onboard, setIsconnected } = useWeb3OnboardContext()
 
   async function disconnect(wallet: DisconnectOptions) {
-    localStorage.removeItem("walletSelected")
+    localStorage.removeItem("selectedWallet")
     setIsconnected(false)
     return await onboard?.disconnectWallet(wallet)
   }

@@ -15,6 +15,7 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
   const { comethWalletAddressInStorage } = useStorageWallet()
+  console.log("comethWalletAddressInStorage ", comethWalletAddressInStorage)
   
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)

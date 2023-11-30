@@ -110,7 +110,8 @@ export function Web3OnboardProvider({
   }, [])
 
   useEffect(() => {
-    const currentWalletInStorage = localStorage.getItem("walletSelected")
+    const currentWalletInStorage = localStorage.getItem("selectedWallet")
+    console.log("currentWalletInStorage ", currentWalletInStorage)
     const isComethWallet =
       currentWalletInStorage === COMETH_CONNECT_STORAGE_LABEL
     if (isComethWallet) {
