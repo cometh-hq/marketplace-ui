@@ -18,12 +18,6 @@ export function AccountBalance() {
       <div className="mb-3 space-y-3 rounded-md border border-border p-3">
         <div className="flex items-center justify-between">
           <AccountBalanceLine
-            balance={balance}
-            currency={manifest.currency.main.name}
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <AccountBalanceLine
             balance={wBalance}
             currency={manifest.currency.wrapped.name}
           />
