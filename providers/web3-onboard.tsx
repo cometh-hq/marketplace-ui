@@ -17,11 +17,11 @@ import {
 } from "@cometh/connect-sdk"
 
 import "@web3-onboard/common"
+import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import Onboard, { OnboardAPI } from "@web3-onboard/core"
 import injectedModule from "@web3-onboard/injected-wallets"
 
 import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
-import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 
 export interface SetOnboardOptions {
   isComethWallet: boolean
@@ -66,7 +66,9 @@ export function Web3OnboardProvider({
             chainId: SupportedNetworks.POLYGON,
             apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
           }),
-          ...(options.walletAddress && { walletAddress: options.walletAddress })
+          ...(options.walletAddress && {
+            walletAddress: options.walletAddress,
+          }),
         })
       )
     }
@@ -110,7 +112,7 @@ export function Web3OnboardProvider({
   useEffect(() => {
     const currentWalletInStorage = localStorage.getItem("selectedWallet")
     const isComethWallet =
-      currentWalletInStorage === `"${COMETH_CONNECT_STORAGE_LABEL}"`
+      currentWalletInStorage === COMETH_CONNECT_STORAGE_LABEL
     if (isComethWallet) {
       initOnboard({
         isComethWallet,
@@ -123,7 +125,7 @@ export function Web3OnboardProvider({
       onboard
         ?.connectWallet({
           autoSelect: {
-            label: JSON.parse(currentWalletInStorage),
+            label: currentWalletInStorage,
             disableModals: true,
           },
         })
