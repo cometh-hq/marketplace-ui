@@ -38,7 +38,7 @@ export const useIsConnecting = () => {
 export const useWalletProvider = () => {
   const wallet = useWallet()
   const isComethWallet = wallet?.label === COMETH_CONNECT_STORAGE_LABEL ?? false
-  console.log("wallet", wallet)
+  // console.log("wallet", wallet)
   const provider: any = useMemo(
     () =>
       isComethWallet

@@ -1,8 +1,8 @@
 import { Manifest } from "@/types/manifest"
 
 const manifest: Manifest = {
-  name: "Brand",
-  contractAddress: "0xFB1a1788471f86399f4bdb1eCFD88c774E21dB27",
+  name: "Cosmik Marketplace",
+  contractAddress: "0x93bfc0Ed248a8e84Bbe5DD71B146705e51345104",
   themeClass: "theme-base",
 
   pages: {
@@ -15,17 +15,17 @@ const manifest: Manifest = {
   },
 
   network: {
-    chainId: 137,
+    chainId: 2121337,
   },
 
   currency: {
     main: {
-      name: "MATIC",
+      name: "ETH",
       address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     },
     wrapped: {
-      name: "WMATIC",
-      address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      name: "WETH",
+      address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
     },
   },
 }
