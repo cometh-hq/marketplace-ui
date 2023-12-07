@@ -25,6 +25,7 @@ export const AssetHeaderImage = ({ asset }: { asset: AssetWithTradeData }) => {
           <AssetImage
             src={asset.cachedImageUrl}
             fallback={asset.metadata.image}
+            imageData={asset.metadata.image_data}
             height={380}
             width={320}
             className="relative z-10 h-full w-full rounded-xl object-contain p-[10%]"
