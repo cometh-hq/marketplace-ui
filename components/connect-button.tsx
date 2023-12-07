@@ -24,6 +24,7 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
         isComethWallet,
         ...(comethWalletAddressInStorage && { walletAddress: comethWalletAddressInStorage }),
       })
+
       await connectWallet({ isComethWallet })
       setIsconnected(true)
     } catch (error) {
