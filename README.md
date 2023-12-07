@@ -7,7 +7,7 @@ Welcome to **Marketplace UI** - your gateway to creating and publishing web3 mar
 ## Explore the Demo
 
 Before diving in, take a look at our demo for a preview of what you can achieve with Marketplace UI. 
-[Explore the Demo](https://starter.marketplace.develop.core.cometh.tech/marketplace/marketplace).
+[Explore the Demo](https://starter.marketplace.develop.core.cometh.tech/marketplace/).
 
 ## Setting Up Your Project
 
@@ -70,10 +70,6 @@ export const siteConfig = {
   name: `${manifest.name} | Marketplace`,
   description: `Discover ${manifest.name}, the ultimate Web3 marketplace platform.`,
   mainNav: [
-    {
-      title: "Home", 
-      href: "/",
-    },
     {
       title: "Marketplace",
       href: "/marketplace",
