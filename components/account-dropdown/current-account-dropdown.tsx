@@ -1,10 +1,9 @@
 "use client"
 
 import Image from "next/image"
+import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { User } from "lucide-react"
 import { useWindowSize } from "usehooks-ts"
-
-import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button, ButtonProps } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
