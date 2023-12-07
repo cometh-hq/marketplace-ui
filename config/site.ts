@@ -7,10 +7,6 @@ export const siteConfig = {
   description: `Discover ${manifest.name}, the ultimate Web3 marketplace platform.`,
   mainNav: [
     {
-      title: "Primary sales",
-      href: "/",
-    },
-    {
       title: "Marketplace",
       href: "/marketplace",
     },
