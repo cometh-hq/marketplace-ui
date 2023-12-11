@@ -1,11 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { PopoverProps } from "@radix-ui/react-popover"
-import { ListFilter, Check, ChevronDown } from "lucide-react"
+import { Check, ChevronDown, ListFilter } from "lucide-react"
+import { useWindowSize } from "usehooks-ts"
 
+import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { cn } from "@/lib/utils/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -21,30 +23,35 @@ import {
 } from "@/components/ui/popover"
 
 import { FILTERS_SORT } from "../../../config/filters"
-import { useNFTFilters } from "@/lib/utils/nft-filters"
-
-import { useWindowSize } from 'usehooks-ts'
 
 interface MarketplaceSortDropdownProps extends PopoverProps {}
+
+const DEFAULT_SORT_LABEL = FILTERS_SORT[0].label
 
 export function MarketplaceSortDropdown({
   ...props
 }: MarketplaceSortDropdownProps) {
   const [open, setOpen] = useState(false)
+  const [currentLabel, setCurrentLabel] = useState(DEFAULT_SORT_LABEL)
   const { get } = useSearchParams()
 
   const { width } = useWindowSize()
   const isSmallScreen = width && width < 540
 
-  const label = FILTERS_SORT.find(
-    (option) =>
-      option.orderBy === get("orderBy") && option.direction === get("direction") || FILTERS_SORT[0].label
-  )?.label
+  const orderBy = get("orderBy")
+  const direction = get("direction")
+
+  useEffect(() => {
+    const matchingLabel = FILTERS_SORT.find(
+      (option) => option.orderBy === orderBy && option.direction === direction
+    )?.label
+    setCurrentLabel(matchingLabel || DEFAULT_SORT_LABEL)
+  }, [get, orderBy, direction])
 
   return (
     <Popover open={open} onOpenChange={setOpen} {...props}>
       <PopoverTrigger asChild>
-      <Button
+        <Button
           variant="outline"
           size={isSmallScreen ? "icon" : "default"}
           role="combobox"
@@ -53,11 +60,12 @@ export function MarketplaceSortDropdown({
           aria-controls="radix-:Rirb9ipj9:"
           className="shrink-0"
         >
+          <ListFilter size="16" className={isSmallScreen ? '' : 'mr-2'} />
           {isSmallScreen ? (
-            <ListFilter size="16" />
+            ""
           ) : (
             <>
-              {label}
+              {currentLabel}
               <ChevronDown size="16" className="ml-2 shrink-0 opacity-50" />
             </>
           )}
@@ -106,8 +114,7 @@ const DropdownElement = ({
   }, [setIsOpen, update, orderBy, direction])
 
   const isSelected =
-    orderBy === get("orderBy") &&
-    direction === get("direction")
+    orderBy === get("orderBy") && direction === get("direction")
 
   return (
     <CommandItem onSelect={handleChange}>

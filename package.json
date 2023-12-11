@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@cometh/connect-sdk": "^1.2.1",
-    "@cometh/marketplace-sdk": "^1.0.5",
+    "@cometh/marketplace-sdk": "^1.0.10",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",

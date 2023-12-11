@@ -1,15 +1,22 @@
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 
+import { getAssetColor } from "@/lib/utils/colors-attributes"
 import { cn } from "@/lib/utils/utils"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { AssetImage } from "@/components/ui/asset-image"
 
+import { AssetImageContainer } from "../grid/asset-card"
+
 export const AssetHeaderImage = ({ asset }: { asset: AssetWithTradeData }) => {
   const viewerAddress = useCurrentViewerAddress()
   const owner = asset.owner === viewerAddress
 
-  if (!asset.cachedImageUrl) {
+  if (
+    !asset.cachedImageUrl &&
+    !asset.metadata.image &&
+    !asset.metadata.image_data
+  ) {
     return null
   }
 
@@ -25,9 +32,10 @@ export const AssetHeaderImage = ({ asset }: { asset: AssetWithTradeData }) => {
           <AssetImage
             src={asset.cachedImageUrl}
             fallback={asset.metadata.image}
+            imageData={asset.metadata.image_data}
             height={380}
             width={320}
-            className="relative z-10 h-full w-full rounded-xl object-contain p-[10%]"
+            className="relative  h-full w-full rounded-xl object-contain p-[10%]"
           />
         </div>
       </AspectRatio>
