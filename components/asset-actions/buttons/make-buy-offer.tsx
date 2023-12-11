@@ -86,7 +86,7 @@ export function MakeBuyOfferPriceDialog({
 
         <div className="mt-4 flex gap-4">
           <div className="flex flex-col gap-3 md:w-2/3">
-            <Label htmlFor="make-buy-offer-price">Offer price</Label>
+            <Label htmlFor="make-buy-offer-price">Offer price *</Label>
             <Input
               id="make-buy-offer-price"
               type="number"
@@ -95,7 +95,7 @@ export function MakeBuyOfferPriceDialog({
             />
           </div>
           <div className="flex flex-col gap-3 md:w-1/3">
-            <Label htmlFor="make-buy-offer-price">Validity time</Label>
+            <Label htmlFor="make-buy-offer-price">Validity time *</Label>
             <Select onValueChange={(v) => setValidity(v)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="" />

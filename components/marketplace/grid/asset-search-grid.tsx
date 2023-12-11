@@ -15,6 +15,7 @@ import { AssetCard } from "./asset-card"
 import { AssetCardsList } from "./asset-cards-list"
 import { AssetsSearchEmpty } from "./asset-search-empty"
 import { MarketplaceFiltersDropdown } from "./filters-dropdown"
+import { FiltersResetBtn } from "./filters-reset-btn"
 import { NFTStateFilters } from "./nft-state-filters"
 import { SearchAsset } from "./search-asset"
 import { MarketplaceSortDropdown } from "./sort-dropdown"
@@ -77,6 +78,7 @@ export const AssetsSearchGrid = ({
         <div className="flex items-center gap-x-3">
           <SearchAsset onChange={setSearch} />
           <MarketplaceFiltersDropdown filters={filtersDefinition} />
+          <FiltersResetBtn />
           <MarketplaceSortDropdown />
         </div>
       </div>
@@ -93,7 +95,7 @@ export const AssetsSearchGrid = ({
             ))}
           </AssetCardsList>
           <div ref={loadMoreRef} className="mt-10">
-            {isFetchingNextPage ? "Loading more..." : hasNextPage}
+            {isFetchingNextPage ? "Loading NFTs..." : hasNextPage}
           </div>
         </>
       )}

@@ -21,7 +21,7 @@ export function SearchAsset({ onChange }: SearchAssetProps) {
     <Input
       ref={SearchRef}
       type="text"
-      placeholder="Search NFT"
+      placeholder="Search name"
       className="h-[40px]"
       icon={
         <Search size="16" className={"min-w-[17px] opacity-40"} />

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { manifest } from "@/manifests"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 
 import { Button } from "@/components/ui/button"
@@ -11,7 +12,6 @@ import {
 } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { TabsContent } from "@/components/ui/tabs"
-import { manifest } from "@/manifests"
 
 export function AssetMetadata({ asset }: { asset: AssetWithTradeData }) {
   const attributes = asset.metadata.attributes
@@ -35,12 +35,24 @@ export function AssetMetadata({ asset }: { asset: AssetWithTradeData }) {
             <TableBody>
               {attributes?.map((attribute, index) => (
                 <TableRow key={index}>
-                  <TableCell className="py-3 pl-6">{attribute.trait_type}</TableCell>
+                  <TableCell className="py-3 pl-6">
+                    {attribute.trait_type}
+                  </TableCell>
                   <TableCell className="py-3 text-right font-medium">
                     <Button asChild variant="link">
-                      <Link href={`/marketplace?trait=${attribute.value}`}>
-                        {attribute.value}
-                      </Link>
+                      {attribute.value?.toString ? (
+                        <Link href={`/marketplace?trait=${attribute.value}`}>
+                          {attribute.value.toString()}
+                        </Link>
+                      ) : (
+                        <Link
+                          href={`/marketplace?trait=${JSON.stringify(
+                            attribute.value
+                          )}`}
+                        >
+                          {JSON.stringify(attribute.value)}
+                        </Link>
+                      )}
                     </Button>
                   </TableCell>
                 </TableRow>
