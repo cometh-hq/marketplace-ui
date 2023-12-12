@@ -1,28 +1,36 @@
 import { useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
+import { useStorageWallet } from "@/services/web3/use-storage-wallet"
+import { useWalletConnect } from "@/services/web3/use-wallet-connect"
 
 import { useIsConnecting } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 
-import { SigninDropdown } from "./account-dropdown/signin-dropdown"
 import { CurrentAccountDropdown } from "./account-dropdown/current-account-dropdown"
-import { useWalletConnect } from "@/services/web3/use-wallet-connect"
-import { useStorageWallet } from "@/services/web3/use-storage-wallet"
+import { SigninDropdown } from "./account-dropdown/signin-dropdown"
 
-export function ConnectButton({ children }: { children?: React.ReactNode }) {
+export function ConnectButton({
+  children,
+  fullVariant = false,
+}: {
+  children?: React.ReactNode
+  fullVariant?: boolean
+}) {
   const { initOnboard, isConnected, setIsconnected, reconnecting } =
     useWeb3OnboardContext()
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
   const { comethWalletAddressInStorage } = useStorageWallet()
   console.log("comethWalletAddressInStorage ", comethWalletAddressInStorage)
-  
+
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
     try {
       initOnboard({
         isComethWallet,
-        ...(comethWalletAddressInStorage && { walletAddress: comethWalletAddressInStorage }),
+        ...(comethWalletAddressInStorage && {
+          walletAddress: comethWalletAddressInStorage,
+        }),
       })
 
       await connectWallet({ isComethWallet })
@@ -34,16 +42,23 @@ export function ConnectButton({ children }: { children?: React.ReactNode }) {
     }
   }
 
-  if (isConnected && !children)
-    return <CurrentAccountDropdown />
+  if (isConnected && !children) return <CurrentAccountDropdown />
 
   if (reconnecting) {
-    return <Button isLoading={reconnecting} disabled={reconnecting}>Reconnecting</Button>
+    return (
+      <Button isLoading={reconnecting} disabled={reconnecting}>
+        Reconnecting
+      </Button>
+    )
   }
 
   if (!isConnected || isLoading || connecting) {
     return (
-      <SigninDropdown handleConnect={handleConnect} disabled={isLoading || connecting} />
+      <SigninDropdown
+        handleConnect={handleConnect}
+        disabled={isLoading || connecting}
+        fullVariant={fullVariant}
+      />
     )
   }
 

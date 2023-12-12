@@ -16,6 +16,7 @@ type SwitchNetworkProps = {
 export const SwitchNetwork = ({
   callbackChildren,
   children,
+  
 }: SwitchNetworkProps) => {
   const { isConnected } = useWeb3OnboardContext()
   const { isChainSupported, switchNetwork, switchNetworkLoading } =
@@ -54,10 +55,15 @@ export const SwitchNetwork = ({
                 </Button>
               </>
             ) : (
-              <span className="text-sm font-medium">
-                Please, connect your wallet.
-              </span>
+              <div>
+                <div className="text-sm font-medium">
+                  Please, connect your wallet to interact with the marketplace.
+                </div>
+              </div>
             )}
+          </div>
+          <div>
+            <ConnectButton  fullVariant={true} />
           </div>
         </>
       )}

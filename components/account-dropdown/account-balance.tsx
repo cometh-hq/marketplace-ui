@@ -5,7 +5,6 @@ import { useFormatMainBalance } from "@/services/balance/main"
 import { useFormatWrappedBalance } from "@/services/balance/wrapped"
 
 import { WrapButton } from "../asset-actions/buttons/wrap"
-import { Button } from "../ui/button"
 
 export function AccountBalance() {
   const balance = useFormatMainBalance()
@@ -24,12 +23,11 @@ export function AccountBalance() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid  text-right">
         <WrapButton
           isUnwrap={isUnwrap}
           onToggleMode={() => setIsUnwrap(!isUnwrap)}
         />
-        <Button variant="secondary">Add funds</Button>
       </div>
     </div>
   )

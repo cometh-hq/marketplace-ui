@@ -7,7 +7,7 @@ Welcome to **Marketplace UI** - your gateway to creating and publishing web3 mar
 ## Explore the Demo
 
 Before diving in, take a look at our demo for a preview of what you can achieve with Marketplace UI. 
-[Explore the Demo](https://starter.marketplace.develop.core.cometh.tech/marketplace/).
+[Explore the Demo](https://demo.cometh.io/marketplace/marketplace).
 
 ## Setting Up Your Project
 
@@ -32,28 +32,28 @@ Based on the provided `.env.example`, here's an example of how your `.env` file 
 ```
 NEXT_PUBLIC_NODE_ENV=development
 NEXT_PUBLIC_BASE_PATH=""
-NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS=<CONTRACT_ADDRESS>
+NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS=<NETWORK_ZERO_EX_CONTRACT_ADDRESS>
+NEXT_PUBLIC_CONTRACT_ADDRESS=<YOUR_ERC_721_CONTRACT_ADDRESS>
 
 # Cometh
 NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL="https://api.marketplace.prod.core.cometh.tech/v1"
-NEXT_PUBLIC_COMETH_CONNECT_API_KEY=<API_KEY> // optional
+NEXT_PUBLIC_COMETH_CONNECT_API_KEY=<API_KEY>
 NEXT_PUBLIC_MARKETPLACE_API_KEY=<API_KEY>
 ```
  
-🔧 Please replace `<CONTRACT_ADDRESS>` with the appropriate Zero Ex contract address (follow [this link](https://0x.org/docs/introduction/0x-cheat-sheet#exchange-proxy-addresses) to find the right value) and `NEXT_PUBLIC_MARKETPLACE_API_KEY` available in your [cometh dashboard](https://app.cometh.io/).
+🔧 Please replace `<NETWORK_ZERO_EX_CONTRACT_ADDRESS>` with the appropriate Zero Ex contract address (follow [this link](https://0x.org/docs/introduction/0x-cheat-sheet#exchange-proxy-addresses) to find the right value). Your keys `NEXT_PUBLIC_MARKETPLACE_API_KEY` and `NEXT_PUBLIC_COMETH_CONNECT_API_KEY` are available in your [cometh dashboard](https://app.cometh.io/), they are usually the same key.
 
-The **NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL** is set by default and shouldn't be changed unless otherwise noted.
+The **NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL** is set by default for the polygon network. If you are on another network, you can find this url in your dashboard.
 
-👉 To add *Cometh Connect* in your marketplace, you need to generate an API key here: [Cometh Connect](https://docs.cometh.io/connect/quickstart/getting-started).
+👉 To add *Cometh Connect* in your marketplace, you need to generate activated the product on your project: [Cometh Connect](https://docs.cometh.io/connect/quickstart/getting-started).
 
 ### 3. Customizing Your Marketplace
 
 #### **Manifest:** 
 Use the `manifests/index.ts` file to configure essential aspects of your marketplace. It lets you set:
 - The name of your marketplace.
-- Contract addresses.
 - Asset attribute configurations.
-- Network details.
+- Network details (update if not on polygon).
 - Currency settings.
 
 🔧 **Important:** It's crucial to customize the `index.ts` file to align with the specifics of your marketplace.

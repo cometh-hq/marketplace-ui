@@ -1,8 +1,10 @@
+import { Address } from "viem"
+
 import { Manifest } from "@/types/manifest"
 
 const manifest: Manifest = {
   name: "My NFT collection",
-  contractAddress: "0x8634666ba15ada4bbc83b9dbf285f73d9e46e4c2",
+  contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
   themeClass: "theme-base",
 
   pages: {
@@ -30,8 +32,8 @@ const manifest: Manifest = {
   },
 }
 
-if(!manifest.contractAddress) {
-  throw new Error("Contract address is not defined in the manifest")
+if (!manifest.contractAddress || manifest.contractAddress.indexOf("0x") !== 0) {
+  throw new Error("Contract address is not correctly defined in the manifest")
 }
 
 export { manifest }
