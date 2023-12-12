@@ -1,5 +1,9 @@
 "use client"
 
+import { cx } from "class-variance-authority"
+import { WalletIcon } from "lucide-react"
+
+import { env } from "@/config/env"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -10,16 +14,16 @@ import {
 
 import { AccountWallet } from "./account-wallet"
 
-import { env } from "@/config/env"
-
 export type SigninDropdownProps = {
   disabled: boolean
   handleConnect?: (isComethWallet: boolean) => Promise<void>
+  fullVariant?: boolean
 }
 
 export function SigninDropdown({
   disabled,
   handleConnect,
+  fullVariant
 }: SigninDropdownProps) {
   const wallets = [
     ...(env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY
@@ -41,14 +45,22 @@ export function SigninDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="default" disabled={disabled} isLoading={disabled}>
-          Signin
+        <Button
+          className={cx({
+            "w-full h-12": fullVariant,
+          })}
+          variant="default"
+          disabled={disabled}
+          isLoading={disabled}
+        >
+          <WalletIcon size="16" className="mr-2" />
+          Login
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
         <Card className="p-4" style={{ width: "324px" }}>
           <CardHeader className="mb-3 p-0">
-            <CardTitle className="text-xl">Signin</CardTitle>
+            <CardTitle className="text-xl">Login</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 p-0">
             {wallets.map((wallet) => (
