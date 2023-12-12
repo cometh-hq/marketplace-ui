@@ -22,7 +22,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
     const mainAttributes = manifest.pages?.asset?.mainAttributes ?? []
     return asset.metadata.attributes?.reduce((p, c) => {
       if (mainAttributes.includes(c.trait_type)) {
-        p.push({ trait_type: c.trait_type, value: c.value })
+        p.push({ trait_type: c.trait_type, value: c.value || 'null' })
       }
       return p
     }, [] as { trait_type: string; value: string | number | boolean }[])
@@ -54,7 +54,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
             Marketplace
           </BreadcrumbElement>
           /
-          <BreadcrumbElement href={`/marketplace/${asset.metadata.name}`}>
+          <BreadcrumbElement href={`/marketplace/${asset.tokenId}`}>
             {asset.metadata.name}
           </BreadcrumbElement>
         </BreadcrumbContainer>

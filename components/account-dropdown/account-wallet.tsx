@@ -18,7 +18,9 @@ export function AccountWallet({
 }: AccountWalletProps) {
   return (
     <DropdownMenuItem className="outline-none">
-      {!isComethWallet && (
+      {isComethWallet ? (
+        <div className="mb-1 text-sm font-semibold">Biometric smart wallet</div>
+      ) : (
         <div className="mb-1 text-sm font-semibold">External wallet</div>
       )}
       <Button

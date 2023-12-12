@@ -1,3 +1,5 @@
+import NextBundleAnalyzer from '@next/bundle-analyzer'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -10,7 +12,14 @@ const nextConfig = {
       },
     ],
   },
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH,
+  rewrites: async () => {
+    return [{ source: "/", destination: "/marketplace" }]
+  },
 }
 
-export default nextConfig
+const withBundleAnalyzer = NextBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+export default withBundleAnalyzer(nextConfig)

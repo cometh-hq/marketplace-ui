@@ -1,5 +1,14 @@
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
+import {
+  DollarSignIcon,
+  Icon,
+  IconNode,
+  LayoutGridIcon,
+  LucideIcon,
+  TagIcon,
+  UserIcon,
+} from "lucide-react"
 
 import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
@@ -10,21 +19,23 @@ export type NFTStateFilterItemProps = {
   label: string
   isOnSale?: boolean
   isSelected?: boolean
+  iconComponent?: React.ReactNode
 }
 
 const NFTStateFilterItem = ({
   label,
   isOnSale,
   isSelected = false,
+  iconComponent = undefined,
 }: NFTStateFilterItemProps) => {
   const { update } = useNFTFilters()
-
   return (
     <Button
       onClick={() => update({ isOnSale })}
       variant={isSelected ? "secondary" : "ghost"}
       className="font-semibold"
     >
+      {iconComponent ? iconComponent : ""}
       {label}
     </Button>
   )
@@ -40,26 +51,29 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
   const pathname = usePathname()
   const viewerAddress = useCurrentViewerAddress()
 
-  const isOnProfilePage = pathname.includes(
-    `/profile`
-  )
+  const isOnProfilePage = pathname.includes(`/profile`)
 
   const result = results && results > 0 ? `(${results})` : ""
 
   return (
     <div className="flex gap-5">
-       <NFTStateFilterItem
+      <NFTStateFilterItem
         label={`All items ${result}`}
         isSelected={!get("isOnSale")}
+        iconComponent={<LayoutGridIcon size="16" className="mr-2" />}
       />
       <NFTStateFilterItem
-        label="Buy now"
+        label="On sale"
         isOnSale
         isSelected={Boolean(get("isOnSale"))}
+        iconComponent={<TagIcon size="16" className="mr-2" />}
       />
       {viewerAddress && !isOnProfilePage && (
         <Link href={`/profile/${viewerAddress}`}>
-          <NFTStateFilterItem label="Owned" />
+          <NFTStateFilterItem
+            label="My NFTs"
+            iconComponent={<UserIcon size="16" className="mr-2" />}
+          />
         </Link>
       )}
     </div>

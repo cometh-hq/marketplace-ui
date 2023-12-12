@@ -11,10 +11,17 @@ export const getImageURL = (src?: string | null) => {
 export type AssetImageProps = {
   src?: string | null
   fallback?: string | null
+  imageData?: string | null
   name?: string
 } & Omit<ImageProps, "src" | "alt" | "onError" | "quality">
 
-export function AssetImage({ src, name, fallback, ...props }: AssetImageProps) {
+export function AssetImage({
+  src,
+  name,
+  imageData,
+  fallback,
+  ...props
+}: AssetImageProps) {
   const [_src, setSrc] = useState(getImageURL(src ?? fallback ?? null))
 
   const tried = useRef(false)
@@ -24,8 +31,17 @@ export function AssetImage({ src, name, fallback, ...props }: AssetImageProps) {
     setSrc(getImageURL(fallback) ?? null)
   }, [_src, fallback])
 
+  if (imageData && imageData.startsWith("<svg")) {
+    return (
+      <div
+        className="z-10 h-full w-full bg-background"
+        dangerouslySetInnerHTML={{ __html: imageData }}
+      />
+    )
+  }
+
   if (!_src) {
-    return <div className="z-20 h-full w-full bg-background" />
+    return <div className="z-10 h-full w-full bg-background" />
   }
 
   return (

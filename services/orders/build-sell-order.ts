@@ -13,7 +13,10 @@ import {
 import { BigNumber, ethers } from "ethers"
 import { DateTime } from "luxon"
 
-import { calculateFeesAmount, totalFeesFromCollection } from "@/lib/utils/fees"
+import {
+  calculateAmountWithoutFees,
+  calculateFeesAmount
+} from "@/lib/utils/fees"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
@@ -36,10 +39,20 @@ export const useBuildSellOrder = () => {
         .plus({ days: parseInt(validity) })
         .toJSDate()
 
+      const sumOfFeesPercentages = collection.collectionFees.reduce(
+        (sum, fee) => sum + fee.feePercentage,
+        0
+      )
+
+      const priceWithoutFees = calculateAmountWithoutFees(
+        price,
+        sumOfFeesPercentages
+      )
+
       const fees: UserFacingFeeStruct[] = collection.collectionFees.map(
         (fee) => {
           return {
-            amount: calculateFeesAmount(price, fee.feePercentage),
+            amount: calculateFeesAmount(priceWithoutFees, fee.feePercentage),
             recipient: fee.recipientAddress,
           }
         }
@@ -53,7 +66,7 @@ export const useBuildSellOrder = () => {
 
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
         tokenAddress: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-        amount: price.sub(totalFeesFromCollection(fees)).toString(),
+        amount: priceWithoutFees.toString(),
         type: "ERC20",
       }
 

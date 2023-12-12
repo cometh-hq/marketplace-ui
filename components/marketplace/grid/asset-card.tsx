@@ -116,6 +116,7 @@ export function AssetCardBase({
             <AssetImage
               src={src}
               fallback={fallback}
+              imageData={asset.metadata.image_data}
               height={380}
               width={320}
               className="z-20 h-full w-full rounded-lg object-contain"
