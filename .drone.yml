@@ -30,7 +30,7 @@ steps:
       NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: dev_cometh_api_url
       NEXT_PUBLIC_MARKETPLACE_API_KEY:
-        from_secret: marketplace_api_key
+        from_secret: dev_marketplace_api_key
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: dev_connect_api_key
       NEXT_PUBLIC_BASE_PATH: "/marketplace"
@@ -105,7 +105,7 @@ steps:
       NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: staging_cometh_api_url
       NEXT_PUBLIC_MARKETPLACE_API_KEY:
-        from_secret: marketplace_api_key
+        from_secret: staging_marketplace_api_key
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: staging_connect_api_key
       NEXT_PUBLIC_BASE_PATH: "/marketplace"
@@ -180,7 +180,7 @@ steps:
       NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: prod_cometh_api_url
       NEXT_PUBLIC_MARKETPLACE_API_KEY:
-        from_secret: marketplace_api_key
+        from_secret: prod_marketplace_api_key
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: prod_connect_api_key
       NEXT_PUBLIC_BASE_PATH: "/marketplace"

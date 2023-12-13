@@ -17,7 +17,7 @@ const manifest: Manifest = {
   },
 
   network: {
-    chainId: 137,
+    chainId: process.env.NEXT_PUBLIC_NETWORK_ID || 137,
   },
 
   currency: {
