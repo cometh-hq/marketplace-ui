@@ -11,6 +11,7 @@ import {
 
 import { useWeb3OnboardContext } from "@/providers/web3-onboard";
 import {User} from "@/components/account-dropdown/signin-dropdown";
+import axios from "axios";
 
 type AddNewDeviceDialogProps = {
     setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -31,7 +32,18 @@ export function AddNewDeviceDialog({ setIsOpen, onClose }: AddNewDeviceDialogPro
 
     const handleNewSignerRequest = async () => {
         try {
-            const response = await initNewSignerRequest(user!.address);
+            console.log("handleNewSignerRequest", user!.address);
+            try {
+                const addSignerRequest = await initNewSignerRequest(user!.address);
+                console.log("addSignerRequest", addSignerRequest);
+                const response = await axios.post('http://localhost:3000/api/new-signer-request', addSignerRequest, 
+                {
+                    withCredentials: true
+                });
+                console.log("response", response);
+            } catch (error) {
+                console.error("Error initNewSignerRequest", error);
+            }
             setIsOpen(false);
             //TODO: call the cosmik back service with resopnse for saving the new signer request
         } catch (error) {

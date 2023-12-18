@@ -68,7 +68,7 @@ export function Web3OnboardProvider({
       baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
     });
 
-    const response = await connectAuthAdaptor.initNewSignerRequest(walletAddress);
+    return await connectAuthAdaptor.initNewSignerRequest(walletAddress);
     //To-Do Call Cosmik Back end for Saving the Signer Request with respond
   }
 
