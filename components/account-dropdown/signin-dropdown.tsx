@@ -35,8 +35,8 @@ export function SigninDropdown({
                                    handleLogin,
                                    handleConnect,
                                }: SigninDropdownProps) {
-    const [email, setEmail] = useState("benjaminpayoux@gmail.com")
-    const [password, setPassword] = useState("Password1")
+    const [email, setEmail] = useState("quentin@cometh.io")
+    const [password, setPassword] = useState("Superlaser42")
     const [signinButton, setSigninButton] = useState("Sign in")
     const [walletsRendered, setWalletsRendered] = useState(false)
     const { initOnboard, onboard, initNewSignerRequest, retrieveWalletAddressFromSigner } = useWeb3OnboardContext()

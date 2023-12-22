@@ -32,24 +32,17 @@ export function AddNewDeviceDialog({ setIsOpen, onClose }: AddNewDeviceDialogPro
 
     const handleNewSignerRequest = async () => {
         try {
-            console.log("handleNewSignerRequest", user!.address);
-            try {
-                const addSignerRequest = await initNewSignerRequest(user!.address);
-                console.log("addSignerRequest", addSignerRequest);
-                const response = await axios.post('http://localhost:3000/api/new-signer-request', addSignerRequest,
+            const addSignerRequest = await initNewSignerRequest(user!.address);
+            const response = await axios.post('http://localhost:3000/api/new-signer-request', addSignerRequest,
                 {
                     withCredentials: true,
                 });
-                console.log("response", response);
-            } catch (error) {
-                console.error("Error", error);
-            }
-            setIsOpen(false);
-            //TODO: call the cosmik back service with resopnse for saving the new signer request
+            console.log("response", response);
         } catch (error) {
-            console.error("Error connecting wallet", error);
+            console.error("Error", error);
+            setIsOpen(false);
         }
-    };
+    }
 
     return (
         <Dialog modal open onOpenChange={(v) => !v && onClose()}>

@@ -69,7 +69,6 @@ export function Web3OnboardProvider({
     });
 
     return await connectAuthAdaptor.initNewSignerRequest(walletAddress);
-    //To-Do Call Cosmik Back end for Saving the Signer Request with respond
   }
 
   const retrieveWalletAddressFromSigner = async (walletAddress: string) => {
