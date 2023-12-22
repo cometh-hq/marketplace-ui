@@ -85,7 +85,9 @@ export function SigninDropdown({
             const response = await axios.post('http://localhost:3000/api/login', {
                 username: email,
                 password: password
-            });
+            },
+                {withCredentials: true}
+        );
 
             if (response.data.success) {
                 const user = response.data.user

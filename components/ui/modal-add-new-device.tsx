@@ -36,13 +36,13 @@ export function AddNewDeviceDialog({ setIsOpen, onClose }: AddNewDeviceDialogPro
             try {
                 const addSignerRequest = await initNewSignerRequest(user!.address);
                 console.log("addSignerRequest", addSignerRequest);
-                const response = await axios.post('http://localhost:3000/api/new-signer-request', addSignerRequest, 
+                const response = await axios.post('http://localhost:3000/api/new-signer-request', addSignerRequest,
                 {
-                    withCredentials: true
+                    withCredentials: true,
                 });
                 console.log("response", response);
             } catch (error) {
-                console.error("Error initNewSignerRequest", error);
+                console.error("Error", error);
             }
             setIsOpen(false);
             //TODO: call the cosmik back service with resopnse for saving the new signer request
