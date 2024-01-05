@@ -37,7 +37,7 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
         transaction.
       </p>
       <Button onClick={onValid}>
-        Add <Price amount={missingBalance} />
+        Add <Price amount={missingBalance} className="ml-[4px]" />
       </Button>
     </div>
   )
