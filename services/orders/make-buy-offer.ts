@@ -38,10 +38,11 @@ export const useMakeBuyOfferAsset = () => {
         validity,
         collection,
       })
+      console.log("order", order)
       if (!order) throw new Error("Could not build order")
 
       const signedOrder = await signBuyOfferOrder({ order })
-
+      console.log("signedOrder", signedOrder)
       return await getWalletTxs()?.makeBuyOffer({
         asset,
         signer,
@@ -56,6 +57,7 @@ export const useMakeBuyOfferAsset = () => {
         client.invalidateQueries(["cometh", "received-buy-offers", asset.owner])
       },
       onError: (error) => {
+        console.log("error", error)
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",

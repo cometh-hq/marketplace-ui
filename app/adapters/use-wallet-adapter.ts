@@ -19,6 +19,7 @@ export function useWalletAdapter() {
 
   useEffect(() => {
     walletAdapter.current = isComethWallet ? comethConnectTxs : eoaTxs
+    console.log("walletAdapter.current", walletAdapter.current)
   }, [comethConnectTxs, eoaTxs, isComethWallet])
 
   return { getWalletTxs }

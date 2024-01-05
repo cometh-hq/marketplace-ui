@@ -23,6 +23,7 @@ export function ConfirmMakeBuyOfferStep({
   const { mutateAsync: makeBuyOffer, isLoading } = useMakeBuyOfferAsset()
 
   const onConfirm = useCallback(async () => {
+    console.log("onConfirm")
     await makeBuyOffer({ asset, price, validity })
     onValid()
   }, [asset, makeBuyOffer, onValid, price])
