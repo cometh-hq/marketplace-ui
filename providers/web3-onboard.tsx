@@ -21,7 +21,7 @@ import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import Onboard, { OnboardAPI } from "@web3-onboard/core"
 import injectedModule from "@web3-onboard/injected-wallets"
 
-import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
+import { COMETH_CONNECT_STORAGE_LABEL, SUPPORTED_NETWORKS } from "@/config/site"
 
 export interface SetOnboardOptions {
   isComethWallet: boolean
@@ -75,13 +75,7 @@ export function Web3OnboardProvider({
 
     const web3OnboardInstance = Onboard({
       wallets,
-      chains: [
-        {
-          id: "0x89",
-          token: "MATIC",
-          label: "Polygon",
-        },
-      ],
+      chains: SUPPORTED_NETWORKS,
       appMetadata: {
         name: manifest.name,
         description: "Description",
