@@ -20,7 +20,7 @@ export default async function ProfilePage({
   return (
     <div className="container mx-auto flex w-full flex-col items-start gap-4 py-10 max-sm:pt-4">
       <Link href={`/marketplace`}>
-        <Button variant="secondary">
+        <Button variant="secondary" className="gap-1">
           <ArrowLeftIcon size="16" />
           Back to marketplace
         </Button>

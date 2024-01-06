@@ -45,7 +45,11 @@ export function ConnectButton({
 
   if (reconnecting) {
     return (
-      <Button isLoading={reconnecting} disabled={reconnecting}>
+      <Button
+        size={fullVariant ? "lg" : "default"}
+        isLoading={reconnecting}
+        disabled={reconnecting}
+      >
         Reconnecting
       </Button>
     )
