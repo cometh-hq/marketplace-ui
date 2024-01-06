@@ -133,7 +133,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
   const viewerAddress = useCurrentViewerAddress()
 
   const owner = useMemo(() => {
-    return asset.owner === viewerAddress
+    return asset.owner === viewerAddress?.toLowerCase()
   }, [viewerAddress, asset.owner])
 
   if (!asset.metadata.name) {

@@ -1,10 +1,8 @@
 "use client"
 
-import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { AlertCircle, Loader } from "lucide-react"
 
 import { useCorrectNetwork } from "@/lib/web3/network"
-import { ConnectButton } from "@/components/connect-button"
 
 import { Button } from "../../ui/button"
 
@@ -18,20 +16,18 @@ export const SwitchNetwork = ({
   children,
   
 }: SwitchNetworkProps) => {
-  const { isConnected } = useWeb3OnboardContext()
   const { isChainSupported, switchNetwork, switchNetworkLoading } =
     useCorrectNetwork()
 
   return (
     <>
-      {isConnected && isChainSupported ? (
+      {isChainSupported ? (
         children
       ) : (
         <>
           {callbackChildren ?? children}
           <div className="flex items-center justify-center gap-2 text-destructive">
             <AlertCircle size="16" />
-            {isConnected ? (
               <>
                 <span className="text-sm font-medium">
                   Network not supported.
@@ -54,16 +50,6 @@ export const SwitchNetwork = ({
                   </span>
                 </Button>
               </>
-            ) : (
-              <div>
-                <div className="text-sm font-medium">
-                  Please, connect your wallet to interact with the marketplace.
-                </div>
-              </div>
-            )}
-          </div>
-          <div>
-            <ConnectButton  fullVariant={true} />
           </div>
         </>
       )}

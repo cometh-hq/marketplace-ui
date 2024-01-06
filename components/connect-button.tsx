@@ -21,7 +21,6 @@ export function ConnectButton({
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
   const { comethWalletAddressInStorage } = useStorageWallet()
-  console.log("comethWalletAddressInStorage ", comethWalletAddressInStorage)
 
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
@@ -46,7 +45,11 @@ export function ConnectButton({
 
   if (reconnecting) {
     return (
-      <Button isLoading={reconnecting} disabled={reconnecting}>
+      <Button
+        size={fullVariant ? "lg" : "default"}
+        isLoading={reconnecting}
+        disabled={reconnecting}
+      >
         Reconnecting
       </Button>
     )

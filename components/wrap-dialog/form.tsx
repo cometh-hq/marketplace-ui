@@ -104,7 +104,7 @@ export function WrapDialogForm({
         className="space-y-6"
       >
         <TokenInputField
-          label={`Amount of ${renderTokenName()} to convert`}
+          label={`Amount of ${renderTokenName()} to convert (max: ${maxBalance})`}
           placeholder="Enter a amount"
           tokenName={renderTokenName()}
           name="amount"

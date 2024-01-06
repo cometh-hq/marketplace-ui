@@ -45,7 +45,7 @@ export function TransactionDialogButton<T extends Step>({
           {label}
         </Button>
       </DialogTrigger>
-      <DialogContent className="flex flex-col p-10">
+      <DialogContent>
         <Stepper value={currentStep.value} steps={steps} />
         {children}
       </DialogContent>

@@ -1,4 +1,4 @@
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, TradeDirection } from "@cometh/marketplace-sdk"
 import { Provider } from "@ethersproject/providers"
 import {
   NftOrderV4Serialized,
@@ -9,11 +9,12 @@ import { Signer } from "ethers"
 
 export type OrderParams = {
   signer: Signer | Provider
-  signedOrder: SignedNftOrderV4
+  signedOrder?: SignedNftOrderV4
   order: NftOrderV4Serialized
+  tradeDirection?: TradeDirection.BUY | TradeDirection.SELL
 }
 
-export type MakeBuyOfferParams = {
+export type MakeOfferParams = {
   asset: AssetWithTradeData
 } & OrderParams
 
@@ -22,7 +23,3 @@ export type CancelOrderParams = {
   signer: Signer
   nftSwapSdk: NftSwapV4 | null
 }
-
-export type SellAssetOptions = {
-  asset: AssetWithTradeData
-} & OrderParams

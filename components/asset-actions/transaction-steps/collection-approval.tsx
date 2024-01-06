@@ -22,7 +22,7 @@ export function CollectionApprovalStep({
   return (
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Permissions</h3>
-      <p>
+      <p className="text-center">
         {manifest.name} would like to be able to transfer your NFT, when a user
         buys it. Your wallet is going to ask you to approve that.
       </p>

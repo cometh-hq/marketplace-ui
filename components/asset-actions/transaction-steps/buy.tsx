@@ -5,9 +5,10 @@ import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Button } from "@/components/ui/button"
 import { InfoBox } from "@/components/ui/message-box"
 import { Price } from "@/components/ui/price"
-import { AssetHeaderImage } from "@/components/marketplace/asset/image"
-import { SwitchNetwork } from "../buttons/switch-network"
 import { ButtonLoading } from "@/components/button-loading"
+import { AssetHeaderImage } from "@/components/marketplace/asset/image"
+
+import { SwitchNetwork } from "../buttons/switch-network"
 
 export type BuyStepProps = {
   asset: AssetWithTradeData
@@ -42,13 +43,14 @@ export function BuyStep({ asset, onValid, setTxHash }: BuyStepProps) {
       />
 
       <SwitchNetwork>
-        {isLoading ? (
-          <ButtonLoading />
-        ) : (
-          <Button className="flex gap-1" onClick={onSubmit}>
-            Buy now for <Price amount={asset.orderbookStats.lowestSalePrice} />
-          </Button>
-        )}
+        <Button
+          className="flex gap-1"
+          onClick={onSubmit}
+          disabled={isLoading}
+          isLoading={isLoading}
+        >
+          Buy now for <Price amount={asset.orderbookStats.lowestSalePrice} />
+        </Button>
       </SwitchNetwork>
     </div>
   )

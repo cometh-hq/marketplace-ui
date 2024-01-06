@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { ButtonLoading } from "@/components/button-loading"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
 import { SwitchNetwork } from "../buttons/switch-network"
@@ -50,7 +51,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
       ...bnPrice,
     })
     if (!isError) onValid()
-  }, [asset, bnPrice, onValid, sell])
+  }, [asset, bnPrice, onValid])
 
   return (
     <>
@@ -59,7 +60,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
       </div>
 
       <div className="mt-4 flex w-full gap-4">
-        <div className="flex flex-col gap-3 md:w-2/3">
+        <div className="flex flex-col gap-3 sm:w-2/3">
           <Label htmlFor="selling-price">Selling price</Label>
           <Input
             value={price}
@@ -70,7 +71,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
           />
         </div>
 
-        <div className="flex flex-col gap-3 md:w-1/3">
+        <div className="flex flex-col gap-3 sm:w-1/3">
           <Label htmlFor="make-buy-offer-price">Validity time</Label>
           <Select onValueChange={(v) => setValidity(v)}>
             <SelectTrigger className="w-[180px]">
@@ -86,7 +87,13 @@ export function SellStep({ asset, onValid }: SellStepProps) {
       </div>
 
       <SwitchNetwork>
-        <Button className="mt-4 flex w-full gap-1" size="lg" onClick={onSubmit}>
+        <Button
+          className="flex w-full gap-1"
+          size="lg"
+          onClick={onSubmit}
+          disabled={isLoading}
+          isLoading={isLoading}
+        >
           Sell for <Price amount={bnPrice?.price} />
         </Button>
       </SwitchNetwork>

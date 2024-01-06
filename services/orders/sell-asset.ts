@@ -1,4 +1,4 @@
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, TradeDirection } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 
@@ -8,7 +8,6 @@ import { toast } from "@/components/ui/toast/use-toast"
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { handleOrderbookError } from "../errors"
 import { useBuildSellOrder } from "./build-sell-order"
-import { useSignOrder } from "./sign-order"
 import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 export type SellAssetOptions = {
@@ -19,7 +18,6 @@ export type SellAssetOptions = {
 
 export const useSellAsset = () => {
   const buildSignSellOrder = useBuildSellOrder()
-  const signSellOrder = useSignOrder()
   const client = useQueryClient()
   const signer = useSigner()
   const { data: collection } = useGetCollection()
@@ -34,13 +32,11 @@ export const useSellAsset = () => {
       const order = buildSignSellOrder({ asset, price, validity, collection })
       if (!order) throw new Error("Could not build order")
 
-      const signedOrder = await signSellOrder({ order })
-
-      return await getWalletTxs()?.sellAsset({
+      return await getWalletTxs()?.makeBuyOffer({
         asset,
         signer,
-        signedOrder,
         order,
+        tradeDirection: TradeDirection.SELL
       })
     },
     {

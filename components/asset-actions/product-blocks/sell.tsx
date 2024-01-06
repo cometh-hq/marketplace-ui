@@ -39,7 +39,7 @@ export function SellProductBlock({ asset }: SellProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
-        <ConnectButton>
+        <ConnectButton fullVariant>
           <SwitchNetwork>
             <SellAssetButton asset={asset} />
           </SwitchNetwork>
