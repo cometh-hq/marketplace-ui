@@ -64,8 +64,10 @@ export function Web3OnboardProvider({
           apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
           authAdapter: new ConnectAdaptor({
             chainId: SupportedNetworks.POLYGON,
-            apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!
+            apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+            // baseUrl: "https://api.connect.develop.cometh.tech/",
           }),
+          // baseUrl: "https://api.connect.develop.cometh.tech/",
           ...(options.walletAddress && {
             walletAddress: options.walletAddress,
           }),

@@ -33,7 +33,7 @@ export function ConfirmAcceptBuyOfferStep({
   return (
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Summary</h3>
-      <p>
+      <p className="text-center">
         You are about to accept an offer for <br />this asset for <Price size="default" amount={amountWithFees} /> (fees included)
       </p>
       {isLoading ? (

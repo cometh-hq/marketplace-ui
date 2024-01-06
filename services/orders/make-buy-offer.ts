@@ -1,5 +1,4 @@
-import { manifest } from "@/manifests"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, TradeDirection } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 
@@ -10,7 +9,6 @@ import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { handleOrderbookError } from "../errors"
 import { useBuildBuyOfferOrder } from "./build-buy-offer-order"
-import { useSignOrder } from "./sign-order"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -21,10 +19,8 @@ export type MakeBuyOfferOptions = {
 export const useMakeBuyOfferAsset = () => {
   const client = useQueryClient()
   const buildSignBuyOfferOrder = useBuildBuyOfferOrder()
-  const signBuyOfferOrder = useSignOrder()
   const signer = useSigner()
   const { data: collection } = useGetCollection()
-
   const { getWalletTxs } = useWalletAdapter()
 
   return useMutation(
@@ -38,16 +34,12 @@ export const useMakeBuyOfferAsset = () => {
         validity,
         collection,
       })
-      console.log("order", order)
       if (!order) throw new Error("Could not build order")
 
-      const signedOrder = await signBuyOfferOrder({ order })
-      console.log("signedOrder", signedOrder)
       return await getWalletTxs()?.makeBuyOffer({
         asset,
         signer,
-        signedOrder,
-        order,
+        order
       })
     },
     {
@@ -57,7 +49,6 @@ export const useMakeBuyOfferAsset = () => {
         client.invalidateQueries(["cometh", "received-buy-offers", asset.owner])
       },
       onError: (error) => {
-        console.log("error", error)
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
