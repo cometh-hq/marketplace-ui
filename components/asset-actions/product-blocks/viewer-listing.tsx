@@ -47,7 +47,7 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
-        <ConnectButton>
+        <ConnectButton fullVariant>
           <SwitchNetwork>
             <CancelListingButton asset={asset} />
           </SwitchNetwork>
