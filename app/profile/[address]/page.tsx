@@ -1,21 +1,27 @@
+"use client"
 import { ArrowLeftIcon, UserIcon } from "lucide-react"
 import { Address } from "viem"
 
 import { shortenAddress } from "@/lib/utils/addresses"
-import { seedFilters, serializeFilters } from "@/lib/utils/seed"
+
 import { Button } from "@/components/ui/button"
 import { CopyButton } from "@/components/ui/copy-button"
 import { Link } from "@/components/ui/link"
 import { ShareButton } from "@/components/ui/share-button"
 import { AccountAssetActivities } from "@/components/activities/account/tabs"
 import { AssetsSearchGrid } from "@/components/marketplace/grid/asset-search-grid"
+import { useFilters } from "@/services/cometh-marketplace/filters"
 
-export default async function ProfilePage({
+export default function ProfilePage({
   params,
 }: {
   params: { address: Address }
 }) {
-  const filters = await seedFilters()
+  const { filtersRaw } = useFilters()
+
+  if (!filtersRaw) {
+    return null
+  }
 
   return (
     <div className="container mx-auto flex w-full flex-col items-start gap-4 py-10">
@@ -31,7 +37,7 @@ export default async function ProfilePage({
       </div>
       <div className="flex">
         <Link href={`/marketplace`}>
-          <Button variant="secondary" >
+          <Button variant="secondary">
             <ArrowLeftIcon size="16" className="mr-2" />
             Back to marketplace
           </Button>
@@ -40,7 +46,7 @@ export default async function ProfilePage({
       <AccountAssetActivities walletAddress={params.address}>
         <AssetsSearchGrid
           filteredBy={{ owner: params.address }}
-          filters={serializeFilters(filters)}
+          filters={filtersRaw}
         />
       </AccountAssetActivities>
     </div>
