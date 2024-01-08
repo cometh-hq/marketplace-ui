@@ -185,7 +185,6 @@ export const MarketplaceFiltersDropdown = ({
             <FilterMultiCombobox key={k} label={k} values={v.values} />
           ))}
         </div>
-        <DropdownMenuSeparator className="mb-1" />
       </DropdownMenuContent>
     </DropdownMenu>
   )

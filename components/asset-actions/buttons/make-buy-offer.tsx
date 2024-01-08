@@ -113,7 +113,8 @@ export function MakeBuyOfferPriceDialog({
           disabled={!bn}
           onClick={() => onSubmit(bn!.price, bn!.validity)}
         >
-          Make offer for&nbsp;<Price amount={bn?.price} />
+          Make offer for&nbsp;
+          <Price amount={bn?.price} />
         </Button>
       </DialogContent>
     </Dialog>
