@@ -17,7 +17,7 @@ const client = z.object({
   NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"]),
   NEXT_PUBLIC_BASE_PATH: z.string().optional(),
   NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS: z.string().min(1),
-  NEXT_PUBLIC_NETWORK_ID: z.number().min(1),
+  NEXT_PUBLIC_NETWORK_ID: z.coerce.number().min(0),
   NEXT_PUBLIC_CONTRACT_ADDRESS: z.string().length(42),
 
   // Cometh

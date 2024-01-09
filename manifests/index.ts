@@ -1,7 +1,7 @@
 import { Address } from "viem"
 
 import { Manifest } from "@/types/manifest"
-import env from "@/config/env"
+import { env } from "@/config/env"
 
 const manifest: Manifest = {
   name: "My NFT collection",
