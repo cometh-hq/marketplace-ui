@@ -429,7 +429,7 @@
     siwe "^1.1.6"
     uuid "^9.0.0"
 
-"@cometh/marketplace-sdk@^1.0.4":
+"@cometh/marketplace-sdk@^1.0.10":
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/@cometh/marketplace-sdk/-/marketplace-sdk-1.0.10.tgz#4f23a67f040f4c6c82b5905c6c07ffbea7bb63fa"
   integrity sha512-u8lFaZj+Bg/Tmkqh9a2qFF0Rv1MQGP1Y2SSu0oT/cu+MRhpADoNAQIoI15+F3aY/8DA/3Zq+Tnx+AaKEcHxybA==
