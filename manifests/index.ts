@@ -22,8 +22,8 @@ const manifest: Manifest = {
 
   currency: {
     main: {
-      name: "MATIC",
-      address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+      name: "Test coin",
+      address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
     },
     wrapped: {
       name: "WMATIC",
