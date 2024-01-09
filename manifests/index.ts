@@ -1,10 +1,11 @@
 import { Address } from "viem"
 
 import { Manifest } from "@/types/manifest"
+import env from "@/config/env"
 
 const manifest: Manifest = {
   name: "My NFT collection",
-  contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
+  contractAddress: env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
   themeClass: "theme-base",
 
   pages: {
@@ -17,7 +18,7 @@ const manifest: Manifest = {
   },
 
   network: {
-    chainId: process.env.NEXT_PUBLIC_NETWORK_ID || 137,
+    chainId: env.NEXT_PUBLIC_NETWORK_ID || 137,
   },
 
   currency: {
