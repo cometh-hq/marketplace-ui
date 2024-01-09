@@ -23,21 +23,21 @@ export type SigninDropdownProps = {
 export function SigninDropdown({
   disabled,
   handleConnect,
-  fullVariant
+  fullVariant,
 }: SigninDropdownProps) {
   const wallets = [
     ...(env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY
       ? [
           {
             name: "Cometh",
-            icon: `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/cometh-connect.png`,
+            icon: `${env.NEXT_PUBLIC_BASE_PATH}/icons/cometh-connect.png`,
             isComethWallet: true,
           },
         ]
       : []),
     {
       name: "Metamask",
-      icon: `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`,
+      icon: `${env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`,
       isComethWallet: false,
     },
   ]
@@ -47,7 +47,7 @@ export function SigninDropdown({
       <DropdownMenuTrigger asChild>
         <Button
           className={cx({
-            "w-full h-12": fullVariant,
+            "h-12 w-full": fullVariant,
           })}
           variant="default"
           disabled={disabled}

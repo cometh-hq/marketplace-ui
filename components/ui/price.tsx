@@ -12,6 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./tooltip"
+import { env } from "@/config/env"
 
 const priceTriggerVariants = cva("font-bold", {
   variants: {
@@ -67,13 +68,15 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {!hideIcon && (
           <span className={cn("relative ", iconVariants({ size }))}>
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
+              src={`${env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
               alt={formattedAmount.toString()}
               fill
             />
           </span>
         )}
-        <span className={cn(priceTriggerVariants({ size, variant, className }))}>
+        <span
+          className={cn(priceTriggerVariants({ size, variant, className }))}
+        >
           {formattedAmount.toString()}
         </span>
       </span>
@@ -94,7 +97,5 @@ export const Price = ({ amount, ...rest }: PriceProps) => {
 
   const formattedAmount = (+formatUnits(amount.toString(), 18)).toString()
 
-  return (
-    <PriceTrigger {...rest} formattedAmount={formattedAmount} />
-    )
+  return <PriceTrigger {...rest} formattedAmount={formattedAmount} />
 }

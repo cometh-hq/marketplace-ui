@@ -1,9 +1,10 @@
 "use client"
 
 import Image from "next/image"
-import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { User } from "lucide-react"
 import { useWindowSize } from "usehooks-ts"
+
+import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button, ButtonProps } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -17,6 +18,7 @@ import { ButtonLoading } from "@/components/button-loading"
 import { CopyButton } from "../ui/copy-button"
 import { AccountBalance } from "./account-balance"
 import { AccountLogAction } from "./log-actions"
+import { env } from "@/config/env"
 
 export type AccountDropdownProps = {
   buttonVariant?: ButtonProps["variant"]
@@ -32,9 +34,9 @@ export function CurrentAccountDropdown({
 
   const isMobile = width < 640
 
-  const walletIcon = isComethWallet 
-  ? `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/cometh-connect.png`
-  : `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`
+  const walletIcon = isComethWallet
+    ? `${env.NEXT_PUBLIC_BASE_PATH}/icons/cometh-connect.png`
+    : `${env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`
 
   return (
     <DropdownMenu>
@@ -56,14 +58,14 @@ export function CurrentAccountDropdown({
                 </CardTitle>
                 <div className="flex items-center">
                   {viewerAddress && (
-                  <>
-                    <UserLink
-                      user={{ address: viewerAddress }}
-                      className="mr-2 text-sm"
-                      hideIcon
-                      forceDisplayAddress
-                    />
-                    <CopyButton textToCopy={viewerAddress} />
+                    <>
+                      <UserLink
+                        user={{ address: viewerAddress }}
+                        className="mr-2 text-sm"
+                        hideIcon
+                        forceDisplayAddress
+                      />
+                      <CopyButton textToCopy={viewerAddress} />
                     </>
                   )}
                 </div>

@@ -4,6 +4,7 @@ import { manifest } from "@/manifests"
 import { useFormatWrappedBalance } from "@/services/balance/wrapped"
 
 import { WrapButton } from "../asset-actions/buttons/wrap"
+import { env } from "@/config/env"
 
 export function AccountBalance() {
   const wBalance = useFormatWrappedBalance()
@@ -43,7 +44,7 @@ export function AccountBalanceLine({
   return (
     <div className="text-[15px] font-semibold">
       <Image
-        src={`${process.env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
+        src={`${env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
         alt=""
         width={24}
         height={24}
