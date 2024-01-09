@@ -21,7 +21,9 @@ import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import Onboard, { OnboardAPI } from "@web3-onboard/core"
 import injectedModule from "@web3-onboard/injected-wallets"
 
-import { COMETH_CONNECT_STORAGE_LABEL, SUPPORTED_NETWORKS } from "@/config/site"
+import { env } from "@/config/env"
+import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
+import { SUPPORTED_NETWORKS } from "@/config/supportedNetworks"
 
 export interface SetOnboardOptions {
   isComethWallet: boolean
@@ -46,6 +48,10 @@ export function useWeb3OnboardContext() {
   return useContext(Web3OnboardContext)
 }
 
+function numberToHex(value: number): string {
+  return `0x${value.toString(16)}`
+}
+
 export function Web3OnboardProvider({
   children,
 }: {
@@ -61,13 +67,13 @@ export function Web3OnboardProvider({
     if (options.isComethWallet) {
       wallets.push(
         ConnectOnboardConnector({
-          apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+          apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
           authAdapter: new ConnectAdaptor({
-            chainId: SupportedNetworks.POLYGON,
-            apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
-            // baseUrl: "https://api.connect.develop.cometh.tech/",
+            chainId: numberToHex(
+              env.NEXT_PUBLIC_NETWORK_ID
+            ) as SupportedNetworks,
+            apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
           }),
-          // baseUrl: "https://api.connect.develop.cometh.tech/",
           ...(options.walletAddress && {
             walletAddress: options.walletAddress,
           }),
@@ -107,6 +113,7 @@ export function Web3OnboardProvider({
 
   useEffect(() => {
     const currentWalletInStorage = localStorage.getItem("selectedWallet")
+    console.log("currentWalletInStorage ", currentWalletInStorage)
     const isComethWallet =
       currentWalletInStorage === COMETH_CONNECT_STORAGE_LABEL
     if (isComethWallet) {

@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { SUPPORTED_NETWORKS } from "./supportedNetworks"
+
 /**
  * Specify your server-side environment variables schema here.
  * This way you can ensure the app isn't built with invalid env vars.
@@ -7,6 +9,21 @@ import { z } from "zod"
 const server = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
 })
+
+const networkIdSchema = z.coerce
+  .number()
+  .min(0)
+  .refine(
+    (networkId) => {
+      const matchingNetwork = SUPPORTED_NETWORKS.find(
+        (network) => parseInt(network.id) === networkId
+      )
+      return !!matchingNetwork
+    },
+    {
+      message: `Network id not in the list of supported networks.`,
+    }
+  )
 
 /**
  * Specify your client-side environment variables schema here.
@@ -17,7 +34,7 @@ const client = z.object({
   NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"]),
   NEXT_PUBLIC_BASE_PATH: z.string().optional(),
   NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS: z.string().min(1),
-  NEXT_PUBLIC_NETWORK_ID: z.coerce.number().min(0),
+  NEXT_PUBLIC_NETWORK_ID: networkIdSchema,
   NEXT_PUBLIC_CONTRACT_ADDRESS: z.string().length(42),
 
   // Cometh
