@@ -18,5 +18,9 @@ export const handleOrderbookError = (
     throw new Error(errorMessage)
   }
 
+  if (error instanceof Error) {
+    return error.message;
+  }
+
   throw new Error("Internal server error")
 }

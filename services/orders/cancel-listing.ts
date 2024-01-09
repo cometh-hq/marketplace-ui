@@ -31,8 +31,7 @@ export const useCancelListing = () => {
           title: "Your order has been canceled.",
         })
       },
-      onError: (error: any) => {
-        console.error(error)
+      onError: (error) => {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",

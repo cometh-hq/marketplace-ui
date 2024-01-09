@@ -23,8 +23,8 @@ const manifest: Manifest = {
 
   currency: {
     main: {
-      name: "Test coin",
-      address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
+      name: "MTK",
+      address: "0x42F671d85624B835f906D3AAcC47745795e4B4F8",
     },
     wrapped: {
       name: "WMATIC",
