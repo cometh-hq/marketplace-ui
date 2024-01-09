@@ -101,7 +101,7 @@ steps:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
       NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
-        from_secret: zero_ex_contract_address
+        from_secret: debug_zero_ex_contract_address
       NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: debug_cometh_api_url
       NEXT_PUBLIC_MARKETPLACE_API_KEY:
