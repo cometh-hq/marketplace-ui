@@ -17,7 +17,7 @@ const manifest: Manifest = {
   },
 
   network: {
-    chainId: process.env.NEXT_PUBLIC_NETWORK_ID || 137,
+    chainId: Number(process.env.NEXT_PUBLIC_NETWORK_ID) || 137,
   },
 
   currency: {
@@ -27,7 +27,7 @@ const manifest: Manifest = {
     },
     wrapped: {
       name: "WMATIC",
-      address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
+      address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
     },
   },
 }
