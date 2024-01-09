@@ -61,12 +61,12 @@ export function SiteHeader() {
         <Link
           href="/marketplace"
           className={cx(
-            "text-2xl z-[100] flex items-center space-x-2",
+            "z-[100] flex items-center space-x-2 text-2xl",
             isOpen && "text-primary-foreground"
           )}
         >
           <Icons.logo className="h-6 w-6 text-current" />
-          <span className="mr-10  font-bold opacity-90 md:inline">
+          <span className="mr-10 text-base font-bold opacity-90 md:inline md:text-lg">
             {siteConfig.name}
           </span>
         </Link>

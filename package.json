@@ -14,7 +14,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache"
   },
   "dependencies": {
-    "@cometh/connect-sdk": "^1.2.1",
+    "@cometh/connect-sdk": "^1.2.4",
     "@cometh/marketplace-sdk": "^1.0.10",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",

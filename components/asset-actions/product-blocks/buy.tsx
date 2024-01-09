@@ -42,7 +42,7 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
         />
       </ProductBlockDividedColumn>
       <ProductBlockCenteredColumn>
-        <ConnectButton>
+        <ConnectButton fullVariant>
           <SwitchNetwork>
             <MakeBuyOfferButton asset={asset} />
             <BuyAssetButton asset={asset} />

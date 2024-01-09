@@ -32,7 +32,7 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Top up your wallet</h3>
-      <p>
+      <p className="text-center">
         Looks like you don&rsquo;t have enough funds to complete this
         transaction.
       </p>

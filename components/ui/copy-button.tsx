@@ -23,7 +23,7 @@ export function CopyButton({ size = 'sm', textToCopy }: CopyButtonProps) {
 
   const variants = {
     sm: "h-7 w-7",
-    lg: "h-[36px] w-[36px]"
+    lg: "h-10 w-10"
   } as Record<string, string>
 
   return (
