@@ -94,7 +94,7 @@ export const useAcceptBuyOffer = () => {
         console.error(error)
         toast({
           variant: "destructive",
-          title: "Uh oh! Something went wrong.",
+          title: "Something went wrong.",
           description: handleOrderbookError(error, {
             400: "Bad request",
             404: "Order not found",

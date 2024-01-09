@@ -1,13 +1,11 @@
 import { manifest } from "@/manifests"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { BigNumber, Signer } from "ethers"
 import { Address } from "viem"
 
 import { IWETH__factory } from "@/lib/generated/contracts/weth/IWETH__factory"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
-
-import { handleOrderbookError } from "../errors"
 
 export type WrapTokenOptions = {
   amount: BigNumber
@@ -58,14 +56,12 @@ export const useWrapToken = () => {
           description: "Your token has been wrapped.",
         })
       },
-      onError: (error) => {
+      onError: (error: Error) => {
+        console.error(error)
         toast({
           variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            500: "Internal orderbook server error",
-          }),
+          title: "Something went wrong.",
+          description: error.message,
         })
       },
     }

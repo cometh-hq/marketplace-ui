@@ -46,7 +46,7 @@ export const useBuyAsset = () => {
           return {
             recipient: fee.recipient,
             amount: fee.amount,
-            feeData: fee.feeData || '0x',
+            feeData: fee.feeData || "0x",
           }
         }),
         erc721Token: manifest.contractAddress,
@@ -68,14 +68,11 @@ export const useBuyAsset = () => {
           title: "NFT bought!",
         })
       },
-      onError: (error) => {
+      onError: (error: Error) => {
         toast({
           variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            500: "Internal orderbook server error",
-          }),
+          title: "Something went wrong.",
+          description: error.message,
         })
       },
     }
