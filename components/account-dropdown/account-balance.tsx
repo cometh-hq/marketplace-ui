@@ -1,12 +1,15 @@
-import { useState } from "react"
 import Image from "next/image"
+import { useState } from "react"
 import { useFormatWrappedBalance } from "@/services/balance/wrapped"
+import { useFormatMainBalance } from "@/services/balance/main"
 
-import { WrapButton } from "../asset-actions/buttons/wrap"
 import { env } from "@/config/env"
 import globalConfig from "@/config/globalConfig"
 
+import { WrapButton } from "../asset-actions/buttons/wrap"
+
 export function AccountBalance() {
+  const balance = useFormatMainBalance()
   const wBalance = useFormatWrappedBalance()
 
   const [isUnwrap, setIsUnwrap] = useState(false)
@@ -16,8 +19,12 @@ export function AccountBalance() {
       <div className="mb-3 space-y-3 rounded-md border border-border p-3">
         <div className="flex items-center justify-between">
           <AccountBalanceLine
-            balance={wBalance}
-            currency={globalConfig.network.wrappedNativeToken.symbol}
+            balance={globalConfig.useNativeForOrders ? balance : wBalance}
+            currency={
+              globalConfig.useNativeForOrders
+                ? globalConfig.network.nativeToken.symbol
+                : globalConfig.network.wrappedNativeToken.symbol
+            }
           />
         </div>
       </div>

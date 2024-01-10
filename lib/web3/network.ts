@@ -26,8 +26,6 @@ export const useCorrectNetwork = () => {
         setIsChainSupported(currentChainId === supportedChain)
       })
 
-      console.log("onboard", onboard)
-
       return () => {
         subscribe.unsubscribe()
       }

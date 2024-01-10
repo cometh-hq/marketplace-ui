@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect } from "react"
-import { manifest } from "@/manifests"
 import { useFormatMainBalance } from "@/services/balance/main"
 import { useFormatWrappedBalance } from "@/services/balance/wrapped"
 import { useUnwrapToken } from "@/services/exchange/unwrap-token"
