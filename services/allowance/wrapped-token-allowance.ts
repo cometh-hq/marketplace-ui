@@ -7,6 +7,7 @@ import { Address } from "viem"
 import { ERC20__factory } from "@/lib/generated/contracts"
 import { useSigner } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
+import { toast } from "@/components/ui/toast/use-toast"
 
 export const fetchWrappedAllowance = async ({
   address,
@@ -59,6 +60,14 @@ export const useWrappedTokenAllow = (price: BigNumberish, options?: {
     ...options,
     onSuccess: () => {
       options?.onSuccess?.()
+    },
+    onError: (error: Error) => {
+      console.error(error)
+      toast({
+        variant: "destructive",
+        title: "Error approving token",
+        description: error.message,
+      })
     }
   })
 }
