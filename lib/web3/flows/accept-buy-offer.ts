@@ -61,9 +61,9 @@ export const useRequiredAcceptBuyOfferSteps = ({
   const viewerAddress = useCurrentViewerAddress()
   const nftSwapSdk = useNFTSwapv4()
 
-  return useQuery(
-    ["requiredAcceptBuyOfferSteps", offer],
-    async () => {
+  return useQuery({
+    queryKey: ["requiredAcceptBuyOfferSteps", offer],
+    queryFn: async () => {
       if (!nftSwapSdk || !viewerAddress) return defaultSteps
       return fetchRequiredAcceptBuyOfferSteps({
         offer,
@@ -71,12 +71,11 @@ export const useRequiredAcceptBuyOfferSteps = ({
         nftSwapSdk,
       })
     },
-    {
-      staleTime: Infinity,
-      refetchOnWindowFocus: false,
-      enabled: !!nftSwapSdk && !!viewerAddress,
-    }
-  )
+
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    enabled: !!nftSwapSdk && !!viewerAddress,
+  })
 }
 
 export type UseAcceptBuyOfferButtonOptions = {

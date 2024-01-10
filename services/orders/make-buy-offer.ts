@@ -23,9 +23,9 @@ export const useMakeBuyOfferAsset = () => {
   const { data: collection } = useGetCollection()
   const { getWalletTxs } = useWalletAdapter()
 
-  return useMutation(
-    ["make-buy-offer-asset"],
-    async ({ asset, price, validity }: MakeBuyOfferOptions) => {
+  return useMutation({
+    mutationKey: ["make-buy-offer-asset"],
+    mutationFn: async ({ asset, price, validity }: MakeBuyOfferOptions) => {
       if (!collection) throw new Error("Could not get collection")
 
       const order = buildSignBuyOfferOrder({
@@ -39,25 +39,24 @@ export const useMakeBuyOfferAsset = () => {
       return await getWalletTxs()?.makeBuyOffer({
         asset,
         signer,
-        order
+        order,
       })
     },
-    {
-      onSuccess: (_, { asset }) => {
-        client.invalidateQueries(["cometh", "search"]) // TODO: optimize this, just invalidate current asset
-        client.invalidateQueries(["cometh", "assets", asset.tokenId])
-        client.invalidateQueries(["cometh", "received-buy-offers", asset.owner])
-      },
-      onError: (error) => {
-        toast({
-          variant: "destructive",
-          title: "Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            500: "Internal orderbook server error",
-          }),
-        })
-      },
-    }
-  )
+
+    onSuccess: (_, { asset }) => {
+      client.invalidateQueries({ queryKey: ["cometh", "search"]}) // TODO: optimize this, just invalidate current asset
+      client.invalidateQueries({ queryKey: ["cometh", "assets", asset.tokenId]})
+      client.invalidateQueries({ queryKey: ["cometh", "received-buy-offers", asset.owner]})
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: handleOrderbookError(error, {
+          400: "Bad request",
+          500: "Internal orderbook server error",
+        }),
+      })
+    },
+  })
 }

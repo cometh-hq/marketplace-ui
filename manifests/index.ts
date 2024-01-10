@@ -25,6 +25,7 @@ const manifest: Manifest = {
     symbol: "TCOIN",
     address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
   },
+  rpcUrl: env.NEXT_PUBLIC_RPC_URL
 }
 
 export { manifest }

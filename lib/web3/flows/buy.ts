@@ -5,11 +5,11 @@ import { useQuery } from "@tanstack/react-query"
 import { parseUnits } from "ethers/lib/utils"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
 import { useCurrentViewerAddress } from "../auth"
-import globalConfig from "@/config/globalConfig"
 
 export type UseRequiredBuyingStepsOptions = {
   asset: AssetWithTradeData
@@ -68,9 +68,9 @@ export const useRequiredBuyingSteps = ({
 }: UseRequiredBuyingStepsOptions) => {
   const viewerAddress = useCurrentViewerAddress()
 
-  return useQuery(
-    ["requiredBuyingSteps", asset, viewerAddress],
-    async () => {
+  return useQuery({
+    queryKey: ["requiredBuyingSteps", asset, viewerAddress],
+    queryFn: async () => {
       if (!viewerAddress) {
         throw new Error("Could not find viewer address")
       }
@@ -82,10 +82,9 @@ export const useRequiredBuyingSteps = ({
 
       return steps
     },
-    {
-      enabled: !!viewerAddress,
-    }
-  )
+
+    enabled: !!viewerAddress,
+  })
 }
 
 export type UseBuyAssetButtonOptions = {

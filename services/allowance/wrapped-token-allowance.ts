@@ -1,8 +1,9 @@
 import { manifest } from "@/manifests"
+import { wagmiConfig } from "@/providers/wagmi"
 import { useMutation } from "@tanstack/react-query"
-import { erc20ABI, getWalletClient, readContract } from "@wagmi/core"
+import { readContract } from "@wagmi/core"
 import { BigNumber, BigNumberish, ContractTransaction, Signer } from "ethers"
-import { Address } from "viem"
+import { Address, erc20Abi } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 import { ERC20__factory } from "@/lib/generated/contracts"
@@ -20,9 +21,9 @@ export const fetchWrappedAllowance = async ({
   contractAddress: Address
 }) => {
   try {
-    const result = await readContract({
+    const result = await readContract(wagmiConfig, {
       address: contractAddress,
-      abi: erc20ABI,
+      abi: erc20Abi,
       functionName: "allowance",
       args: [address, spender],
     })
@@ -51,9 +52,9 @@ export const useWrappedTokenAllow = (
   const nftSwapSdk = useNFTSwapv4()
   const signer = useSigner()
 
-  return useMutation(
-    ["wrappedTokenAllow"],
-    async () => {
+  return useMutation({
+    mutationKey: ["wrappedTokenAllow"],
+    mutationFn: async () => {
       if (!signer || !nftSwapSdk) return
       const spender = nftSwapSdk?.exchangeProxyContractAddress!
       const erc20 = ERC20__factory.connect(
@@ -63,19 +64,17 @@ export const useWrappedTokenAllow = (
       const tx = await erc20.approve(spender, price)
       return tx.wait()
     },
-    {
-      ...options,
-      onSuccess: () => {
-        options?.onSuccess?.()
-      },
-      onError: (error: Error) => {
-        console.error(error)
-        toast({
-          variant: "destructive",
-          title: "Error approving token",
-          description: error.message,
-        })
-      },
-    }
-  )
+    ...options,
+    onSuccess: () => {
+      options?.onSuccess?.()
+    },
+    onError: (error: Error) => {
+      console.error(error)
+      toast({
+        variant: "destructive",
+        title: "Error approving token",
+        description: error.message,
+      })
+    },
+  })
 }

@@ -35,9 +35,9 @@ export const useWrapToken = () => {
   const viewerAddress = useCurrentViewerAddress()
   const signer = useSigner()
 
-  return useMutation(
-    ["wrap"],
-    async ({ amount }: WrapTokenMutationOptions) => {
+  return useMutation({
+    mutationKey: ["wrap"],
+    mutationFn: async ({ amount }: WrapTokenMutationOptions) => {
       if (
         !viewerAddress ||
         !signer ||
@@ -53,21 +53,20 @@ export const useWrapToken = () => {
         wrapContractAddress: globalConfig.network.wrappedNativeToken.address,
       })
     },
-    {
-      onSuccess: () => {
-        toast({
-          title: "Token wrapped!",
-          description: "Your token has been wrapped.",
-        })
-      },
-      onError: (error: Error) => {
-        console.error(error)
-        toast({
-          variant: "destructive",
-          title: "Something went wrong.",
-          description: error.message,
-        })
-      },
-    }
-  )
+
+    onSuccess: () => {
+      toast({
+        title: "Token wrapped!",
+        description: "Your token has been wrapped.",
+      })
+    },
+    onError: (error: Error) => {
+      console.error(error)
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: error.message,
+      })
+    },
+  })
 }

@@ -3,12 +3,12 @@ import { useMutation } from "@tanstack/react-query"
 import { BigNumber, Signer } from "ethers"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import { IWETH__factory } from "@/lib/generated/contracts/weth/IWETH__factory"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
 
 import { handleOrderbookError } from "../errors"
-import globalConfig from "@/config/globalConfig"
 
 export type UnwrapTokenOptions = {
   amount: BigNumber
@@ -37,9 +37,9 @@ export const useUnwrapToken = () => {
   const viewerAddress = useCurrentViewerAddress()
   const signer = useSigner()
 
-  return useMutation(
-    ["unwrap"],
-    async ({ amount }: UnwrapTokenMutationOptions) => {
+  return useMutation({
+    mutationKey: ["unwrap"],
+    mutationFn: async ({ amount }: UnwrapTokenMutationOptions) => {
       if (!viewerAddress || !signer) {
         throw new Error("Could not unwrap token")
       }
@@ -51,22 +51,21 @@ export const useUnwrapToken = () => {
         wrapContractAddress: globalConfig.network.wrappedNativeToken.address,
       })
     },
-    {
-      onSuccess: () => {
-        toast({
-          title: "Token unwrapped!",
-        })
-      },
-      onError: (error) => {
-        toast({
-          variant: "destructive",
-          title: "Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            500: "Internal orderbook server error",
-          }),
-        })
-      },
-    }
-  )
+
+    onSuccess: () => {
+      toast({
+        title: "Token unwrapped!",
+      })
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: handleOrderbookError(error, {
+          400: "Bad request",
+          500: "Internal orderbook server error",
+        }),
+      })
+    },
+  })
 }

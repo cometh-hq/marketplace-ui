@@ -31,9 +31,9 @@ const networkIdSchema = z.coerce
 const client = z.object({
   NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"]),
   NEXT_PUBLIC_BASE_PATH: z.string().optional(),
-  NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS: z.string().min(1),
   NEXT_PUBLIC_NETWORK_ID: networkIdSchema,
   NEXT_PUBLIC_CONTRACT_ADDRESS: z.string().length(42),
+  NEXT_PUBLIC_RPC_URL: z.string().url().optional(),
 
   // Cometh
   NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL: z.string().url(),
@@ -52,10 +52,9 @@ const processEnv: Record<
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_NODE_ENV: process.env.NEXT_PUBLIC_NODE_ENV,
   NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || "",
-  NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
-    process.env.NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS,
   NEXT_PUBLIC_NETWORK_ID: process.env.NEXT_PUBLIC_NETWORK_ID,
   NEXT_PUBLIC_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+  NEXT_PUBLIC_RPC_URL: process.env.NEXT_PUBLIC_RPC_URL,
 
   NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
     process.env.NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL,

@@ -4,11 +4,10 @@ import { BigNumber } from "ethers"
 
 import { useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
+import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
-import { handleOrderbookError } from "../errors"
 import { useBuildSellOrder } from "./build-sell-order"
-import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 export type SellAssetOptions = {
   asset: AssetWithTradeData
@@ -24,9 +23,9 @@ export const useSellAsset = () => {
 
   const { getWalletTxs } = useWalletAdapter()
 
-  return useMutation(
-    ["sell-asset"],
-    async ({ asset, price, validity }: SellAssetOptions) => {
+  return useMutation({
+    mutationKey: ["sell-asset"],
+    mutationFn: async ({ asset, price, validity }: SellAssetOptions) => {
       if (!collection) throw new Error("Could not get collection")
 
       const order = buildSignSellOrder({ asset, price, validity, collection })
@@ -36,24 +35,23 @@ export const useSellAsset = () => {
         asset,
         signer,
         order,
-        tradeDirection: TradeDirection.SELL
+        tradeDirection: TradeDirection.SELL,
       })
     },
-    {
-      onSuccess: (_, { asset }) => {
-        client.invalidateQueries(["cometh", "search"]) // TODO: optimize this, just invalidate current asset
-        client.invalidateQueries(["cometh", "assets", asset.tokenId])
-        toast({
-          title: "Your asset is now listed for sale.",
-        })
-      },
-      onError: (error: Error) => {
-        toast({
-          variant: "destructive",
-          title: "Something went wrong.",
-          description: error.message,
-        })
-      },
-    }
-  )
+
+    onSuccess: (_, { asset }) => {
+      client.invalidateQueries({ queryKey: ["cometh", "search"]}) // TODO: optimize this, just invalidate current asset
+      client.invalidateQueries({ queryKey: ["cometh", "assets", asset.tokenId]})
+      toast({
+        title: "Your asset is now listed for sale.",
+      })
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: error.message,
+      })
+    },
+  })
 }

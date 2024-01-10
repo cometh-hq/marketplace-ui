@@ -1,11 +1,11 @@
-import { manifest } from "@/manifests"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
+
 import { fetchHasSufficientFunds } from "../balance/has-sufficient-funds"
 import { fetchWrappedBalance } from "../balance/wrapped"
-import globalConfig from "@/config/globalConfig"
 
 export type FetchNeedsToWrapOptions = {
   price: BigNumber
@@ -43,14 +43,14 @@ export type UseNeedsToWrapOptions = {
 }
 
 export const useNeedsToWrap = ({ price, address }: UseNeedsToWrapOptions) => {
-  return useQuery(
-    ["needsToWrap", price, address],
-    async () =>
+  return useQuery({
+    queryKey: ["needsToWrap", price, address],
+    queryFn: async () =>
       fetchNeedsToWrap({
         price: price!,
         address: address!,
         wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
       }),
-    { enabled: !!address && !!price }
-  )
+    enabled: !!address && !!price,
+  })
 }

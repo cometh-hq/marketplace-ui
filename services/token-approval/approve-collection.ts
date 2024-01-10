@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query"
 import { UserFacingERC721AssetDataSerializedV4 } from "@traderxyz/nft-swap-sdk"
 
+import globalConfig from "@/config/globalConfig"
+
 import { useCurrentViewerAddress } from "../../lib/web3/auth"
 import { useNFTSwapv4 } from "../../lib/web3/nft-swap-sdk"
-import globalConfig from "@/config/globalConfig"
 
 export type UseApproveCollectionParams = {
   tokenId: string | number
@@ -17,8 +18,8 @@ export const useApproveCollection = ({
   const nftSwapSdk = useNFTSwapv4()
   const address = useCurrentViewerAddress()
 
-  return useMutation(
-    async () => {
+  return useMutation({
+    mutationFn: async () => {
       if (!nftSwapSdk || !address) throw new Error("SDK not initialized")
       const item: UserFacingERC721AssetDataSerializedV4 = {
         tokenAddress: globalConfig.contractAddress,
@@ -27,8 +28,7 @@ export const useApproveCollection = ({
       }
       return nftSwapSdk.approveTokenOrNftByAsset(item, address)
     },
-    {
-      onSuccess,
-    }
-  )
+
+    onSuccess,
+  })
 }

@@ -59,9 +59,9 @@ export const useRequiredSellingSteps = ({
   const viewerAddress = useCurrentViewerAddress()
   const nftSwapSdk = useNFTSwapv4()
 
-  return useQuery(
-    ["requiredSellingSteps", asset],
-    async () => {
+  return useQuery({
+    queryKey: ["requiredSellingSteps", asset],
+    queryFn: async () => {
       if (!nftSwapSdk || !viewerAddress) return defaultSteps
       return fetchRequiredSellingSteps({
         asset,
@@ -69,12 +69,11 @@ export const useRequiredSellingSteps = ({
         nftSwapSdk,
       })
     },
-    {
-      staleTime: Infinity,
-      refetchOnWindowFocus: false,
-      enabled: !!nftSwapSdk && !!viewerAddress,
-    }
-  )
+
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    enabled: !!nftSwapSdk && !!viewerAddress,
+  })
 }
 
 export type UseSellAssetButtonOptions = {

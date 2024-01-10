@@ -2,13 +2,12 @@ import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
 import { getFirstListing } from "../cometh-marketplace/offers"
-import { handleOrderbookError } from "../errors"
-import globalConfig from "@/config/globalConfig"
 
 export type BuyAssetOptions = {
   asset: AssetWithTradeData
@@ -19,9 +18,9 @@ export const useBuyAsset = () => {
   const nftSwapSdk = useNFTSwapv4()
   const viewerAddress = useCurrentViewerAddress()
 
-  return useMutation(
-    ["buy-asset"],
-    async ({ asset }: BuyAssetOptions) => {
+  return useMutation({
+    mutationKey: ["buy-asset"],
+    mutationFn: async ({ asset }: BuyAssetOptions) => {
       if (!nftSwapSdk || !viewerAddress)
         throw new Error("Could not initialize SDK")
 
@@ -61,20 +60,19 @@ export const useBuyAsset = () => {
       )
       return fillTxReceipt
     },
-    {
-      onSuccess: (_, { asset }) => {
-        client.invalidateQueries(["cometh", "assets", asset.tokenId])
-        toast({
-          title: "NFT bought!",
-        })
-      },
-      onError: (error: Error) => {
-        toast({
-          variant: "destructive",
-          title: "Something went wrong.",
-          description: error.message,
-        })
-      },
-    }
-  )
+
+    onSuccess: (_, { asset }) => {
+      client.invalidateQueries({queryKey: ["cometh", "assets", asset.tokenId]})
+      toast({
+        title: "NFT bought!",
+      })
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong.",
+        description: error.message,
+      })
+    },
+  })
 }

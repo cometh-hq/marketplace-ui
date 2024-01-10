@@ -6,13 +6,13 @@ import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchNeedsMoreAllowance } from "../../../services/allowance/needs-more-allowance"
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
 import { useCurrentViewerAddress } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
-import globalConfig from "@/config/globalConfig"
 
 export type UseRequiredMakeBuyOfferSteps = {
   asset: AssetWithTradeData
@@ -92,9 +92,9 @@ export const useRequiredMakeBuyOfferSteps = ({
   const viewerAddress = useCurrentViewerAddress()
   const nftSwapSdk = useNFTSwapv4()
 
-  return useQuery(
-    ["requiredBuyingSteps", asset, price],
-    async () => {
+  return useQuery({
+    queryKey: ["requiredBuyingSteps", asset, price],
+    queryFn: async () => {
       if (!viewerAddress) return suffixSteps
       return fetchRequiredMakeBuyOfferSteps({
         price: price!,
@@ -103,11 +103,10 @@ export const useRequiredMakeBuyOfferSteps = ({
         spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
       })
     },
-    {
-      refetchOnWindowFocus: false,
-      enabled: !!viewerAddress && !!price,
-    }
-  )
+
+    refetchOnWindowFocus: false,
+    enabled: !!viewerAddress && !!price,
+  })
 }
 
 export type UseMakeBuyOfferAssetButtonOptions = {

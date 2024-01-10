@@ -1,4 +1,3 @@
-import { manifest } from "@/manifests"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
@@ -45,16 +44,15 @@ export const useHasSufficientFunds = ({
   address,
   price,
 }: UseHasSufficientFundsOptions) => {
-  return useQuery(
-    ["hasSufficientFunds", address, price],
-    async () =>
+  return useQuery({
+    queryKey: ["hasSufficientFunds", address, price],
+    queryFn: async () =>
       fetchHasSufficientFunds({
         address: address!,
         price,
         wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
       }),
-    {
-      enabled: !!address && !!price,
-    }
-  )
+
+    enabled: !!address && !!price,
+  })
 }
