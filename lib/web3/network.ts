@@ -13,11 +13,6 @@ export const useCorrectNetwork = () => {
   const supportedChain = ethers.utils.hexlify(globalConfig.network.chainId)
   const wallet = useWallet()?.chains[0]?.id
 
-  console.log("onboard", onboard)
-  console.log("isChainSupported", isChainSupported)
-  console.log("supportedChain", supportedChain)
-  console.log("wallet", wallet)
-  
   useEffect(() => {
     setIsChainSupported(wallet?.toString() === supportedChain)
   }, [])
