@@ -47,14 +47,11 @@ export const useSellAsset = () => {
           title: "Your asset is now listed for sale.",
         })
       },
-      onError: (error) => {
+      onError: (error: Error) => {
         toast({
           variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            500: "Internal orderbook server error",
-          }),
+          title: "Something went wrong.",
+          description: error.message,
         })
       },
     }

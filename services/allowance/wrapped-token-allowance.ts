@@ -4,10 +4,11 @@ import { erc20ABI, getWalletClient, readContract } from "@wagmi/core"
 import { BigNumber, BigNumberish, ContractTransaction, Signer } from "ethers"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import { ERC20__factory } from "@/lib/generated/contracts"
 import { useSigner } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import globalConfig from "@/config/globalConfig"
+import { toast } from "@/components/ui/toast/use-toast"
 
 export const fetchWrappedAllowance = async ({
   address,
@@ -66,6 +67,14 @@ export const useWrappedTokenAllow = (
       ...options,
       onSuccess: () => {
         options?.onSuccess?.()
+      },
+      onError: (error: Error) => {
+        console.error(error)
+        toast({
+          variant: "destructive",
+          title: "Error approving token",
+          description: error.message,
+        })
       },
     }
   )
