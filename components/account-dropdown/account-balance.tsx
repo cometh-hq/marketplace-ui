@@ -19,11 +19,11 @@ export function AccountBalance() {
       <div className="mb-3 space-y-3 rounded-md border border-border p-3">
         <div className="flex items-center justify-between">
           <AccountBalanceLine
-            balance={globalConfig.useNativeForOrders ? balance : wBalance}
+            balance={globalConfig.useNativeForOrders ? wBalance : balance}
             currency={
               globalConfig.useNativeForOrders
-                ? globalConfig.network.nativeToken.symbol
-                : globalConfig.network.wrappedNativeToken.symbol
+                ? globalConfig.network.wrappedNativeToken.symbol
+                : globalConfig.network.nativeToken.symbol
             }
           />
         </div>
