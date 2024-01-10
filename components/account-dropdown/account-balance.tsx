@@ -1,10 +1,10 @@
 import { useState } from "react"
 import Image from "next/image"
-import { manifest } from "@/manifests"
 import { useFormatWrappedBalance } from "@/services/balance/wrapped"
 
 import { WrapButton } from "../asset-actions/buttons/wrap"
 import { env } from "@/config/env"
+import globalConfig from "@/config/globalConfig"
 
 export function AccountBalance() {
   const wBalance = useFormatWrappedBalance()
@@ -17,7 +17,7 @@ export function AccountBalance() {
         <div className="flex items-center justify-between">
           <AccountBalanceLine
             balance={wBalance}
-            currency={manifest.currency.wrapped.name}
+            currency={globalConfig.network.wrappedNativeToken.symbol}
           />
         </div>
       </div>

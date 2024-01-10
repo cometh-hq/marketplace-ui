@@ -16,10 +16,10 @@ import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { findAssetInSearchResults } from "@/lib/utils/search"
 
 import { comethMarketplaceClient } from "./client"
-import { manifest } from "@/manifests"
+import globalConfig from "@/config/globalConfig"
 
 export type SearchOptions = {
-  filters?: Omit<AssetSearchFilters, 'contractAddress'>
+  filters?: Omit<AssetSearchFilters, "contractAddress">
   page: number
   assetsPerPage: number
 }
@@ -32,14 +32,14 @@ export type UseSearchOptions = {
 }
 
 const defaultFilters = {
-  contractAddress: manifest.contractAddress,
+  contractAddress: globalConfig.contractAddress,
   limit: 200,
 }
 
 const ASSETS_PER_PAGE = 20
 
 export async function getAssetsPaginated(
-  filters?: Omit<AssetSearchFilters, 'contractAddress'>,
+  filters?: Omit<AssetSearchFilters, "contractAddress">,
   page: number = 1,
   assetsPerPage: number = ASSETS_PER_PAGE
 ) {
@@ -47,14 +47,14 @@ export async function getAssetsPaginated(
     ...defaultFilters,
     ...filters,
     skip: (page - 1) * assetsPerPage,
-    limit: assetsPerPage
+    limit: assetsPerPage,
   })
 
   await Promise.all(
     nfts.assets.map(async (asset: any) => {
       if (!asset.metadata.attributes) {
         const metadata = await fetchAsset({
-          contractAddress: manifest.contractAddress,
+          contractAddress: globalConfig.contractAddress,
           assetId: asset.tokenId,
         })
 
@@ -62,7 +62,8 @@ export async function getAssetsPaginated(
           asset.metadata.attributes = metadata.metadata.attributes
         }
       }
-    }))
+    })
+  )
 
   const total = nfts.total
   const totalPages = Math.ceil(total / assetsPerPage)
@@ -117,9 +118,9 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     ({ pageParam = 1 }) => {
       return getAssetsPaginated(
         {
-          isOnSale: (filters.isOnSale),
-          orderBy: (filters.orderBy) ?? FilterOrderBy.PRICE,
-          direction: (filters.direction) ?? FilterDirection.ASC,
+          isOnSale: filters.isOnSale,
+          orderBy: filters.orderBy ?? FilterOrderBy.PRICE,
+          direction: filters.direction ?? FilterDirection.ASC,
           ...(parsedAttributes.length > 0
             ? { attributes: parsedAttributes }
             : {}),
@@ -127,8 +128,8 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
           ...(options?.owner && { owner: options.owner }),
         },
         pageParam,
-        ASSETS_PER_PAGE,
-     )
+        ASSETS_PER_PAGE
+      )
     },
     {
       cacheTime: 0,
@@ -144,7 +145,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     isLoading,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage
+    isFetchingNextPage,
   }
 }
 

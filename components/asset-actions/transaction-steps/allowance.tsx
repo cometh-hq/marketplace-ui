@@ -3,6 +3,7 @@ import { manifest } from "@/manifests"
 import { useWrappedTokenAllow } from "@/services/allowance/wrapped-token-allowance"
 import { BigNumberish } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 import { ButtonLoading } from "@/components/button-loading"
@@ -13,11 +14,15 @@ export type AllowanceStepProps = {
   refetchSteps?: () => void
 }
 
-export function AllowanceStep({ price, onValid, refetchSteps }: AllowanceStepProps) {
+export function AllowanceStep({
+  price,
+  onValid,
+  refetchSteps,
+}: AllowanceStepProps) {
   const { mutateAsync: approveToken, isLoading } = useWrappedTokenAllow(price, {
     onSuccess: () => {
       refetchSteps?.()
-    }
+    },
   })
 
   const approve = useCallback(async () => {
@@ -28,8 +33,8 @@ export function AllowanceStep({ price, onValid, refetchSteps }: AllowanceStepPro
   return (
     <div className="flex flex-col items-center justify-center">
       <p className="text-md mb-[32px] mt-[40px] text-center">
-        Let {manifest.name} spend your{" "}
-        <strong>{manifest.currency.wrapped.name}</strong> to buy this NFT.
+        Let {manifest.collectionName} spend your{" "}
+        <strong>{globalConfig.ordersErc20.name}</strong> to buy this NFT.
       </p>
 
       {isLoading ? (

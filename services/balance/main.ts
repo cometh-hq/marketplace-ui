@@ -4,6 +4,7 @@ import { Address, useBalance } from "wagmi"
 
 import { balanceToBigNumber, balanceToString } from "./format"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
+import globalConfig from "@/config/globalConfig"
 
 export const fetchMainBalance = (address: Address) =>
   fetchBalance({
@@ -12,6 +13,7 @@ export const fetchMainBalance = (address: Address) =>
 
 export const useMainBalance = (address: Address) => {
   const { data: balance } = useBalance({
+    chainId: globalConfig.network.chainId,
     address,
     watch: true,
   })

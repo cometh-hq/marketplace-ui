@@ -1,12 +1,12 @@
 "use client"
 
-import { manifest } from "@/manifests"
 import { useAssetDetails } from "@/services/cometh-marketplace/search-assets"
 import { useAssetTransfers } from "@/services/cometh-marketplace/transfers"
 
+import globalConfig from "@/config/globalConfig"
+import { Loading } from "@/components/ui/loading"
 import { AssetActivities } from "@/components/activities/asset-details/tabs"
 import AssetDetails from "@/components/marketplace/asset/header"
-import { Loading } from "@/components/ui/loading"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
 export default function DetailsPage({
@@ -15,9 +15,9 @@ export default function DetailsPage({
   params: { assetId: string }
 }) {
   const { assetId } = params
-  const { data: asset } = useAssetDetails(manifest.contractAddress, assetId)
+  const { data: asset } = useAssetDetails(globalConfig.contractAddress, assetId)
   const { data: assetTransfers } = useAssetTransfers(
-    manifest.contractAddress,
+    globalConfig.contractAddress,
     assetId
   )
 
@@ -31,10 +31,7 @@ export default function DetailsPage({
           <AssetHeaderImage asset={asset} />
           <AssetDetails asset={asset} />
           {assetTransfers && (
-            <AssetActivities
-              asset={asset}
-              assetTransfers={assetTransfers}
-            />
+            <AssetActivities asset={asset} assetTransfers={assetTransfers} />
           )}
         </div>
       )}

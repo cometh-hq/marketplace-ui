@@ -12,6 +12,7 @@ import { ArrowDownUp } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import globalConfig from "@/config/globalConfig"
 import { useCorrectNetwork } from "@/lib/web3/network"
 import { Button } from "@/components/ui/button"
 import {
@@ -90,11 +91,11 @@ export function WrapDialogForm({
   const renderTokenName = (isMain = true) => {
     return isMain
       ? isUnwrap
-        ? manifest.currency.wrapped.name
-        : manifest.currency.main.name
+        ? globalConfig.network.wrappedNativeToken.name
+        : globalConfig.network.nativeToken.name
       : isUnwrap
-      ? manifest.currency.main.name
-      : manifest.currency.wrapped.name
+      ? globalConfig.network.nativeToken.name
+      : globalConfig.network.wrappedNativeToken.name
   }
 
   return (
@@ -104,8 +105,8 @@ export function WrapDialogForm({
         className="space-y-6"
       >
         <TokenInputField
-          label={`Amount of ${renderTokenName()} to convert (max: ${maxBalance})`}
-          placeholder="Enter a amount"
+          label={`You send some ${renderTokenName()} to convert (max: ${maxBalance})`}
+          placeholder="Enter an amount"
           tokenName={renderTokenName()}
           name="amount"
         />
@@ -133,7 +134,7 @@ export function WrapDialogForm({
         </div>
 
         <TokenInputField
-          label={`You receive ${renderTokenName(false)}`}
+          label={`You receive some ${renderTokenName(false)}`}
           value={receivedAmount}
           disabled={true}
           tokenName={renderTokenName(false)}

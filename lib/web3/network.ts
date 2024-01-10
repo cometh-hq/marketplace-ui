@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
-import { manifest } from "@/manifests"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { ethers } from "ethers"
+
+import globalConfig from "@/config/globalConfig"
 
 import { useWallet } from "./auth"
 
@@ -9,7 +10,7 @@ export const useCorrectNetwork = () => {
   const { onboard } = useWeb3OnboardContext()
   const [isChainSupported, setIsChainSupported] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const supportedChain = ethers.utils.hexlify(manifest.network.chainId)
+  const supportedChain = ethers.utils.hexlify(globalConfig.network.chainId)
   const wallet = useWallet()?.chains[0]?.id
 
   console.log("onboard", onboard)

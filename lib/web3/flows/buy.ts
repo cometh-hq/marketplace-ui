@@ -9,6 +9,7 @@ import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
 import { useCurrentViewerAddress } from "../auth"
+import globalConfig from "@/config/globalConfig"
 
 export type UseRequiredBuyingStepsOptions = {
   asset: AssetWithTradeData
@@ -76,7 +77,7 @@ export const useRequiredBuyingSteps = ({
       const steps = await fetchRequiredBuyingSteps({
         asset,
         address: viewerAddress,
-        wrappedContractAddress: manifest.currency.wrapped.address,
+        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
       })
 
       return steps

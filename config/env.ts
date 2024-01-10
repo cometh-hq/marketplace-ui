@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { SUPPORTED_NETWORKS } from "./supportedNetworks"
+import networks from "./networks"
 
 /**
  * Specify your server-side environment variables schema here.
@@ -15,9 +15,7 @@ const networkIdSchema = z.coerce
   .min(0)
   .refine(
     (networkId) => {
-      const matchingNetwork = SUPPORTED_NETWORKS.find(
-        (network) => parseInt(network.id) === networkId
-      )
+      const matchingNetwork = networks[networkId]
       return !!matchingNetwork
     },
     {
@@ -53,7 +51,7 @@ const processEnv: Record<
 > = {
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_NODE_ENV: process.env.NEXT_PUBLIC_NODE_ENV,
-  NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  NEXT_PUBLIC_BASE_PATH: process.env.NEXT_PUBLIC_BASE_PATH || "",
   NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
     process.env.NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS,
   NEXT_PUBLIC_NETWORK_ID: process.env.NEXT_PUBLIC_NETWORK_ID,
