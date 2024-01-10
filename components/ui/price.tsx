@@ -6,12 +6,6 @@ import { formatUnits } from "ethers/lib/utils"
 
 import { cn } from "@/lib/utils/utils"
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./tooltip"
 import { env } from "@/config/env"
 
 const priceTriggerVariants = cva("font-bold", {
@@ -94,7 +88,6 @@ export type PriceProps = {
 
 export const Price = ({ amount, ...rest }: PriceProps) => {
   if (!amount) return "-"
-
   const formattedAmount = (+formatUnits(amount.toString(), 18)).toString()
 
   return <PriceTrigger {...rest} formattedAmount={formattedAmount} />

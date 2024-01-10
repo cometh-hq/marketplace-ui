@@ -21,6 +21,7 @@ export const useMakeBuyOfferAsset = () => {
   const buildSignBuyOfferOrder = useBuildBuyOfferOrder()
   const signer = useSigner()
   const { data: collection } = useGetCollection()
+
   const { getWalletTxs } = useWalletAdapter()
 
   return useMutation(
@@ -28,12 +29,17 @@ export const useMakeBuyOfferAsset = () => {
     async ({ asset, price, validity }: MakeBuyOfferOptions) => {
       if (!collection) throw new Error("Could not get collection")
 
+      console.log("asset in make-buy-offer-asset", asset)
+      console.log("price in make-buy-offer-asset", price)
+
       const order = buildSignBuyOfferOrder({
         asset,
         price,
         validity,
         collection,
       })
+
+      console.log("order in make-buy-offer-asset", order)
       if (!order) throw new Error("Could not build order")
 
       return await getWalletTxs()?.makeBuyOffer({
@@ -44,6 +50,7 @@ export const useMakeBuyOfferAsset = () => {
     },
     {
       onSuccess: (_, { asset }) => {
+        console.log("asset in make-buy-offer-asset", asset)
         client.invalidateQueries(["cometh", "search"]) // TODO: optimize this, just invalidate current asset
         client.invalidateQueries(["cometh", "assets", asset.tokenId])
         client.invalidateQueries(["cometh", "received-buy-offers", asset.owner])

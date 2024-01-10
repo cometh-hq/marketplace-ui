@@ -1,7 +1,7 @@
 import { manifest } from "@/manifests"
 import { useMutation } from "@tanstack/react-query"
-import { erc20ABI, getWalletClient, readContract } from "@wagmi/core"
-import { BigNumber, BigNumberish, ContractTransaction, Signer } from "ethers"
+import { erc20ABI, readContract } from "@wagmi/core"
+import { BigNumberish } from "ethers"
 import { Address } from "viem"
 
 import { ERC20__factory } from "@/lib/generated/contracts"
@@ -62,7 +62,6 @@ export const useWrappedTokenAllow = (price: BigNumberish, options?: {
       options?.onSuccess?.()
     },
     onError: (error: Error) => {
-      console.error(error)
       toast({
         variant: "destructive",
         title: "Error approving token",

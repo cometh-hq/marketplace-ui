@@ -5,7 +5,7 @@ export const SUPPORTED_NETWORKS = [
       label: "Polygon",
     },
     {
-      id: "0x13881",
+      id: "0x013881",
       token: "MATIC",
       label: "Mumbai",
     },
