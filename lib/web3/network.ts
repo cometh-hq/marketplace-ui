@@ -5,6 +5,7 @@ import { ethers } from "ethers"
 import globalConfig from "@/config/globalConfig"
 
 import { useWallet } from "./auth"
+import { toast } from "@/components/ui/toast/use-toast"
 
 export const useCorrectNetwork = () => {
   const { onboard } = useWeb3OnboardContext()
@@ -37,7 +38,12 @@ export const useCorrectNetwork = () => {
     try {
       await onboard?.setChain({ chainId: supportedChain })
     } catch (error) {
-      console.error("Error switching network:", error)
+      console.error(error)
+      // toast({
+      //   variant: "destructive",
+      //   title: "Error approving token",
+      //   description: "Cannot connect to wallet"
+      // })
     } finally {
       setIsLoading(false)
     }

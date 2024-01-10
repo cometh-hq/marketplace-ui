@@ -14,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ButtonLoading } from "@/components/button-loading"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
 import { SwitchNetwork } from "../buttons/switch-network"
