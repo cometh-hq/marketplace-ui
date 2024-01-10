@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 import { parseUnits } from "ethers/lib/utils"
-import { Loader } from "lucide-react"
 
 import { cn } from "@/lib/utils/utils"
 import { useMakeBuyOfferAssetButton } from "@/lib/web3/flows/make-buy-offer"

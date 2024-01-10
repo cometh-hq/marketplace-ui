@@ -1,8 +1,7 @@
-import { manifest } from "@/manifests"
 import { wagmiConfig } from "@/providers/wagmi"
 import { useMutation } from "@tanstack/react-query"
 import { readContract } from "@wagmi/core"
-import { BigNumber, BigNumberish, ContractTransaction, Signer } from "ethers"
+import {  BigNumberish } from "ethers"
 import { Address, erc20Abi } from "viem"
 
 import globalConfig from "@/config/globalConfig"

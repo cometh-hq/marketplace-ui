@@ -16,7 +16,7 @@ export interface ConnectParams {
 }
 
 async function _selectdCorrectChain(onboard: OnboardAPI, wallet: WalletState) {
-  const requiredChaindId = ethers.utils.hexValue(globalConfig.network.chainId)
+  const requiredChaindId = ethers.utils.hexlify(globalConfig.network.chainId)
   if (wallet.chains?.[0].id !== requiredChaindId) {
     await onboard.setChain({ chainId: requiredChaindId })
   }

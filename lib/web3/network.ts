@@ -10,7 +10,7 @@ export const useCorrectNetwork = () => {
   const { onboard } = useWeb3OnboardContext()
   const [isChainSupported, setIsChainSupported] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const supportedChain = ethers.utils.hexValue(globalConfig.network.chainId)
+  const supportedChain = ethers.utils.hexlify(globalConfig.network.chainId)
   const wallet = useWallet()?.chains[0]?.id
 
   useEffect(() => {
