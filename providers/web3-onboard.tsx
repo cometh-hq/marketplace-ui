@@ -22,8 +22,16 @@ import Onboard, { OnboardAPI } from "@web3-onboard/core"
 import injectedModule from "@web3-onboard/injected-wallets"
 
 import { env } from "@/config/env"
+import networks from "@/config/networks"
 import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
-import { SUPPORTED_NETWORKS } from "@/config/supportedNetworks"
+
+const web3OnboardNetworks = Object.values(networks).map((network) => {
+  return {
+    id: network.hexaId,
+    token: network.nativeToken.symbol,
+    label: network.name,
+  }
+})
 
 export interface SetOnboardOptions {
   isComethWallet: boolean
@@ -83,9 +91,9 @@ export function Web3OnboardProvider({
 
     const web3OnboardInstance = Onboard({
       wallets,
-      chains: SUPPORTED_NETWORKS,
+      chains: web3OnboardNetworks,
       appMetadata: {
-        name: manifest.name,
+        name: manifest.collectionName,
         description: "Description",
         icon: `${env.NEXT_PUBLIC_BASE_PATH}/icons/un.svg`,
         logo: `${env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`,

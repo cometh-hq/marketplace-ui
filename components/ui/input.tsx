@@ -51,7 +51,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        {value && (
+        {value && type != 'number' && (
           <button onClick={handleClear} className="ml-2 text-sm">
             <XIcon size={16} />
           </button>

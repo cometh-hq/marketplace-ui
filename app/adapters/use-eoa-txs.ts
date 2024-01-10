@@ -1,7 +1,5 @@
-import { manifest } from "@/manifests"
 import { comethMarketplaceClient } from "@/services/cometh-marketplace/client"
 import {
-  AssetWithTradeData,
   CancelOrderRequest,
   NewOrder,
   TokenType,
@@ -17,6 +15,7 @@ import {
 } from "./types"
 import { WalletAdapter } from "./wallet-adapter"
 import { useSignOrder } from "@/services/orders/sign-order"
+import globalConfig from "@/config/globalConfig"
 
 export function useEOATxs(): WalletAdapter {
   const signBuyOfferOrder = useSignOrder()
@@ -29,7 +28,7 @@ export function useEOATxs(): WalletAdapter {
     const signedOrder = await signBuyOfferOrder({ order })
 
     const buyOffer: NewOrder = {
-      tokenAddress: manifest.contractAddress,
+      tokenAddress: globalConfig.contractAddress,
       tokenId: asset.tokenId,
       tokenProperties: [],
       tokenQuantity: BigNumber.from(1).toString(),

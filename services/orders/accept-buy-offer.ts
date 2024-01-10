@@ -1,5 +1,4 @@
 import { useMemo } from "react"
-import { manifest } from "@/manifests"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
 import { Address, isAddressEqual } from "viem"
@@ -10,6 +9,7 @@ import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
 import { handleOrderbookError } from "../errors"
+import globalConfig from "@/config/globalConfig"
 
 export type AcceptBuyOfferOptions = {
   offer: BuyOffer
@@ -63,10 +63,10 @@ export const useAcceptBuyOffer = () => {
           return {
             recipient: fee.recipient,
             amount: fee.amount,
-            feeData: fee.feeData || '0x',
+            feeData: fee.feeData || "0x",
           }
         }),
-        erc721Token: manifest.contractAddress,
+        erc721Token: globalConfig.contractAddress,
         erc721TokenId: offer.trade.tokenId,
         erc721TokenProperties: [],
         signature: signature,

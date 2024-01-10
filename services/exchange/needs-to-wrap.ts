@@ -5,6 +5,7 @@ import { Address } from "viem"
 
 import { fetchHasSufficientFunds } from "../balance/has-sufficient-funds"
 import { fetchWrappedBalance } from "../balance/wrapped"
+import globalConfig from "@/config/globalConfig"
 
 export type FetchNeedsToWrapOptions = {
   price: BigNumber
@@ -48,7 +49,7 @@ export const useNeedsToWrap = ({ price, address }: UseNeedsToWrapOptions) => {
       fetchNeedsToWrap({
         price: price!,
         address: address!,
-        wrappedContractAddress: manifest.currency.wrapped.address,
+        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
       }),
     { enabled: !!address && !!price }
   )

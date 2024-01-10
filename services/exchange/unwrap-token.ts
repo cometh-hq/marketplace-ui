@@ -8,6 +8,7 @@ import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
 
 import { handleOrderbookError } from "../errors"
+import globalConfig from "@/config/globalConfig"
 
 export type UnwrapTokenOptions = {
   amount: BigNumber
@@ -39,7 +40,7 @@ export const useUnwrapToken = () => {
   return useMutation(
     ["unwrap"],
     async ({ amount }: UnwrapTokenMutationOptions) => {
-      if (!viewerAddress || !signer || !manifest?.currency?.wrapped?.address) {
+      if (!viewerAddress || !signer) {
         throw new Error("Could not unwrap token")
       }
 
@@ -47,7 +48,7 @@ export const useUnwrapToken = () => {
         amount,
         account: viewerAddress,
         signer,
-        wrapContractAddress: manifest.currency.wrapped.address,
+        wrapContractAddress: globalConfig.network.wrappedNativeToken.address,
       })
     },
     {

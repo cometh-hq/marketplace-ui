@@ -12,6 +12,7 @@ import { fetchNeedsMoreAllowance } from "../../../services/allowance/needs-more-
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
 import { useCurrentViewerAddress } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
+import globalConfig from "@/config/globalConfig"
 
 export type UseRequiredMakeBuyOfferSteps = {
   asset: AssetWithTradeData
@@ -98,7 +99,7 @@ export const useRequiredMakeBuyOfferSteps = ({
       return fetchRequiredMakeBuyOfferSteps({
         price: price!,
         address: viewerAddress,
-        wrappedContractAddress: manifest.currency.wrapped.address,
+        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
         spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
       })
     },

@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
+
 import { fetchMainBalance } from "./main"
 import { fetchWrappedBalance } from "./wrapped"
 
@@ -49,7 +51,7 @@ export const useHasSufficientFunds = ({
       fetchHasSufficientFunds({
         address: address!,
         price,
-        wrappedContractAddress: manifest.currency.wrapped.address,
+        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
       }),
     {
       enabled: !!address && !!price,

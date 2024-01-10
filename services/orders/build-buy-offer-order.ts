@@ -1,5 +1,4 @@
 import { useCallback } from "react"
-import { manifest } from "@/manifests"
 import {
   AssetWithTradeData,
   Collection,
@@ -13,6 +12,7 @@ import {
 import { BigNumber, ethers } from "ethers"
 import { DateTime } from "luxon"
 
+import globalConfig from "@/config/globalConfig"
 import {
   calculateAmountWithoutFees,
   calculateFeesAmount,
@@ -65,7 +65,7 @@ export const useBuildBuyOfferOrder = () => {
       }
 
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
-        tokenAddress: manifest.currency.wrapped.address,
+        tokenAddress: globalConfig.network.wrappedNativeToken.address,
         amount: price.sub(totalFeesFromCollection(fees)).toString(),
         type: "ERC20",
       }

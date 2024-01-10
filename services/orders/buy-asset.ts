@@ -1,4 +1,3 @@
-import { manifest } from "@/manifests"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
@@ -9,6 +8,7 @@ import { toast } from "@/components/ui/toast/use-toast"
 
 import { getFirstListing } from "../cometh-marketplace/offers"
 import { handleOrderbookError } from "../errors"
+import globalConfig from "@/config/globalConfig"
 
 export type BuyAssetOptions = {
   asset: AssetWithTradeData
@@ -46,10 +46,10 @@ export const useBuyAsset = () => {
           return {
             recipient: fee.recipient,
             amount: fee.amount,
-            feeData: fee.feeData || '0x',
+            feeData: fee.feeData || "0x",
           }
         }),
-        erc721Token: manifest.contractAddress,
+        erc721Token: globalConfig.contractAddress,
         erc721TokenId: order.tokenId,
         erc721TokenProperties: [],
         signature: signature,

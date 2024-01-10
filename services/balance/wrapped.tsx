@@ -3,8 +3,10 @@ import { manifest } from "@/manifests"
 import { fetchBalance } from "@wagmi/core"
 import { Address, useBalance } from "wagmi"
 
-import { balanceToBigNumber, balanceToString } from "./format"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
+
+import { balanceToBigNumber, balanceToString } from "./format"
+import globalConfig from "@/config/globalConfig"
 
 export const fetchWrappedBalance = async (
   address: Address,
@@ -17,8 +19,9 @@ export const fetchWrappedBalance = async (
 
 export const useWrappedBalance = (address: Address) => {
   const { data: balance } = useBalance({
+    chainId: globalConfig.network.chainId,
     address,
-    token: manifest.currency.wrapped.address,
+    token: globalConfig.network.wrappedNativeToken.address,
     watch: true,
   })
 
@@ -28,6 +31,6 @@ export const useWrappedBalance = (address: Address) => {
 export const useFormatWrappedBalance = () => {
   const address = useCurrentViewerAddress()
   const balance = useWrappedBalance(address as `0x${string}`)
-  
+
   return useMemo(() => balanceToString(balance), [balance])
 }

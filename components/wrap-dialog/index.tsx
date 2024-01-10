@@ -9,6 +9,7 @@ import {
 } from "../../components/ui/dialog"
 import { WrapDialogForm } from "./form"
 import { Separator } from "../ui/separator"
+import globalConfig from "@/config/globalConfig"
 
 export type WrapDialogProps = {
   children?: React.ReactNode
@@ -38,8 +39,8 @@ export function WrapDialog({
         </DialogHeader>
         <DialogDescription>
           <p className="font-medium">
-            Easily convert your {manifest.currency.main.name} in one click. <br />
-            This allows you to use your MATIC across various platforms more efficiently.
+            Easily convert your {globalConfig.network.nativeToken.symbol} in one click. <br />
+            This allows you to use your {globalConfig.network.nativeToken.symbol} across various platforms more efficiently.
           </p>
         </DialogDescription>
         <Separator />
