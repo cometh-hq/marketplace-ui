@@ -4,8 +4,8 @@ import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 
-import { fetchMainBalance } from "./main"
-import { fetchWrappedBalance } from "./wrapped"
+import { getNativeBalance, getOrdersERC20Balance } from "./balanceService"
+import { balanceToBigNumber } from "./format"
 
 export type FetchHasSufficientFundsOptions = {
   address: Address
@@ -24,15 +24,15 @@ export const fetchHasSufficientFunds = async ({
   wrappedContractAddress,
 }: FetchHasSufficientFundsOptions) => {
   const [mainBalance, wrappedBalance] = await Promise.all([
-    fetchMainBalance(address),
-    fetchWrappedBalance(address, wrappedContractAddress),
+    getNativeBalance(address),
+    getOrdersERC20Balance(address)
   ])
 
-  const hasSufficientFunds = mainBalance.add(wrappedBalance).gte(price ?? 0)
+  const hasSufficientFunds = balanceToBigNumber(mainBalance).add(wrappedBalance).gte(price ?? 0)
 
   const missingBalance = hasSufficientFunds
     ? BigNumber.from(0)
-    : price?.sub(mainBalance.add(wrappedBalance))
+    : price?.sub(mainBalance).add(wrappedBalance)
 
   return {
     hasSufficientFunds,

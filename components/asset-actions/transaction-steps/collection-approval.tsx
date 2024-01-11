@@ -14,7 +14,7 @@ export function CollectionApprovalStep({
   asset,
   onValid,
 }: CollectionApprovalStepProps) {
-  const { mutate: approveCollection, isLoading } = useApproveCollection({
+  const { mutate: approveCollection, isPending } = useApproveCollection({
     tokenId: asset.tokenId,
     onSuccess: onValid,
   })
@@ -26,7 +26,7 @@ export function CollectionApprovalStep({
         {manifest.collectionName} would like to be able to transfer your NFT,
         when a user buys it. Your wallet is going to ask you to approve that.
       </p>
-      {isLoading ? (
+      {isPending ? (
         <ButtonLoading />
       ) : (
         <Button size="sm" onClick={() => approveCollection()}>

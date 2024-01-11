@@ -1,28 +1,31 @@
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import { fetchBalance } from "@wagmi/core"
-import { Address, useBalance } from "wagmi"
+import { Address } from "viem"
+import { useBalance, useBlockNumber } from "wagmi"
+
+import globalConfig from "@/config/globalConfig"
+import { useCurrentViewerAddress } from "@/lib/web3/auth"
 
 import { balanceToBigNumber, balanceToString } from "./format"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
-import globalConfig from "@/config/globalConfig"
-
-export const fetchMainBalance = (address: Address) =>
-  fetchBalance({
-    address,
-  }).then(balanceToBigNumber)
 
 export const useMainBalance = (address: Address) => {
-  const { data: balance } = useBalance({
+  const queryClient = useQueryClient()
+  const { data: blockNumber } = useBlockNumber({ watch: true })
+  const { data: balance, queryKey } = useBalance({
     chainId: globalConfig.network.chainId,
     address,
-    watch: true,
   })
-  return useMemo(() => balanceToBigNumber(balance), [balance])
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey })
+  }, [blockNumber, queryClient, queryKey])
+
+  return useMemo(() => balanceToBigNumber(balance?.value), [balance])
 }
 
 export const useFormatMainBalance = () => {
   const address = useCurrentViewerAddress()
   const balance = useMainBalance(address as `0x${string}`)
-  
+
   return useMemo(() => balanceToString(balance), [balance])
 }

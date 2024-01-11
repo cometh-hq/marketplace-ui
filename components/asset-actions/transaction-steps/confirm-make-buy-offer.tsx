@@ -20,7 +20,7 @@ export function ConfirmMakeBuyOfferStep({
   validity,
   onValid,
 }: ConfirmBuyOfferStepProps) {
-  const { mutateAsync: makeBuyOffer, isLoading } = useMakeBuyOfferAsset()
+  const { mutateAsync: makeBuyOffer, isPending } = useMakeBuyOfferAsset()
 
   const onConfirm = useCallback(async () => {
     await makeBuyOffer({ asset, price, validity })
@@ -33,7 +33,7 @@ export function ConfirmMakeBuyOfferStep({
       <p className="text-center">
         You are about to make an offer to buy <br />this asset for <Price size="default" amount={price} /> (fees included)
       </p>
-      {isLoading ? (
+      {isPending ? (
         <ButtonLoading />
       ) : (
         <Button onClick={onConfirm}>Confirm</Button>

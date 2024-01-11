@@ -4,9 +4,9 @@ import { BaseProvider } from "@ethersproject/providers"
 import { NftSwapV4 } from "@traderxyz/nft-swap-sdk"
 
 import { env } from "@/config/env"
+import globalConfig from "@/config/globalConfig"
 
 import { useSigner, useWalletProvider } from "./auth"
-import globalConfig from "@/config/globalConfig"
 
 export const useNFTSwapv4 = () => {
   const provider = useWalletProvider()
@@ -19,8 +19,7 @@ export const useNFTSwapv4 = () => {
       signer,
       globalConfig.network.chainId,
       {
-        zeroExExchangeProxyContractAddress:
-          env.NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS,
+        zeroExExchangeProxyContractAddress: globalConfig.network.zeroExExchange,
       }
     )
   }, [provider, signer])

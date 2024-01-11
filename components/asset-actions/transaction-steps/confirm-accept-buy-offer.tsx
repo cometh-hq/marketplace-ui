@@ -18,7 +18,7 @@ export function ConfirmAcceptBuyOfferStep({
   onValid,
   setTxHash,
 }: ConfirmBuyOfferStepProps) {
-  const { mutateAsync: acceptBuyOffer, isLoading, isError } = useAcceptBuyOffer()
+  const { mutateAsync: acceptBuyOffer, isPending, isError } = useAcceptBuyOffer()
 
   const onConfirm = useCallback(async () => {
     const tx = await acceptBuyOffer({ offer })
@@ -36,7 +36,7 @@ export function ConfirmAcceptBuyOfferStep({
       <p className="text-center">
         You are about to accept an offer for <br />this asset for <Price size="default" amount={amountWithFees} /> (fees included)
       </p>
-      {isLoading ? (
+      {isPending ? (
         <ButtonLoading />
       ) : (
         <Button onClick={onConfirm}>Confirm</Button>

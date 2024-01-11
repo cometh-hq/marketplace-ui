@@ -21,7 +21,7 @@ export type BuyStepProps = {
  * so we don't have to do any check here
  */
 export function BuyStep({ asset, onValid, setTxHash }: BuyStepProps) {
-  const { mutateAsync: buy, isLoading, isError } = useBuyAsset()
+  const { mutateAsync: buy, isPending, isError } = useBuyAsset()
 
   /**
    * TODO: check what happens if the modal
@@ -46,8 +46,8 @@ export function BuyStep({ asset, onValid, setTxHash }: BuyStepProps) {
         <Button
           className="flex gap-1"
           onClick={onSubmit}
-          disabled={isLoading}
-          isLoading={isLoading}
+          disabled={isPending}
+          isLoading={isPending}
         >
           Buy now for <Price amount={asset.orderbookStats.lowestSalePrice} />
         </Button>

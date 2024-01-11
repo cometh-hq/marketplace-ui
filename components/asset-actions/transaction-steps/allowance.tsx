@@ -19,7 +19,7 @@ export function AllowanceStep({
   onValid,
   refetchSteps,
 }: AllowanceStepProps) {
-  const { mutateAsync: approveToken, isLoading } = useWrappedTokenAllow(price, {
+  const { mutateAsync: approveToken, isPending } = useWrappedTokenAllow(price, {
     onSuccess: () => {
       refetchSteps?.()
     },
@@ -37,10 +37,10 @@ export function AllowanceStep({
         <strong>{globalConfig.ordersErc20.name}</strong> to buy this NFT.
       </p>
 
-      {isLoading ? (
+      {isPending ? (
         <ButtonLoading />
       ) : (
-        <Button className="flex gap-1" onClick={approve} disabled={isLoading}>
+        <Button className="flex gap-1" onClick={approve} disabled={isPending}>
           Allow <Price amount={price} />
         </Button>
       )}

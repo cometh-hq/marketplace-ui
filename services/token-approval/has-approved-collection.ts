@@ -1,7 +1,7 @@
 import { UserFacingERC721AssetDataSerializedV4 } from "@traderxyz/nft-swap-sdk"
-import { Address } from "wagmi"
 
 import { useNFTSwapv4 } from "../../lib/web3/nft-swap-sdk"
+import { Address } from "viem"
 
 export type FetchHasApprovedCollectionParams = {
   address: Address

@@ -30,7 +30,7 @@ export type SellStepProps = {
  * TODO: wrap in a form
  */
 export function SellStep({ asset, onValid }: SellStepProps) {
-  const { mutateAsync: sell, isLoading, isError } = useSellAsset()
+  const { mutateAsync: sell, isPending, isError } = useSellAsset()
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("")
 
@@ -92,8 +92,8 @@ export function SellStep({ asset, onValid }: SellStepProps) {
           className="flex w-full gap-1"
           size="lg"
           onClick={onSubmit}
-          disabled={isLoading}
-          isLoading={isLoading}
+          disabled={isPending}
+          isLoading={isPending}
         >
           Sell for <Price amount={bnPrice?.price} />
         </Button>

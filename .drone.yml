@@ -91,18 +91,16 @@ steps:
       build_args_from_env:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
-        - NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS
         - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
         - NEXT_PUBLIC_MARKETPLACE_API_KEY
         - NEXT_PUBLIC_COMETH_CONNECT_API_KEY
         - NEXT_PUBLIC_BASE_PATH
         - NEXT_PUBLIC_CONTRACT_ADDRESS
         - NEXT_PUBLIC_NETWORK_ID
+        - NEXT_PUBLIC_RPC_URL
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
-      NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
-        from_secret: debug_zero_ex_contract_address
       NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: debug_cometh_api_url
       NEXT_PUBLIC_MARKETPLACE_API_KEY:
@@ -113,6 +111,8 @@ steps:
       NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_CONTRACT_ADDRESS:
         from_secret: debug_contract_address
+      NEXT_PUBLIC_RPC_URL:
+        from_secret: debug_rpc_url
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
     environment:

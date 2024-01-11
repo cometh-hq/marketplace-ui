@@ -1,31 +1,26 @@
-import { useMemo } from "react"
-import { manifest } from "@/manifests"
-import { fetchBalance } from "@wagmi/core"
-import { Address, useBalance } from "wagmi"
+import { useEffect, useMemo } from "react"
+import { useQueryClient } from "@tanstack/react-query"
+import { Address } from "viem"
+import { useBalance, useBlockNumber } from "wagmi"
 
+import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 
 import { balanceToBigNumber, balanceToString } from "./format"
-import globalConfig from "@/config/globalConfig"
-
-export const fetchWrappedBalance = async (
-  address: Address,
-  wrappedAddress: Address
-) =>
-  fetchBalance({
-    address,
-    token: wrappedAddress,
-  }).then(balanceToBigNumber)
 
 export const useWrappedBalance = (address: Address) => {
-  const { data: balance } = useBalance({
+  const queryClient = useQueryClient()
+  const { data: blockNumber } = useBlockNumber({ watch: true })
+  const { data: balance, queryKey } = useBalance({
     chainId: globalConfig.network.chainId,
     address,
     token: globalConfig.network.wrappedNativeToken.address,
-    watch: true,
   })
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey })
+  }, [blockNumber, queryClient, queryKey])
 
-  return useMemo(() => balanceToBigNumber(balance), [balance])
+  return useMemo(() => balanceToBigNumber(balance?.value), [balance])
 }
 
 export const useFormatWrappedBalance = () => {

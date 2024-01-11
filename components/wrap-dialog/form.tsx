@@ -144,8 +144,8 @@ export function WrapDialogForm({
             type="submit"
             size="lg"
             className="w-full"
-            disabled={!isChainSupported || tokenAction.isLoading}
-            isLoading={tokenAction.isLoading}
+            disabled={!isChainSupported || tokenAction.isPending}
+            isLoading={tokenAction.isPending}
           >
             Convert
           </Button>

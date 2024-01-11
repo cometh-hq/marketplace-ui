@@ -15,7 +15,7 @@ export type WrapStepProps = {
 }
 
 export function WrapStep({ price, onValid }: WrapStepProps) {
-  const { mutateAsync: wrapToken, isLoading } = useWrapToken()
+  const { mutateAsync: wrapToken, isPending } = useWrapToken()
   const viewerAddress = useCurrentViewerAddress()
 
   const needsToWrap = useNeedsToWrap({
@@ -46,7 +46,7 @@ export function WrapStep({ price, onValid }: WrapStepProps) {
         {globalConfig.network.nativeToken.symbol} first.
       </p>
 
-      {isLoading ? (
+      {isPending ? (
         <ButtonLoading />
       ) : (
         <Button className="flex gap-1" onClick={onConfirm}>
