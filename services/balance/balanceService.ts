@@ -1,6 +1,5 @@
 import { wagmiConfig } from "@/providers/wagmi"
 import { getBalance, readContract } from "@wagmi/core"
-import { get } from "lodash"
 import { Address, erc20Abi } from "viem"
 
 import globalConfig from "@/config/globalConfig"

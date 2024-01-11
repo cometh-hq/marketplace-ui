@@ -1,8 +1,7 @@
 "use client"
 
 import { useCallback, useEffect } from "react"
-import { useFormatMainBalance } from "@/services/balance/main"
-import { useFormatWrappedBalance } from "@/services/balance/wrapped"
+import { useBalance } from "@/services/balance/balance"
 import { useUnwrapToken } from "@/services/exchange/unwrap-token"
 import { useWrapToken } from "@/services/exchange/wrap-token"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -60,11 +59,10 @@ export function WrapDialogForm({
   const { isChainSupported } = useCorrectNetwork()
   const wrapToken = useWrapToken()
   const unwrapToken = useUnwrapToken()
-  const balance = useFormatMainBalance()
-  const wBalance = useFormatWrappedBalance()
+  const balance = useBalance()
 
   const tokenAction = isUnwrap ? unwrapToken : wrapToken
-  const maxBalance = isUnwrap ? wBalance : balance
+  const maxBalance = isUnwrap ? balance.wrapped : balance.native
 
   useEffect(() => {
     if (tokenAction.isSuccess) onClose()
@@ -139,7 +137,7 @@ export function WrapDialogForm({
           tokenName={renderTokenName("receive")}
           name="receivedAmount"
         />
-        
+
         <SwitchNetwork>
           <Button
             type="submit"

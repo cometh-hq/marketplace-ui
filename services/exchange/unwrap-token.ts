@@ -7,8 +7,6 @@ import { IWETH__factory } from "@/lib/generated/contracts/weth/IWETH__factory"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
 
-import { handleOrderbookError } from "../errors"
-
 export type UnwrapTokenOptions = {
   amount: BigNumber
   account: Address
@@ -60,10 +58,7 @@ export const useUnwrapToken = () => {
       toast({
         variant: "destructive",
         title: "Something went wrong.",
-        description: handleOrderbookError(error, {
-          400: "Bad request",
-          500: "Internal orderbook server error",
-        }),
+        description: error.message,
       })
     },
   })
