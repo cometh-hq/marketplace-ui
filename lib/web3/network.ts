@@ -11,7 +11,7 @@ export const useCorrectNetwork = () => {
   const { onboard } = useWeb3OnboardContext()
   const [isChainSupported, setIsChainSupported] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const supportedChain = ethers.utils.hexlify(globalConfig.network.chainId)
+  const supportedChain = ethers.utils.hexValue(globalConfig.network.chainId)
   const wallet = useWallet()?.chains[0]?.id
 
   useEffect(() => {
@@ -27,6 +27,8 @@ export const useCorrectNetwork = () => {
         setIsChainSupported(currentChainId === supportedChain)
       })
 
+      console.log("onboard", onboard)
+
       return () => {
         subscribe.unsubscribe()
       }
@@ -37,13 +39,13 @@ export const useCorrectNetwork = () => {
     setIsLoading(true)
     try {
       await onboard?.setChain({ chainId: supportedChain })
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
-      // toast({
-      //   variant: "destructive",
-      //   title: "Error approving token",
-      //   description: "Cannot connect to wallet"
-      // })
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error?.message || "An error occured while switching network"
+      })
     } finally {
       setIsLoading(false)
     }
