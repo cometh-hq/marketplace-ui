@@ -1,4 +1,5 @@
 import { manifest } from "@/manifests"
+import { fetchNeedsMoreAllowance } from "@/services/allowance/needs-more-allowance"
 // import { useLoader } from "@/services/loaders"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
@@ -47,15 +48,24 @@ export const fetchRequiredBuyingSteps = async ({
 
   const price = parseUnits(_price, 18)
 
+  const displayAllowanceStep = !globalConfig.useNativeForOrders &&
+    (await fetchNeedsMoreAllowance({
+      address,
+      price,
+      contractAddress: wrappedContractAddress,
+      spender: globalConfig.network.zeroExExchange,
+    }))
+
   const displayAddFundsStep = !(
     await fetchHasSufficientFunds({
       address,
-      price
+      price,
     })
   )?.hasSufficientFunds
 
   const buyingSteps = [
     displayAddFundsStep && { value: "add-funds", label: "Add funds" },
+    displayAllowanceStep && { value: "allowance", label: "Permissions" },
     ...defaultSteps,
   ].filter(Boolean) as BuyingStep[]
 

@@ -10,6 +10,7 @@ import { Case, Switch } from "@/components/utils/Switch"
 import { BuyStep } from "../transaction-steps/buy"
 import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { FundsStep } from "../transaction-steps/funds"
+import { AllowanceStep } from "../transaction-steps/allowance"
 
 export type BuyAssetButtonProps = {
   asset: AssetWithTradeData
@@ -48,6 +49,9 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
             price={BigNumber.from(assetPrice ?? 0)}
             onValid={nextStep}
           />
+        </Case>
+        <Case value="allowance">
+          <AllowanceStep price={BigNumber.from(assetPrice ?? 0)} onValid={nextStep} />
         </Case>
         <Case value="buy">
           <BuyStep asset={asset} onValid={nextStep} setTxHash={setTxHash} />

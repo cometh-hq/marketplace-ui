@@ -12,6 +12,10 @@ export const useNFTSwapv4 = () => {
   const provider = useWalletProvider()
   const signer = useSigner()
 
+  console.warn('HEREEEEE')
+  console.warn(globalConfig.network.chainId)
+  console.warn(globalConfig.network.zeroExExchange)
+
   return useMemo(() => {
     if (!provider || !signer) return null
     return new NftSwapV4(

@@ -54,7 +54,7 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
         Looks like you don&rsquo;t have enough funds to complete this
         transaction. You are missing <Price amount={missingBalance} />. Once you
         have funded your wallet with some{" "}
-        {globalConfig.ordersDisplayCurrency.name}, please refresh your balance.
+        <strong>{globalConfig.ordersDisplayCurrency.name}</strong>, please refresh your balance.
       </p>
       <p>
         Wallet address: <strong>{viewer}</strong>

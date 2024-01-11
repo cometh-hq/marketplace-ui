@@ -19,18 +19,31 @@ export type UseHasSufficientFundsOptions = {
 
 export const fetchHasSufficientFunds = async ({
   address,
-  price
+  price,
 }: FetchHasSufficientFundsOptions) => {
-  const [mainBalance, wrappedBalance] = await Promise.all([
+  const [mainBalance, erc20Balance] = await Promise.all([
     getNativeBalance(address),
-    getOrdersERC20Balance(address)
+    getOrdersERC20Balance(address),
   ])
 
-  const hasSufficientFunds = balanceToBigNumber(mainBalance).add(wrappedBalance).gte(price ?? 0)
+  let availableFunds = balanceToBigNumber(erc20Balance)
+  if (globalConfig.useNativeForOrders) {
+    availableFunds = availableFunds.add(mainBalance)
+  }
+
+  const hasSufficientFunds = availableFunds.add(erc20Balance).gte(price ?? 0)
 
   const missingBalance = hasSufficientFunds
     ? BigNumber.from(0)
-    : price?.sub(mainBalance).add(wrappedBalance)
+    : price?.sub(availableFunds)
+
+  console.warn("fetchHasSufficientFunds", {
+    availableFunds: availableFunds.toString(),
+    erc20Balance: erc20Balance.toString(),
+    mainBalance: mainBalance.toString(),
+    hasSufficientFunds: hasSufficientFunds.toString(),
+    missingBalance: missingBalance?.toString(),
+  })
 
   return {
     hasSufficientFunds,
@@ -47,7 +60,7 @@ export const useHasSufficientFunds = ({
     queryFn: async () =>
       fetchHasSufficientFunds({
         address: address!,
-        price
+        price,
       }),
 
     enabled: !!address && !!price,

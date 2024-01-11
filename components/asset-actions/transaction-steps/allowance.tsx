@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { manifest } from "@/manifests"
-import { useWrappedTokenAllow } from "@/services/allowance/wrapped-token-allowance"
+import { useERC20Allow } from "@/services/allowance/wrapped-token-allowance"
 import { BigNumberish } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
@@ -19,7 +19,7 @@ export function AllowanceStep({
   onValid,
   refetchSteps,
 }: AllowanceStepProps) {
-  const { mutateAsync: approveToken, isPending } = useWrappedTokenAllow(price, {
+  const { mutateAsync: approveToken, isPending } = useERC20Allow(price, {
     onSuccess: () => {
       refetchSteps?.()
     },

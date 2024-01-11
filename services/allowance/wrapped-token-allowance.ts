@@ -1,7 +1,7 @@
 import { wagmiConfig } from "@/providers/wagmi"
 import { useMutation } from "@tanstack/react-query"
 import { readContract } from "@wagmi/core"
-import {  BigNumberish } from "ethers"
+import { BigNumberish } from "ethers"
 import { Address, erc20Abi } from "viem"
 
 import globalConfig from "@/config/globalConfig"
@@ -42,7 +42,7 @@ export type WrappedTokenAllowParams = {
   amount: BigNumberish
 }
 
-export const useWrappedTokenAllow = (
+export const useERC20Allow = (
   price: BigNumberish,
   options?: {
     onSuccess?: () => void
@@ -57,7 +57,7 @@ export const useWrappedTokenAllow = (
       if (!signer || !nftSwapSdk) return
       const spender = nftSwapSdk?.exchangeProxyContractAddress!
       const erc20 = ERC20__factory.connect(
-        globalConfig.network.wrappedNativeToken.address,
+        globalConfig.ordersErc20.address,
         signer
       )
       const tx = await erc20.approve(spender, price)
