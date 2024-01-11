@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import {
   fetchHasEnoughGas,
   useHasEnoughGas,
@@ -16,15 +16,19 @@ export type AddGasStepProps = {
 
 export function AddGasStep({ onValid }: AddGasStepProps) {
   const viewer = useCurrentViewerAddress()
+  const [isRefreshingBalance, setIsRefreshingBalance] = useState(false)
 
   const { data } = useHasEnoughGas(viewer)
 
   const checkBalance = async () => {
+    setIsRefreshingBalance(true)
+
     if (!viewer) return
-    const hasEnougHas = await fetchHasEnoughGas(viewer)
-    if (hasEnougHas) {
+    const { hasEnoughGas } = await fetchHasEnoughGas(viewer)
+    if (hasEnoughGas) {
       onValid()
     }
+    setIsRefreshingBalance(false)
   }
 
   useEffect(() => {
@@ -48,7 +52,9 @@ export function AddGasStep({ onValid }: AddGasStepProps) {
       <p>
         Wallet address: <strong>{viewer}</strong>
       </p>
-      <Button onClick={checkBalance}>Refresh balance</Button>
+      <Button isLoading={isRefreshingBalance} onClick={checkBalance}>
+        Refresh balance
+      </Button>
     </div>
   )
 }

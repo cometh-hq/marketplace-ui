@@ -16,6 +16,8 @@ export type FundsStepProps = {
 
 export function FundsStep({ price, onValid }: FundsStepProps) {
   const viewer = useCurrentViewerAddress()
+  const [isRefreshingBalance, setIsRefreshingBalance] = useState(false)
+
 
   const { data } = useHasSufficientFunds({
     address: viewer,
@@ -33,6 +35,7 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
   const { missingBalance } = data
 
   const checkBalance = async () => {
+    setIsRefreshingBalance(true)
     if (!viewer) return
     const { hasSufficientFunds} = await fetchHasSufficientFunds({
       address: viewer,
@@ -41,6 +44,7 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
     if (hasSufficientFunds) {
       onValid()
     }
+    setIsRefreshingBalance(false)
   }
 
   return (
