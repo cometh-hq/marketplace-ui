@@ -43,14 +43,16 @@ export function WrapStep({ price, onValid }: WrapStepProps) {
         but you do not have enough{" "}
         <strong>{globalConfig.network.wrappedNativeToken.symbol}</strong> in
         your wallet. You need to wrap some{" "}
-        {globalConfig.network.nativeToken.symbol} first.
+        {globalConfig.network.nativeToken.symbol} first as a purchase offer
+        cannot be opened with native tokens.
       </p>
 
       {isPending ? (
         <ButtonLoading />
       ) : (
         <Button className="flex gap-1" onClick={onConfirm}>
-          Wrap <Price amount={price} /> {globalConfig.network.nativeToken.symbol}
+          Wrap <Price amount={price} />{" "}
+          {globalConfig.network.nativeToken.symbol}
         </Button>
       )}
     </div>

@@ -5,6 +5,7 @@ import {
 } from "@/services/balance/has-sufficient-funds"
 import { BigNumber } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
@@ -17,7 +18,6 @@ export type FundsStepProps = {
 export function FundsStep({ price, onValid }: FundsStepProps) {
   const viewer = useCurrentViewerAddress()
   const [isRefreshingBalance, setIsRefreshingBalance] = useState(false)
-
 
   const { data } = useHasSufficientFunds({
     address: viewer,
@@ -37,7 +37,7 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
   const checkBalance = async () => {
     setIsRefreshingBalance(true)
     if (!viewer) return
-    const { hasSufficientFunds} = await fetchHasSufficientFunds({
+    const { hasSufficientFunds } = await fetchHasSufficientFunds({
       address: viewer,
       price,
     })
@@ -52,13 +52,16 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
       <h3 className="text-xl font-semibold">Top up your wallet</h3>
       <p className="text-center">
         Looks like you don&rsquo;t have enough funds to complete this
-        transaction. You are missing <Price amount={missingBalance} />. 
-        Once you have funded your wallet, please refresh your balance.
+        transaction. You are missing <Price amount={missingBalance} />. Once you
+        have funded your wallet with some{" "}
+        {globalConfig.ordersDisplayCurrency.name}, please refresh your balance.
       </p>
       <p>
         Wallet address: <strong>{viewer}</strong>
       </p>
-      <Button isLoading={isRefreshingBalance} onClick={checkBalance}>Refresh balance</Button>
+      <Button isLoading={isRefreshingBalance} onClick={checkBalance}>
+        Refresh balance
+      </Button>
     </div>
   )
 }

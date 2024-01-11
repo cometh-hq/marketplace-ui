@@ -29,11 +29,13 @@ import { TransactionDialogButton } from "@/components/dialog-button"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 import { Case, Switch } from "@/components/utils/Switch"
 
+import { AddGasStep } from "../transaction-steps/add-gas"
 import { AllowanceStep } from "../transaction-steps/allowance"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/confirm-make-buy-offer"
 import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { FundsStep } from "../transaction-steps/funds"
 import { WrapStep } from "../transaction-steps/wrap"
+import globalConfig from "@/config/globalConfig"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
@@ -85,7 +87,7 @@ export function MakeBuyOfferPriceDialog({
 
         <div className="mt-4 flex gap-4">
           <div className="flex flex-col gap-3 md:w-2/3">
-            <Label htmlFor="make-buy-offer-price">Offer price *</Label>
+            <Label htmlFor="make-buy-offer-price">Offer price in {globalConfig.ordersDisplayCurrency.symbol} *</Label>
             <Input
               id="make-buy-offer-price"
               type="number"
@@ -184,6 +186,9 @@ export function MakeBuyOfferButton({
       isDisabled={isLoading}
     >
       <Switch value={currentStep.value}>
+        <Case value="add-gas">
+          <AddGasStep onValid={nextStep} />
+        </Case>
         <Case value="add-funds">
           <FundsStep price={price} onValid={nextStep} />
         </Case>

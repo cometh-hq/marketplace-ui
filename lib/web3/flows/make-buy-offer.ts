@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { manifest } from "@/manifests"
+import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 import { fetchNeedsToWrap } from "@/services/exchange/needs-to-wrap"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
@@ -50,14 +51,25 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
   wrappedContractAddress,
   spender,
 }: FetchRequiredBuyingStepsOptions) => {
+  const { hasEnoughGas } = await fetchHasEnoughGas(address)
+  const displayAddGasStep = !hasEnoughGas && !globalConfig.useNativeForOrders
+
   const displayAddFundsStep = price
     ? !(
         await fetchHasSufficientFunds({
           address,
-          price
+          price,
         })
       )?.hasSufficientFunds
     : false
+
+  const displayWrapStep =
+    globalConfig.useNativeForOrders &&
+    (await fetchNeedsToWrap({
+      price,
+      address,
+      wrappedContractAddress,
+    }))
 
   const displaysAllowanceStep = price
     ? await fetchNeedsMoreAllowance({
@@ -68,13 +80,8 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
       })
     : false
 
-  const displayWrapStep = await fetchNeedsToWrap({
-    price,
-    address,
-    wrappedContractAddress,
-  })
-
   const makeBuyOfferSteps = [
+    displayAddGasStep && { value: "add-gas", label: "Add gas" },
     displayAddFundsStep && { value: "add-funds", label: "Add funds" },
     displayWrapStep && { value: "wrap", label: "Wrap" },
     displaysAllowanceStep && { value: "allowance", label: "Allowance" },

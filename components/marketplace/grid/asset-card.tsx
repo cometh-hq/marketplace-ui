@@ -189,7 +189,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
                     isVariantLink
                   />
                 ) : (
-                  "No offers yet"
+                  "No offer yet"
                 )}
               </div>
             </div>

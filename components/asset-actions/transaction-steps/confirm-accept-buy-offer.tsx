@@ -1,11 +1,12 @@
 import { useCallback } from "react"
 import { useAcceptBuyOffer } from "@/services/orders/accept-buy-offer"
+import { BigNumber } from "ethers"
 
 import { BuyOffer } from "@/types/buy-offers"
+import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 import { ButtonLoading } from "@/components/button-loading"
-import { BigNumber } from "ethers"
 
 export type ConfirmBuyOfferStepProps = {
   offer: BuyOffer
@@ -18,7 +19,11 @@ export function ConfirmAcceptBuyOfferStep({
   onValid,
   setTxHash,
 }: ConfirmBuyOfferStepProps) {
-  const { mutateAsync: acceptBuyOffer, isPending, isError } = useAcceptBuyOffer()
+  const {
+    mutateAsync: acceptBuyOffer,
+    isPending,
+    isError,
+  } = useAcceptBuyOffer()
 
   const onConfirm = useCallback(async () => {
     const tx = await acceptBuyOffer({ offer })
@@ -34,7 +39,9 @@ export function ConfirmAcceptBuyOfferStep({
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Summary</h3>
       <p className="text-center">
-        You are about to accept an offer for <br />this asset for <Price size="default" amount={amountWithFees} /> (fees included)
+        You are about to accept an offer for <br />
+        this asset for <Price size="default" amount={amountWithFees} />{" "}
+        {globalConfig.ordersDisplayCurrency.symbol} (fees included)
       </p>
       {isPending ? (
         <ButtonLoading />

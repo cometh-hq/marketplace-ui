@@ -70,8 +70,16 @@ export const useBuildOfferOrder = ({
         type: "ERC721",
       }
 
+      const tokenAddress =
+        tradeDirection === TradeDirection.SELL
+          ? globalConfig.ordersTokenAddress
+          : globalConfig.ordersErc20.address
+
+      console.warn(tokenAddress)
+      console.warn(tokenAddress)
+      console.warn(tokenAddress)
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
-        tokenAddress: globalConfig.ordersTokenAddress,
+        tokenAddress,
         amount: price.sub(totalFeesFromCollection(fees)).toString(),
         type: "ERC20",
       }

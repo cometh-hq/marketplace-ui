@@ -3,8 +3,6 @@ import {
   fetchHasEnoughGas,
   useHasEnoughGas,
 } from "@/services/balance/has-enough-gas"
-import { useHasSufficientFunds } from "@/services/balance/has-sufficient-funds"
-import { BigNumber } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"

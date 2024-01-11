@@ -26,14 +26,14 @@ export const useBuyAsset = () => {
 
       const order = await getFirstListing(asset.tokenId)
 
-      const signature = order.signature || {
+      const signature = {...order.signature} || {
         signatureType: 4,
         v: 0,
         r: "0x0000000000000000000000000000000000000000000000000000000000000000",
         s: "0x0000000000000000000000000000000000000000000000000000000000000000",
       }
 
-      const fillTx: ContractTransaction = await nftSwapSdk.fillSignedOrder({
+      const formattedZeroXOrder = {
         direction: 0,
         maker: order.maker,
         taker: order.taker,
@@ -52,7 +52,13 @@ export const useBuyAsset = () => {
         erc721TokenId: order.tokenId,
         erc721TokenProperties: [],
         signature: signature,
-      })
+      }
+
+      console.warn('formattedZeroXOrder', formattedZeroXOrder)
+
+      const fillTx: ContractTransaction = await nftSwapSdk.fillSignedOrder(
+        formattedZeroXOrder
+      )
 
       const fillTxReceipt = await fillTx.wait()
       console.log(
@@ -62,7 +68,9 @@ export const useBuyAsset = () => {
     },
 
     onSuccess: (_, { asset }) => {
-      client.invalidateQueries({queryKey: ["cometh", "assets", asset.tokenId]})
+      client.invalidateQueries({
+        queryKey: ["cometh", "assets", asset.tokenId],
+      })
       toast({
         title: "NFT bought!",
       })
