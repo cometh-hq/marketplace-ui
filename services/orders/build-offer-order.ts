@@ -71,8 +71,7 @@ export const useBuildOfferOrder = ({
       }
 
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
-        tokenAddress: globalConfig.network.wrappedNativeToken.address,
-        // tokenAddress: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        tokenAddress: globalConfig.ordersTokenAddress,
         amount: price.sub(totalFeesFromCollection(fees)).toString(),
         type: "ERC20",
       }
