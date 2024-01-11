@@ -16,6 +16,7 @@ export const useWrappedBalance = (address: Address) => {
     address,
     token: globalConfig.network.wrappedNativeToken.address,
   })
+  
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey })
   }, [blockNumber, queryClient, queryKey])

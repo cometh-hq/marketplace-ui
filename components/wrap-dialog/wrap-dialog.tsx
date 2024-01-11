@@ -1,4 +1,3 @@
-import { manifest } from "@/manifests"
 import {
   Dialog,
   DialogContent,
@@ -6,8 +5,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../components/ui/dialog"
-import { WrapDialogForm } from "./form"
+} from "../ui/dialog"
+import { WrapDialogForm } from "./wrap-dialog-form"
 import { Separator } from "../ui/separator"
 import globalConfig from "@/config/globalConfig"
 
@@ -39,8 +38,8 @@ export function WrapDialog({
         </DialogHeader>
         <DialogDescription>
           <p className="font-medium">
-            Easily convert your {globalConfig.network.nativeToken.symbol} in one click. <br />
-            This allows you to use your {globalConfig.network.nativeToken.symbol} across various platforms more efficiently.
+            Easily convert your tokens in one click. <br />
+            This allows you to use your {globalConfig.network.nativeToken.name} across various platforms more efficiently.
           </p>
         </DialogDescription>
         <Separator />

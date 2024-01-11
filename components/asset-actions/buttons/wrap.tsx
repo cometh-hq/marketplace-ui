@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
-import { WrapDialog } from "@/components/wrap-dialog"
+import { WrapDialog } from "@/components/wrap-dialog/wrap-dialog"
 
 type WrapButtonProps = {
   isUnwrap?: boolean
