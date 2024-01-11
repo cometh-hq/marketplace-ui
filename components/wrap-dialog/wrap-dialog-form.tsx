@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { useFormatMainBalance } from "@/services/balance/main"
 import { useFormatWrappedBalance } from "@/services/balance/wrapped"
 import { useUnwrapToken } from "@/services/exchange/unwrap-token"
@@ -23,12 +23,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 import { SwitchNetwork } from "../asset-actions/buttons/switch-network"
 
@@ -39,12 +33,23 @@ export type WrapDialogFormProps = {
 }
 
 type TokenInputFieldProps = {
-  label: string
+  label: React.ReactNode
   placeholder?: string
   value?: string
   disabled?: boolean
   tokenName: string
   useFieldProps?: boolean
+}
+
+const tokenNames = {
+  send: {
+    wrap: globalConfig.network.nativeToken.symbol,
+    unwrap: globalConfig.network.wrappedNativeToken.symbol,
+  },
+  receive: {
+    wrap: globalConfig.network.wrappedNativeToken.symbol,
+    unwrap: globalConfig.network.nativeToken.symbol,
+  },
 }
 
 export function WrapDialogForm({
@@ -82,19 +87,20 @@ export function WrapDialogForm({
 
   const receivedAmount = form.watch("amount")
 
-  const handleSubmitForm = async (values: { amount: string }) => {
-    const parsedAmount = parseUnits(values.amount, 18)
-    tokenAction.mutate({ amount: parsedAmount })
-  }
+  const handleSubmitForm = useCallback(
+    async (values: { amount: string }) => {
+      const parsedAmount = parseUnits(values.amount, 18)
+      tokenAction.mutate({ amount: parsedAmount })
+    },
+    [tokenAction]
+  )
 
-  const renderTokenName = (isMain = true) => {
-    return isMain
-      ? isUnwrap
-        ? globalConfig.network.wrappedNativeToken.name
-        : globalConfig.network.nativeToken.name
-      : isUnwrap
-      ? globalConfig.network.nativeToken.name
-      : globalConfig.network.wrappedNativeToken.name
+  const handleToggleMode = useCallback(() => {
+    onToggleMode && onToggleMode()
+  }, [onToggleMode])
+
+  const renderTokenName = (field: "send" | "receive") => {
+    return tokenNames[field][isUnwrap ? "unwrap" : "wrap"]
   }
 
   return (
@@ -104,41 +110,36 @@ export function WrapDialogForm({
         className="space-y-6"
       >
         <TokenInputField
-          label={`You send some ${renderTokenName()} to convert (max: ${maxBalance})`}
+          label={
+            <>
+              {<b>You send</b>} (Max amount is {maxBalance}{" "}
+              {renderTokenName("send")})
+            </>
+          }
           placeholder="Enter an amount"
-          tokenName={renderTokenName()}
+          tokenName={renderTokenName("send")}
           name="amount"
         />
 
         <div className="flex flex-col items-center">
-          <TooltipProvider delayDuration={200}>
-            <Tooltip defaultOpen={false}>
-              <TooltipTrigger asChild>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={onToggleMode}
-                >
-                  <ArrowDownUp size="16" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="text-sm font-semibold">
-                  Switch to {isUnwrap ? "Wrap" : "Unwrap"}
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={handleToggleMode}
+          >
+            <ArrowDownUp size="16" />
+          </Button>
         </div>
 
         <TokenInputField
-          label={`You receive some ${renderTokenName(false)}`}
+          label={<b>You receive</b>}
           value={receivedAmount}
           disabled={true}
-          tokenName={renderTokenName(false)}
+          tokenName={renderTokenName("receive")}
           name="receivedAmount"
         />
+        
         <SwitchNetwork>
           <Button
             type="submit"
