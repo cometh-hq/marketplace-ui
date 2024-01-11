@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import {
   fetchHasSufficientFunds,
   useHasSufficientFunds,
@@ -58,7 +58,7 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
       <p>
         Wallet address: <strong>{viewer}</strong>
       </p>
-      <Button onClick={checkBalance}>Refresh balance</Button>
+      <Button isLoading={isRefreshingBalance} onClick={checkBalance}>Refresh balance</Button>
     </div>
   )
 }
