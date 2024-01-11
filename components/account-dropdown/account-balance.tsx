@@ -1,7 +1,6 @@
 import { useState } from "react"
 import Image from "next/image"
-import { useFormatMainBalance } from "@/services/balance/main"
-import { useFormatWrappedBalance } from "@/services/balance/wrapped"
+import { useBalance } from "@/services/balance/balance"
 
 import { env } from "@/config/env"
 import globalConfig from "@/config/globalConfig"
@@ -10,28 +9,24 @@ import { Separator } from "@/components/ui/separator"
 import { WrapButton } from "../asset-actions/buttons/wrap"
 
 export function AccountBalance() {
-  const balance = useFormatMainBalance()
-  const wBalance = useFormatWrappedBalance()
-
+  const balance = useBalance()
   const [isUnwrap, setIsUnwrap] = useState(false)
-  console.log("globalConfig.ordersErc20", globalConfig.ordersErc20)
+
   return (
     <div>
       <div className="mb-3 space-y-3 rounded-md border border-border p-3">
         <div className="flex flex-col gap-2">
           <AccountBalanceLine
-            balance={balance}
-            currency={globalConfig.ordersDisplayCurrency.symbol}
+            balance={balance.native}
+            currency={globalConfig.network.nativeToken.symbol}
           />
-          {globalConfig.useNativeForOrders && (
-            <>
-              <Separator />
-              <AccountBalanceLine
-                balance={wBalance}
-                currency={globalConfig.ordersErc20.symbol}
-              />
-            </>
-          )}
+          <Separator />
+          <AccountBalanceLine
+            balance={
+              globalConfig.useNativeForOrders ? balance.wrapped : balance.ERC20
+            }
+            currency={globalConfig.ordersErc20.symbol}
+          />
         </div>
       </div>
 

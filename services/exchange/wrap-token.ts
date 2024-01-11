@@ -61,7 +61,6 @@ export const useWrapToken = () => {
       })
     },
     onError: (error: Error) => {
-      console.error(error)
       toast({
         variant: "destructive",
         title: "Something went wrong.",
