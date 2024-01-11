@@ -1,3 +1,4 @@
+import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 import {
   AssetWithTradeData,
   SearchAssetWithTradeData,
@@ -38,6 +39,8 @@ export const fetchRequiredSellingSteps = async ({
   address,
   nftSwapSdk,
 }: FetchRequiredSellingStepsOptions) => {
+  const { hasEnoughGas } = await fetchHasEnoughGas(address)
+
   const hasApprovedCollection = await fetchHasApprovedCollection({
     address,
     tokenId: asset.tokenId,
@@ -46,6 +49,7 @@ export const fetchRequiredSellingSteps = async ({
   })
 
   const sellingSteps = [
+    !hasEnoughGas && { value: "add-gas", label: "Add gas" },
     !hasApprovedCollection && { value: "token-approval", label: "Permissions" },
     ...defaultSteps,
   ].filter(Boolean) as SellingStep[]

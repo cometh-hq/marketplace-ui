@@ -50,8 +50,7 @@ export const fetchRequiredBuyingSteps = async ({
   const displayAddFundsStep = !(
     await fetchHasSufficientFunds({
       address,
-      price,
-      wrappedContractAddress,
+      price
     })
   )?.hasSufficientFunds
 

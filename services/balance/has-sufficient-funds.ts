@@ -10,7 +10,6 @@ import { balanceToBigNumber } from "./format"
 export type FetchHasSufficientFundsOptions = {
   address: Address
   price?: BigNumber | null
-  wrappedContractAddress: Address
 }
 
 export type UseHasSufficientFundsOptions = {
@@ -20,8 +19,7 @@ export type UseHasSufficientFundsOptions = {
 
 export const fetchHasSufficientFunds = async ({
   address,
-  price,
-  wrappedContractAddress,
+  price
 }: FetchHasSufficientFundsOptions) => {
   const [mainBalance, wrappedBalance] = await Promise.all([
     getNativeBalance(address),
@@ -49,8 +47,7 @@ export const useHasSufficientFunds = ({
     queryFn: async () =>
       fetchHasSufficientFunds({
         address: address!,
-        price,
-        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
+        price
       }),
 
     enabled: !!address && !!price,

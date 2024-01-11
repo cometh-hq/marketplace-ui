@@ -26,8 +26,7 @@ export const fetchNeedsToWrap = async ({
 }: FetchNeedsToWrapOptions): Promise<boolean> => {
   const hasSufficientFunds = await fetchHasSufficientFunds({
     address,
-    price,
-    wrappedContractAddress,
+    price
   })
   if (!hasSufficientFunds) return false
 

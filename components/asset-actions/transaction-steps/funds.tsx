@@ -1,5 +1,8 @@
 import { useEffect } from "react"
-import { useHasSufficientFunds } from "@/services/balance/has-sufficient-funds"
+import {
+  fetchHasSufficientFunds,
+  useHasSufficientFunds,
+} from "@/services/balance/has-sufficient-funds"
 import { BigNumber } from "ethers"
 
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
@@ -29,16 +32,29 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
 
   const { missingBalance } = data
 
+  const checkBalance = async () => {
+    if (!viewer) return
+    const { hasSufficientFunds} = await fetchHasSufficientFunds({
+      address: viewer,
+      price,
+    })
+    if (hasSufficientFunds) {
+      onValid()
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Top up your wallet</h3>
       <p className="text-center">
         Looks like you don&rsquo;t have enough funds to complete this
-        transaction.
+        transaction. You are missing <Price amount={missingBalance} />. 
+        Once you have funded your wallet, please refresh your balance.
       </p>
-      <Button onClick={onValid}>
-        Add <Price amount={missingBalance} />
-      </Button>
+      <p>
+        Wallet address: <strong>{viewer}</strong>
+      </p>
+      <Button onClick={checkBalance}>Refresh balance</Button>
     </div>
   )
 }

@@ -19,7 +19,7 @@ const manifest: Manifest = {
 
   chainId: env.NEXT_PUBLIC_NETWORK_ID || 137,
 
-  useNativeTokenForOrders: true,
+  useNativeTokenForOrders: false,
   erc20: {
     name: "Test coin",
     symbol: "TCOIN",

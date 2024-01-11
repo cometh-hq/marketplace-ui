@@ -54,8 +54,7 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
     ? !(
         await fetchHasSufficientFunds({
           address,
-          price,
-          wrappedContractAddress,
+          price
         })
       )?.hasSufficientFunds
     : false

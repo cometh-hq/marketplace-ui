@@ -17,6 +17,7 @@ import {
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
 import { SwitchNetwork } from "../buttons/switch-network"
+import globalConfig from "@/config/globalConfig"
 
 export type SellStepProps = {
   asset: AssetWithTradeData
@@ -62,7 +63,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
 
       <div className="mt-4 flex w-full gap-4">
         <div className="flex flex-col gap-3 sm:w-2/3">
-          <Label htmlFor="selling-price">Selling price</Label>
+          <Label htmlFor="selling-price">Selling price in {globalConfig.ordersErc20.symbol}</Label>
           <Input
             value={price}
             onChange={(e) => setPrice(e.target.value)}

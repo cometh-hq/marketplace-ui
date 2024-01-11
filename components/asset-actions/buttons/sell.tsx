@@ -9,6 +9,7 @@ import { CollectionApprovalStep } from "../transaction-steps/collection-approval
 import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { SellStep } from "../transaction-steps/sell"
 import { cn } from "@/lib/utils/utils"
+import { AddGasStep } from "../transaction-steps/add-gas"
 
 export type SellAssetButtonProps = {
   asset: AssetWithTradeData
@@ -40,6 +41,9 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
       isVariantLink={isVariantLink}
     >
       <Switch value={currentStep.value}>
+        <Case value="add-gas">
+          <AddGasStep onValid={nextStep} />
+        </Case>
         <Case value="token-approval">
           <CollectionApprovalStep asset={asset} onValid={nextStep} />
         </Case>
