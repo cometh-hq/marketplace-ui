@@ -8,7 +8,7 @@ import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { handleOrderbookError } from "../errors"
-import { useBuildBuyOfferOrder } from "./build-buy-offer-order"
+import { useBuildOfferOrder } from "./build-offer-order"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -18,7 +18,9 @@ export type MakeBuyOfferOptions = {
 
 export const useMakeBuyOfferAsset = () => {
   const client = useQueryClient()
-  const buildSignBuyOfferOrder = useBuildBuyOfferOrder()
+  const buildSignBuyOfferOrder = useBuildOfferOrder({
+    tradeDirection: TradeDirection.BUY,
+  })
   const signer = useSigner()
   const { data: collection } = useGetCollection()
 

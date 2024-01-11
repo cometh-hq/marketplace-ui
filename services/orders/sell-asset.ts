@@ -7,7 +7,7 @@ import { toast } from "@/components/ui/toast/use-toast"
 import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
-import { useBuildSellOrder } from "./build-sell-order"
+import { useBuildOfferOrder } from "./build-offer-order"
 
 export type SellAssetOptions = {
   asset: AssetWithTradeData
@@ -16,7 +16,9 @@ export type SellAssetOptions = {
 }
 
 export const useSellAsset = () => {
-  const buildSignSellOrder = useBuildSellOrder()
+  const buildSignSellOrder = useBuildOfferOrder({
+    tradeDirection: TradeDirection.SELL,
+  })
   const client = useQueryClient()
   const signer = useSigner()
   const { data: collection } = useGetCollection()
@@ -40,8 +42,10 @@ export const useSellAsset = () => {
     },
 
     onSuccess: (_, { asset }) => {
-      client.invalidateQueries({ queryKey: ["cometh", "search"]}) // TODO: optimize this, just invalidate current asset
-      client.invalidateQueries({ queryKey: ["cometh", "assets", asset.tokenId]})
+      client.invalidateQueries({ queryKey: ["cometh", "search"] }) // TODO: optimize this, just invalidate current asset
+      client.invalidateQueries({
+        queryKey: ["cometh", "assets", asset.tokenId],
+      })
       toast({
         title: "Your asset is now listed for sale.",
       })

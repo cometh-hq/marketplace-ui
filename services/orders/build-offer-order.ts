@@ -3,6 +3,7 @@ import {
   AssetWithTradeData,
   Collection,
   CollectionFees,
+  TradeDirection,
 } from "@cometh/marketplace-sdk"
 import {
   UserFacingERC20AssetDataSerializedV4,
@@ -21,18 +22,23 @@ import {
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
-export type BuildBuyOfferOrderOptions = {
+export type BuildOfferOrderOptions = {
   asset: AssetWithTradeData
   price: BigNumber
   validity: string
   collection: Collection & { collectionFees: CollectionFees }
 }
-export const useBuildBuyOfferOrder = () => {
+
+export const useBuildOfferOrder = ({
+  tradeDirection,
+}: {
+  tradeDirection: TradeDirection
+}) => {
   const viewer = useCurrentViewerAddress()
   const nftSwapSdk = useNFTSwapv4()
 
   return useCallback(
-    ({ asset, price, validity, collection }: BuildBuyOfferOrderOptions) => {
+    ({ asset, price, validity, collection }: BuildOfferOrderOptions) => {
       if (!nftSwapSdk || !viewer || !collection.collectionFees) return null
 
       const expiry = DateTime.now()
@@ -66,6 +72,7 @@ export const useBuildBuyOfferOrder = () => {
 
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
         tokenAddress: globalConfig.network.wrappedNativeToken.address,
+        // tokenAddress: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         amount: price.sub(totalFeesFromCollection(fees)).toString(),
         type: "ERC20",
       }
@@ -73,7 +80,7 @@ export const useBuildBuyOfferOrder = () => {
       return nftSwapSdk.buildNftAndErc20Order(
         erc721Asset,
         erc20Asset,
-        "buy",
+        tradeDirection,
         viewer,
         {
           fees,
