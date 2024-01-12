@@ -76,7 +76,11 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
             />
           </span>
         )}
-        {`${formattedAmount}${!hideSymbol || !hideIcon ? ` ${globalConfig.ordersDisplayCurrency.symbol}` : ''}`}
+        {`${formattedAmount}${
+          !hideSymbol || !globalConfig.ordersDisplayCurrency.thumb
+            ? ` ${globalConfig.ordersDisplayCurrency.symbol}`
+            : ""
+        }`}
       </span>
     )
   }
