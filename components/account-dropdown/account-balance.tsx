@@ -63,8 +63,8 @@ export function AccountBalanceLine({
           <Image
             src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${logoSrc}`}
             alt=""
-            width={24}
-            height={24}
+            width={20}
+            height={20}
           />
         </div>
       )}
