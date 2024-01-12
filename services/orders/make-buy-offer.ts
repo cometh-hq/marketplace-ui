@@ -31,9 +31,6 @@ export const useMakeBuyOfferAsset = () => {
     mutationFn: async ({ asset, price, validity }: MakeBuyOfferOptions) => {
       if (!collection) throw new Error("Could not get collection")
 
-      console.log("asset in make-buy-offer-asset", asset)
-      console.log("price in make-buy-offer-asset", price)
-
       const order = buildSignBuyOfferOrder({
         asset,
         price,
@@ -41,7 +38,6 @@ export const useMakeBuyOfferAsset = () => {
         collection,
       })
 
-      console.log("order in make-buy-offer-asset", order)
       if (!order) throw new Error("Could not build order")
 
       return await getWalletTxs()?.makeBuyOffer({
@@ -52,7 +48,6 @@ export const useMakeBuyOfferAsset = () => {
     },
 
     onSuccess: (_, { asset }) => {
-      console.log("asset in make-buy-offer-asset", asset)
       client.invalidateQueries({ queryKey: ["cometh", "search"] }) // TODO: optimize this, just invalidate current asset
       client.invalidateQueries({
         queryKey: ["cometh", "assets", asset.tokenId],

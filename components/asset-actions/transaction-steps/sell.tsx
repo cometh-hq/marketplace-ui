@@ -38,8 +38,6 @@ export function SellStep({ asset, onValid }: SellStepProps) {
   const bnPrice = useMemo(() => {
     try {
       const parsedPrice = parseUnits(price, 18)
-      console.log("price in SellStep", price)
-      console.log("parsedPrice in SellStep", parsedPrice)
       return { price: parsedPrice, validity }
     } catch (e) {
       return null

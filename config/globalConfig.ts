@@ -10,12 +10,17 @@ type GlobalConfig = {
     name: string
     symbol: string
     address: Address
+    thumb?: string | {
+      native: string
+      wrapped: string
+    }
   }
   ordersTokenAddress: Address
   network: NetworkConfig
   ordersDisplayCurrency: {
     name: string
     symbol: string
+    thumb?: string
   }
 }
 
@@ -39,6 +44,7 @@ const rawOrdersErc20 =
   !useNativeTokenForOrders && manifest.erc20 !== null
     ? manifest.erc20
     : network.wrappedNativeToken
+
 const ordersErc20 = {
   ...rawOrdersErc20,
   address: rawOrdersErc20.address as Address,
@@ -47,10 +53,12 @@ const ordersErc20 = {
 const ordersDisplayCurrency = {
   name: ordersErc20.name,
   symbol: ordersErc20.symbol,
+  thumb: ordersErc20.thumb,
 }
 if (useNativeTokenForOrders) {
   ordersDisplayCurrency.name = network.nativeToken.name
   ordersDisplayCurrency.symbol = network.nativeToken.symbol
+  ordersDisplayCurrency.thumb = network.nativeToken.thumb
 }
 
 const globalConfig: GlobalConfig = {
@@ -59,7 +67,8 @@ const globalConfig: GlobalConfig = {
   ordersErc20: {
     name: ordersErc20.name,
     symbol: ordersErc20.symbol,
-    address: ordersErc20.address
+    address: ordersErc20.address,
+    thumb: ordersErc20.thumb,
   },
   ordersTokenAddress: useNativeTokenForOrders
     ? NATIVE_TOKEN_ADDRESS_AS_ERC20

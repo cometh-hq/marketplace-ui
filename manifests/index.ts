@@ -19,11 +19,13 @@ const manifest: Manifest = {
 
   chainId: env.NEXT_PUBLIC_NETWORK_ID || 137,
 
-  useNativeTokenForOrders: false,
+  useNativeTokenForOrders: true,
   erc20: {
     name: "My Token",
     symbol: "MTK",
     address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
+    // put your logo in the '/public/tokens' folder and update the following line (example: "mytoken.png")
+    thumb: "", 
   },
   rpcUrl: env.NEXT_PUBLIC_RPC_URL
 }

@@ -11,14 +11,14 @@ import { WrapButton } from "../asset-actions/buttons/wrap"
 export function AccountBalance() {
   const balance = useBalance()
   const [isUnwrap, setIsUnwrap] = useState(false)
-
   return (
-    <div>
+    <>
       <div className="mb-3 space-y-3 rounded-md border border-border p-3">
         <div className="flex flex-col gap-2">
           <AccountBalanceLine
             balance={balance.native}
             currency={globalConfig.network.nativeToken.symbol}
+            logo={globalConfig.network.nativeToken.thumb}
           />
           <Separator />
           <AccountBalanceLine
@@ -26,6 +26,7 @@ export function AccountBalance() {
               globalConfig.useNativeForOrders ? balance.wrapped : balance.ERC20
             }
             currency={globalConfig.ordersErc20.symbol}
+            logo={globalConfig.ordersErc20.thumb}
           />
         </div>
       </div>
@@ -38,29 +39,38 @@ export function AccountBalance() {
           />
         </div>
       )}
-    </div>
+    </>
   )
 }
 
 type AccountBalanceLineProps = {
   balance: string
   currency: string
+  logo?: string | { native: string; wrapped: string }
 }
 
 export function AccountBalanceLine({
   balance,
   currency,
+  logo,
 }: AccountBalanceLineProps) {
+  const logoSrc = typeof logo === 'string' ? logo : logo?.native || logo?.wrapped;
+
   return (
-    <div className="text-[15px] font-semibold">
-      <Image
-        src={`${env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
-        alt=""
-        width={24}
-        height={24}
-        className="inline-block"
-      />
-      {balance} {currency}
+    <div className="inline-flex items-center gap-1.5">
+      {logo && (
+        <div className="rounded-full bg-secondary">
+          <Image
+            src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${logoSrc}`}
+            alt=""
+            width={24}
+            height={24}
+          />
+        </div>
+      )}
+      <span className="text-[15px] font-semibold">
+        {balance} {currency}
+      </span>
     </div>
   )
 }

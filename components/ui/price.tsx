@@ -4,9 +4,9 @@ import { VariantProps, cva, cx } from "class-variance-authority"
 import { BigNumberish } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
 
-import { cn } from "@/lib/utils/utils"
-
 import { env } from "@/config/env"
+import globalConfig from "@/config/globalConfig"
+import { cn } from "@/lib/utils/utils"
 
 const priceTriggerVariants = cva("font-bold", {
   variants: {
@@ -57,13 +57,13 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
     return (
       <span
         ref={ref}
-        className="relative inline-flex items-center align-middle"
+        className="relative inline-flex items-center gap-x-1.5 align-middle"
       >
-        {!hideIcon && (
-          <span className={cn("relative ", iconVariants({ size }))}>
+        {!hideIcon && globalConfig.ordersDisplayCurrency.thumb && (
+          <span className={cn("relative", iconVariants({ size }))}>
             <Image
-              src={`${env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
-              alt={formattedAmount.toString()}
+              src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${globalConfig.ordersDisplayCurrency.thumb}`}
+              alt={formattedAmount}
               fill
             />
           </span>
