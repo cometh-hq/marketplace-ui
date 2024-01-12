@@ -11,6 +11,7 @@ import { AllowanceStep } from "../transaction-steps/allowance"
 import { BuyStep } from "../transaction-steps/buy"
 import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { FundsStep } from "../transaction-steps/funds"
+import { AddGasStep } from "../transaction-steps/add-gas"
 
 export type BuyAssetButtonProps = {
   asset: AssetWithTradeData
@@ -41,6 +42,9 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
       isLoading={isLoading}
     >
       <Switch value={currentStep.value}>
+        <Case value="add-gas">
+          <AddGasStep onValid={nextStep} />
+        </Case>
         <Case value="add-funds">
           <FundsStep
             price={BigNumber.from(assetPrice ?? 0)}
