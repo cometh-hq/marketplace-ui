@@ -11,6 +11,7 @@ import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
 import { useCurrentViewerAddress } from "../auth"
+import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 
 export type UseRequiredBuyingStepsOptions = {
   asset: AssetWithTradeData
@@ -63,7 +64,12 @@ export const fetchRequiredBuyingSteps = async ({
     })
   )?.hasSufficientFunds
 
+
+  const { hasEnoughGas } = await fetchHasEnoughGas(address)
+  const displayAddGasStep = !hasEnoughGas && !globalConfig.useNativeForOrders
+
   const buyingSteps = [
+    displayAddGasStep && { value: "add-gas", label: "Add gas" },
     displayAddFundsStep && { value: "add-funds", label: "Add funds" },
     displayAllowanceStep && { value: "allowance", label: "Permissions" },
     ...defaultSteps,

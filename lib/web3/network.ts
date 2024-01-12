@@ -24,6 +24,10 @@ export const useCorrectNetwork = () => {
       const subscribe = wallets.subscribe((wallet) => {
         const currentChainId =
           wallet && wallet[0] ? wallet[0].chains[0].id : null
+          console.warn("currentChainId", currentChainId)
+          console.warn("supportedChain", supportedChain)
+          console.warn("config chainid", globalConfig.network.chainId)
+
         setIsChainSupported(currentChainId === supportedChain)
       })
 

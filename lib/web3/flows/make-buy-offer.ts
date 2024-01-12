@@ -75,7 +75,7 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
     ? await fetchNeedsMoreAllowance({
         address,
         price,
-        contractAddress: wrappedContractAddress,
+        contractAddress: globalConfig.ordersErc20.address,
         spender,
       })
     : false

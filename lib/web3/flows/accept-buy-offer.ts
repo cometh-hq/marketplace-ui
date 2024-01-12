@@ -7,6 +7,7 @@ import { useStepper } from "@/lib/utils/stepper"
 import { fetchHasApprovedCollection } from "../../../services/token-approval/has-approved-collection"
 import { useCurrentViewerAddress } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
+import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 
 export type UseRequiredSellingStepsOptions = {
   offer: BuyOffer
@@ -38,6 +39,8 @@ export const fetchRequiredAcceptBuyOfferSteps = async ({
   address,
   nftSwapSdk,
 }: FetchRequiredSellingStepsOptions) => {
+  const { hasEnoughGas } = await fetchHasEnoughGas(address)
+
   const hasApprovedCollection = await fetchHasApprovedCollection({
     address,
     tokenId: offer.asset?.tokenId ?? offer.trade.tokenId,
@@ -48,6 +51,7 @@ export const fetchRequiredAcceptBuyOfferSteps = async ({
   })
 
   const sellingSteps = [
+    !hasEnoughGas && { value: "add-gas", label: "Add gas" },
     !hasApprovedCollection && { value: "token-approval", label: "Permissions" },
     ...defaultSteps,
   ].filter(Boolean) as AcceptBuyOfferStep[]

@@ -8,6 +8,7 @@ import { CollectionApprovalStep } from "../transaction-steps/collection-approval
 import { ConfirmAcceptBuyOfferStep } from "../transaction-steps/confirm-accept-buy-offer"
 import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { useState } from "react"
+import { AddGasStep } from "../transaction-steps/add-gas"
 
 export type AcceptBuyOfferButtonProps = {
   offer: BuyOffer
@@ -31,6 +32,9 @@ export function AcceptBuyOfferButton({ offer }: AcceptBuyOfferButtonProps) {
       isVariantLink={true}
     >
       <Switch value={currentStep.value}>
+        <Case value="add-gas">
+          <AddGasStep onValid={nextStep} />
+        </Case>
         <Case value="token-approval">
           <CollectionApprovalStep asset={offer.asset! || offer.trade} onValid={nextStep} />
         </Case>

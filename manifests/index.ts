@@ -21,8 +21,8 @@ const manifest: Manifest = {
 
   useNativeTokenForOrders: false,
   erc20: {
-    name: "Test coin",
-    symbol: "TCOIN",
+    name: "My Token",
+    symbol: "MTK",
     address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
   },
   rpcUrl: env.NEXT_PUBLIC_RPC_URL
