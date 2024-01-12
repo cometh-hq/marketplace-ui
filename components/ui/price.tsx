@@ -43,12 +43,13 @@ export type PriceTriggerVariants = VariantProps<typeof priceTriggerVariants>
 export type PriceTriggerProps = {
   formattedAmount: string
   hideIcon?: boolean
-  hideSymbol?: boolean
   className?: string
 } & PriceTriggerVariants
 
+console.log("globalConfig.ordersDisplayCurrency", globalConfig.ordersDisplayCurrency);
+
 const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
-  ({ formattedAmount, size, variant, hideIcon = false, hideSymbol = false, className }, ref) => {
+  ({ formattedAmount, size, variant, hideIcon = false, className }, ref) => {
     return (
       <span
         ref={ref}
@@ -57,7 +58,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
           priceTriggerVariants({ size, variant, className })
         )}
       >
-        {formattedAmount} {!hideSymbol && (globalConfig.ordersDisplayCurrency.symbol)}
+        {formattedAmount}
         {!hideIcon && globalConfig.ordersDisplayCurrency.thumb && (
           <span className={cn("relative", iconVariants({ size }))}>
             <Image

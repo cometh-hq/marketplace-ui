@@ -166,7 +166,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
                 Price
               </div>
               {asset.orderbookStats.lowestSalePrice ? (
-                <Price amount={asset.orderbookStats.lowestSalePrice} hideSymbol />
+                <Price amount={asset.orderbookStats.lowestSalePrice} />
               ) : owner ? (
                 <SellAssetButton
                   asset={asset as unknown as AssetWithTradeData}
@@ -182,7 +182,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
               </div>
               <div className="text-end">
                 {asset.orderbookStats.highestOfferPrice ? (
-                  <Price amount={asset.orderbookStats.highestOfferPrice} hideSymbol />
+                  <Price amount={asset.orderbookStats.highestOfferPrice} />
                 ) : !owner ? (
                   <MakeBuyOfferButton
                     asset={asset as unknown as AssetWithTradeData}
