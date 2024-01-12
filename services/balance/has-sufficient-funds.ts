@@ -31,7 +31,7 @@ export const fetchHasSufficientFunds = async ({
     availableFunds = availableFunds.add(mainBalance)
   }
 
-  const hasSufficientFunds = availableFunds.add(erc20Balance).gte(price ?? 0)
+  const hasSufficientFunds = availableFunds.gte(price ?? 0)
 
   const missingBalance = hasSufficientFunds
     ? BigNumber.from(0)
