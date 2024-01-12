@@ -35,7 +35,7 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
     <TransactionDialogButton
       label={
         <>
-          Buy now for <Price amount={asset.orderbookStats.lowestSalePrice} />
+          Buy now for&nbsp;<Price amount={asset.orderbookStats.lowestSalePrice} />
         </>
       }
       currentStep={currentStep}
