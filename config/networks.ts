@@ -15,11 +15,13 @@ export type NetworkConfig = {
     name: string
     symbol: string
     decimals: number
+    thumb?: string
   }
   wrappedNativeToken: {
     name: string
     symbol: string
     address: Address
+    thumb?: string
   }
   zeroExExchange: Address
 }
@@ -263,11 +265,17 @@ const NETWORKS: Record<number, NetworkConfig> = {
       url: "https://mumbai.polygonscan.com/",
       standard: "EIP3091",
     },
-    nativeToken: { name: "Matic", symbol: "tMATIC", decimals: 18 },
+    nativeToken: {
+      name: "Matic",
+      symbol: "tMATIC",
+      decimals: 18,
+      thumb: "matic.png",
+    },
     wrappedNativeToken: {
       name: "Wrapped Matic",
       symbol: "WtMATIC",
       address: "0x9c3c9283d3e44854697cd22d3faa240cfb032889",
+      thumb: "wmatic.png",
     },
     zeroExExchange: "0x4fb72262344034e034fce3d9c701fd9213a55260",
   },

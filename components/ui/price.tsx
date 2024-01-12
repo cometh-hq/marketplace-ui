@@ -4,9 +4,9 @@ import { VariantProps, cva, cx } from "class-variance-authority"
 import { BigNumberish } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
 
-import { cn } from "@/lib/utils/utils"
-
 import { env } from "@/config/env"
+import globalConfig from "@/config/globalConfig"
+import { cn } from "@/lib/utils/utils"
 
 const priceTriggerVariants = cva("font-bold", {
   variants: {
@@ -18,9 +18,6 @@ const priceTriggerVariants = cva("font-bold", {
     size: {
       default: "text-base",
       sm: "text-sm",
-      lg: "text-lg",
-      xl: "text-xl",
-      "3xl": "text-3xl font-extrabold",
     },
   },
   defaultVariants: {
@@ -32,11 +29,8 @@ const priceTriggerVariants = cva("font-bold", {
 const iconVariants = cva("object-contain", {
   variants: {
     size: {
-      default: "w-6 h-6",
-      sm: "w-5 h-5",
-      lg: "w-6 h-6",
-      xl: "w-6 h-6",
-      "3xl": "w-7 h-7",
+      default: "w-5 h-5",
+      sm: "w-4 h-4",
     },
   },
   defaultVariants: {
@@ -52,27 +46,28 @@ export type PriceTriggerProps = {
   className?: string
 } & PriceTriggerVariants
 
+console.log("globalConfig.ordersDisplayCurrency", globalConfig.ordersDisplayCurrency);
+
 const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
   ({ formattedAmount, size, variant, hideIcon = false, className }, ref) => {
     return (
       <span
         ref={ref}
-        className="relative inline-flex items-center align-middle"
+        className={cn(
+          "inline-flex items-center gap-x-1.5",
+          priceTriggerVariants({ size, variant, className })
+        )}
       >
-        {!hideIcon && (
-          <span className={cn("relative ", iconVariants({ size }))}>
+        {!hideIcon && globalConfig.ordersDisplayCurrency.thumb && (
+          <span className={cn("relative", iconVariants({ size }))}>
             <Image
-              src={`${env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
-              alt={formattedAmount.toString()}
+              src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${globalConfig.ordersDisplayCurrency.thumb}`}
+              alt={formattedAmount}
               fill
             />
           </span>
         )}
-        <span
-          className={cn(priceTriggerVariants({ size, variant, className }))}
-        >
-          {formattedAmount.toString()}
-        </span>
+        {formattedAmount}
       </span>
     )
   }
@@ -83,6 +78,7 @@ PriceTrigger.displayName = "PriceTrigger"
 export type PriceProps = {
   amount?: BigNumberish | null | undefined
   hideIcon?: boolean
+  hideSymbol?: boolean
   className?: string
 } & PriceTriggerVariants
 

@@ -28,7 +28,7 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
         <AssetStatusBadge status="listed" />
-        <Price amount={listingPrice} size="xl" />
+        <Price amount={listingPrice} />
       </ProductBlockDividedColumn>
 
       <BestOfferColumn asset={asset} />

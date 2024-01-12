@@ -23,6 +23,7 @@ export type Manifest = {
     name: string
     symbol: string
     address: string
+    thumb?: string
   } | null,
   rpcUrl?: string
 }
