@@ -43,18 +43,27 @@ export type PriceTriggerVariants = VariantProps<typeof priceTriggerVariants>
 export type PriceTriggerProps = {
   formattedAmount: string
   hideIcon?: boolean
+  hideSymbol?: boolean
   className?: string
 } & PriceTriggerVariants
 
-console.log("globalConfig.ordersDisplayCurrency", globalConfig.ordersDisplayCurrency);
-
 const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
-  ({ formattedAmount, size, variant, hideIcon = false, className }, ref) => {
+  (
+    {
+      formattedAmount,
+      size,
+      variant,
+      hideIcon = false,
+      hideSymbol = true,
+      className,
+    },
+    ref
+  ) => {
     return (
       <span
         ref={ref}
         className={cn(
-          "inline-flex items-center gap-x-1.5",
+          "inline-flex items-center gap-x-1.5 align-middle",
           priceTriggerVariants({ size, variant, className })
         )}
       >
@@ -67,7 +76,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
             />
           </span>
         )}
-        {formattedAmount}
+        {`${formattedAmount}${!hideSymbol && ` ${globalConfig.ordersDisplayCurrency.symbol}`}`}
       </span>
     )
   }

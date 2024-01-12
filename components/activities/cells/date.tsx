@@ -8,5 +8,5 @@ export type DateCellProps = {
 
 export const DateCell = ({ row }: DateCellProps) => {
   const formattedDate = row.original.date.toRelative() ?? '-'
-  return <span className="text-sm font-medium text-muted-foreground">{formattedDate}</span>
+  return <span className="font-medium text-muted-foreground">{formattedDate}</span>
 }
