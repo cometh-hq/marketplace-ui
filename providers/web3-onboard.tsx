@@ -92,7 +92,7 @@ export function Web3OnboardProvider({
           ...(options.walletAddress && {
             walletAddress: options.walletAddress,
           }),
-          uiConfig  : t
+          uiConfig: t,
         })
       )
     }
@@ -138,22 +138,28 @@ export function Web3OnboardProvider({
       })
     }
 
-    if (currentWalletInStorage) {
-      setReconnecting(true)
-      onboard
-        ?.connectWallet({
-          autoSelect: {
-            label: currentWalletInStorage,
-            disableModals: true,
-          },
-        })
-        .then((res) => {
-          if (res?.length) {
+    const startReconnecting = async () => {
+      if (currentWalletInStorage) {
+        setReconnecting(true)
+        try {
+          const connectionResult = await onboard?.connectWallet({
+            autoSelect: {
+              label: currentWalletInStorage,
+              disableModals: true,
+            },
+          })
+          if (connectionResult?.length) {
             setIsconnected(true)
             setReconnecting(false)
           }
-        })
+        } catch (error) {
+          console.error("Error reconnecting wallet", error)
+          setReconnecting(false)
+        }
+      }
     }
+    startReconnecting()
+
   }, [initOnboard, onboard, comethWalletAddressInStorage])
 
   return (
