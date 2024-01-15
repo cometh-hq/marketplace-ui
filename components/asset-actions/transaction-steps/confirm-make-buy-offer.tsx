@@ -33,8 +33,7 @@ export function ConfirmMakeBuyOfferStep({
       <h3 className="text-xl font-semibold">Summary</h3>
       <p className="text-center">
         You are about to make an offer to buy <br />
-        this asset for <Price size="default" amount={price} />{" "}
-        {globalConfig.ordersDisplayCurrency.symbol} (fees included)
+        this asset for <Price size="default" amount={price} hideSymbol={false} /> (fees included)
       </p>
       {isPending ? (
         <ButtonLoading />
