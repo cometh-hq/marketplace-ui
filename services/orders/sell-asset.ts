@@ -49,13 +49,6 @@ export const useSellAsset = () => {
       toast({
         title: "Your asset is now listed for sale.",
       })
-    },
-    onError: (error: Error) => {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong.",
-        description: error.message,
-      })
-    },
+    }
   })
 }

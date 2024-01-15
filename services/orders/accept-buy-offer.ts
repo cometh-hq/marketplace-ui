@@ -9,8 +9,6 @@ import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
-import { handleOrderbookError } from "../errors"
-
 export type AcceptBuyOfferOptions = {
   offer: BuyOffer
 }
@@ -89,20 +87,6 @@ export const useAcceptBuyOffer = () => {
       toast({
         title: "Order filled!",
       })
-    },
-    onError: (error) => {
-      console.error(error)
-      toast({
-        variant: "destructive",
-        title: "Something went wrong.",
-        description: handleOrderbookError(error, {
-          400: "Bad request",
-          404: "Order not found",
-          401: "Unauthorized",
-          403: "Forbidden",
-          500: "Internal orderbook server error",
-        }),
-      })
-    },
+    }
   })
 }

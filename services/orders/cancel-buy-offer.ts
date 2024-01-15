@@ -5,10 +5,7 @@ import { isAddressEqual } from "viem"
 import { BuyOffer } from "@/types/buy-offers"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { toast } from "@/components/ui/toast/use-toast"
 import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
-
-import { handleOrderbookError } from "../errors"
 
 export type UseCanCancelBuyOfferParams = {
   offer: BuyOffer
@@ -56,19 +53,6 @@ export const useCancelBuyOffer = () => {
       client.invalidateQueries({
         queryKey: ["cometh", "sent-buy-offers", offer.emitter.address],
       })
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong.",
-        description: handleOrderbookError(error, {
-          400: "Bad request",
-          404: "Order not found",
-          401: "Unauthorized",
-          403: "Forbidden",
-          500: "Internal orderbook server error",
-        }),
-      })
-    },
+    }
   })
 }

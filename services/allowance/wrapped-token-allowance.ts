@@ -66,14 +66,6 @@ export const useERC20Allow = (
     ...options,
     onSuccess: () => {
       options?.onSuccess?.()
-    },
-    onError: (error: Error) => {
-      console.error(error)
-      toast({
-        variant: "destructive",
-        title: "Error approving token",
-        description: error.message,
-      })
-    },
+    }
   })
 }

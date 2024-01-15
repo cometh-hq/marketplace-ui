@@ -59,13 +59,6 @@ export const useWrapToken = () => {
         title: "Token wrapped!",
         description: "Your token has been wrapped.",
       })
-    },
-    onError: (error: Error) => {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong.",
-        description: error.message,
-      })
-    },
+    }
   })
 }

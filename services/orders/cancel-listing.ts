@@ -7,7 +7,6 @@ import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useSigner } from "../../lib/web3/auth"
 import { getFirstListing } from "../cometh-marketplace/offers"
-import { handleOrderbookError } from "../errors"
 
 export const useCancelListing = () => {
   const client = useQueryClient()
@@ -30,17 +29,6 @@ export const useCancelListing = () => {
       toast({
         title: "Your order has been canceled.",
       })
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong.",
-        description: handleOrderbookError(error, {
-          400: "Bad request",
-          404: "Order not found",
-          500: "Internal orderbook server error",
-        }),
-      })
-    },
+    }
   })
 }

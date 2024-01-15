@@ -72,13 +72,6 @@ export const useBuyAsset = () => {
       toast({
         title: "NFT bought!",
       })
-    },
-    onError: (error: Error) => {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong.",
-        description: error.message,
-      })
-    },
+    }
   })
 }
