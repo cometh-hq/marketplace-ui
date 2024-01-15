@@ -96,8 +96,8 @@ export function MakeBuyOfferPriceDialog({
             />
           </div>
           <div className="flex flex-col gap-3 md:w-1/3">
-            <Label htmlFor="make-buy-offer-price">Validity time *</Label>
-            <Select defaultValue="1" onValueChange={(v) => setValidity(v)}>
+            <Label htmlFor="make-buy-offer-price">Validity time</Label>
+            <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="" />
               </SelectTrigger>
@@ -105,6 +105,7 @@ export function MakeBuyOfferPriceDialog({
                 <SelectItem value="1">24h</SelectItem>
                 <SelectItem value="2">48h</SelectItem>
                 <SelectItem value="3">72h</SelectItem>
+                <SelectItem value="10">10 days</SelectItem>
               </SelectContent>
             </Select>
           </div>

@@ -277,7 +277,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0x9c3c9283d3e44854697cd22d3faa240cfb032889",
       thumb: "wmatic.png",
     },
-    zeroExExchange: "0x4fb72262344034e034fce3d9c701fd9213a55260",
+    zeroExExchange: "0xf471d32cb40837bf24529fcf17418fc1a4807626",
   },
   2121337: {
     chainId: 2121337,

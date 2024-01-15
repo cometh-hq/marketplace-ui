@@ -22,8 +22,8 @@ export const fetchHasApprovedCollection = async ({
       tokenId: tokenId.toString(),
       type: "ERC721",
     }
-
-    return (await nftSwapSdk.loadApprovalStatus(item, address)).contractApproved
+    const approvalStatus = await nftSwapSdk.loadApprovalStatus(item, address)
+    return approvalStatus.contractApproved
   } catch (error) {
     console.error("error in try/catch bis", error)
     return false
