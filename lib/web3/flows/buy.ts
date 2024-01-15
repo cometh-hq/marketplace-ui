@@ -1,9 +1,8 @@
-import { manifest } from "@/manifests"
 import { fetchNeedsMoreAllowance } from "@/services/allowance/needs-more-allowance"
+import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 // import { useLoader } from "@/services/loaders"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
-import { parseUnits } from "ethers/lib/utils"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
@@ -11,7 +10,7 @@ import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
 import { useCurrentViewerAddress } from "../auth"
-import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
+import { BigNumber } from "ethers"
 
 export type UseRequiredBuyingStepsOptions = {
   asset: AssetWithTradeData
@@ -40,16 +39,17 @@ export const fetchRequiredBuyingSteps = async ({
   address,
   wrappedContractAddress,
 }: FetchRequiredBuyingStepsOptions) => {
-  const _price = asset.orderbookStats.lowestSalePrice
-  if (!_price) {
+  const rawPrice = asset.orderbookStats.lowestSalePrice
+  if (!rawPrice) {
     throw new Error(
-      `Asset has an invalid price, expected BigNumber, got '${_price}'`
+      `Asset has an invalid price, expected BigNumber, got '${rawPrice}'`
     )
   }
+  const price = BigNumber.from(rawPrice)
 
-  const price = parseUnits(_price, 18)
 
-  const displayAllowanceStep = !globalConfig.useNativeForOrders &&
+  const displayAllowanceStep =
+    !globalConfig.useNativeForOrders &&
     (await fetchNeedsMoreAllowance({
       address,
       price,
@@ -57,13 +57,11 @@ export const fetchRequiredBuyingSteps = async ({
       spender: globalConfig.network.zeroExExchange,
     }))
 
-  const displayAddFundsStep = !(
-    await fetchHasSufficientFunds({
-      address,
-      price,
-    })
-  )?.hasSufficientFunds
-
+  const missingFundsData = await fetchHasSufficientFunds({
+    address,
+    price,
+  })
+  const displayAddFundsStep = !missingFundsData?.hasSufficientFunds
 
   const { hasEnoughGas } = await fetchHasEnoughGas(address)
   const displayAddGasStep = !hasEnoughGas && !globalConfig.useNativeForOrders
