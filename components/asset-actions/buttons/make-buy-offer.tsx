@@ -53,7 +53,7 @@ export function MakeBuyOfferPriceDialog({
 }) {
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
-  const bn = useMemo(() => {
+  const orderParams = useMemo(() => {
     try {
       const parsedPrice = parseUnits(price, 18)
       return { price: parsedPrice, validity }
@@ -97,7 +97,7 @@ export function MakeBuyOfferPriceDialog({
           </div>
           <div className="flex flex-col gap-3 md:w-1/3">
             <Label htmlFor="make-buy-offer-price">Validity time *</Label>
-            <Select onValueChange={(v) => setValidity(v)}>
+            <Select defaultValue="1" onValueChange={(v) => setValidity(v)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="" />
               </SelectTrigger>
@@ -111,11 +111,11 @@ export function MakeBuyOfferPriceDialog({
         </div>
         <Button
           size="lg"
-          disabled={!bn}
-          onClick={() => onSubmit(bn!.price, bn!.validity)}
+          disabled={!orderParams || !orderParams.price}
+          onClick={() => onSubmit(orderParams!.price, orderParams!.validity)}
         >
           Make offer for&nbsp;
-          <Price amount={bn?.price} />
+          <Price amount={orderParams?.price} />
         </Button>
       </DialogContent>
     </Dialog>

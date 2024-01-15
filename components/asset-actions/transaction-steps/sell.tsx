@@ -3,6 +3,7 @@ import { useSellAsset } from "@/services/orders/sell-asset"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { parseUnits } from "ethers/lib/utils"
 
+import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,7 +18,6 @@ import {
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
 import { SwitchNetwork } from "../buttons/switch-network"
-import globalConfig from "@/config/globalConfig"
 
 export type SellStepProps = {
   asset: AssetWithTradeData
@@ -33,25 +33,28 @@ export type SellStepProps = {
 export function SellStep({ asset, onValid }: SellStepProps) {
   const { mutateAsync: sell, isPending, isError } = useSellAsset()
   const [price, setPrice] = useState("")
-  const [validity, setValidity] = useState("")
+  const [validity, setValidity] = useState("1")
 
-  const bnPrice = useMemo(() => {
+  const orderParams = useMemo(() => {
+    if (!price) return null
     try {
       const parsedPrice = parseUnits(price, 18)
       return { price: parsedPrice, validity }
     } catch (e) {
+      console.error(e)
       return null
     }
   }, [price, validity])
 
   const onSubmit = useCallback(async () => {
-    if (!bnPrice || !validity) return
+    console.log("22")
+    if (!orderParams) return
     await sell({
       asset,
-      ...bnPrice,
+      ...orderParams,
     })
     if (!isError) onValid()
-  }, [asset, bnPrice, onValid])
+  }, [asset, orderParams, onValid, isError, sell])
 
   return (
     <>
@@ -61,7 +64,9 @@ export function SellStep({ asset, onValid }: SellStepProps) {
 
       <div className="mt-4 flex w-full gap-4">
         <div className="flex flex-col gap-3 sm:w-2/3">
-          <Label htmlFor="selling-price">Selling price in {globalConfig.ordersErc20.symbol}</Label>
+          <Label htmlFor="selling-price">
+            Selling price in {globalConfig.ordersErc20.symbol}*
+          </Label>
           <Input
             value={price}
             onChange={(e) => setPrice(e.target.value)}
@@ -73,7 +78,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
 
         <div className="flex flex-col gap-3 sm:w-1/3">
           <Label htmlFor="make-buy-offer-price">Validity time</Label>
-          <Select onValueChange={(v) => setValidity(v)}>
+          <Select defaultValue="1" onValueChange={(v) => setValidity(v)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="" />
             </SelectTrigger>
@@ -91,10 +96,10 @@ export function SellStep({ asset, onValid }: SellStepProps) {
           className="flex w-full gap-1"
           size="lg"
           onClick={onSubmit}
-          disabled={isPending}
+          disabled={isPending || !orderParams?.price}
           isLoading={isPending}
         >
-          Sell for <Price amount={bnPrice?.price} />
+          Sell for <Price amount={orderParams?.price} />
         </Button>
       </SwitchNetwork>
     </>

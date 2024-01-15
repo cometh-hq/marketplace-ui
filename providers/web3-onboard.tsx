@@ -73,6 +73,13 @@ export function Web3OnboardProvider({
   const initOnboard = useCallback((options: SetOnboardOptions) => {
     const wallets = [injectedModule()]
     if (options.isComethWallet) {
+      // TODO: Remove hack once connect is fixed and removed the spread
+      const t = {
+        uiConfig: {
+          displayValidationModal: false,
+        },
+      } as any
+
       wallets.push(
         ConnectOnboardConnector({
           apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
@@ -85,6 +92,7 @@ export function Web3OnboardProvider({
           ...(options.walletAddress && {
             walletAddress: options.walletAddress,
           }),
+          uiConfig  : t
         })
       )
     }

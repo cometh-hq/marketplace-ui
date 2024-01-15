@@ -54,8 +54,6 @@ export const useBuyAsset = () => {
         signature: signature,
       }
 
-      console.warn('formattedZeroXOrder', formattedZeroXOrder)
-
       const fillTx: ContractTransaction = await nftSwapSdk.fillSignedOrder(
         formattedZeroXOrder
       )

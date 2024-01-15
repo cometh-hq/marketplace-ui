@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { OnboardAPI, WalletState } from "@web3-onboard/core"
-import { ethers } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
 import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
@@ -16,8 +15,9 @@ export interface ConnectParams {
 }
 
 async function _selectdCorrectChain(onboard: OnboardAPI, wallet: WalletState) {
-  const requiredChaindId = ethers.utils.hexlify(globalConfig.network.chainId)
-  if (wallet.chains?.[0].id !== requiredChaindId) {
+  const requiredChaindId = `0x${globalConfig.network.chainId.toString(16)}`
+  const walletChain = `0x${parseInt(wallet.chains?.[0].id ?? "0", 16).toString(16)}`
+  if (walletChain !== requiredChaindId) {
     await onboard.setChain({ chainId: requiredChaindId })
   }
 }

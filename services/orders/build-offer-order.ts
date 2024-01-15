@@ -75,9 +75,6 @@ export const useBuildOfferOrder = ({
           ? globalConfig.ordersTokenAddress
           : globalConfig.ordersErc20.address
 
-      console.warn(tokenAddress)
-      console.warn(tokenAddress)
-      console.warn(tokenAddress)
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
         tokenAddress,
         amount: price.sub(totalFeesFromCollection(fees)).toString(),

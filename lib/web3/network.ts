@@ -3,9 +3,9 @@ import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { ethers } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
+import { toast } from "@/components/ui/toast/use-toast"
 
 import { useWallet } from "./auth"
-import { toast } from "@/components/ui/toast/use-toast"
 
 export const useCorrectNetwork = () => {
   const { onboard } = useWeb3OnboardContext()
@@ -15,7 +15,11 @@ export const useCorrectNetwork = () => {
   const wallet = useWallet()?.chains[0]?.id
 
   useEffect(() => {
-    setIsChainSupported(wallet?.toString() === supportedChain)
+    if(!wallet) {
+      setIsChainSupported(false)
+      return
+    }
+    setIsChainSupported(parseInt(wallet, 16) === parseInt(supportedChain, 16))
   }, [])
 
   useEffect(() => {
@@ -24,9 +28,6 @@ export const useCorrectNetwork = () => {
       const subscribe = wallets.subscribe((wallet) => {
         const currentChainId =
           wallet && wallet[0] ? wallet[0].chains[0].id : null
-          console.warn("currentChainId", currentChainId)
-          console.warn("supportedChain", supportedChain)
-          console.warn("config chainid", globalConfig.network.chainId)
 
         setIsChainSupported(currentChainId === supportedChain)
       })
@@ -46,7 +47,8 @@ export const useCorrectNetwork = () => {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error?.message || "An error occured while switching network"
+        description:
+          error?.message || "An error occured while switching network",
       })
     } finally {
       setIsLoading(false)

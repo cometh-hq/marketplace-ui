@@ -37,14 +37,6 @@ export const fetchHasSufficientFunds = async ({
     ? BigNumber.from(0)
     : price?.sub(availableFunds)
 
-  console.warn("fetchHasSufficientFunds", {
-    availableFunds: availableFunds.toString(),
-    erc20Balance: erc20Balance.toString(),
-    mainBalance: mainBalance.toString(),
-    hasSufficientFunds: hasSufficientFunds.toString(),
-    missingBalance: missingBalance?.toString(),
-  })
-
   return {
     hasSufficientFunds,
     missingBalance,

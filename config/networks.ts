@@ -256,7 +256,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
   },
   80001: {
     chainId: 80001,
-    hexaId: "0x013881",
+    hexaId: "0x13881",
     name: "Matic(Polygon) Testnet Mumbai",
     chain: "Matic(Polygon)",
     network: "testnet",
