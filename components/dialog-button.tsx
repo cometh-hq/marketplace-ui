@@ -1,9 +1,11 @@
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { Step, Stepper } from "@/components/ui/stepper"
-
-import { useCorrectNetwork } from "@/lib/web3/network"
 import { cn } from "@/lib/utils/utils"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Step, Stepper } from "@/components/ui/stepper"
 
 export type TransactionDialogProps<T extends Step> = {
   label: string | React.ReactNode
@@ -23,22 +25,19 @@ export function TransactionDialogButton<T extends Step>({
   children,
   currentStep,
   onClose,
-  open,
   isLoading,
   isDisabled,
   isVariantLink,
   ...props
 }: TransactionDialogProps<T>) {
-  const { isChainSupported } = useCorrectNetwork()
-  
   return (
-    <Dialog open={open} modal onOpenChange={(v) => !v && onClose()}>
+    <Dialog modal>
       <DialogTrigger asChild>
         <Button
           size={isVariantLink ? "default" : "lg"}
           variant={isVariantLink ? "link" : "default"}
           className={cn(isVariantLink && "h-auto p-0")}
-          disabled={!isChainSupported || isDisabled}
+          disabled={isDisabled}
           isLoading={isLoading}
           {...props}
         >

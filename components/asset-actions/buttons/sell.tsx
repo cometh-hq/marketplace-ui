@@ -4,11 +4,9 @@ import { useSellAssetButton } from "@/lib/web3/flows/sell"
 import { TransactionDialogButton } from "@/components/dialog-button"
 import { Case, Switch } from "@/components/utils/Switch"
 
-import { ButtonLoading } from "../../../components/button-loading"
 import { CollectionApprovalStep } from "../transaction-steps/collection-approval"
 import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { SellStep } from "../transaction-steps/sell"
-import { cn } from "@/lib/utils/utils"
 import { AddGasStep } from "../transaction-steps/add-gas"
 
 export type SellAssetButtonProps = {
@@ -17,19 +15,9 @@ export type SellAssetButtonProps = {
 }
 
 export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) {
-  /**
-   * TODO: Defer the calculation
-   */
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useSellAssetButton({ asset })
 
-  if (isLoading) return (
-    <ButtonLoading
-      size={isVariantLink ? "default" : "lg"}
-      variant={isVariantLink ? "link" : "default"}
-      className={cn(isVariantLink && "h-auto p-0")}
-    />
-  )
   if (!requiredSteps?.length || !currentStep) return null
 
   return (
@@ -39,6 +27,8 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
       steps={requiredSteps}
       onClose={reset}
       isVariantLink={isVariantLink}
+      isLoading={isLoading}
+      isDisabled={isLoading}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">

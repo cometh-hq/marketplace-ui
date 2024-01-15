@@ -19,12 +19,12 @@ export type BuyAssetButtonProps = {
 
 export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
   const [txHash, setTxHash] = useState<string | null>(null)
-
   /**
    * TODO: Defer the calculation
    */
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useBuyAssetButton({ asset })
+
   if (!requiredSteps?.length || !currentStep) return null
 
   const assetPrice = asset.orderbookStats.lowestSalePrice ?? 0
@@ -40,6 +40,7 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
       steps={requiredSteps}
       onClose={reset}
       isLoading={isLoading}
+      isDisabled={isLoading}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">

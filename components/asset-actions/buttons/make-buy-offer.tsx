@@ -158,14 +158,6 @@ export function MakeBuyOfferButton({
     )
   }
 
-  if (isLoading)
-    return (
-      <ButtonLoading
-        size={isVariantLink ? "default" : "lg"}
-        variant={isVariantLink ? "link" : "default"}
-        className={cn(isVariantLink && "h-auto p-0")}
-      />
-    )
   if (!requiredSteps?.length || !currentStep) return null
 
   const onClose = () => {
