@@ -19,7 +19,7 @@ const manifest: Manifest = {
 
   chainId: env.NEXT_PUBLIC_NETWORK_ID || 137,
 
-  useNativeTokenForOrders: false,
+  useNativeTokenForOrders: true,
   erc20: {
     name: "My Token",
     symbol: "MTK",
