@@ -1,8 +1,11 @@
+import { DialogClose } from "@radix-ui/react-dialog"
+
 import { cn } from "@/lib/utils/utils"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Step, Stepper } from "@/components/ui/stepper"
@@ -24,14 +27,17 @@ export function TransactionDialogButton<T extends Step>({
   steps,
   children,
   currentStep,
+  open,
   onClose,
   isLoading,
   isDisabled,
   isVariantLink,
   ...props
 }: TransactionDialogProps<T>) {
+  const isLastStep = currentStep.value === steps[steps.length - 1].value
+
   return (
-    <Dialog modal>
+    <Dialog open={open} modal onOpenChange={(v) => !v && onClose()}>
       <DialogTrigger asChild>
         <Button
           size={isVariantLink ? "default" : "lg"}
@@ -47,6 +53,20 @@ export function TransactionDialogButton<T extends Step>({
       <DialogContent>
         <Stepper value={currentStep.value} steps={steps} />
         {children}
+        {isLastStep && (
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button
+                onClick={onClose}
+                className="flex gap-1"
+                size="sm"
+                variant="outline"
+              >
+                Close
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   )

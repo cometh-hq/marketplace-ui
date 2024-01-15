@@ -8,6 +8,8 @@ import { CollectionApprovalStep } from "../transaction-steps/collection-approval
 import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { SellStep } from "../transaction-steps/sell"
 import { AddGasStep } from "../transaction-steps/add-gas"
+import { ButtonLoading } from "@/components/button-loading"
+import { cn } from "@/lib/utils/utils"
 
 export type SellAssetButtonProps = {
   asset: AssetWithTradeData
@@ -17,6 +19,17 @@ export type SellAssetButtonProps = {
 export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) {
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useSellAssetButton({ asset })
+
+    if (isLoading) {
+      return (
+        <ButtonLoading
+          size={isVariantLink ? "default" : "lg"}
+          variant={isVariantLink ? "link" : "default"}
+          className={cn(isVariantLink && "h-auto p-0")}
+        />
+      )
+    }
+  
 
   if (!requiredSteps?.length || !currentStep) return null
 
