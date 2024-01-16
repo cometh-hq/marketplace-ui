@@ -24,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ButtonLoading } from "@/components/button-loading"
 import { TransactionDialogButton } from "@/components/dialog-button"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 import { Case, Switch } from "@/components/utils/Switch"
@@ -199,9 +198,6 @@ export function MakeBuyOfferButton({
             onValid={onClose}
           />
         </Case>
-        {/* <Case value="confirmation">
-          <ConfirmationStep asset={asset} onValid={onClose} />
-        </Case> */}
       </Switch>
     </TransactionDialogButton>
   )
