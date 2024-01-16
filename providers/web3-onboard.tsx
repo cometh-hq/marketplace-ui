@@ -72,6 +72,7 @@ export function Web3OnboardProvider({
 
   const initOnboard = useCallback((options: SetOnboardOptions) => {
     const wallets = [injectedModule()]
+    console.warn("options", options)
     if (options.isComethWallet) {
       // TODO: Remove hack once connect is fixed and removed the spread
       const uiConfig = {

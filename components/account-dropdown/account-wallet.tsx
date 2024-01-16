@@ -26,7 +26,7 @@ export function AccountWallet({
       <Button
         variant="secondary"
         className="h-12 w-full justify-start gap-2 text-[15px]"
-        onClick={() => handleConnect && handleConnect(name === "Cometh")}
+        onClick={() => handleConnect && handleConnect(isComethWallet)}
       >
         <Image
           src={icon}
