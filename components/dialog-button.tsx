@@ -1,10 +1,8 @@
+import { manifest } from "@/manifests"
+
 import { cn } from "@/lib/utils/utils"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Step, Stepper } from "@/components/ui/stepper"
 
 export type TransactionDialogProps<T extends Step> = {
@@ -45,7 +43,16 @@ export function TransactionDialogButton<T extends Step>({
           {label}
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        onPointerDownOutside={(event) => {
+          if (
+            event.target instanceof HTMLElement &&
+            event.target.closest("#cometh-gas-modal-wrapper")
+          ) {
+           event.preventDefault()
+          }
+        }}
+      >
         <Stepper value={currentStep.value} steps={steps} />
         {children}
       </DialogContent>

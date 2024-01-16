@@ -77,7 +77,7 @@ export function Web3OnboardProvider({
       // TODO: Remove hack once connect is fixed and removed the spread
       const uiConfig = {
         uiConfig: {
-          displayValidationModal: false,
+          displayValidationModal: true,
         },
       } as any
 
