@@ -24,8 +24,7 @@ export type SellingStep = {
 }
 
 const defaultSteps = [
-  { label: "Pricing", value: "sell" },
-  { label: "All set", value: "confirmation" },
+  { label: "Pricing", value: "sell" }
 ] as SellingStep[]
 
 export type FetchRequiredSellingStepsOptions = {

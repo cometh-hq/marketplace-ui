@@ -24,8 +24,7 @@ export type AcceptBuyOfferStep = {
 }
 
 const defaultSteps = [
-  { label: "Pricing", value: "confirm-accept-buy-offer" },
-  { label: "All set", value: "confirmation" },
+  { label: "Pricing", value: "confirm-accept-buy-offer" }
 ] as AcceptBuyOfferStep[]
 
 export type FetchRequiredSellingStepsOptions = {
