@@ -64,7 +64,7 @@ export const fetchRequiredBuyingSteps = async ({
   const displayAddFundsStep = !missingFundsData?.hasSufficientFunds
 
   const { hasEnoughGas } = await fetchHasEnoughGas(address)
-  const displayAddGasStep = !hasEnoughGas && !globalConfig.useNativeForOrders
+  const displayAddGasStep = !hasEnoughGas
 
   const buyingSteps = [
     displayAddGasStep && { value: "add-gas", label: "Add gas" },

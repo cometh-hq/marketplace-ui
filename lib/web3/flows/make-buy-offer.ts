@@ -52,7 +52,7 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
   spender,
 }: FetchRequiredBuyingStepsOptions) => {
   const { hasEnoughGas } = await fetchHasEnoughGas(address)
-  const displayAddGasStep = !hasEnoughGas && !globalConfig.useNativeForOrders
+  const displayAddGasStep = !hasEnoughGas 
 
   const displayAddFundsStep = price
     ? !(
