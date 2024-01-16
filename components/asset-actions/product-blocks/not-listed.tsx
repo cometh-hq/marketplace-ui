@@ -38,7 +38,7 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
-        <ConnectButton fullVariant>
+        <ConnectButton customText="Login to make an offer" fullVariant>
           <SwitchNetwork>
             <MakeBuyOfferButton asset={asset} />
           </SwitchNetwork>

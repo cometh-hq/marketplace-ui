@@ -22,6 +22,8 @@ import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/make-buy-
 import { SellAssetButton } from "@/components/asset-actions/buttons/sell"
 
 import { Price } from "../../ui/price"
+import { ConnectButton } from "@/components/connect-button"
+import { SwitchNetwork } from "@/components/asset-actions/buttons/switch-network"
 
 export type AssetCardProps = {
   asset: SearchAssetWithTradeData & {
@@ -186,10 +188,14 @@ export function AssetCard({ asset, children }: AssetCardProps) {
                 {asset.orderbookStats.highestOfferPrice ? (
                   <Price amount={asset.orderbookStats.highestOfferPrice} />
                 ) : !owner ? (
-                  <MakeBuyOfferButton
-                    asset={asset as unknown as AssetWithTradeData}
-                    isVariantLink
-                  />
+                  <ConnectButton isLinkVariant customText="Login to buy" >
+                    <SwitchNetwork>
+                    <MakeBuyOfferButton
+                      asset={asset as unknown as AssetWithTradeData}
+                      isVariantLink
+                    />
+                    </SwitchNetwork>
+                  </ConnectButton>
                 ) : (
                   "No offer yet"
                 )}

@@ -18,12 +18,16 @@ export type SigninDropdownProps = {
   disabled: boolean
   handleConnect?: (isComethWallet: boolean) => Promise<void>
   fullVariant?: boolean
+  customText?: string
+  isLinkVariant?: boolean
 }
 
 export function SigninDropdown({
   disabled,
   handleConnect,
   fullVariant,
+  customText,
+  isLinkVariant
 }: SigninDropdownProps) {
   const wallets = [
     ...(env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY
@@ -45,17 +49,19 @@ export function SigninDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
+       
         <Button
           className={cx({
             "h-12 w-full": fullVariant,
           })}
-          variant="default"
+          variant={isLinkVariant ? "link" : "default"}
           disabled={disabled}
           isLoading={disabled}
         >
-          <WalletIcon size="16" className="mr-2" />
-          Login
+          {!isLinkVariant && <WalletIcon size="16" className="mr-2" />}
+          {customText ? customText : "Login"}
         </Button>
+        
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
         <Card className="p-4" style={{ width: "324px" }}>

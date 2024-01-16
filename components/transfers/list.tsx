@@ -80,7 +80,7 @@ export function TransfersList({
           ))
         ) : (
           <TableRow>
-            <TableCell className="h-24 text-center">No results.</TableCell>
+            <TableCell className="h-24 text-center">No transfer found for this asset.</TableCell>
           </TableRow>
         )}
       </TableBody>
