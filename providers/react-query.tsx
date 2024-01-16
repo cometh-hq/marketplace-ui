@@ -31,34 +31,14 @@ export function ReactQueryProvider({
         }),
         mutationCache: new MutationCache({
           onError: (error, _variables, _context, mutation) => {
-            if (mutation.state.data !== undefined) {
-              toast({
-                variant: "destructive",
-                title: "Something went wrong.",
-                description: error.message,
-              })
-            }
+            if (mutation.options.onError) return;
+            toast({
+              variant: "destructive",
+              title: "Something went wrong.",
+              description: error.message,
+            })
           },
-        }),
-        // mutationCache: new MutationCache({
-        //   onError: (error, _variables, _context, mutation) => {
-        //     if (mutation.options.onError) return;
-        //       toast({
-        //         variant: "destructive",
-        //         title: "Something went wrong.",
-        //         description: 'je suis une erreur en global ' + error.message,
-        //       })
-
-        //       // description: handleOrderbookError(error, {
-        //       //   400: "Bad request",
-        //       //   404: "Order not found",
-        //       //   401: "Unauthorized",
-        //       //   403: "Forbidden",
-        //       //   500: "Internal orderbook server error",
-        //       // }),
-        //     }
-        //   },
-        // ),
+        })
       })
   )
   return (

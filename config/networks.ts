@@ -10,6 +10,7 @@ export type NetworkConfig = {
     name: string
     url: string
     standard: string
+    blockUrl?: string
   } | null
   nativeToken: {
     name: string
@@ -37,6 +38,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       name: "etherscan",
       url: "https://etherscan.io",
       standard: "EIP3091",
+      blockUrl: "https://etherscan.io/block",
     },
     nativeToken: { name: "Ether", symbol: "ETH", decimals: 18 },
     wrappedNativeToken: {
@@ -154,6 +156,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       name: "bscscan",
       url: "https://bscscan.com",
       standard: "EIP3091",
+      blockUrl: "https://bscscan.com/block",
     },
     nativeToken: {
       name: "Binance Chain Native Token",
@@ -177,6 +180,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       name: "polygonscan",
       url: "https://polygonscan.com",
       standard: "EIP3091",
+      blockUrl: "https://polygonscan.com/tx",
     },
     nativeToken: { name: "Matic", symbol: "MATIC", decimals: 18 },
     wrappedNativeToken: {
@@ -196,6 +200,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       name: "ftmscan",
       url: "https://ftmscan.com",
       standard: "EIP3091",
+      blockUrl: "https://ftmscan.com/block",
     },
     nativeToken: { name: "Fantom", symbol: "FTM", decimals: 18 },
     wrappedNativeToken: {
@@ -213,8 +218,9 @@ const NETWORKS: Record<number, NetworkConfig> = {
     network: "mainnet",
     explorer: {
       name: "Arbiscan",
-      url: "https://arbiscan.io",
+      url: "https://arbiscan.io/",
       standard: "EIP3091",
+      blockUrl: "https://arbiscan.io/block",
     },
     nativeToken: { name: "Ether", symbol: "AETH", decimals: 18 },
     wrappedNativeToken: {
@@ -264,6 +270,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       name: "polygonscan",
       url: "https://mumbai.polygonscan.com/",
       standard: "EIP3091",
+      blockUrl: "https://mumbai.polygonscan.com/tx",
     },
     nativeToken: {
       name: "Matic",
@@ -287,8 +294,9 @@ const NETWORKS: Record<number, NetworkConfig> = {
     network: "testnet",
     explorer: {
       name: "muster blockscout",
-      url: "https://muster-anytrust-explorer.alt.technology/",
+      url: "https://muster-anytrust-explorer.alt.technology",
       standard: "EIP3091",
+      blockUrl: "https://muster-anytrust-explorer.alt.technology/tx",
     },
     nativeToken: { name: "Muster", symbol: "MUST", decimals: 18 },
     wrappedNativeToken: {

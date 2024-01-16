@@ -34,8 +34,7 @@ export type MakeBuyOfferStep = {
 }
 
 const suffixSteps: MakeBuyOfferStep[] = [
-  { label: "Confirm", value: "confirm-buy-offer" },
-  { label: "All set", value: "confirmation" },
+  { label: "Confirm", value: "confirm-buy-offer" }
 ]
 
 export type FetchRequiredBuyingStepsOptions = {

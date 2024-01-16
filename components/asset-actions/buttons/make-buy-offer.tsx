@@ -24,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { ButtonLoading } from "@/components/button-loading"
 import { TransactionDialogButton } from "@/components/dialog-button"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 import { Case, Switch } from "@/components/utils/Switch"
@@ -32,10 +31,10 @@ import { Case, Switch } from "@/components/utils/Switch"
 import { AddGasStep } from "../transaction-steps/add-gas"
 import { AllowanceStep } from "../transaction-steps/allowance"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/confirm-make-buy-offer"
-import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { FundsStep } from "../transaction-steps/funds"
 import { WrapStep } from "../transaction-steps/wrap"
 import globalConfig from "@/config/globalConfig"
+import { ButtonLoading } from "@/components/button-loading"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
@@ -206,11 +205,8 @@ export function MakeBuyOfferButton({
             asset={asset}
             price={price}
             validity={validity ?? "1"}
-            onValid={nextStep}
+            onValid={onClose}
           />
-        </Case>
-        <Case value="confirmation">
-          <ConfirmationStep />
         </Case>
       </Switch>
     </TransactionDialogButton>

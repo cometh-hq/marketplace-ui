@@ -13,6 +13,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
 import { CopyButton } from "../ui/copy-button"
 import { UserButton } from "../ui/user-button"
+import globalConfig from "@/config/globalConfig"
 
 type TransfersListProps = {
   assetTransfers: AssetTransfers
@@ -66,7 +67,7 @@ export function TransfersList({
               </TableCell>
               <TableCell>
                 <Link
-                  href={`https://polygonscan.com/tx/${transfer.txHash}`}
+                  href={`${globalConfig.network.explorer}/${transfer.txHash}`}
                   className="flex items-center justify-end gap-2 text-sm font-medium text-muted-foreground hover:text-secondary-foreground"
                 >
                   {transfer.createdAt.toLocaleString(DateTime.DATE_MED)}

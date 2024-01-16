@@ -24,8 +24,7 @@ export type BuyingStep = {
 }
 
 const defaultSteps: BuyingStep[] = [
-  { label: "Payment", value: "buy" },
-  { label: "All set", value: "confirmation" },
+  { label: "Payment", value: "buy" }
 ]
 
 export type FetchRequiredBuyingStepsOptions = {

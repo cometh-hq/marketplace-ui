@@ -1,9 +1,8 @@
 import { useCallback, useMemo, useState } from "react"
-import { useSellAsset } from "@/services/orders/sell-asset"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { SwitchNetwork } from "../buttons/switch-network"
+import { useSellAsset } from "@/services/orders/sell-asset"
 import { parseUnits } from "ethers/lib/utils"
-
-import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,11 +16,11 @@ import {
 } from "@/components/ui/select"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
-import { SwitchNetwork } from "../buttons/switch-network"
+import globalConfig from "@/config/globalConfig"
+
 
 export type SellStepProps = {
   asset: AssetWithTradeData
-  onValid: () => void
 }
 
 /**
@@ -30,19 +29,17 @@ export type SellStepProps = {
  *
  * TODO: wrap in a form
  */
-export function SellStep({ asset, onValid }: SellStepProps) {
+export function SellStep({ asset }: SellStepProps) {
   const { mutateAsync: sell, isPending, isError } = useSellAsset()
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
 
   const orderParams = useMemo(() => {
     if (!price) return null
-    try {
-      const parsedPrice = parseUnits(price, 18)
-      return { price: parsedPrice, validity }
-    } catch (e) {
-      console.error(e)
-      return null
+    const parsedPrice = parseUnits(price, 18)
+    return {
+      price: parsedPrice,
+      validity,
     }
   }, [price, validity])
 
@@ -52,8 +49,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
       asset,
       ...orderParams,
     })
-    if (!isError) onValid()
-  }, [asset, orderParams, onValid, isError, sell])
+  }, [asset, orderParams, sell])
 
   return (
     <>
@@ -85,7 +81,7 @@ export function SellStep({ asset, onValid }: SellStepProps) {
               <SelectItem value="1">24h</SelectItem>
               <SelectItem value="2">48h</SelectItem>
               <SelectItem value="3">72h</SelectItem>
-                <SelectItem value="10">10 days</SelectItem>
+              <SelectItem value="10">10 days</SelectItem>
             </SelectContent>
           </Select>
         </div>
