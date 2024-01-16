@@ -7,29 +7,30 @@ import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 import { ButtonLoading } from "@/components/button-loading"
+import { toast } from "@/components/ui/toast/use-toast"
 
 export type ConfirmBuyOfferStepProps = {
   offer: BuyOffer
-  onValid: () => void
-  setTxHash: (txHash: string) => void
 }
 
 export function ConfirmAcceptBuyOfferStep({
   offer,
-  onValid,
-  setTxHash,
 }: ConfirmBuyOfferStepProps) {
   const {
     mutateAsync: acceptBuyOffer,
     isPending,
-    isError,
+    isSuccess
   } = useAcceptBuyOffer()
 
   const onConfirm = useCallback(async () => {
     const tx = await acceptBuyOffer({ offer })
-    if (tx) setTxHash(tx.transactionHash)
-    if (!isError) onValid()
-  }, [acceptBuyOffer, offer, onValid])
+    if (isSuccess) {
+      toast({
+        title: "Your offer has been accepted.",
+        description: `${globalConfig.network.explorer}/${tx.transactionHash}`
+      })
+    }
+  }, [acceptBuyOffer, offer, isSuccess])
 
   const amount = offer.trade.erc20TokenAmount
   const fees = offer.trade.totalFees

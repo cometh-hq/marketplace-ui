@@ -26,7 +26,7 @@ export function ConfirmMakeBuyOfferStep({
   const onConfirm = useCallback(async () => {
     await makeBuyOffer({ asset, price, validity })
     onValid()
-  }, [asset, makeBuyOffer, onValid, price])
+  }, [asset, price, validity, makeBuyOffer, onValid])
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 pt-8">

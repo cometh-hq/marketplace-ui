@@ -158,16 +158,6 @@ export function MakeBuyOfferButton({
     )
   }
 
-  if (isLoading) {
-    return (
-      <ButtonLoading
-        size={isVariantLink ? "default" : "lg"}
-        variant={isVariantLink ? "link" : "default"}
-        className={cn(isVariantLink && "h-auto p-0")}
-      />
-    )
-  }
-
   if (!requiredSteps?.length || !currentStep) return null
 
   const onClose = () => {
@@ -206,12 +196,12 @@ export function MakeBuyOfferButton({
             asset={asset}
             price={price}
             validity={validity ?? "1"}
-            onValid={nextStep}
+            onValid={onClose}
           />
         </Case>
-        <Case value="confirmation">
-          <ConfirmationStep />
-        </Case>
+        {/* <Case value="confirmation">
+          <ConfirmationStep asset={asset} onValid={onClose} />
+        </Case> */}
       </Switch>
     </TransactionDialogButton>
   )

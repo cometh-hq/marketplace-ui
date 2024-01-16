@@ -5,7 +5,6 @@ import { ContractTransaction } from "ethers"
 import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { toast } from "@/components/ui/toast/use-toast"
 
 import { getFirstListing } from "../cometh-marketplace/offers"
 
@@ -64,13 +63,9 @@ export const useBuyAsset = () => {
       )
       return fillTxReceipt
     },
-
     onSuccess: (_, { asset }) => {
       client.invalidateQueries({
         queryKey: ["cometh", "assets", asset.tokenId],
-      })
-      toast({
-        title: "NFT bought!",
       })
     }
   })

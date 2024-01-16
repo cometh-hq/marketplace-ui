@@ -1,14 +1,23 @@
 import Link from "next/link"
+import {
+  AssetWithTradeData,
+  SearchAssetWithTradeData,
+} from "@cometh/marketplace-sdk"
 import { ExternalLinkIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import globalConfig from "@/config/globalConfig"
 
 export type ConfirmationStepProps = {
+  asset?: AssetWithTradeData | SearchAssetWithTradeData
   txHash?: string | null
+  onValid?: () => void
 }
 
 export function ConfirmationStep({
+  asset,
   txHash,
+  onValid,
 }: ConfirmationStepProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
@@ -22,7 +31,7 @@ export function ConfirmationStep({
       <div className="flex items-center gap-2">
         {txHash && (
           <Link
-            href={`https://polygonscan.com/tx/${txHash}`}
+            href={`${globalConfig.network.explorer}/${txHash}`}
             target="_blank"
             rel="noreferrer"
           >

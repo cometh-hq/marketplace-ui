@@ -5,8 +5,6 @@ import { Case, Switch } from "@/components/utils/Switch"
 
 import { CollectionApprovalStep } from "../transaction-steps/collection-approval"
 import { ConfirmAcceptBuyOfferStep } from "../transaction-steps/confirm-accept-buy-offer"
-import { ConfirmationStep } from "../transaction-steps/confirmation"
-import { useState } from "react"
 import { AddGasStep } from "../transaction-steps/add-gas"
 
 export type AcceptBuyOfferButtonProps = {
@@ -14,8 +12,6 @@ export type AcceptBuyOfferButtonProps = {
 }
 
 export function AcceptBuyOfferButton({ offer }: AcceptBuyOfferButtonProps) {
-  const [txHash, setTxHash] = useState<string | null>(null)
-
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useAcceptBuyOfferAssetButton({ offer })
 
@@ -39,10 +35,7 @@ export function AcceptBuyOfferButton({ offer }: AcceptBuyOfferButtonProps) {
           <CollectionApprovalStep asset={offer.asset! || offer.trade} onValid={nextStep} />
         </Case>
         <Case value="confirm-accept-buy-offer">
-          <ConfirmAcceptBuyOfferStep offer={offer} setTxHash={setTxHash} onValid={nextStep} />
-        </Case>
-        <Case value="confirmation">
-          <ConfirmationStep txHash={txHash} />
+          <ConfirmAcceptBuyOfferStep offer={offer} />
         </Case>
       </Switch>
     </TransactionDialogButton>

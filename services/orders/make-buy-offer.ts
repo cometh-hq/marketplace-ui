@@ -7,6 +7,7 @@ import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { useBuildOfferOrder } from "./build-offer-order"
+import { toast } from "@/components/ui/toast/use-toast"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -52,6 +53,9 @@ export const useMakeBuyOfferAsset = () => {
       })
       client.invalidateQueries({
         queryKey: ["cometh", "received-buy-offers", asset.owner],
+      })
+      toast({
+        title: "Your offer has been submitted."
       })
     }
   })

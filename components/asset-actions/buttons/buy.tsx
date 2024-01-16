@@ -9,7 +9,6 @@ import { Case, Switch } from "@/components/utils/Switch"
 
 import { AllowanceStep } from "../transaction-steps/allowance"
 import { BuyStep } from "../transaction-steps/buy"
-import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { FundsStep } from "../transaction-steps/funds"
 import { AddGasStep } from "../transaction-steps/add-gas"
 
@@ -18,7 +17,6 @@ export type BuyAssetButtonProps = {
 }
 
 export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
-  const [txHash, setTxHash] = useState<string | null>(null)
   /**
    * TODO: Defer the calculation
    */
@@ -59,10 +57,7 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
           />
         </Case>
         <Case value="buy">
-          <BuyStep asset={asset} onValid={nextStep} setTxHash={setTxHash} />
-        </Case>
-        <Case value="confirmation">
-          <ConfirmationStep txHash={txHash} />
+          <BuyStep asset={asset} onValid={reset} />
         </Case>
       </Switch>
     </TransactionDialogButton>

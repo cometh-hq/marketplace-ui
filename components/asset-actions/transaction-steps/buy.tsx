@@ -1,11 +1,14 @@
 import { useCallback } from "react"
+import Link from "next/link"
 import { useBuyAsset } from "@/services/orders/buy-asset"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { ExternalLinkIcon } from "lucide-react"
 
+import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { InfoBox } from "@/components/ui/message-box"
 import { Price } from "@/components/ui/price"
-import { ButtonLoading } from "@/components/button-loading"
+import { toast } from "@/components/ui/toast/use-toast"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
 import { SwitchNetwork } from "../buttons/switch-network"
@@ -13,25 +16,43 @@ import { SwitchNetwork } from "../buttons/switch-network"
 export type BuyStepProps = {
   asset: AssetWithTradeData
   onValid: () => void
-  setTxHash: (txHash: string) => void
 }
 
 /**
  * Arriving at this stage means that the user has sufficient funds
  * so we don't have to do any check here
  */
-export function BuyStep({ asset, onValid, setTxHash }: BuyStepProps) {
-  const { mutateAsync: buy, isPending, isError } = useBuyAsset()
+export function BuyStep({ asset, onValid }: BuyStepProps) {
+  const { mutateAsync: buy, isPending } = useBuyAsset()
 
-  /**
-   * TODO: check what happens if the modal
-   * is closed before the transaction is confirmed
-   */
   const onSubmit = useCallback(async () => {
-    const tx = await buy({ asset: asset })
-    if (tx) setTxHash(tx.transactionHash)
-    if (!isError) onValid()
-  }, [asset, buy, onValid, setTxHash])
+    try {
+      const tx = await buy({ asset: asset })
+      console.log(tx)
+      toast({
+        title: "NFT bought!",
+        description: (
+          <a
+            href={`${globalConfig.network.explorer?.blockUrl}/${tx.transactionHash}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2"
+          >
+            <ExternalLinkIcon size={16} />
+            View on {globalConfig.network.explorer?.name}
+          </a>
+        ),
+      })
+      onValid()
+    } catch (error) {
+      console.error(error)
+      // toast({
+      //   variant: "destructive",
+      //   title: "Error",
+      //   description: "An error occured while buying this NFT, please retry."
+      // })
+    }
+  }, [asset, buy, onValid])
 
   return (
     <div className="flex flex-col items-center justify-center gap-[16px] pt-[16px]">
