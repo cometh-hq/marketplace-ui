@@ -29,9 +29,10 @@ const manifest: Manifest = {
     // put your logo in the '/public/tokens' folder and update the following line (example: "mytoken.png")
     thumb: "", 
   },
+  // Optional for development but strongly recommended for production use
   rpcUrl: env.NEXT_PUBLIC_RPC_URL,
   // Set to true if contracts transactions are sponsored for Cometh Connect users.
-  // Contracts to sponsor are ERC721, 0x and either your the wrapped native token contract or your ERC20
+  // Contracts to sponsor are your ERC721, 0x exchange and either the wrapped native token contract or your ERC20
   areContractsSponsored: true
 }
 
