@@ -1,11 +1,7 @@
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
 import {
-  DollarSignIcon,
-  Icon,
-  IconNode,
   LayoutGridIcon,
-  LucideIcon,
   TagIcon,
   UserIcon,
 } from "lucide-react"
