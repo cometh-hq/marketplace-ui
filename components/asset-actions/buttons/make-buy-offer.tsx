@@ -35,6 +35,7 @@ import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { FundsStep } from "../transaction-steps/funds"
 import { WrapStep } from "../transaction-steps/wrap"
 import globalConfig from "@/config/globalConfig"
+import { ButtonLoading } from "@/components/button-loading"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
@@ -153,6 +154,16 @@ export function MakeBuyOfferButton({
         onSubmit={(newPrice, newValidity) => {
           setPrice(newPrice), setValidity(newValidity)
         }}
+      />
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <ButtonLoading
+        size={isVariantLink ? "default" : "lg"}
+        variant={isVariantLink ? "link" : "default"}
+        className={cn(isVariantLink && "h-auto p-0")}
       />
     )
   }
