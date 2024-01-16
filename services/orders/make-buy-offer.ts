@@ -3,11 +3,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 
 import { useSigner } from "@/lib/web3/auth"
-import { toast } from "@/components/ui/toast/use-toast"
 import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
-import { handleOrderbookError } from "../errors"
 import { useBuildOfferOrder } from "./build-offer-order"
 
 export type MakeBuyOfferOptions = {
@@ -55,16 +53,6 @@ export const useMakeBuyOfferAsset = () => {
       client.invalidateQueries({
         queryKey: ["cometh", "received-buy-offers", asset.owner],
       })
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Something went wrong.",
-        description: handleOrderbookError(error, {
-          400: "Bad request",
-          500: "Internal orderbook server error",
-        }),
-      })
-    },
+    }
   })
 }

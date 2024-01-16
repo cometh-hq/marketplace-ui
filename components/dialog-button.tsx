@@ -1,9 +1,14 @@
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { Step, Stepper } from "@/components/ui/stepper"
+import { DialogClose } from "@radix-ui/react-dialog"
 
-import { useCorrectNetwork } from "@/lib/web3/network"
 import { cn } from "@/lib/utils/utils"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Step, Stepper } from "@/components/ui/stepper"
 
 export type TransactionDialogProps<T extends Step> = {
   label: string | React.ReactNode
@@ -22,15 +27,15 @@ export function TransactionDialogButton<T extends Step>({
   steps,
   children,
   currentStep,
-  onClose,
   open,
+  onClose,
   isLoading,
   isDisabled,
   isVariantLink,
   ...props
 }: TransactionDialogProps<T>) {
-  const { isChainSupported } = useCorrectNetwork()
-  
+  const isLastStep = currentStep.value === steps[steps.length - 1].value
+
   return (
     <Dialog open={open} modal onOpenChange={(v) => !v && onClose()}>
       <DialogTrigger asChild>
@@ -38,7 +43,7 @@ export function TransactionDialogButton<T extends Step>({
           size={isVariantLink ? "default" : "lg"}
           variant={isVariantLink ? "link" : "default"}
           className={cn(isVariantLink && "h-auto p-0")}
-          disabled={!isChainSupported || isDisabled}
+          disabled={isDisabled}
           isLoading={isLoading}
           {...props}
         >
@@ -48,6 +53,20 @@ export function TransactionDialogButton<T extends Step>({
       <DialogContent>
         <Stepper value={currentStep.value} steps={steps} />
         {children}
+        {isLastStep && (
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button
+                onClick={onClose}
+                className="flex gap-1"
+                size="sm"
+                variant="outline"
+              >
+                Close
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   )

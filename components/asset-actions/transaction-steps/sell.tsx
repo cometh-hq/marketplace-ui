@@ -47,7 +47,6 @@ export function SellStep({ asset, onValid }: SellStepProps) {
   }, [price, validity])
 
   const onSubmit = useCallback(async () => {
-    console.log("22")
     if (!orderParams) return
     await sell({
       asset,

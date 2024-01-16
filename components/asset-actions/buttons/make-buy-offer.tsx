@@ -158,7 +158,7 @@ export function MakeBuyOfferButton({
     )
   }
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <ButtonLoading
         size={isVariantLink ? "default" : "lg"}
@@ -166,6 +166,8 @@ export function MakeBuyOfferButton({
         className={cn(isVariantLink && "h-auto p-0")}
       />
     )
+  }
+
   if (!requiredSteps?.length || !currentStep) return null
 
   const onClose = () => {
@@ -208,7 +210,7 @@ export function MakeBuyOfferButton({
           />
         </Case>
         <Case value="confirmation">
-          <ConfirmationStep asset={asset} onValid={onClose} />
+          <ConfirmationStep />
         </Case>
       </Switch>
     </TransactionDialogButton>
