@@ -37,17 +37,22 @@ export function useWalletConnect(): {
     if (!onboard) throw new Error("Onboard is not initialized")
 
     try {
-      const wallets = await onboard.connectWallet(
-        isComethWallet
-          ? {
-              autoSelect: {
-                label: COMETH_CONNECT_STORAGE_LABEL,
-                disableModals: true,
-              },
-            }
-          : undefined
-      )
-
+      const wallets = await Promise.race([
+        onboard.connectWallet(
+          isComethWallet
+            ? {
+                autoSelect: {
+                  label: COMETH_CONNECT_STORAGE_LABEL,
+                  disableModals: true,
+                },
+              }
+            : undefined
+        ),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Timeout")), 5000)
+        ),
+      ]) as WalletState[]
+      
       if (wallets?.[0]) {
         await _selectdCorrectChain(onboard, wallets[0])
         localStorage.setItem("selectedWallet", wallets[0].label)
@@ -55,6 +60,7 @@ export function useWalletConnect(): {
       } else {
         throw new Error("No wallet selected")
       }
+      
     } catch (error) {
       console.log(error)
       throw new Error("Failed to connect wallet")
