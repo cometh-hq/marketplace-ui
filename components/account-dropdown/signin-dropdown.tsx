@@ -29,14 +29,14 @@ export function SigninDropdown({
     ...(env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY
       ? [
           {
-            name: "Cometh",
+            name: "Connect",
             icon: `${env.NEXT_PUBLIC_BASE_PATH}/cometh-connect.png`,
             isComethWallet: true,
           },
         ]
       : []),
     {
-      name: "Metamask",
+      name: "External wallet",
       icon: `${env.NEXT_PUBLIC_BASE_PATH}/metamask.svg`,
       isComethWallet: false,
     },

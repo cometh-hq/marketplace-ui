@@ -101,7 +101,7 @@ export function AssetCardBase({
       enabled={true}
       condition={!!true}
       delay={getRandomArrayElement([0, 50, 100, 150, 200])}
-      className="relative w-full cursor-pointer justify-self-center"
+      className="relative w-full justify-self-center"
     >
       <Card
         className={cn(
@@ -177,9 +177,11 @@ export function AssetCard({ asset, children }: AssetCardProps) {
               )}
             </div>
             <div>
-              <div className="text-sm font-medium">
-                Highest offer
-              </div>
+              {asset.orderbookStats.highestOfferPrice &&(
+                <div className="text-sm font-medium">
+                  Best offer
+                </div>
+              ) } 
               <div className="text-end">
                 {asset.orderbookStats.highestOfferPrice ? (
                   <Price amount={asset.orderbookStats.highestOfferPrice} />

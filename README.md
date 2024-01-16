@@ -108,6 +108,6 @@ erc20: {
 },
 ```
 
-### What is an RPC and why would I need one?
+#### What is an RPC and why would I need one?
 
 An RPC node is the entry point of calls made to the blockchain. By default our tools will use public free RPC urls. However, to avoid throttling and performance issues in production, it is strongly recommended to find a better private RPC dedicated to your app. 
