@@ -49,12 +49,11 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
 
   const isOnProfilePage = pathname.includes(`/profile`)
 
-  const result = results && results > 0 ? `(${results})` : ""
 
   return (
     <div className="flex gap-5">
       <NFTStateFilterItem
-        label={`All items ${result}`}
+        label={`All items`}
         isSelected={!get("isOnSale")}
         iconComponent={<LayoutGridIcon size="16" className="mr-2" />}
       />

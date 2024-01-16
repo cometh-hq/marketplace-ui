@@ -53,15 +53,15 @@ export const AssetsSearchGrid = ({
     return (nfts?.pages ?? []).map((r) => r?.nfts.assets).flat()
   }, [nfts?.pages])
 
-  const results = useMemo(() => {
+  const totalNbAssets = useMemo(() => {
     return nfts?.pages[0]?.total ?? 0
   }, [nfts?.pages])
 
   useEffect(() => {
-    if (results && initialResults === null) {
-      setInitialResults(results)
+    if (totalNbAssets && initialResults === null) {
+      setInitialResults(totalNbAssets)
     }
-  }, [results])
+  }, [totalNbAssets])
 
   useEffect(() => {
     if (nfts) refetch()
@@ -73,8 +73,8 @@ export const AssetsSearchGrid = ({
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <div className="relative mb-10 flex w-full flex-wrap items-center justify-between gap-4">
-        <NFTStateFilters assets={assets} results={results} />
+      <div className="relative  flex w-full flex-wrap items-center justify-between gap-4">
+        <NFTStateFilters assets={assets} results={totalNbAssets} />
         <div className="flex items-center gap-x-3">
           <SearchAsset onChange={setSearch} />
           <MarketplaceFiltersDropdown filters={filtersDefinition} />
@@ -82,6 +82,9 @@ export const AssetsSearchGrid = ({
           <MarketplaceSortDropdown />
         </div>
       </div>
+      <p className="w-full pl-2 text-left text-sm mt-3 mb-10">
+        <strong>{totalNbAssets} asset(s)</strong> matching your filters
+      </p>
 
       {isLoading && <Loading />}
 
@@ -89,6 +92,7 @@ export const AssetsSearchGrid = ({
         <AssetsSearchEmpty />
       ) : (
         <>
+         
           <AssetCardsList>
             {assets.map((asset, index) => (
               <AssetCard key={index} asset={asset} />
