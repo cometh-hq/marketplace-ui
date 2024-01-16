@@ -5,7 +5,7 @@ import {
 } from "@/services/balance/has-enough-gas"
 
 import globalConfig from "@/config/globalConfig"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
+import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 
 export type AddGasStepProps = {
@@ -15,6 +15,7 @@ export type AddGasStepProps = {
 export function AddGasStep({ onValid }: AddGasStepProps) {
   const viewer = useCurrentViewerAddress()
   const [isRefreshingBalance, setIsRefreshingBalance] = useState(false)
+  const isComethWallet = useIsComethWallet()
 
   const { data } = useHasEnoughGas(viewer)
 
@@ -22,7 +23,7 @@ export function AddGasStep({ onValid }: AddGasStepProps) {
     setIsRefreshingBalance(true)
 
     if (!viewer) return
-    const { hasEnoughGas } = await fetchHasEnoughGas(viewer)
+    const { hasEnoughGas } = await fetchHasEnoughGas(viewer, isComethWallet)
     if (hasEnoughGas) {
       onValid()
     }

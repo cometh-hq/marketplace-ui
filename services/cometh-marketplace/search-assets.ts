@@ -119,8 +119,8 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
       return getAssetsPaginated(
         {
           isOnSale: filters.isOnSale,
-          orderBy: filters.orderBy ?? FilterOrderBy.PRICE,
-          direction: filters.direction ?? FilterDirection.ASC,
+          orderBy: filters.orderBy ?? FilterOrderBy.LISTING_DATE,
+          direction: filters.direction ?? FilterDirection.DESC,
           ...(parsedAttributes.length > 0
             ? { attributes: parsedAttributes }
             : {}),

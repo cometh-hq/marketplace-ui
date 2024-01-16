@@ -12,7 +12,7 @@ import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchNeedsMoreAllowance } from "../../../services/allowance/needs-more-allowance"
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
-import { useCurrentViewerAddress } from "../auth"
+import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
 
 export type UseRequiredMakeBuyOfferSteps = {
@@ -43,6 +43,7 @@ export type FetchRequiredBuyingStepsOptions = {
   address: Address
   wrappedContractAddress: Address
   spender: Address
+  isComethWallet: boolean
 }
 
 export const fetchRequiredMakeBuyOfferSteps = async ({
@@ -50,9 +51,10 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
   address,
   wrappedContractAddress,
   spender,
+  isComethWallet,
 }: FetchRequiredBuyingStepsOptions) => {
-  const { hasEnoughGas } = await fetchHasEnoughGas(address)
-  const displayAddGasStep = !hasEnoughGas 
+  const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
+  const displayAddGasStep = !hasEnoughGas
 
   const displayAddFundsStep = price
     ? !(
@@ -96,6 +98,7 @@ export const useRequiredMakeBuyOfferSteps = ({
   price,
 }: UseRequiredMakeBuyOfferSteps) => {
   const viewerAddress = useCurrentViewerAddress()
+  const isComethWallet = useIsComethWallet()
   const nftSwapSdk = useNFTSwapv4()
 
   return useQuery({
@@ -107,6 +110,7 @@ export const useRequiredMakeBuyOfferSteps = ({
         address: viewerAddress,
         wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
         spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
+        isComethWallet,
       })
     },
 

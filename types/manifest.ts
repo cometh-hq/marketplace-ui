@@ -26,4 +26,5 @@ export type Manifest = {
     thumb?: string
   } | null,
   rpcUrl?: string
+  areContractsSponsored: boolean
 }

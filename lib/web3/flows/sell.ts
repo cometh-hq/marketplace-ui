@@ -9,7 +9,7 @@ import { Address } from "viem"
 import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasApprovedCollection } from "../../../services/token-approval/has-approved-collection"
-import { useCurrentViewerAddress } from "../auth"
+import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
 
 export type UseRequiredSellingStepsOptions = {
@@ -32,14 +32,16 @@ export type FetchRequiredSellingStepsOptions = {
   asset: AssetWithTradeData
   address: Address
   nftSwapSdk: NonNullable<ReturnType<typeof useNFTSwapv4>>
+  isComethWallet: boolean
 }
 
 export const fetchRequiredSellingSteps = async ({
   asset,
   address,
   nftSwapSdk,
+  isComethWallet
 }: FetchRequiredSellingStepsOptions) => {
-  const { hasEnoughGas } = await fetchHasEnoughGas(address)
+  const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
 
   const hasApprovedCollection = await fetchHasApprovedCollection({
     address,
@@ -62,6 +64,7 @@ export const useRequiredSellingSteps = ({
 }: UseRequiredSellingStepsOptions) => {
   const viewerAddress = useCurrentViewerAddress()
   const nftSwapSdk = useNFTSwapv4()
+  const isComethWallet = useIsComethWallet()
 
   return useQuery({
     queryKey: ["requiredSellingSteps", asset],
@@ -71,6 +74,7 @@ export const useRequiredSellingSteps = ({
         asset,
         address: viewerAddress,
         nftSwapSdk,
+        isComethWallet
       })
     },
 

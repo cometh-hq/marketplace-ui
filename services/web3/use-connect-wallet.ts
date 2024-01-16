@@ -1,7 +1,6 @@
 "use client"
 
 import {
-  ConnectOptions,
   DisconnectOptions,
   WalletState,
 } from "@web3-onboard/core"

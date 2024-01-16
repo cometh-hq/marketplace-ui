@@ -9,7 +9,7 @@ import globalConfig from "@/config/globalConfig"
 import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
-import { useCurrentViewerAddress } from "../auth"
+import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 import { BigNumber } from "ethers"
 
 export type UseRequiredBuyingStepsOptions = {
@@ -32,12 +32,14 @@ export type FetchRequiredBuyingStepsOptions = {
   asset: AssetWithTradeData
   address: Address
   wrappedContractAddress: Address
+  isComethWallet: boolean
 }
 
 export const fetchRequiredBuyingSteps = async ({
   asset,
   address,
   wrappedContractAddress,
+  isComethWallet,
 }: FetchRequiredBuyingStepsOptions) => {
   const rawPrice = asset.orderbookStats.lowestSalePrice
   if (!rawPrice) {
@@ -63,7 +65,7 @@ export const fetchRequiredBuyingSteps = async ({
   })
   const displayAddFundsStep = !missingFundsData?.hasSufficientFunds
 
-  const { hasEnoughGas } = await fetchHasEnoughGas(address)
+  const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
   const displayAddGasStep = !hasEnoughGas
 
   const buyingSteps = [
@@ -80,7 +82,7 @@ export const useRequiredBuyingSteps = ({
   asset,
 }: UseRequiredBuyingStepsOptions) => {
   const viewerAddress = useCurrentViewerAddress()
-
+  const isComethWallet = useIsComethWallet()
   return useQuery({
     queryKey: ["requiredBuyingSteps", asset, viewerAddress],
     queryFn: async () => {
@@ -91,6 +93,7 @@ export const useRequiredBuyingSteps = ({
         asset,
         address: viewerAddress,
         wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
+        isComethWallet
       })
 
       return steps

@@ -22,6 +22,7 @@ type GlobalConfig = {
     symbol: string
     thumb?: string
   }
+  areContractsSponsored: boolean
 }
 
 export const NATIVE_TOKEN_ADDRESS_AS_ERC20 =
@@ -75,6 +76,7 @@ const globalConfig: GlobalConfig = {
     : ordersErc20.address,
   ordersDisplayCurrency,
   network,
+  areContractsSponsored: manifest.areContractsSponsored
 }
 
 export default globalConfig
