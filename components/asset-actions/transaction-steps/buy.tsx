@@ -12,6 +12,7 @@ import { toast } from "@/components/ui/toast/use-toast"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
 import { SwitchNetwork } from "../buttons/switch-network"
+import { CopyButton } from "@/components/ui/copy-button"
 
 export type BuyStepProps = {
   asset: AssetWithTradeData
@@ -26,12 +27,11 @@ export function BuyStep({ asset, onValid }: BuyStepProps) {
   const { mutateAsync: buy, isPending } = useBuyAsset()
 
   const onSubmit = useCallback(async () => {
-    try {
-      const tx = await buy({ asset: asset })
-      console.log(tx)
-      toast({
-        title: "NFT bought!",
-        description: (
+    const tx = await buy({ asset: asset })
+    toast({
+      title: "NFT bought!",
+      description: (
+        globalConfig.network.explorer?.blockUrl ? (
           <a
             href={`${globalConfig.network.explorer?.blockUrl}/${tx.transactionHash}`}
             target="_blank"
@@ -41,23 +41,20 @@ export function BuyStep({ asset, onValid }: BuyStepProps) {
             <ExternalLinkIcon size={16} />
             View on {globalConfig.network.explorer?.name}
           </a>
-        ),
-      })
-      onValid()
-    } catch (error) {
-      console.error(error)
-      // toast({
-      //   variant: "destructive",
-      //   title: "Error",
-      //   description: "An error occured while buying this NFT, please retry."
-      // })
-    }
+          ) : (
+            <div className="flex items-center gap-2">
+              Copy the transaction hash <CopyButton size="lg" textToCopy={tx.transactionHash} />
+            </div>
+          )
+      ),
+    })
+    onValid()
   }, [asset, buy, onValid])
 
   return (
     <div className="flex flex-col items-center justify-center gap-[16px] pt-[16px]">
       <AssetHeaderImage asset={asset} />
-
+      
       <InfoBox
         title="Secured Transaction"
         description="This transaction is secured by the blockchain. You will be prompted to confirm the transaction in your wallet."
