@@ -66,13 +66,15 @@ export function TransfersList({
                 </div>
               </TableCell>
               <TableCell>
-                <Link
-                  href={`${globalConfig.network.explorer}/${transfer.txHash}`}
+                <a
+                  href={`${globalConfig.network.explorer?.url}/tx/${transfer.txHash}`}
+                  target="_blank"
+                  rel='noreferrer'
                   className="flex items-center justify-end gap-2 text-sm font-medium text-muted-foreground hover:text-secondary-foreground"
                 >
                   {transfer.createdAt.toLocaleString(DateTime.DATE_MED)}
                   <ExternalLink size="18" className="" />
-                </Link>
+                </a>
               </TableCell>
             </TableRow>
           ))

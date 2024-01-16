@@ -72,7 +72,7 @@ export function MakeBuyOfferPriceDialog({
           className={cn(isVariantLink ? "h-auto p-0" : "")}
           disabled={!isChainSupported}
         >
-          Make offer
+          Make an offer
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -179,7 +179,7 @@ export function MakeBuyOfferButton({
   return (
     <TransactionDialogButton
       open={open}
-      label="Make offer"
+      label="Make an offer"
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={onClose}
