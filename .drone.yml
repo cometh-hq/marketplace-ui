@@ -16,26 +16,33 @@ steps:
       build_args_from_env:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
+        - NEXT_PUBLIC_BASE_PATH
         - NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS
+        - NEXT_PUBLIC_CONTRACT_ADDRESS
+        - NEXT_PUBLIC_NETWORK_ID
         - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
         - NEXT_PUBLIC_MARKETPLACE_API_KEY
+        - NEXT_PUBLIC_COMETH_CONNECT_BASE_URL
         - NEXT_PUBLIC_COMETH_CONNECT_API_KEY
-        - NEXT_PUBLIC_BASE_PATH
-        - NEXT_PUBLIC_CONTRACT_ADDRESS
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
+      NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
         from_secret: zero_ex_contract_address
-      NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
-        from_secret: dev_cometh_api_url
-      NEXT_PUBLIC_MARKETPLACE_API_KEY:
-        from_secret: dev_marketplace_api_key
-      NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
-        from_secret: dev_connect_api_key
-      NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_CONTRACT_ADDRESS:
         from_secret: dev_contract_address
+      NEXT_PUBLIC_NETWORK_ID:
+        from_secret: network_id
+      NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
+        from_secret: dev_marketplace_api_url
+      NEXT_PUBLIC_MARKETPLACE_API_KEY:
+        from_secret: dev_marketplace_api_key
+      NEXT_PUBLIC_COMETH_CONNECT_BASE_URL:
+        from_secret: dev_connect_base_url
+      NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
+        from_secret: dev_connect_api_key
+      
   - name: rolling update
     image: gcr.io/cometh-service/app-rolling-update:latest
     environment:
