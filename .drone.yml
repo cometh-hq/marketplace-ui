@@ -6,13 +6,13 @@ steps:
     image: plugins/gcr
     settings:
       dockerfile: Dockerfile
-      registry: gcr.io/cometh-core
+      registry: gcr.io/cometh-service
       repo: ${DRONE_REPO_NAME}
-      cache_from: gcr.io/cometh-core/${DRONE_REPO_NAME}:develop
+      cache_from: gcr.io/cometh-service/${DRONE_REPO_NAME}:develop
       tags:
         - develop
       json_key:
-        from_secret: core_google_credentials
+        from_secret: service_google_credentials
       build_args_from_env:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
@@ -33,14 +33,14 @@ steps:
         from_secret: dev_marketplace_api_key
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: dev_connect_api_key
-      NEXT_PUBLIC_BASE_PATH: "/marketplace"
+      NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_CONTRACT_ADDRESS:
         from_secret: dev_contract_address
   - name: rolling update
-    image: gcr.io/cometh-core/app-rolling-update:latest
+    image: gcr.io/cometh-service/app-rolling-update:latest
     environment:
       GCP_SA:
-        from_secret: core_google_credentials
+        from_secret: service_google_credentials
       SERVICE: ${DRONE_REPO_NAME}
       ENVIRONMENT: develop
     depends_on: [build and push]
@@ -71,7 +71,7 @@ trigger:
     include:
       - push
 image_pull_secrets:
-  - core_dockerconfigjson
+  - service_dockerconfigjson
 ---
 kind: pipeline
 type: docker
@@ -81,13 +81,13 @@ steps:
     image: plugins/gcr
     settings:
       dockerfile: Dockerfile
-      registry: gcr.io/cometh-core
+      registry: gcr.io/cometh-service
       repo: ${DRONE_REPO_NAME}
-      cache_from: gcr.io/cometh-core/${DRONE_REPO_NAME}:staging
+      cache_from: gcr.io/cometh-service/${DRONE_REPO_NAME}:staging
       tags:
         - staging
       json_key:
-        from_secret: core_google_credentials
+        from_secret: service_google_credentials
       build_args_from_env:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
@@ -108,14 +108,14 @@ steps:
         from_secret: staging_marketplace_api_key
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: staging_connect_api_key
-      NEXT_PUBLIC_BASE_PATH: "/marketplace"
+      NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_CONTRACT_ADDRESS:
         from_secret: staging_contract_address
   - name: rolling update
-    image: gcr.io/cometh-core/app-rolling-update:latest
+    image: gcr.io/cometh-service/app-rolling-update:latest
     environment:
       GCP_SA:
-        from_secret: core_google_credentials
+        from_secret: service_google_credentials
       SERVICE: ${DRONE_REPO_NAME}
       ENVIRONMENT: staging
     depends_on: [build and push]
@@ -146,7 +146,7 @@ trigger:
     include:
       - push
 image_pull_secrets:
-  - core_dockerconfigjson
+  - service_dockerconfigjson
 ---
 kind: pipeline
 type: docker
@@ -156,13 +156,13 @@ steps:
     image: plugins/gcr
     settings:
       dockerfile: Dockerfile
-      registry: gcr.io/cometh-core
+      registry: gcr.io/cometh-service
       repo: ${DRONE_REPO_NAME}
-      cache_from: gcr.io/cometh-core/${DRONE_REPO_NAME}:prod
+      cache_from: gcr.io/cometh-service/${DRONE_REPO_NAME}:prod
       tags:
         - prod
       json_key:
-        from_secret: core_google_credentials
+        from_secret: service_google_credentials
       build_args_from_env:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
@@ -183,14 +183,14 @@ steps:
         from_secret: prod_marketplace_api_key
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: prod_connect_api_key
-      NEXT_PUBLIC_BASE_PATH: "/marketplace"
+      NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_CONTRACT_ADDRESS:
         from_secret: prod_contract_address
   - name: rolling update
-    image: gcr.io/cometh-core/app-rolling-update:latest
+    image: gcr.io/cometh-service/app-rolling-update:latest
     environment:
       GCP_SA:
-        from_secret: core_google_credentials
+        from_secret: service_google_credentials
       SERVICE: ${DRONE_REPO_NAME}
       ENVIRONMENT: prod
     depends_on: [build and push]
@@ -221,4 +221,4 @@ trigger:
     include:
       - push
 image_pull_secrets:
-  - core_dockerconfigjson
+  - service_dockerconfigjson

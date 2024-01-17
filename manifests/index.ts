@@ -3,7 +3,7 @@ import { Address } from "viem"
 import { Manifest } from "@/types/manifest"
 
 const manifest: Manifest = {
-  name: "My NFT collection",
+  name: "Cosmik Marketplace",
   contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
   themeClass: "theme-base",
 
@@ -22,12 +22,12 @@ const manifest: Manifest = {
 
   currency: {
     main: {
-      name: "MATIC",
+      name: "ETH",
       address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     },
     wrapped: {
-      name: "WMATIC",
-      address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      name: "WETH",
+      address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
     },
   },
 }
