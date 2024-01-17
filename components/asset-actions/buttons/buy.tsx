@@ -17,9 +17,6 @@ export type BuyAssetButtonProps = {
 }
 
 export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
-  /**
-   * TODO: Defer the calculation
-   */
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useBuyAssetButton({ asset })
 

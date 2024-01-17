@@ -124,8 +124,8 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
           ...(parsedAttributes.length > 0
             ? { attributes: parsedAttributes }
             : {}),
-          ...(options?.search && { name: options.search }),
-          ...(options?.owner && { owner: options.owner }),
+          ...options?.search && { name: options.search },
+          ...options?.owner && { owner: options.owner },
         },
         pageParam,
         ASSETS_PER_PAGE

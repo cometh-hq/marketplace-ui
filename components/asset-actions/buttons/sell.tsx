@@ -9,6 +9,7 @@ import { SellStep } from "../transaction-steps/sell"
 import { AddGasStep } from "../transaction-steps/add-gas"
 import { ButtonLoading } from "@/components/button-loading"
 import { cn } from "@/lib/utils/utils"
+import { useState } from "react"
 
 export type SellAssetButtonProps = {
   asset: AssetWithTradeData
@@ -16,6 +17,7 @@ export type SellAssetButtonProps = {
 }
 
 export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) {
+  const [open, setOpen] = useState(false)
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useSellAssetButton({ asset })
 
@@ -31,12 +33,19 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
 
   if (!requiredSteps?.length || !currentStep) return null
 
+  const handleClose = () => {
+    reset()
+    setOpen(false)
+  }
+
   return (
     <TransactionDialogButton
+      open={open}
       label="Sell"
       currentStep={currentStep}
       steps={requiredSteps}
-      onClose={reset}
+      onOpenChange={setOpen}
+      onClose={handleClose}
       isVariantLink={isVariantLink}
       isLoading={isLoading}
       isDisabled={isLoading}
@@ -49,7 +58,7 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
           <CollectionApprovalStep asset={asset} onValid={nextStep} />
         </Case>
         <Case value="sell">
-          <SellStep asset={asset} />
+          <SellStep asset={asset} onClose={handleClose}/>
         </Case>
       </Switch>
     </TransactionDialogButton>

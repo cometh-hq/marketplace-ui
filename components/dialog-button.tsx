@@ -9,8 +9,9 @@ export type TransactionDialogProps<T extends Step> = {
   label: string | React.ReactNode
   steps: T[]
   currentStep: T
-  onClose: () => void
   open?: boolean
+  onOpenChange?: (open: boolean) => void
+  onClose: () => void
   children: React.ReactNode[] | React.ReactNode
   isLoading?: boolean
   isDisabled?: boolean
@@ -18,11 +19,12 @@ export type TransactionDialogProps<T extends Step> = {
 } & React.ComponentProps<typeof Button>
 
 export function TransactionDialogButton<T extends Step>({
+  open,
   label,
   steps,
   children,
   currentStep,
-  open,
+  onOpenChange,
   onClose,
   isLoading,
   isDisabled,
@@ -30,7 +32,11 @@ export function TransactionDialogButton<T extends Step>({
   ...props
 }: TransactionDialogProps<T>) {
   return (
-    <Dialog open={open} modal onOpenChange={(v) => !v && onClose()}>
+    <Dialog
+      open={open}
+      modal
+      onOpenChange={(v) => (onOpenChange?.(v) || !v && onClose())}
+    >
       <DialogTrigger asChild>
         <Button
           size={isVariantLink ? "default" : "lg"}
@@ -49,7 +55,7 @@ export function TransactionDialogButton<T extends Step>({
             event.target instanceof HTMLElement &&
             event.target.closest("#cometh-gas-modal-wrapper")
           ) {
-           event.preventDefault()
+            event.preventDefault()
           }
         }}
       >
