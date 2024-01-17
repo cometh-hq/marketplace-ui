@@ -21,6 +21,7 @@ import globalConfig from "@/config/globalConfig"
 
 export type SellStepProps = {
   asset: AssetWithTradeData
+  onClose: () => void
 }
 
 /**
@@ -29,8 +30,8 @@ export type SellStepProps = {
  *
  * TODO: wrap in a form
  */
-export function SellStep({ asset }: SellStepProps) {
-  const { mutateAsync: sell, isPending, isError } = useSellAsset()
+export function SellStep({ asset, onClose }: SellStepProps) {
+  const { mutateAsync: sell, isPending } = useSellAsset()
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
 
@@ -49,7 +50,8 @@ export function SellStep({ asset }: SellStepProps) {
       asset,
       ...orderParams,
     })
-  }, [asset, orderParams, sell])
+    onClose()
+  }, [asset, onClose, orderParams, sell])
 
   return (
     <>

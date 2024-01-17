@@ -1,18 +1,17 @@
+import { manifest } from "@/manifests"
+
 import { cn } from "@/lib/utils/utils"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Step, Stepper } from "@/components/ui/stepper"
 
 export type TransactionDialogProps<T extends Step> = {
   label: string | React.ReactNode
   steps: T[]
   currentStep: T
-  onClose: () => void
   open?: boolean
+  onOpenChange?: (open: boolean) => void
+  onClose: () => void
   children: React.ReactNode[] | React.ReactNode
   isLoading?: boolean
   isDisabled?: boolean
@@ -20,11 +19,12 @@ export type TransactionDialogProps<T extends Step> = {
 } & React.ComponentProps<typeof Button>
 
 export function TransactionDialogButton<T extends Step>({
+  open,
   label,
   steps,
   children,
   currentStep,
-  open,
+  onOpenChange,
   onClose,
   isLoading,
   isDisabled,
@@ -32,7 +32,11 @@ export function TransactionDialogButton<T extends Step>({
   ...props
 }: TransactionDialogProps<T>) {
   return (
-    <Dialog open={open} modal onOpenChange={(v) => !v && onClose()}>
+    <Dialog
+      open={open}
+      modal
+      onOpenChange={(v) => (onOpenChange?.(v) || !v && onClose())}
+    >
       <DialogTrigger asChild>
         <Button
           size={isVariantLink ? "default" : "lg"}
@@ -45,7 +49,16 @@ export function TransactionDialogButton<T extends Step>({
           {label}
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent
+        onPointerDownOutside={(event) => {
+          if (
+            event.target instanceof HTMLElement &&
+            event.target.closest("#cometh-gas-modal-wrapper")
+          ) {
+            event.preventDefault()
+          }
+        }}
+      >
         <Stepper value={currentStep.value} steps={steps} />
         {children}
       </DialogContent>
