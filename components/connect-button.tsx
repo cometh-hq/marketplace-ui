@@ -47,7 +47,7 @@ export function ConnectButton({
 
   if (isConnected && !children) return <CurrentAccountDropdown />
 
-  if (reconnecting) {
+  if (reconnecting && !isLinkVariant) {
     return (
       <Button
         size={fullVariant ? "lg" : "default"}
@@ -63,7 +63,7 @@ export function ConnectButton({
     return (
       <SigninDropdown
         handleConnect={handleConnect}
-        disabled={isLoading || connecting}
+        disabled={isLoading || connecting || reconnecting}
         fullVariant={fullVariant}
         customText={customText}
         isLinkVariant={isLinkVariant}
