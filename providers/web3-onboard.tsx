@@ -14,6 +14,8 @@ import {
   ComethWallet,
   ConnectAdaptor,
   ConnectOnboardConnector,
+  NewSignerRequestBody,
+  NewSignerRequestType,
   SupportedNetworks,
 } from "@cometh/connect-sdk"
 
@@ -35,7 +37,7 @@ const Web3OnboardContext = createContext<{
   isConnected: boolean
   setIsconnected: Dispatch<SetStateAction<boolean>>
   reconnecting: boolean
-  initNewSignerRequest: (walletAddress: string) => Promise<void>
+  initNewSignerRequest: (walletAddress: string) => Promise<NewSignerRequestBody>
   retrieveWalletAddressFromSigner: (walletAddress: string) => Promise<void>
 }>({
   onboard: null,
@@ -43,7 +45,16 @@ const Web3OnboardContext = createContext<{
   isConnected: false,
   setIsconnected: () => {},
   reconnecting: false,
-  initNewSignerRequest: () => Promise.resolve(),
+  initNewSignerRequest: () => Promise.resolve({
+    walletAddress: "",
+    signerAddress: "",
+    deviceData: {
+      browser: "",
+      os: "",
+      platform: "",
+    },
+    type: NewSignerRequestType.WEBAUTHN,
+  }),
     retrieveWalletAddressFromSigner: () => Promise.resolve(),
 })
 

@@ -57,7 +57,6 @@ export function ConnectButton({
       <SigninDropdown
         handleConnect={handleConnect}
         disabled={isLoading || connecting}
-        fullVariant={fullVariant}
       />
     )
   }
