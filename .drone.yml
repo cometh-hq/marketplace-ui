@@ -27,7 +27,7 @@ steps:
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
-      NEXT_PUBLIC_BASE_PATH: ""
+      NEXT_PUBLIC_BASE_PATH: "/marketplace"
       NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
         from_secret: zero_ex_contract_address
       NEXT_PUBLIC_CONTRACT_ADDRESS:
