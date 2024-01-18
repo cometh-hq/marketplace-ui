@@ -3,6 +3,7 @@ import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 import { parseUnits } from "ethers/lib/utils"
 
+import globalConfig from "@/config/globalConfig"
 import { cn } from "@/lib/utils/utils"
 import { useMakeBuyOfferAssetButton } from "@/lib/web3/flows/make-buy-offer"
 import { useCorrectNetwork } from "@/lib/web3/network"
@@ -24,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { ButtonLoading } from "@/components/button-loading"
 import { TransactionDialogButton } from "@/components/dialog-button"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 import { Case, Switch } from "@/components/utils/Switch"
@@ -33,22 +35,23 @@ import { AllowanceStep } from "../transaction-steps/allowance"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/confirm-make-buy-offer"
 import { FundsStep } from "../transaction-steps/funds"
 import { WrapStep } from "../transaction-steps/wrap"
-import globalConfig from "@/config/globalConfig"
-import { ButtonLoading } from "@/components/button-loading"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
   isVariantLink?: boolean
+  variant?: string
 }
 
 export function MakeBuyOfferPriceDialog({
   onSubmit,
   asset,
   isVariantLink,
+  variant,
 }: {
   onSubmit: (price: BigNumber, validity: string) => void
   asset: AssetWithTradeData
   isVariantLink?: boolean
+  variant?: string
 }) {
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
@@ -68,7 +71,7 @@ export function MakeBuyOfferPriceDialog({
       <DialogTrigger asChild>
         <Button
           size={isVariantLink ? "default" : "lg"}
-          variant={isVariantLink ? "link" : "default"}
+          variant={isVariantLink ? "link" : (variant as any) || "default"}
           className={cn(isVariantLink ? "h-auto p-0" : "")}
           disabled={!isChainSupported}
         >
@@ -86,7 +89,9 @@ export function MakeBuyOfferPriceDialog({
 
         <div className="mt-4 flex gap-4">
           <div className="flex flex-col gap-3 md:w-2/3">
-            <Label htmlFor="make-buy-offer-price">Offer price in {globalConfig.ordersDisplayCurrency.symbol} *</Label>
+            <Label htmlFor="make-buy-offer-price">
+              Offer price in {globalConfig.ordersDisplayCurrency.symbol} *
+            </Label>
             <Input
               id="make-buy-offer-price"
               type="number"
@@ -125,6 +130,7 @@ export function MakeBuyOfferPriceDialog({
 export function MakeBuyOfferButton({
   asset,
   isVariantLink,
+  variant,
 }: MakeBuyOfferProps) {
   const [open, setOpen] = useState(false)
   const {
@@ -153,6 +159,7 @@ export function MakeBuyOfferButton({
         onSubmit={(newPrice, newValidity) => {
           setPrice(newPrice), setValidity(newValidity)
         }}
+        variant={variant}
       />
     )
   }

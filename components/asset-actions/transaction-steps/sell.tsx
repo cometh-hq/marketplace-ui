@@ -1,12 +1,14 @@
 import { useCallback, useMemo, useState } from "react"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
-import { SwitchNetwork } from "../buttons/switch-network"
 import { useSellAsset } from "@/services/orders/sell-asset"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { parseUnits } from "ethers/lib/utils"
+
+import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Price } from "@/components/ui/price"
+import { PriceDetails } from "@/components/ui/priceTab"
 import {
   Select,
   SelectContent,
@@ -16,8 +18,7 @@ import {
 } from "@/components/ui/select"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
-import globalConfig from "@/config/globalConfig"
-
+import { SwitchNetwork } from "../buttons/switch-network"
 
 export type SellStepProps = {
   asset: AssetWithTradeData
@@ -59,7 +60,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
         <AssetHeaderImage asset={asset} />
       </div>
 
-      <div className="mt-4 flex w-full gap-4">
+      <div className="mt-4 flex w-full  flex-col gap-4 sm:flex-row">
         <div className="flex flex-col gap-3 sm:w-2/3">
           <Label htmlFor="selling-price">
             Selling price in {globalConfig.ordersErc20.symbol}*
@@ -70,6 +71,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
             id="selling-price"
             placeholder="1.0"
             type="number"
+            disabled={isPending}
           />
         </div>
 
@@ -88,6 +90,8 @@ export function SellStep({ asset, onClose }: SellStepProps) {
           </Select>
         </div>
       </div>
+
+      <PriceDetails fullPrice={price} />
 
       <SwitchNetwork>
         <Button

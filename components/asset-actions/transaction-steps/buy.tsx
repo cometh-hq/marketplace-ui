@@ -1,7 +1,6 @@
 import { useCallback } from "react"
-import Link from "next/link"
 import { useBuyAsset } from "@/services/orders/buy-asset"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
 import { ExternalLinkIcon } from "lucide-react"
 
 import globalConfig from "@/config/globalConfig"
@@ -15,7 +14,7 @@ import { SwitchNetwork } from "../buttons/switch-network"
 import { CopyButton } from "@/components/ui/copy-button"
 
 export type BuyStepProps = {
-  asset: AssetWithTradeData
+  asset: SearchAssetWithTradeData | AssetWithTradeData
   onValid: () => void
 }
 

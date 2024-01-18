@@ -20,10 +20,11 @@ import { AssetImage } from "@/components/ui/asset-image"
 import { Card } from "@/components/ui/card"
 import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/make-buy-offer"
 import { SellAssetButton } from "@/components/asset-actions/buttons/sell"
+import { SwitchNetwork } from "@/components/asset-actions/buttons/switch-network"
+import { ConnectButton } from "@/components/connect-button"
 
 import { Price } from "../../ui/price"
-import { ConnectButton } from "@/components/connect-button"
-import { SwitchNetwork } from "@/components/asset-actions/buttons/switch-network"
+import { BuyAssetButton } from "@/components/asset-actions/buttons/buy"
 
 export type AssetCardProps = {
   asset: SearchAssetWithTradeData & {
@@ -121,7 +122,7 @@ export function AssetCardBase({
               imageData={asset.metadata.image_data}
               height={380}
               width={320}
-              className="z-20 h-full w-full rounded-lg object-contain"
+              className="z-20 size-full rounded-lg object-contain"
             />
           </AssetImageContainer>
         </Link>
@@ -129,6 +130,39 @@ export function AssetCardBase({
       </Card>
     </Appear>
   )
+}
+
+function renderAssetActions(
+  asset: SearchAssetWithTradeData & {
+    metadata: {
+      attributes?: AssetAttribute[]
+    }
+  },
+  owner: boolean
+) {
+  if(asset.orderbookStats.lowestListingPrice) {
+    return (
+      <ConnectButton isLinkVariant customText="Login to buy">
+        <SwitchNetwork>
+          <BuyAssetButton isSmall asset={asset} />
+        </SwitchNetwork>
+      </ConnectButton>)
+  } else if (asset.orderbookStats.highestOfferPrice) {
+    return <Price amount={asset.orderbookStats.highestOfferPrice} />
+  } else if (!owner) {
+    return (
+      <ConnectButton isLinkVariant customText="Login to buy">
+        <SwitchNetwork>
+          <MakeBuyOfferButton
+            asset={asset as unknown as AssetWithTradeData}
+            isVariantLink
+          />
+        </SwitchNetwork>
+      </ConnectButton>
+    )
+  } else {
+    return "No offer yet"
+  }
 }
 
 export function AssetCard({ asset, children }: AssetCardProps) {
@@ -164,9 +198,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
         <div className="w-full rounded-lg bg-muted/80 p-3">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm font-medium">
-                Price
-              </div>
+              <div className="text-sm font-medium">Price</div>
               {asset.orderbookStats.lowestSalePrice ? (
                 <Price amount={asset.orderbookStats.lowestSalePrice} />
               ) : owner ? (
@@ -179,27 +211,10 @@ export function AssetCard({ asset, children }: AssetCardProps) {
               )}
             </div>
             <div>
-              {asset.orderbookStats.highestOfferPrice &&(
-                <div className="text-sm font-medium">
-                  Best offer
-                </div>
-              ) } 
-              <div className="text-end">
-                {asset.orderbookStats.highestOfferPrice ? (
-                  <Price amount={asset.orderbookStats.highestOfferPrice} />
-                ) : !owner ? (
-                  <ConnectButton isLinkVariant customText="Login to buy" >
-                    <SwitchNetwork>
-                    <MakeBuyOfferButton
-                      asset={asset as unknown as AssetWithTradeData}
-                      isVariantLink
-                    />
-                    </SwitchNetwork>
-                  </ConnectButton>
-                ) : (
-                  "No offer yet"
-                )}
-              </div>
+              {asset.orderbookStats.highestOfferPrice && (
+                <div className="text-sm font-medium">Best offer</div>
+              )}
+              <div className="text-end">{renderAssetActions(asset, owner)}</div>
             </div>
           </div>
         </div>

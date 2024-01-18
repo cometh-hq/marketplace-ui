@@ -6,8 +6,8 @@ import { AssetSearchFilters } from "@cometh/marketplace-sdk"
 import { useInView } from "react-intersection-observer"
 
 import {
-  SerializedMarketplacePanelFilters,
   deserializeFilters,
+  SerializedMarketplacePanelFilters,
 } from "@/lib/utils/seed"
 import { Loading } from "@/components/ui/loading"
 
@@ -61,15 +61,15 @@ export const AssetsSearchGrid = ({
     if (totalNbAssets && initialResults === null) {
       setInitialResults(totalNbAssets)
     }
-  }, [totalNbAssets])
+  }, [totalNbAssets, initialResults, setInitialResults])
 
   useEffect(() => {
     if (nfts) refetch()
-  }, [nfts])
+  }, [nfts, refetch])
 
   useEffect(() => {
     if (inView) fetchNextPage()
-  }, [inView])
+  }, [inView, fetchNextPage])
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -83,7 +83,10 @@ export const AssetsSearchGrid = ({
         </div>
       </div>
       <p className="mb-10 mt-3 w-full pl-2 text-left text-sm">
-        <strong>{totalNbAssets} asset{totalNbAssets > 1 && "s"}</strong> matching your search
+        <strong>
+          {totalNbAssets} asset{totalNbAssets > 1 && "s"}
+        </strong>{" "}
+        matching your search
       </p>
 
       {isLoading && <Loading />}
@@ -92,7 +95,6 @@ export const AssetsSearchGrid = ({
         <AssetsSearchEmpty />
       ) : (
         <>
-         
           <AssetCardsList>
             {assets.map((asset, index) => (
               <AssetCard key={index} asset={asset} />

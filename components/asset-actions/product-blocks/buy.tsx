@@ -45,7 +45,7 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
         <ConnectButton fullVariant customText="Login to buy">
           <SwitchNetwork>
             <BuyAssetButton asset={asset} />
-            <MakeBuyOfferButton asset={asset} />
+            <MakeBuyOfferButton variant="secondary" asset={asset} />
           </SwitchNetwork>
         </ConnectButton>
       </ProductBlockCenteredColumn>

@@ -6,20 +6,19 @@ import { BuyOffer } from "@/types/buy-offers"
 import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
-import { ButtonLoading } from "@/components/button-loading"
+import { PriceDetails } from "@/components/ui/priceTab"
 import { toast } from "@/components/ui/toast/use-toast"
+import { ButtonLoading } from "@/components/button-loading"
 
 export type ConfirmBuyOfferStepProps = {
   offer: BuyOffer
 }
 
-export function ConfirmAcceptBuyOfferStep({
-  offer,
-}: ConfirmBuyOfferStepProps) {
+export function ConfirmAcceptBuyOfferStep({ offer }: ConfirmBuyOfferStepProps) {
   const {
     mutateAsync: acceptBuyOffer,
     isPending,
-    isSuccess
+    isSuccess,
   } = useAcceptBuyOffer()
 
   const onConfirm = useCallback(async () => {
@@ -27,7 +26,7 @@ export function ConfirmAcceptBuyOfferStep({
     if (isSuccess) {
       toast({
         title: "Your offer has been accepted.",
-        description: `${globalConfig.network.explorer}/${tx.transactionHash}`
+        description: `${globalConfig.network.explorer}/${tx.transactionHash}`,
       })
     }
   }, [acceptBuyOffer, offer, isSuccess])
@@ -37,13 +36,15 @@ export function ConfirmAcceptBuyOfferStep({
   const amountWithFees = BigNumber.from(amount).add(fees).toString()
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 pt-8">
-      <h3 className="text-xl font-semibold">Summary</h3>
+    <div className="flex w-full flex-col justify-center gap-4 pt-4">
+      <h3 className="w-full text-center text-xl font-semibold">Summary</h3>
       <p className="text-center">
         You are about to accept an offer for <br />
         this asset for <Price size="default" amount={amountWithFees} />{" "}
-        {globalConfig.ordersDisplayCurrency.symbol} (fees included)
+        (fees included)
       </p>
+      <PriceDetails fullPrice={amountWithFees} isEthersFormat={false} />
+
       {isPending ? (
         <ButtonLoading />
       ) : (

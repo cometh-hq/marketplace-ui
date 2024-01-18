@@ -1,5 +1,3 @@
-import { manifest } from "@/manifests"
-
 import { cn } from "@/lib/utils/utils"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
@@ -16,6 +14,7 @@ export type TransactionDialogProps<T extends Step> = {
   isLoading?: boolean
   isDisabled?: boolean
   isVariantLink?: boolean
+  variant?: string
 } & React.ComponentProps<typeof Button>
 
 export function TransactionDialogButton<T extends Step>({
@@ -29,19 +28,20 @@ export function TransactionDialogButton<T extends Step>({
   isLoading,
   isDisabled,
   isVariantLink,
+  variant,
   ...props
 }: TransactionDialogProps<T>) {
   return (
     <Dialog
       open={open}
       modal
-      onOpenChange={(v) => (onOpenChange?.(v) || !v && onClose())}
+      onOpenChange={(v) => onOpenChange?.(v) || (!v && onClose())}
     >
       <DialogTrigger asChild>
         <Button
           size={isVariantLink ? "default" : "lg"}
-          variant={isVariantLink ? "link" : "default"}
-          className={cn(isVariantLink && "h-auto p-0")}
+          variant={isVariantLink ? "link" : variant || "default"}
+          className={cn(isVariantLink && "h-auto p-0", "!bg-muted")}
           disabled={isDisabled}
           isLoading={isLoading}
           {...props}
