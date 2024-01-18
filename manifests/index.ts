@@ -20,7 +20,7 @@ const manifest: Manifest = {
   chainId: env.NEXT_PUBLIC_NETWORK_ID || 137,
 
   // Set to true if you want to use the native token for orders
-  useNativeTokenForOrders: true,
+  useNativeTokenForOrders: false,
   // The ERC20 token used if useNativeTokenForOrders is false
   erc20: {
     name: "My Token",
@@ -33,7 +33,7 @@ const manifest: Manifest = {
   rpcUrl: env.NEXT_PUBLIC_RPC_URL,
   // Set to true if contracts transactions are sponsored for Cometh Connect users.
   // Contracts to sponsor are your ERC721, 0x exchange and either the wrapped native token contract or your ERC20
-  areContractsSponsored: false
+  areContractsSponsored: true
 }
 
 export { manifest }
