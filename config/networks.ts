@@ -1,5 +1,4 @@
-import { Address } from "viem"
-
+import { Address , parseEther} from "viem"
 export type NetworkConfig = {
   chainId: number
   hexaId: string
@@ -25,6 +24,8 @@ export type NetworkConfig = {
     thumb?: string
   }
   zeroExExchange: Address
+  // Don't hesitate to update this value as you see fit
+  minimumBalanceForGas: bigint
 }
 
 const NETWORKS: Record<number, NetworkConfig> = {
@@ -47,6 +48,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     },
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    minimumBalanceForGas: parseEther('0.001')
   },
   3: {
     chainId: 3,
@@ -62,6 +64,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0xc778417e063141139fce010982780140aa0cd5ab",
     },
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    minimumBalanceForGas: parseEther('0.001')
   },
   4: {
     chainId: 4,
@@ -81,6 +84,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0xc778417e063141139fce010982780140aa0cd5ab",
     },
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    minimumBalanceForGas: parseEther('0.001')
   },
   5: {
     chainId: 5,
@@ -96,6 +100,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
     },
     zeroExExchange: "0xf91bb752490473b8342a3e964e855b9f9a2a668e",
+    minimumBalanceForGas: parseEther('0.001')
   },
   8: {
     chainId: 8,
@@ -115,6 +120,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0x1FA6A37c64804C0D797bA6bC1955E50068FbF362",
     },
     zeroExExchange: "0x19aaD856cE8c4C7e813233b21d56dA97796cC052",
+    minimumBalanceForGas: parseEther('1')
   },
   10: {
     chainId: 10,
@@ -130,6 +136,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0x4200000000000000000000000000000000000006",
     },
     zeroExExchange: "0xdef1abe32c034e558cdd535791643c58a13acc10",
+    minimumBalanceForGas: parseEther('0.001')
   },
   42: {
     chainId: 42,
@@ -145,6 +152,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
     },
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    minimumBalanceForGas: parseEther('1')
   },
   56: {
     chainId: 56,
@@ -169,6 +177,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
     },
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    minimumBalanceForGas: parseEther('1')
   },
   137: {
     chainId: 137,
@@ -189,6 +198,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
     },
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    minimumBalanceForGas: parseEther('0.1')
   },
   250: {
     chainId: 250,
@@ -209,6 +219,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83",
     },
     zeroExExchange: "0xdef189deaef76e379df891899eb5a00a94cbc250",
+    minimumBalanceForGas: parseEther('1')
   },
   42161: {
     chainId: 42161,
@@ -229,6 +240,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
     },
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    minimumBalanceForGas: parseEther('1')
   },
   42220: {
     chainId: 42220,
@@ -244,6 +256,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0x471EcE3750Da237f93B8E339c536989b8978a438",
     },
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    minimumBalanceForGas: parseEther('1')
   },
   43114: {
     chainId: 43114,
@@ -259,6 +272,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
     },
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
+    minimumBalanceForGas: parseEther('1')
   },
   80001: {
     chainId: 80001,
@@ -285,6 +299,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       thumb: "wmatic.png",
     },
     zeroExExchange: "0xf471d32cb40837bf24529fcf17418fc1a4807626",
+    minimumBalanceForGas: parseEther('0.1')
   },
   2121337: {
     chainId: 2121337,
@@ -305,6 +320,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
     },
     zeroExExchange: "0x9a6204dE86443eB0914059b291f667D8953e8aE1",
+    minimumBalanceForGas: parseEther('0.1')
   },
 }
 

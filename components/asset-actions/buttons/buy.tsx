@@ -11,6 +11,7 @@ import { AllowanceStep } from "../transaction-steps/allowance"
 import { BuyStep } from "../transaction-steps/buy"
 import { FundsStep } from "../transaction-steps/funds"
 import { AddGasStep } from "../transaction-steps/add-gas"
+import { UnwrapStep } from "../transaction-steps/unwrapStep"
 
 export type BuyAssetButtonProps = {
   asset: AssetWithTradeData
@@ -43,6 +44,12 @@ export function BuyAssetButton({ asset }: BuyAssetButtonProps) {
         </Case>
         <Case value="add-funds">
           <FundsStep
+            price={BigNumber.from(assetPrice ?? 0)}
+            onValid={nextStep}
+          />
+        </Case>
+        <Case value="unwrap-native-token">
+          <UnwrapStep
             price={BigNumber.from(assetPrice ?? 0)}
             onValid={nextStep}
           />

@@ -23,7 +23,8 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
   return (
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
-        <AssetStatusBadge status="not-listed" />-
+        <ProductBlockLabel>Price</ProductBlockLabel>
+        <AssetStatusBadge status="not-listed" />
       </ProductBlockDividedColumn>
 
       <BestOfferColumn asset={asset} />

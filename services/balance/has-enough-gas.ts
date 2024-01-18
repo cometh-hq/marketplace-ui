@@ -15,7 +15,7 @@ export const fetchHasEnoughGas = async (
     return { hasEnoughGas: true }
   const nativeTokenBalance = await getNativeBalance(walletAddress)
 
-  return { hasEnoughGas: nativeTokenBalance > 0 }
+  return { hasEnoughGas: nativeTokenBalance > globalConfig.minimumBalanceForGas }
 }
 
 export const useHasEnoughGas = (walletAddress: Address | undefined) => {

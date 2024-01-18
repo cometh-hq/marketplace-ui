@@ -28,7 +28,7 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
   return (
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
-        <AssetStatusBadge status="listed" />
+        <ProductBlockLabel>Price</ProductBlockLabel>
         <Price amount={asset.orderbookStats.lowestSalePrice} />
       </ProductBlockDividedColumn>
 

@@ -82,8 +82,8 @@ export const AssetsSearchGrid = ({
           <MarketplaceSortDropdown />
         </div>
       </div>
-      <p className="w-full pl-2 text-left text-sm mt-3 mb-10">
-        <strong>{totalNbAssets} asset(s)</strong> matching your filters
+      <p className="mb-10 mt-3 w-full pl-2 text-left text-sm">
+        <strong>{totalNbAssets} asset{totalNbAssets > 1 && "s"}</strong> matching your search
       </p>
 
       {isLoading && <Loading />}

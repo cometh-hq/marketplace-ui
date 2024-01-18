@@ -21,9 +21,10 @@ export async function unwrapToken({
   wrapContractAddress,
 }: UnwrapTokenOptions) {
   const contract = IWETH__factory.connect(wrapContractAddress, signer)
-  return await contract?.withdraw(amount, {
+  const tx =  await contract?.withdraw(amount, {
     from: account,
   })
+  await tx.wait()
 }
 
 export type UnwrapTokenMutationOptions = {

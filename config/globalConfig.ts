@@ -1,8 +1,7 @@
 import { manifest } from "@/manifests"
-import { Address } from "viem"
+import { Address, parseEther } from "viem"
 
 import networks, { NetworkConfig } from "@/config/networks"
-
 type GlobalConfig = {
   contractAddress: Address
   useNativeForOrders: boolean
@@ -10,10 +9,12 @@ type GlobalConfig = {
     name: string
     symbol: string
     address: Address
-    thumb?: string | {
-      native: string
-      wrapped: string
-    }
+    thumb?:
+      | string
+      | {
+          native: string
+          wrapped: string
+        }
   }
   ordersTokenAddress: Address
   network: NetworkConfig
@@ -23,6 +24,7 @@ type GlobalConfig = {
     thumb?: string
   }
   areContractsSponsored: boolean
+  minimumBalanceForGas: bigint
 }
 
 export const NATIVE_TOKEN_ADDRESS_AS_ERC20 =
@@ -62,6 +64,10 @@ if (useNativeTokenForOrders) {
   ordersDisplayCurrency.thumb = network.nativeToken.thumb
 }
 
+const minimumBalanceForGas = manifest.areContractsSponsored
+  ? parseEther("0")
+  : network.minimumBalanceForGas
+
 const globalConfig: GlobalConfig = {
   contractAddress: manifest.contractAddress as Address,
   useNativeForOrders: useNativeTokenForOrders,
@@ -76,7 +82,8 @@ const globalConfig: GlobalConfig = {
     : ordersErc20.address,
   ordersDisplayCurrency,
   network,
-  areContractsSponsored: manifest.areContractsSponsored
+  areContractsSponsored: manifest.areContractsSponsored,
+  minimumBalanceForGas
 }
 
 export default globalConfig

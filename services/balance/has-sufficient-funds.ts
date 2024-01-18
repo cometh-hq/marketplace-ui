@@ -10,23 +10,29 @@ import { balanceToBigNumber } from "./format"
 export type FetchHasSufficientFundsOptions = {
   address: Address
   price?: BigNumber | null
+  includeWrappedNative?: boolean
 }
 
 export type UseHasSufficientFundsOptions = {
   address?: Address | null
   price?: BigNumber | null
+  includeWrappedNative?: boolean
 }
 
 export const fetchHasSufficientFunds = async ({
   address,
   price,
+  includeWrappedNative = true,
 }: FetchHasSufficientFundsOptions) => {
   const [mainBalance, erc20Balance] = await Promise.all([
     getNativeBalance(address),
     getOrdersERC20Balance(address),
   ])
 
-  let availableFunds = balanceToBigNumber(erc20Balance)
+  let availableFunds = BigNumber.from(0)
+  if (includeWrappedNative || !globalConfig.useNativeForOrders) {
+    availableFunds = availableFunds.add(balanceToBigNumber(erc20Balance))
+  }
   if (globalConfig.useNativeForOrders) {
     availableFunds = availableFunds.add(mainBalance)
   }
@@ -37,6 +43,17 @@ export const fetchHasSufficientFunds = async ({
     ? BigNumber.from(0)
     : price?.sub(availableFunds)
 
+
+console.warn({
+  includeWrappedNative: includeWrappedNative,
+  mainBalance: mainBalance?.toString(),
+  erc20Balance: erc20Balance?.toString(),
+  availableFunds: availableFunds?.toString(),
+  price: price?.toString(),
+  hasSufficientFunds: hasSufficientFunds?.toString(),
+  missingBalance: missingBalance?.toString(),
+})
+
   return {
     hasSufficientFunds,
     missingBalance,
@@ -46,6 +63,7 @@ export const fetchHasSufficientFunds = async ({
 export const useHasSufficientFunds = ({
   address,
   price,
+  includeWrappedNative = true,
 }: UseHasSufficientFundsOptions) => {
   return useQuery({
     queryKey: ["hasSufficientFunds", address, price],
@@ -53,6 +71,7 @@ export const useHasSufficientFunds = ({
       fetchHasSufficientFunds({
         address: address!,
         price,
+        includeWrappedNative,
       }),
 
     enabled: !!address && !!price,

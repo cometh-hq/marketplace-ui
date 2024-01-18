@@ -14,17 +14,18 @@ export type WrapTokenOptions = {
   wrapContractAddress: Address
 }
 
-export function wrapToken({
+export async function wrapToken({
   amount,
   account,
   signer,
   wrapContractAddress,
 }: WrapTokenOptions) {
   const contract = IWETH__factory.connect(wrapContractAddress, signer)
-  return contract?.deposit({
+  const tx = await contract?.deposit({
     from: account,
     value: amount,
   })
+  await tx.wait()
 }
 
 export type WrapTokenMutationOptions = {

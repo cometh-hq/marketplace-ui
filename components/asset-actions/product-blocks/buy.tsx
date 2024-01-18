@@ -27,7 +27,7 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
   return (
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
-        <AssetStatusBadge status="listed" />
+        <ProductBlockLabel>Price</ProductBlockLabel>
         <Price amount={listingPrice} />
       </ProductBlockDividedColumn>
 
@@ -44,8 +44,8 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
       <ProductBlockCenteredColumn>
         <ConnectButton fullVariant customText="Login to buy">
           <SwitchNetwork>
-            <MakeBuyOfferButton asset={asset} />
             <BuyAssetButton asset={asset} />
+            <MakeBuyOfferButton asset={asset} />
           </SwitchNetwork>
         </ConnectButton>
       </ProductBlockCenteredColumn>

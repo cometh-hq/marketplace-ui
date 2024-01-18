@@ -1,8 +1,10 @@
 import { fetchNeedsMoreAllowance } from "@/services/allowance/needs-more-allowance"
 import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
+import { fetchNeedsToUnwrap } from "@/services/exchange/needs-to-unwrap"
 // import { useLoader } from "@/services/loaders"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
+import { BigNumber } from "ethers"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
@@ -10,7 +12,6 @@ import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
 import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
-import { BigNumber } from "ethers"
 
 export type UseRequiredBuyingStepsOptions = {
   asset: AssetWithTradeData
@@ -23,9 +24,7 @@ export type BuyingStep = {
   value: BuyingStepValue
 }
 
-const defaultSteps: BuyingStep[] = [
-  { label: "Payment", value: "buy" }
-]
+const defaultSteps: BuyingStep[] = [{ label: "Payment", value: "buy" }]
 
 export type FetchRequiredBuyingStepsOptions = {
   asset: AssetWithTradeData
@@ -48,7 +47,6 @@ export const fetchRequiredBuyingSteps = async ({
   }
   const price = BigNumber.from(rawPrice)
 
-
   const displayAllowanceStep =
     !globalConfig.useNativeForOrders &&
     (await fetchNeedsMoreAllowance({
@@ -64,12 +62,25 @@ export const fetchRequiredBuyingSteps = async ({
   })
   const displayAddFundsStep = !missingFundsData?.hasSufficientFunds
 
+  const needsToUnwrapData = await fetchNeedsToUnwrap({
+    address,
+    price,
+  })
+  const displayAddUnwrappedNativeTokenStep =
+    needsToUnwrapData.needsToUnwrap &&
+    globalConfig.useNativeForOrders &&
+    !displayAddFundsStep
+
   const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
   const displayAddGasStep = !hasEnoughGas
 
   const buyingSteps = [
     displayAddGasStep && { value: "add-gas", label: "Add gas" },
     displayAddFundsStep && { value: "add-funds", label: "Add funds" },
+    displayAddUnwrappedNativeTokenStep && {
+      value: "unwrap-native-token",
+      label: "Unwrap",
+    },
     displayAllowanceStep && { value: "allowance", label: "Permissions" },
     ...defaultSteps,
   ].filter(Boolean) as BuyingStep[]
@@ -92,7 +103,7 @@ export const useRequiredBuyingSteps = ({
         asset,
         address: viewerAddress,
         wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
-        isComethWallet
+        isComethWallet,
       })
 
       return steps
