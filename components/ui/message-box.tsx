@@ -1,11 +1,6 @@
 import { Info } from "lucide-react"
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./card"
+import { Card, CardDescription, CardHeader, CardTitle } from "./card"
 
 export type MessageBoxProps = {
   title: string
@@ -22,8 +17,8 @@ const MessageBox = ({
 }: MessageBoxProps) => {
   return (
     <Card className={className}>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-center text-lg font-semibold gap-2">
+      <CardHeader className="py-0">
+        <CardTitle className="flex items-center justify-center gap-2 text-lg font-semibold">
           {renderIcon?.()}
           {title}
         </CardTitle>

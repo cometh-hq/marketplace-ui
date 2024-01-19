@@ -1,3 +1,4 @@
+import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 import {
   AssetWithTradeData,
   SearchAssetWithTradeData,
@@ -8,7 +9,7 @@ import { Address } from "viem"
 import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasApprovedCollection } from "../../../services/token-approval/has-approved-collection"
-import { useCurrentViewerAddress } from "../auth"
+import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
 
 export type UseRequiredSellingStepsOptions = {
@@ -23,21 +24,24 @@ export type SellingStep = {
 }
 
 const defaultSteps = [
-  { label: "Pricing", value: "sell" },
-  { label: "All set", value: "confirmation" },
+  { label: "Pricing", value: "sell" }
 ] as SellingStep[]
 
 export type FetchRequiredSellingStepsOptions = {
   asset: AssetWithTradeData
   address: Address
   nftSwapSdk: NonNullable<ReturnType<typeof useNFTSwapv4>>
+  isComethWallet: boolean
 }
 
 export const fetchRequiredSellingSteps = async ({
   asset,
   address,
   nftSwapSdk,
+  isComethWallet
 }: FetchRequiredSellingStepsOptions) => {
+  const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
+
   const hasApprovedCollection = await fetchHasApprovedCollection({
     address,
     tokenId: asset.tokenId,
@@ -46,6 +50,7 @@ export const fetchRequiredSellingSteps = async ({
   })
 
   const sellingSteps = [
+    !hasEnoughGas && { value: "add-gas", label: "Add gas" },
     !hasApprovedCollection && { value: "token-approval", label: "Permissions" },
     ...defaultSteps,
   ].filter(Boolean) as SellingStep[]
@@ -58,23 +63,24 @@ export const useRequiredSellingSteps = ({
 }: UseRequiredSellingStepsOptions) => {
   const viewerAddress = useCurrentViewerAddress()
   const nftSwapSdk = useNFTSwapv4()
+  const isComethWallet = useIsComethWallet()
 
-  return useQuery(
-    ["requiredSellingSteps", asset],
-    async () => {
+  return useQuery({
+    queryKey: ["requiredSellingSteps", asset],
+    queryFn: async () => {
       if (!nftSwapSdk || !viewerAddress) return defaultSteps
       return fetchRequiredSellingSteps({
         asset,
         address: viewerAddress,
         nftSwapSdk,
+        isComethWallet
       })
     },
-    {
-      staleTime: Infinity,
-      refetchOnWindowFocus: false,
-      enabled: !!nftSwapSdk && !!viewerAddress,
-    }
-  )
+
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    enabled: !!nftSwapSdk && !!viewerAddress,
+  })
 }
 
 export type UseSellAssetButtonOptions = {

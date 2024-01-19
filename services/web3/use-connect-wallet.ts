@@ -1,7 +1,6 @@
 "use client"
 
 import {
-  ConnectOptions,
   DisconnectOptions,
   WalletState,
 } from "@web3-onboard/core"
@@ -12,7 +11,7 @@ import { useWalletConnect } from "./use-wallet-connect";
 
 export function useConnectWallet(): [
   { wallet: WalletState | null; connecting: boolean },
-  ({ isComethWallet = false }) => Promise<WalletState>,
+  ({ isComethWallet } : {isComethWallet: boolean}) => Promise<WalletState>,
   (wallet: DisconnectOptions) => Promise<WalletState[] | undefined>,
 ] {
   const getWalletState = useGetWalletState()

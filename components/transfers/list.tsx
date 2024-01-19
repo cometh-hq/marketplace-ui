@@ -13,6 +13,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 
 import { CopyButton } from "../ui/copy-button"
 import { UserButton } from "../ui/user-button"
+import globalConfig from "@/config/globalConfig"
 
 type TransfersListProps = {
   assetTransfers: AssetTransfers
@@ -65,19 +66,21 @@ export function TransfersList({
                 </div>
               </TableCell>
               <TableCell>
-                <Link
-                  href={`https://polygonscan.com/tx/${transfer.txHash}`}
+                <a
+                  href={`${globalConfig.network.explorer?.url}/tx/${transfer.txHash}`}
+                  target="_blank"
+                  rel='noreferrer'
                   className="flex items-center justify-end gap-2 text-sm font-medium text-muted-foreground hover:text-secondary-foreground"
                 >
                   {transfer.createdAt.toLocaleString(DateTime.DATE_MED)}
                   <ExternalLink size="18" className="" />
-                </Link>
+                </a>
               </TableCell>
             </TableRow>
           ))
         ) : (
           <TableRow>
-            <TableCell className="h-24 text-center">No results.</TableCell>
+            <TableCell className="h-24 text-center">No transfer found for this asset.</TableCell>
           </TableRow>
         )}
       </TableBody>

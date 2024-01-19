@@ -1,7 +1,7 @@
 import { UserFacingERC721AssetDataSerializedV4 } from "@traderxyz/nft-swap-sdk"
-import { Address } from "wagmi"
 
 import { useNFTSwapv4 } from "../../lib/web3/nft-swap-sdk"
+import { Address } from "viem"
 
 export type FetchHasApprovedCollectionParams = {
   address: Address
@@ -22,8 +22,8 @@ export const fetchHasApprovedCollection = async ({
       tokenId: tokenId.toString(),
       type: "ERC721",
     }
-
-    return (await nftSwapSdk.loadApprovalStatus(item, address)).contractApproved
+    const approvalStatus = await nftSwapSdk.loadApprovalStatus(item, address)
+    return approvalStatus.contractApproved
   } catch (error) {
     console.error("error in try/catch bis", error)
     return false

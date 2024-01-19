@@ -18,26 +18,30 @@ export type SigninDropdownProps = {
   disabled: boolean
   handleConnect?: (isComethWallet: boolean) => Promise<void>
   fullVariant?: boolean
+  customText?: string
+  isLinkVariant?: boolean
 }
 
 export function SigninDropdown({
   disabled,
   handleConnect,
-  fullVariant
+  fullVariant,
+  customText,
+  isLinkVariant
 }: SigninDropdownProps) {
   const wallets = [
     ...(env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY
       ? [
           {
-            name: "Cometh",
-            icon: `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/cometh-connect.png`,
+            name: "Cometh Connect",
+            icon: `${env.NEXT_PUBLIC_BASE_PATH}/cometh-connect.png`,
             isComethWallet: true,
           },
         ]
       : []),
     {
-      name: "Metamask",
-      icon: `${process.env.NEXT_PUBLIC_BASE_PATH}/icons/metamask.svg`,
+      name: "External wallets",
+      icon: `${env.NEXT_PUBLIC_BASE_PATH}/metamask.svg`,
       isComethWallet: false,
     },
   ]
@@ -45,17 +49,19 @@ export function SigninDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
+       
         <Button
           className={cx({
-            "w-full h-12": fullVariant,
+            "h-12 w-full": fullVariant,
           })}
-          variant="default"
+          variant={isLinkVariant ? "link" : "default"}
           disabled={disabled}
           isLoading={disabled}
         >
-          <WalletIcon size="16" className="mr-2" />
-          Login
+          {!isLinkVariant && <WalletIcon size="16" className="mr-2" />}
+          {customText ? customText : "Login"}
         </Button>
+        
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
         <Card className="p-4" style={{ width: "324px" }}>
@@ -64,6 +70,7 @@ export function SigninDropdown({
           </CardHeader>
           <CardContent className="space-y-3 p-0">
             {wallets.map((wallet) => (
+              
               <AccountWallet
                 key={wallet.name}
                 name={wallet.name}

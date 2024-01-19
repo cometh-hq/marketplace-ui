@@ -1,17 +1,20 @@
-import { manifest } from "@/manifests"
+import { fetchNeedsMoreAllowance } from "@/services/allowance/needs-more-allowance"
+import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
+import { fetchNeedsToUnwrap } from "@/services/exchange/needs-to-unwrap"
 // import { useLoader } from "@/services/loaders"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import {  AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
-import { parseUnits } from "ethers/lib/utils"
+import { BigNumber } from "ethers"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
-import { useCurrentViewerAddress } from "../auth"
+import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 
 export type UseRequiredBuyingStepsOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeDataCore
 }
 
 export type BuyingStepValue = "add-funds" | "buy" | "confirmation"
@@ -21,41 +24,64 @@ export type BuyingStep = {
   value: BuyingStepValue
 }
 
-const defaultSteps: BuyingStep[] = [
-  { label: "Payment", value: "buy" },
-  { label: "All set", value: "confirmation" },
-]
+const defaultSteps: BuyingStep[] = [{ label: "Payment", value: "buy" }]
 
 export type FetchRequiredBuyingStepsOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeDataCore
   address: Address
   wrappedContractAddress: Address
+  isComethWallet: boolean
 }
 
 export const fetchRequiredBuyingSteps = async ({
   asset,
   address,
   wrappedContractAddress,
+  isComethWallet,
 }: FetchRequiredBuyingStepsOptions) => {
-  const _price = asset.orderbookStats.lowestSalePrice
-  if (!_price) {
+  const rawPrice = asset.orderbookStats.lowestSalePrice
+  if (!rawPrice) {
     throw new Error(
-      `Asset has an invalid price, expected BigNumber, got '${_price}'`
+      `Asset has an invalid price, expected BigNumber, got '${rawPrice}'`
     )
   }
+  const price = BigNumber.from(rawPrice)
 
-  const price = parseUnits(_price, 18)
-
-  const displayAddFundsStep = !(
-    await fetchHasSufficientFunds({
+  const displayAllowanceStep =
+    !globalConfig.useNativeForOrders &&
+    (await fetchNeedsMoreAllowance({
       address,
       price,
-      wrappedContractAddress,
-    })
-  )?.hasSufficientFunds
+      contractAddress: wrappedContractAddress,
+      spender: globalConfig.network.zeroExExchange,
+    }))
+
+  const missingFundsData = await fetchHasSufficientFunds({
+    address,
+    price,
+  })
+  const displayAddFundsStep = !missingFundsData?.hasSufficientFunds
+
+  const needsToUnwrapData = await fetchNeedsToUnwrap({
+    address,
+    price,
+  })
+  const displayAddUnwrappedNativeTokenStep =
+    needsToUnwrapData.needsToUnwrap &&
+    globalConfig.useNativeForOrders &&
+    !displayAddFundsStep
+
+  const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
+  const displayAddGasStep = !hasEnoughGas
 
   const buyingSteps = [
+    displayAddGasStep && { value: "add-gas", label: "Add gas" },
     displayAddFundsStep && { value: "add-funds", label: "Add funds" },
+    displayAddUnwrappedNativeTokenStep && {
+      value: "unwrap-native-token",
+      label: "Unwrap",
+    },
+    displayAllowanceStep && { value: "allowance", label: "Permissions" },
     ...defaultSteps,
   ].filter(Boolean) as BuyingStep[]
 
@@ -66,29 +92,29 @@ export const useRequiredBuyingSteps = ({
   asset,
 }: UseRequiredBuyingStepsOptions) => {
   const viewerAddress = useCurrentViewerAddress()
-
-  return useQuery(
-    ["requiredBuyingSteps", asset, viewerAddress],
-    async () => {
+  const isComethWallet = useIsComethWallet()
+  return useQuery({
+    queryKey: ["requiredBuyingSteps", asset, viewerAddress],
+    queryFn: async () => {
       if (!viewerAddress) {
         throw new Error("Could not find viewer address")
       }
       const steps = await fetchRequiredBuyingSteps({
         asset,
         address: viewerAddress,
-        wrappedContractAddress: manifest.currency.wrapped.address,
+        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
+        isComethWallet,
       })
 
       return steps
     },
-    {
-      enabled: !!viewerAddress,
-    }
-  )
+
+    enabled: !!viewerAddress,
+  })
 }
 
 export type UseBuyAssetButtonOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeDataCore
 }
 
 export const useBuyAssetButton = ({ asset }: UseBuyAssetButtonOptions) => {

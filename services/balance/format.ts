@@ -1,12 +1,11 @@
 import { BigNumber } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
-import { useBalance } from "wagmi"
 
 export const balanceToBigNumber = (
-  balance?: ReturnType<typeof useBalance>["data"] | null
+  balance?: bigint | null
 ) => {
   if (!balance) return BigNumber.from(0)
-  return BigNumber.from(balance.value)
+  return BigNumber.from(balance)
 }
 
 export const balanceToString = (

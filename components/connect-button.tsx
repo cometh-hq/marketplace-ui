@@ -3,7 +3,6 @@ import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import { useWalletConnect } from "@/services/web3/use-wallet-connect"
 
-import { useIsConnecting } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 
 import { CurrentAccountDropdown } from "./account-dropdown/current-account-dropdown"
@@ -12,9 +11,14 @@ import { SigninDropdown } from "./account-dropdown/signin-dropdown"
 export function ConnectButton({
   children,
   fullVariant = false,
+  customText = undefined,
+  isLinkVariant  = undefined
+  
 }: {
   children?: React.ReactNode
-  fullVariant?: boolean
+  fullVariant?: boolean,
+  customText?: string
+  isLinkVariant?: boolean
 }) {
   const { initOnboard, isConnected, setIsconnected, reconnecting } =
     useWeb3OnboardContext()
@@ -43,7 +47,7 @@ export function ConnectButton({
 
   if (isConnected && !children) return <CurrentAccountDropdown />
 
-  if (reconnecting) {
+  if (reconnecting && !isLinkVariant) {
     return (
       <Button
         size={fullVariant ? "lg" : "default"}
@@ -59,8 +63,10 @@ export function ConnectButton({
     return (
       <SigninDropdown
         handleConnect={handleConnect}
-        disabled={isLoading || connecting}
+        disabled={isLoading || connecting || reconnecting}
         fullVariant={fullVariant}
+        customText={customText}
+        isLinkVariant={isLinkVariant}
       />
     )
   }

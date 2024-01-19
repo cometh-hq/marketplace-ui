@@ -2,7 +2,7 @@
 
 import { ReactQueryProvider } from "./react-query"
 import { AppThemeProvider } from "./theme"
-import { WagmiProvider } from "./wagmi"
+import { MarketplaceWagmiProvider } from "./wagmi"
 import { Web3OnboardProvider } from "./web3-onboard"
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
@@ -10,7 +10,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     <ReactQueryProvider>
       <Web3OnboardProvider>
         <AppThemeProvider>
-          <WagmiProvider>{children}</WagmiProvider>
+          <MarketplaceWagmiProvider>{children}</MarketplaceWagmiProvider>
         </AppThemeProvider>
       </Web3OnboardProvider>
     </ReactQueryProvider>

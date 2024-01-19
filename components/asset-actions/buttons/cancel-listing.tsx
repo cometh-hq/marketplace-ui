@@ -11,7 +11,7 @@ export type CancelListingButtonProps = {
 }
 
 export function CancelListingButton({ asset }: CancelListingButtonProps) {
-  const { mutateAsync: cancel, isLoading } = useCancelListing()
+  const { mutateAsync: cancel, isPending } = useCancelListing()
 
   const onConfirm = useCallback(async () => {
     await cancel(asset)
@@ -22,8 +22,8 @@ export function CancelListingButton({ asset }: CancelListingButtonProps) {
       className="w-full"
       size="lg"
       onClick={onConfirm}
-      disabled={isLoading}
-      isLoading={isLoading}
+      disabled={isPending}
+      isLoading={isPending}
     >
       Cancel Listing
     </Button>

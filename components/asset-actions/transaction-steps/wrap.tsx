@@ -1,14 +1,13 @@
-import { wrap } from "module"
 import { useCallback, useEffect } from "react"
 import { useNeedsToWrap } from "@/services/exchange/needs-to-wrap"
 import { useWrapToken } from "@/services/exchange/wrap-token"
 import { BigNumber } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 import { ButtonLoading } from "@/components/button-loading"
-import { manifest } from "@/manifests"
 
 export type WrapStepProps = {
   price: BigNumber | null
@@ -16,7 +15,7 @@ export type WrapStepProps = {
 }
 
 export function WrapStep({ price, onValid }: WrapStepProps) {
-  const { mutateAsync: wrapToken, isLoading } = useWrapToken()
+  const { mutateAsync: wrapToken, isPending } = useWrapToken()
   const viewerAddress = useCurrentViewerAddress()
 
   const needsToWrap = useNeedsToWrap({
@@ -41,15 +40,19 @@ export function WrapStep({ price, onValid }: WrapStepProps) {
         <span className="inline-flex translate-y-1.5 items-center">
           <Price amount={price} />
         </span>{" "}
-        but you do not have enough <strong>{manifest.currency.wrapped.name.toLocaleUpperCase()}</strong> in your wallet. You
-        need to wrap some ETH first.
+        but you do not have enough{" "}
+        <strong>{globalConfig.network.wrappedNativeToken.symbol}</strong> in
+        your wallet. You need to wrap some{" "}
+        {globalConfig.network.nativeToken.symbol} first as a purchase offer
+        cannot be opened with native tokens.
       </p>
 
-      {isLoading ? (
+      {isPending ? (
         <ButtonLoading />
       ) : (
         <Button className="flex gap-1" onClick={onConfirm}>
-          Wrap <Price amount={price} /> MATIC
+          Wrap <Price amount={price} />{" "}
+          {globalConfig.network.nativeToken.symbol}
         </Button>
       )}
     </div>

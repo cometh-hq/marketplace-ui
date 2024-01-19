@@ -1,42 +1,59 @@
 import { useCallback } from "react"
 import { useBuyAsset } from "@/services/orders/buy-asset"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
+import { ExternalLinkIcon } from "lucide-react"
 
+import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { InfoBox } from "@/components/ui/message-box"
 import { Price } from "@/components/ui/price"
-import { ButtonLoading } from "@/components/button-loading"
+import { toast } from "@/components/ui/toast/use-toast"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 
 import { SwitchNetwork } from "../buttons/switch-network"
+import { CopyButton } from "@/components/ui/copy-button"
 
 export type BuyStepProps = {
-  asset: AssetWithTradeData
+  asset: SearchAssetWithTradeData | AssetWithTradeData
   onValid: () => void
-  setTxHash: (txHash: string) => void
 }
 
 /**
  * Arriving at this stage means that the user has sufficient funds
  * so we don't have to do any check here
  */
-export function BuyStep({ asset, onValid, setTxHash }: BuyStepProps) {
-  const { mutateAsync: buy, isLoading, isError } = useBuyAsset()
+export function BuyStep({ asset, onValid }: BuyStepProps) {
+  const { mutateAsync: buy, isPending } = useBuyAsset()
 
-  /**
-   * TODO: check what happens if the modal
-   * is closed before the transaction is confirmed
-   */
   const onSubmit = useCallback(async () => {
     const tx = await buy({ asset: asset })
-    if (tx) setTxHash(tx.transactionHash)
-    if (!isError) onValid()
-  }, [asset, buy, onValid, setTxHash])
+    toast({
+      title: "NFT bought!",
+      description: (
+        globalConfig.network.explorer?.blockUrl ? (
+          <a
+            href={`${globalConfig.network.explorer?.blockUrl}/${tx.transactionHash}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2"
+          >
+            <ExternalLinkIcon size={16} />
+            View on {globalConfig.network.explorer?.name}
+          </a>
+          ) : (
+            <div className="flex items-center gap-2">
+              Copy the transaction hash <CopyButton size="lg" textToCopy={tx.transactionHash} />
+            </div>
+          )
+      ),
+    })
+    onValid()
+  }, [asset, buy, onValid])
 
   return (
     <div className="flex flex-col items-center justify-center gap-[16px] pt-[16px]">
       <AssetHeaderImage asset={asset} />
-
+      
       <InfoBox
         title="Secured Transaction"
         description="This transaction is secured by the blockchain. You will be prompted to confirm the transaction in your wallet."
@@ -46,8 +63,8 @@ export function BuyStep({ asset, onValid, setTxHash }: BuyStepProps) {
         <Button
           className="flex gap-1"
           onClick={onSubmit}
-          disabled={isLoading}
-          isLoading={isLoading}
+          disabled={isPending}
+          isLoading={isPending}
         >
           Buy now for <Price amount={asset.orderbookStats.lowestSalePrice} />
         </Button>

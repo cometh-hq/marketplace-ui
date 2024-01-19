@@ -11,7 +11,7 @@ export default function MarketplacePage() {
   }
   
   return (
-    <div className="container mx-auto flex items-center justify-center gap-4 py-5 sm:py-10">
+    <div className="container mx-auto flex items-center justify-center gap-4 py-5 sm:py-6">
       <AssetsSearchGrid filters={filtersRaw} />
     </div>
   )

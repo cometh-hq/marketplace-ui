@@ -23,7 +23,8 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
   return (
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
-        <AssetStatusBadge status="not-listed" />-
+        <ProductBlockLabel>Price</ProductBlockLabel>
+        <AssetStatusBadge status="not-listed" />
       </ProductBlockDividedColumn>
 
       <BestOfferColumn asset={asset} />
@@ -38,7 +39,7 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
-        <ConnectButton fullVariant>
+        <ConnectButton customText="Login to make an offer" fullVariant>
           <SwitchNetwork>
             <MakeBuyOfferButton asset={asset} />
           </SwitchNetwork>

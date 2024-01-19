@@ -1,10 +1,10 @@
 import { useState } from "react"
-import { manifest } from "@/manifests"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { OnboardAPI, WalletState } from "@web3-onboard/core"
-import { ethers } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
 import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
+import { useStorageWallet } from "./use-storage-wallet"
 
 export type RegisterFields = {
   email: string
@@ -16,8 +16,11 @@ export interface ConnectParams {
 }
 
 async function _selectdCorrectChain(onboard: OnboardAPI, wallet: WalletState) {
-  const requiredChaindId = ethers.utils.hexlify(manifest.network.chainId)
-  if (wallet.chains?.[0].id !== requiredChaindId) {
+  const requiredChaindId = `0x${globalConfig.network.chainId.toString(16)}`
+  const walletChain = `0x${parseInt(wallet.chains?.[0].id ?? "0", 16).toString(
+    16
+  )}`
+  if (walletChain !== requiredChaindId) {
     await onboard.setChain({ chainId: requiredChaindId })
   }
 }
@@ -36,16 +39,19 @@ export function useWalletConnect(): {
 
     if (!onboard) throw new Error("Onboard is not initialized")
 
+    let onboardConfig = undefined
+    if (isComethWallet) {
+     onboardConfig = {
+      autoSelect: {
+        label: COMETH_CONNECT_STORAGE_LABEL,
+        disableModals: true,
+      },
+    }
+    }
+
     try {
       const wallets = await onboard.connectWallet(
-        isComethWallet
-          ? {
-              autoSelect: {
-                label: COMETH_CONNECT_STORAGE_LABEL,
-                disableModals: true,
-              },
-            }
-          : undefined
+        onboardConfig
       )
 
       if (wallets?.[0]) {

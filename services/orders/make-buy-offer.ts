@@ -3,12 +3,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 
 import { useSigner } from "@/lib/web3/auth"
-import { toast } from "@/components/ui/toast/use-toast"
 import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
-import { handleOrderbookError } from "../errors"
-import { useBuildBuyOfferOrder } from "./build-buy-offer-order"
+import { useBuildOfferOrder } from "./build-offer-order"
+import { toast } from "@/components/ui/toast/use-toast"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -18,14 +17,17 @@ export type MakeBuyOfferOptions = {
 
 export const useMakeBuyOfferAsset = () => {
   const client = useQueryClient()
-  const buildSignBuyOfferOrder = useBuildBuyOfferOrder()
+  const buildSignBuyOfferOrder = useBuildOfferOrder({
+    tradeDirection: TradeDirection.BUY,
+  })
   const signer = useSigner()
   const { data: collection } = useGetCollection()
+
   const { getWalletTxs } = useWalletAdapter()
 
-  return useMutation(
-    ["make-buy-offer-asset"],
-    async ({ asset, price, validity }: MakeBuyOfferOptions) => {
+  return useMutation({
+    mutationKey: ["make-buy-offer-asset"],
+    mutationFn: async ({ asset, price, validity }: MakeBuyOfferOptions) => {
       if (!collection) throw new Error("Could not get collection")
 
       const order = buildSignBuyOfferOrder({
@@ -34,30 +36,27 @@ export const useMakeBuyOfferAsset = () => {
         validity,
         collection,
       })
+
       if (!order) throw new Error("Could not build order")
 
       return await getWalletTxs()?.makeBuyOffer({
         asset,
         signer,
-        order
+        order,
       })
     },
-    {
-      onSuccess: (_, { asset }) => {
-        client.invalidateQueries(["cometh", "search"]) // TODO: optimize this, just invalidate current asset
-        client.invalidateQueries(["cometh", "assets", asset.tokenId])
-        client.invalidateQueries(["cometh", "received-buy-offers", asset.owner])
-      },
-      onError: (error) => {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            500: "Internal orderbook server error",
-          }),
-        })
-      },
+
+    onSuccess: (_, { asset }) => {
+      client.invalidateQueries({ queryKey: ["cometh", "search"] }) // TODO: optimize this, just invalidate current asset
+      client.invalidateQueries({
+        queryKey: ["cometh", "assets", asset.tokenId],
+      })
+      client.invalidateQueries({
+        queryKey: ["cometh", "received-buy-offers", asset.owner],
+      })
+      toast({
+        title: "Your offer has been submitted."
+      })
     }
-  )
+  })
 }

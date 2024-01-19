@@ -2,7 +2,7 @@ import init from "@web3-onboard/core"
 import { Address } from "viem"
 
 export type Manifest = {
-  name: string
+  collectionName: string
   contractAddress: Address
   themeClass: string
 
@@ -17,18 +17,14 @@ export type Manifest = {
     theme?: Parameters<typeof init>[0]["theme"]
   }
 
-  network: {
-    chainId: string | number
-  }
-
-  currency: {
-    main: {
-      name: string
-      address: Address
-    }
-    wrapped: {
-      name: string
-      address: Address
-    }
-  }
+  chainId: number
+  useNativeTokenForOrders: boolean
+  erc20: {
+    name: string
+    symbol: string
+    address: string
+    thumb?: string
+  } | null,
+  rpcUrl?: string
+  areContractsSponsored: boolean
 }

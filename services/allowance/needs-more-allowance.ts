@@ -19,8 +19,16 @@ export const fetchNeedsMoreAllowance = async ({
   const allowance = await fetchWrappedAllowance({
     address,
     spender,
-    contractAddress: contractAddress,
+    contractAddress,
   })
+  console.warn("allowance", {
+    allowance,
+    price,
+    address,
+    spender,
+    contractAddress,
+  })
+
   if (!allowance) return true
   return BigNumber.from(allowance).lt(price)
 }

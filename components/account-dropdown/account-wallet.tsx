@@ -19,14 +19,14 @@ export function AccountWallet({
   return (
     <DropdownMenuItem className="outline-none">
       {isComethWallet ? (
-        <div className="mb-1 text-sm font-semibold">Biometric smart wallet</div>
+        <div className="mb-1 text-sm font-semibold">Smart wallet (biometric)</div>
       ) : (
-        <div className="mb-1 text-sm font-semibold">External wallet</div>
+        <div className="mb-1 text-sm font-semibold">Wallets</div>
       )}
       <Button
         variant="secondary"
         className="h-12 w-full justify-start gap-2 text-[15px]"
-        onClick={() => handleConnect && handleConnect(name === "Cometh")}
+        onClick={() => handleConnect && handleConnect(isComethWallet)}
       >
         <Image
           src={icon}
