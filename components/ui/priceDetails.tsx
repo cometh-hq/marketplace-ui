@@ -47,20 +47,20 @@ export function PriceDetails({ fullPrice, isEthersFormat = true }: PriceDetailsP
       <div className="flex  flex-col justify-between sm:flex-row">
         <span>You will receive:</span>
         <span>
-          <Price amount={amountWithoutFees} />
+          <Price fontWeight="normal" amount={amountWithoutFees} />
         </span>
       </div>
       <div className="flex flex-col justify-between sm:flex-row">
         <span>Fees ({sumOfFeesPercentages}%):</span>
         <span>
-          <Price amount={feesAmount} />
+          <Price fontWeight="normal" amount={feesAmount} />
         </span>
       </div>
       <hr className="my-2" />
       <div className="flex flex-col justify-between sm:flex-row">
         <span>Total price:</span>
         <span>
-          <Price amount={price || 0} />
+          <Price fontWeight="normal" amount={price || 0} />
         </span>
       </div>
     </div>

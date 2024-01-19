@@ -9,7 +9,7 @@ import globalConfig from "@/config/globalConfig"
 import { smartRounding } from "@/lib/utils/priceUtil"
 import { cn } from "@/lib/utils/utils"
 
-const priceTriggerVariants = cva("font-bold", {
+const priceTriggerVariants = cva("", {
   variants: {
     variant: {
       default: "",
@@ -20,10 +20,15 @@ const priceTriggerVariants = cva("font-bold", {
       default: "text-base",
       sm: "text-sm",
     },
+    fontWeight: {
+      default: "font-bold",
+      normal: ""
+    }
   },
   defaultVariants: {
     size: "default",
     variant: "default",
+    fontWeight: "default",
   },
 })
 
@@ -54,6 +59,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       formattedAmount,
       size,
       variant,
+      fontWeight,
       hideIcon = false,
       hideSymbol = true,
       className,
@@ -69,7 +75,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         ref={ref}
         className={cn(
           "inline-flex items-center gap-x-1.5 align-middle",
-          priceTriggerVariants({ size, variant, className })
+          priceTriggerVariants({ size, variant, className, fontWeight })
         )}
       >
         {!hideIcon && globalConfig.ordersDisplayCurrency.thumb && (

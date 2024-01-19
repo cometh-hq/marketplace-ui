@@ -1,7 +1,7 @@
 import { UserFacingFeeStruct } from "@traderxyz/nft-swap-sdk"
 import { BigNumber, BigNumberish } from "ethers"
 
-const FEE_PERCENTAGE_PRECISION = 2
+const FEE_PERCENTAGE_PRECISION = 6
 
 const _scalePrecision = (value: BigNumberish): BigNumber => {
   if (typeof value === "number") {
@@ -17,6 +17,16 @@ export const calculateAmountWithoutFees = (
 ): BigNumber => {
 
   const scaledPercentage = _scalePrecision(feePercentage).div(100)
+
+console.info({
+  priceWithFees:priceWithFees.toString(),
+  feePercentage:feePercentage.toString(),
+  scaledPercentage:scaledPercentage.toString(),
+  result:  _scalePrecision(priceWithFees).div(
+    _scalePrecision(1).add(scaledPercentage)
+  ).toString()
+})
+
   return _scalePrecision(priceWithFees).div(
     _scalePrecision(1).add(scaledPercentage)
   )
@@ -27,6 +37,7 @@ export const calculateFeesAmount = (
   percentage: number
 ): string => {
   const intFeePercentage = percentage * 10 ** FEE_PERCENTAGE_PRECISION
+  
 
   const feeAmount = BigNumber.from(intFeePercentage)
     .mul(price)

@@ -6,7 +6,7 @@ import { BuyOffer } from "@/types/buy-offers"
 import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
-import { PriceDetails } from "@/components/ui/priceTab"
+import { PriceDetails } from "@/components/ui/priceDetails"
 import { toast } from "@/components/ui/toast/use-toast"
 import { ButtonLoading } from "@/components/button-loading"
 
@@ -40,8 +40,8 @@ export function ConfirmAcceptBuyOfferStep({ offer }: ConfirmBuyOfferStepProps) {
       <h3 className="w-full text-center text-xl font-semibold">Summary</h3>
       <p className="text-center">
         You are about to accept an offer for <br />
-        this asset for <Price size="default" amount={amountWithFees} />{" "}
-        (fees included)
+        this asset for <Price size="default" amount={amountWithFees} /> (fees
+        included)
       </p>
       <PriceDetails fullPrice={amountWithFees} isEthersFormat={false} />
 

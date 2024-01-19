@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Price } from "@/components/ui/price"
-import { PriceDetails } from "@/components/ui/priceTab"
+import { PriceDetails } from "@/components/ui/priceDetails"
 import {
   Select,
   SelectContent,
