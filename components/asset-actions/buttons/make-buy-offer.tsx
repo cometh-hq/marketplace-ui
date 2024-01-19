@@ -95,7 +95,7 @@ export function MakeBuyOfferPriceDialog({
             <Input
               id="make-buy-offer-price"
               type="number"
-              onChange={(e) => setPrice(e.target.value)}
+              onInputUpdate={(inputValue) => setPrice(inputValue)}
               min={0}
             />
           </div>

@@ -66,8 +66,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
             Selling price in {globalConfig.ordersErc20.symbol}*
           </Label>
           <Input
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onInputUpdate={(inputValue) => setPrice(inputValue)}
             id="selling-price"
             placeholder="1.0"
             type="number"

@@ -26,7 +26,7 @@ export function SearchAsset({ onChange }: SearchAssetProps) {
       icon={
         <Search size="16" className={"min-w-[17px] opacity-40"} />
       }
-      onChange={handleChange}
+      onInputUpdate={handleChange}
     />
   )
 }

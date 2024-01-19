@@ -2,6 +2,7 @@ import { manifest } from "@/manifests"
 import { Address, parseEther } from "viem"
 
 import networks, { NetworkConfig } from "@/config/networks"
+
 type GlobalConfig = {
   contractAddress: Address
   useNativeForOrders: boolean
@@ -25,6 +26,10 @@ type GlobalConfig = {
   }
   areContractsSponsored: boolean
   minimumBalanceForGas: bigint
+  decimals: {
+    displayMaxSmallDecimals: number
+    inputMaxDecimals: number
+  }
 }
 
 export const NATIVE_TOKEN_ADDRESS_AS_ERC20 =
@@ -83,7 +88,11 @@ const globalConfig: GlobalConfig = {
   ordersDisplayCurrency,
   network,
   areContractsSponsored: manifest.areContractsSponsored,
-  minimumBalanceForGas
+  minimumBalanceForGas,
+  decimals: {
+    displayMaxSmallDecimals: 4,
+    inputMaxDecimals: 18,
+  },
 }
 
 export default globalConfig

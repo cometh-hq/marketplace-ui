@@ -9,7 +9,6 @@ export function useStorageWallet() {
       if (key.startsWith("cometh-connect")) {
         const keyParts = key.split("-");
         const address = keyParts[keyParts.length - 1];
-        console.warn('address', address);
         setComethWalletAddressInStorage(address);
         break;
       }

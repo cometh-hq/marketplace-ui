@@ -140,7 +140,7 @@ function renderAssetActions(
   },
   owner: boolean
 ) {
-  if(asset.orderbookStats.lowestListingPrice) {
+  if(asset.orderbookStats.lowestListingPrice && !owner) {
     return (
       <ConnectButton isLinkVariant customText="Login to buy">
         <SwitchNetwork>

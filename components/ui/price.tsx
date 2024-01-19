@@ -1,11 +1,12 @@
 import { forwardRef } from "react"
 import Image from "next/image"
-import { VariantProps, cva, cx } from "class-variance-authority"
+import { cva, cx, VariantProps } from "class-variance-authority"
 import { BigNumberish } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
 
 import { env } from "@/config/env"
 import globalConfig from "@/config/globalConfig"
+import { smartRounding } from "@/lib/utils/priceUtil"
 import { cn } from "@/lib/utils/utils"
 
 const priceTriggerVariants = cva("font-bold", {
@@ -59,6 +60,10 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
     },
     ref
   ) => {
+    const roundedAmount = smartRounding(
+      formattedAmount,
+      globalConfig.decimals.displayMaxSmallDecimals
+    )
     return (
       <span
         ref={ref}
@@ -71,12 +76,12 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
           <span className={cn("relative", iconVariants({ size }))}>
             <Image
               src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${globalConfig.ordersDisplayCurrency.thumb}`}
-              alt={formattedAmount}
+              alt={globalConfig.ordersDisplayCurrency.symbol}
               fill
             />
           </span>
         )}
-        {`${formattedAmount}${
+        {`${roundedAmount}${
           !hideSymbol || !globalConfig.ordersDisplayCurrency.thumb
             ? ` ${globalConfig.ordersDisplayCurrency.symbol}`
             : ""

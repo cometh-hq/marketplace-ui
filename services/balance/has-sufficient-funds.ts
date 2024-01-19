@@ -43,17 +43,6 @@ export const fetchHasSufficientFunds = async ({
     ? BigNumber.from(0)
     : price?.sub(availableFunds)
 
-
-console.warn({
-  includeWrappedNative: includeWrappedNative,
-  mainBalance: mainBalance?.toString(),
-  erc20Balance: erc20Balance?.toString(),
-  availableFunds: availableFunds?.toString(),
-  price: price?.toString(),
-  hasSufficientFunds: hasSufficientFunds?.toString(),
-  missingBalance: missingBalance?.toString(),
-})
-
   return {
     hasSufficientFunds,
     missingBalance,
