@@ -63,7 +63,7 @@ export const useBalance = () => {
   const wrapped = useWrappedBalance(address)
 
   return {
-    native: useMemo(() => balanceToString(native), [native]),
+    native: useMemo(() => balanceToString(native, true), [native]),
     ERC20: useMemo(() => balanceToString(ERC20), [ERC20]),
     wrapped: useMemo(() => balanceToString(wrapped), [wrapped]),
   }

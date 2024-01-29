@@ -22,8 +22,8 @@ const priceTriggerVariants = cva("", {
     },
     fontWeight: {
       default: "font-bold",
-      normal: ""
-    }
+      normal: "",
+    },
   },
   defaultVariants: {
     size: "default",
@@ -99,16 +99,23 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
 
 PriceTrigger.displayName = "PriceTrigger"
 
+
 export type PriceProps = {
   amount?: BigNumberish | null | undefined
   hideIcon?: boolean
   hideSymbol?: boolean
   className?: string
+  isNativeToken?: boolean
 } & PriceTriggerVariants
 
-export const Price = ({ amount, ...rest }: PriceProps) => {
+export const Price = ({ amount, isNativeToken, ...rest }: PriceProps) => {
   if (!amount) return "-"
-  const formattedAmount = (+formatUnits(amount.toString(), 18)).toString()
+  const formattedAmount = (+formatUnits(
+    amount.toString(),
+    isNativeToken
+      ? globalConfig.decimals.nativeTokenDecimals
+      : globalConfig.ordersErc20.decimals
+  )).toString()
 
   return <PriceTrigger {...rest} formattedAmount={formattedAmount} />
 }

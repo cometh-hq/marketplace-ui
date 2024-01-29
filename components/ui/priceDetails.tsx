@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { useGetCollection } from "@/services/cometh-marketplace/collection"
-import { parseEther } from "viem"
+import { parseUnits } from "viem"
 
 import {
   calculateAmountWithoutFees,
@@ -8,6 +8,7 @@ import {
 } from "@/lib/utils/fees"
 
 import { Price } from "./price"
+import globalConfig from "@/config/globalConfig"
 
 type PriceDetailsProps = {
   fullPrice: string
@@ -21,7 +22,7 @@ export function PriceDetails({ fullPrice, isEthersFormat = true }: PriceDetailsP
     : 0
   let price = fullPrice ? fullPrice : "0"
   if(isEthersFormat) {
-    price = parseEther(price).toString()
+    price = parseUnits(price, globalConfig.ordersErc20.decimals).toString()
   }
 
   const { amountWithoutFees, feesAmount } = useMemo(() => {

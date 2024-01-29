@@ -38,7 +38,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
 
   const orderParams = useMemo(() => {
     if (!price) return null
-    const parsedPrice = parseUnits(price, 18)
+    const parsedPrice = parseUnits(price, globalConfig.ordersErc20.decimals)
     return {
       price: parsedPrice,
       validity,

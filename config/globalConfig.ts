@@ -10,6 +10,7 @@ type GlobalConfig = {
     name: string
     symbol: string
     address: Address
+    decimals: number
     thumb?:
       | string
       | {
@@ -29,6 +30,7 @@ type GlobalConfig = {
   decimals: {
     displayMaxSmallDecimals: number
     inputMaxDecimals: number
+    nativeTokenDecimals: number
   }
 }
 
@@ -70,7 +72,7 @@ if (useNativeTokenForOrders) {
 }
 
 const minimumBalanceForGas = manifest.areContractsSponsored
-  ? parseEther("0")
+  ? BigInt(0)
   : network.minimumBalanceForGas
 
 const globalConfig: GlobalConfig = {
@@ -80,6 +82,7 @@ const globalConfig: GlobalConfig = {
     name: ordersErc20.name,
     symbol: ordersErc20.symbol,
     address: ordersErc20.address,
+    decimals: ordersErc20.decimals,
     thumb: ordersErc20.thumb,
   },
   ordersTokenAddress: useNativeTokenForOrders
@@ -92,6 +95,7 @@ const globalConfig: GlobalConfig = {
   decimals: {
     displayMaxSmallDecimals: 4,
     inputMaxDecimals: 18,
+    nativeTokenDecimals: 18
   },
 }
 
