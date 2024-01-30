@@ -18,13 +18,13 @@ import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { Appear } from "@/components/ui/appear"
 import { AssetImage } from "@/components/ui/asset-image"
 import { Card } from "@/components/ui/card"
+import { BuyAssetButton } from "@/components/asset-actions/buttons/buy"
 import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/make-buy-offer"
 import { SellAssetButton } from "@/components/asset-actions/buttons/sell"
 import { SwitchNetwork } from "@/components/asset-actions/buttons/switch-network"
 import { ConnectButton } from "@/components/connect-button"
 
 import { Price } from "../../ui/price"
-import { BuyAssetButton } from "@/components/asset-actions/buttons/buy"
 
 export type AssetCardProps = {
   asset: SearchAssetWithTradeData & {
@@ -140,13 +140,14 @@ function renderAssetActions(
   },
   owner: boolean
 ) {
-  if(asset.orderbookStats.lowestListingPrice && !owner) {
+  if (asset.orderbookStats.lowestListingPrice && !owner) {
     return (
       <ConnectButton isLinkVariant customText="Login to buy">
         <SwitchNetwork>
           <BuyAssetButton isSmall asset={asset} />
         </SwitchNetwork>
-      </ConnectButton>)
+      </ConnectButton>
+    )
   } else if (asset.orderbookStats.highestOfferPrice) {
     return <Price amount={asset.orderbookStats.highestOfferPrice} />
   } else if (!owner) {
@@ -199,8 +200,8 @@ export function AssetCard({ asset, children }: AssetCardProps) {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-medium">Price</div>
-              {asset.orderbookStats.lowestSalePrice ? (
-                <Price amount={asset.orderbookStats.lowestSalePrice} />
+              {asset.orderbookStats.lowestListingPrice ? (
+                <Price amount={asset.orderbookStats.lowestListingPrice} />
               ) : owner ? (
                 <SellAssetButton
                   asset={asset as unknown as AssetWithTradeData}

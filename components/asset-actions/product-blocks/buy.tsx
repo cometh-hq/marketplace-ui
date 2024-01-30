@@ -22,7 +22,7 @@ export type BuyProductBlockProps = {
 }
 
 export function BuyProductBlock({ asset }: BuyProductBlockProps) {
-  const listingPrice = asset.orderbookStats.lowestSalePrice
+  const listingPrice = asset.orderbookStats.lowestListingPrice
 
   return (
     <ProductBlockContainer>

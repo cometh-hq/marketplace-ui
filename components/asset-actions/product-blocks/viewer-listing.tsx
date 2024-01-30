@@ -29,7 +29,7 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Price</ProductBlockLabel>
-        <Price amount={asset.orderbookStats.lowestSalePrice} />
+        <Price amount={asset.orderbookStats.lowestListingPrice} />
       </ProductBlockDividedColumn>
 
       <ProductBlockDividedColumn>

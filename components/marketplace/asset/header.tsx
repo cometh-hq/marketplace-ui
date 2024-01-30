@@ -47,7 +47,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
   }, [attributes])
 
   return (
-    <div className="flex-1 lg:sticky lg:left-0 lg:top-[5%] lg:w-[45%] lg:pt-[100px]">
+    <div className="flex-1 lg:sticky lg:left-0 lg:top-[5%] lg:w-[35%] lg:pt-[100px]">
       <div className="mb-2 flex items-center justify-between">
         <BreadcrumbContainer>
           <BreadcrumbElement href="/marketplace">

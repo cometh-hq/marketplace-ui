@@ -31,20 +31,20 @@ export function BuyAssetButton({
 
   if (!requiredSteps?.length || !currentStep) return null
 
-  const assetPrice = asset.orderbookStats.lowestSalePrice ?? 0
+  const assetPrice = asset.orderbookStats.lowestListingPrice ?? 0
 
   return (
     <TransactionDialogButton
       label={
         <>
-        {
-          isSmall ? 'Buy now'
-            : 
-          <span>
-            Buy now for&nbsp;
-            <Price amount={asset.orderbookStats.lowestSalePrice} />
-          </span>
-        }
+          {isSmall ? (
+            "Buy now"
+          ) : (
+            <span>
+              Buy now for&nbsp;
+              <Price amount={asset.orderbookStats.lowestListingPrice} />
+            </span>
+          )}
         </>
       }
       currentStep={currentStep}

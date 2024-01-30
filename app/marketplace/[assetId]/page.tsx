@@ -1,7 +1,13 @@
 "use client"
 
 import { useAssetDetails } from "@/services/cometh-marketplace/search-assets"
+import { useSearchOrders } from "@/services/cometh-marketplace/search-orders"
 import { useAssetTransfers } from "@/services/cometh-marketplace/transfers"
+import {
+  FilterDirection,
+  SearchOrdersSortOption,
+  TradeStatus,
+} from "@cometh/marketplace-sdk"
 
 import globalConfig from "@/config/globalConfig"
 import { Loading } from "@/components/ui/loading"
@@ -20,18 +26,30 @@ export default function DetailsPage({
     globalConfig.contractAddress,
     assetId
   )
+  const { data: assetOrders } = useSearchOrders({
+    tokenAddress: globalConfig.contractAddress,
+    tokenIds: [assetId],
+    statuses: [TradeStatus.FILLED, TradeStatus.OPEN],
+    orderBy: SearchOrdersSortOption.UPDATED_AT,
+    orderByDirection: FilterDirection.DESC,
+    limit: 100,
+  })
 
-  const loading = !asset || !assetTransfers
+  const loading = !asset || !assetTransfers || !assetOrders
 
   return (
     <div className="container py-10">
       {loading && <Loading />}
-      {asset && (
+      {!loading && (
         <div className="flex w-full flex-col flex-wrap gap-6 md:gap-12 lg:flex-row lg:items-center">
           <AssetHeaderImage asset={asset} />
           <AssetDetails asset={asset} />
           {assetTransfers && (
-            <AssetActivities asset={asset} assetTransfers={assetTransfers} />
+            <AssetActivities
+              asset={asset}
+              assetOrders={assetOrders?.orders}
+              assetTransfers={assetTransfers}
+            />
           )}
         </div>
       )}

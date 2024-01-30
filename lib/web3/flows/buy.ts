@@ -2,7 +2,7 @@ import { fetchNeedsMoreAllowance } from "@/services/allowance/needs-more-allowan
 import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 import { fetchNeedsToUnwrap } from "@/services/exchange/needs-to-unwrap"
 // import { useLoader } from "@/services/loaders"
-import {  AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
+import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
@@ -39,7 +39,7 @@ export const fetchRequiredBuyingSteps = async ({
   wrappedContractAddress,
   isComethWallet,
 }: FetchRequiredBuyingStepsOptions) => {
-  const rawPrice = asset.orderbookStats.lowestSalePrice
+  const rawPrice = asset.orderbookStats.lowestListingPrice
   if (!rawPrice) {
     throw new Error(
       `Asset has an invalid price, expected BigNumber, got '${rawPrice}'`
