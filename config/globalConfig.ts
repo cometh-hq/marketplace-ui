@@ -71,9 +71,7 @@ if (useNativeTokenForOrders) {
   ordersDisplayCurrency.thumb = network.nativeToken.thumb
 }
 
-const minimumBalanceForGas = manifest.areContractsSponsored
-  ? BigInt(0)
-  : network.minimumBalanceForGas
+const minimumBalanceForGas = network.minimumBalanceForGas
 
 const globalConfig: GlobalConfig = {
   contractAddress: manifest.contractAddress as Address,
