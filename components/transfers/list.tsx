@@ -1,8 +1,8 @@
 "use client"
 
 import React, { useMemo } from "react"
-import { AssetTransfer } from "@alembic/nft-api-sdk"
 import {
+  AssetTransfer,
   AssetTransfers,
   Order,
   TradeDirection,
