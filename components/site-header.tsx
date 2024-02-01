@@ -61,7 +61,7 @@ export function SiteHeader() {
         <Link
           href="/marketplace"
           className={cx(
-            "z-[100] flex items-center space-x-2 text-2xl",
+            "flex items-center space-x-2 text-2xl",
             isOpen && "text-primary-foreground"
           )}
         >

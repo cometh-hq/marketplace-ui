@@ -26,7 +26,7 @@ const manifest: Manifest = {
     name: "My Token",
     symbol: "MTK",
     address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
-    decimals: 14,
+    decimals: 18,
     // put your logo in the '/public/tokens' folder and update the following line (example: "mytoken.png")
     thumb: "", 
   },
