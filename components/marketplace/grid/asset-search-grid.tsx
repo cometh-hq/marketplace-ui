@@ -29,7 +29,10 @@ export const AssetsSearchGrid = ({
   filters: filtersRaw,
   filteredBy = {},
 }: any) => {
-  const { ref: loadMoreRef, inView } = useInView({ threshold: 1 })
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 0.01,
+    rootMargin: "0px 0px 2000px 0px",
+  })
   const [search, setSearch] = useState("")
   const [initialResults, setInitialResults] = useState<number | null>(null)
 
@@ -42,7 +45,6 @@ export const AssetsSearchGrid = ({
     refetch,
     isLoading,
     fetchNextPage,
-    hasNextPage,
     isFetchingNextPage,
   } = useFilterableNFTsQuery({
     search,
@@ -64,12 +66,8 @@ export const AssetsSearchGrid = ({
   }, [totalNbAssets, initialResults, setInitialResults])
 
   useEffect(() => {
-    if (nfts) refetch()
-  }, [nfts, refetch])
-
-  useEffect(() => {
-    if (inView) fetchNextPage()
-  }, [inView, fetchNextPage])
+    if (inView && !isLoading) fetchNextPage()
+  }, [inView, isLoading, fetchNextPage])
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -97,11 +95,15 @@ export const AssetsSearchGrid = ({
         <>
           <AssetCardsList>
             {assets.map((asset, index) => (
-              <AssetCard key={index} asset={asset} />
+              <AssetCard key={asset.tokenId} asset={asset} />
             ))}
           </AssetCardsList>
-          <div ref={loadMoreRef} className="mt-10">
-            {isFetchingNextPage ? "Loading NFTs..." : hasNextPage}
+          <div ref={loadMoreRef} className="py-10">
+            {isFetchingNextPage ? (
+              "Loading more NFTs..."
+            ) : (
+              <div></div>
+            )}
           </div>
         </>
       )}

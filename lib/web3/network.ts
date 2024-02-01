@@ -12,15 +12,17 @@ export const useCorrectNetwork = () => {
   const [isChainSupported, setIsChainSupported] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const supportedChain = ethers.utils.hexValue(globalConfig.network.chainId)
-  const wallet = useWallet()?.chains[0]?.id
+  const walletChaindId = useWallet()?.chains[0]?.id
 
   useEffect(() => {
-    if(!wallet) {
+    if (!walletChaindId) {
       setIsChainSupported(false)
       return
     }
-    setIsChainSupported(parseInt(wallet, 16) === parseInt(supportedChain, 16))
-  }, [])
+    setIsChainSupported(
+      parseInt(walletChaindId, 16) === parseInt(supportedChain, 16)
+    )
+  }, [walletChaindId, supportedChain])
 
   useEffect(() => {
     if (onboard) {

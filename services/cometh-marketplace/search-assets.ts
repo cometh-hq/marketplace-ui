@@ -5,8 +5,8 @@ import {
   type AssetSearchFilters,
 } from "@cometh/marketplace-sdk"
 import {
-  UseInfiniteQueryResult,
   useInfiniteQuery,
+  UseInfiniteQueryResult,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
@@ -49,21 +49,6 @@ export async function getAssetsPaginated(
     skip: (page - 1) * assetsPerPage,
     limit: assetsPerPage,
   })
-
-  await Promise.all(
-    nfts.assets.map(async (asset: any) => {
-      if (!asset.metadata.attributes) {
-        const metadata = await fetchAsset({
-          contractAddress: globalConfig.contractAddress,
-          assetId: asset.tokenId,
-        })
-
-        if (metadata) {
-          asset.metadata.attributes = metadata.metadata.attributes
-        }
-      }
-    })
-  )
 
   const total = nfts.total
   const totalPages = Math.ceil(total / assetsPerPage)
@@ -114,8 +99,8 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["cometh", "search", filters, options?.page, options?.search],
-    queryFn: ({ pageParam  }) => {
+    queryKey: ["cometh", "search", JSON.stringify(filters), options?.page, options?.search],
+    queryFn: ({ pageParam }) => {
       return getAssetsPaginated(
         {
           isOnSale: filters.isOnSale,
@@ -124,8 +109,8 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
           ...(parsedAttributes.length > 0
             ? { attributes: parsedAttributes }
             : {}),
-          ...options?.search && { name: options.search },
-          ...options?.owner && { owner: options.owner },
+          ...(options?.search && { name: options.search }),
+          ...(options?.owner && { owner: options.owner }),
         },
         pageParam,
         ASSETS_PER_PAGE

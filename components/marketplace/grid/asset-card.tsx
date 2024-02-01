@@ -101,9 +101,9 @@ export function AssetCardBase({
 }: AssetCardBaseProps) {
   return (
     <Appear
-      enabled={true}
-      condition={!!true}
-      delay={getRandomArrayElement([0, 50, 100, 150, 200])}
+      enabled={false}
+      condition={true}
+      delay={getRandomArrayElement([0,25, 50, 75, 100])}
       className="relative w-full justify-self-center"
     >
       <Card
@@ -194,7 +194,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
           <span className="inline-block max-w-[100%_-_80px] truncate">
             {asset.metadata.name}
           </span>
-          <span>&nbsp;#{shortenTokenId(asset.tokenId, 4)}</span>
+          <span>&nbsp;#{shortenTokenId(asset.tokenId, 5)}</span>
         </Link>
         <div className="w-full rounded-lg bg-muted/80 p-3">
           <div className="flex items-center justify-between">
