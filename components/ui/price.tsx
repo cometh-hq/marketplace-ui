@@ -51,6 +51,7 @@ export type PriceTriggerProps = {
   hideIcon?: boolean
   hideSymbol?: boolean
   className?: string
+  isNativeToken?: boolean
 } & PriceTriggerVariants
 
 const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
@@ -63,6 +64,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       hideIcon = false,
       hideSymbol = true,
       className,
+      isNativeToken,
     },
     ref
   ) => {
@@ -70,6 +72,9 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       formattedAmount,
       globalConfig.decimals.displayMaxSmallDecimals
     )
+    const currency = isNativeToken
+      ? globalConfig.network.nativeToken
+      : globalConfig.ordersErc20
     return (
       <span
         ref={ref}
@@ -78,19 +83,17 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
           priceTriggerVariants({ size, variant, className, fontWeight })
         )}
       >
-        {!hideIcon && globalConfig.ordersDisplayCurrency.thumb && (
+        {!hideIcon && currency.thumb && (
           <span className={cn("relative", iconVariants({ size }))}>
             <Image
-              src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${globalConfig.ordersDisplayCurrency.thumb}`}
-              alt={globalConfig.ordersDisplayCurrency.symbol}
+              src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${currency.thumb}`}
+              alt={currency.symbol}
               fill
             />
           </span>
         )}
         {`${roundedAmount}${
-          !hideSymbol || !globalConfig.ordersDisplayCurrency.thumb
-            ? ` ${globalConfig.ordersDisplayCurrency.symbol}`
-            : ""
+          !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
       </span>
     )
@@ -98,7 +101,6 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
 )
 
 PriceTrigger.displayName = "PriceTrigger"
-
 
 export type PriceProps = {
   amount?: BigNumberish | null | undefined
@@ -117,5 +119,11 @@ export const Price = ({ amount, isNativeToken, ...rest }: PriceProps) => {
       : globalConfig.ordersErc20.decimals
   )).toString()
 
-  return <PriceTrigger {...rest} formattedAmount={formattedAmount} />
+  return (
+    <PriceTrigger
+      {...rest}
+      isNativeToken={isNativeToken}
+      formattedAmount={formattedAmount}
+    />
+  )
 }

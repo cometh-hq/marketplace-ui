@@ -41,13 +41,18 @@ export function AddGasStep({ onValid }: AddGasStepProps) {
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Top up your wallet</h3>
       <p>
-        Looks like you <strong>don&rsquo;t have enough native tokens</strong> to pay for
-        transaction gas. Whenever you make a transaction on the blockchain, you
-        need to pay a small fee to the miners who process it.
+        Looks like you <strong>don&rsquo;t have enough native tokens</strong> to
+        pay for transaction gas. Whenever you make a transaction on the
+        blockchain, you need to pay a small fee to the miners who process it.
       </p>
       <p>
-        Please add <Price amount={globalConfig.minimumBalanceForGas}/> <strong>{globalConfig.network.nativeToken.name}</strong>{" "}
-        to your wallet, and then refresh your balance. Your transactions will not cost as much but we need an minimum amount to be sure you can pay for gas.
+        Please add{" "}
+        <Price
+          amount={globalConfig.minimumBalanceForGas}
+          isNativeToken={true}
+        />{" "} to your wallet,
+        and then refresh your balance. Your transactions will not cost as much
+        but we need an minimum amount to be sure you can pay for gas.
       </p>
       <p>
         Wallet address: <strong>{viewer}</strong>
