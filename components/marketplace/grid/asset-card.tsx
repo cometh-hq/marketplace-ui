@@ -173,10 +173,6 @@ export function AssetCard({ asset, children }: AssetCardProps) {
     return asset.owner === viewerAddress?.toLowerCase()
   }, [viewerAddress, asset.owner])
 
-  if (!asset.metadata.name) {
-    return null
-  }
-
   return (
     <AssetCardBase
       src={asset.cachedImageUrl}
@@ -192,7 +188,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
           )}
         >
           <span className="inline-block max-w-[100%_-_80px] truncate">
-            {asset.metadata.name}
+            {asset.metadata.name ? asset.metadata.name : "Unknown NFT"}
           </span>
           <span>&nbsp;#{shortenTokenId(asset.tokenId, 5)}</span>
         </Link>
