@@ -15,8 +15,22 @@ import {
   polygonMumbai,
 } from "@wagmi/chains"
 import { WagmiProvider, createConfig, http } from "wagmi"
+import { type Chain as ViemChain } from 'viem'
 
 import globalConfig from "@/config/globalConfig"
+
+export const musterTestnet = {
+  id: 2121337,
+  name: 'Muster Anytrust Sepolia',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: {
+    default: { http: ['https://muster-anytrust.alt.technology'] },
+  },
+  blockExplorers: {
+    default: { name: 'Muster anytrust', url: 'https://muster-anytrust-explorer.alt.technology/' },
+  },
+  testnet: true
+} as const satisfies ViemChain
 
 const wagmiChains = [
   mainnet,
@@ -29,7 +43,9 @@ const wagmiChains = [
   celo,
   avalanche,
   polygonMumbai,
+  musterTestnet,
 ]
+
 const marketplaceChain = wagmiChains.find(
   (chain) => chain.id === globalConfig.network.chainId
 )

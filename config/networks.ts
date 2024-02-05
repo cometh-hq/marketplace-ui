@@ -329,10 +329,10 @@ const NETWORKS: Record<number, NetworkConfig> = {
       standard: "EIP3091",
       blockUrl: "https://muster-anytrust-explorer.alt.technology/tx",
     },
-    nativeToken: { name: "Muster", symbol: "MUST", decimals: 18 },
+    nativeToken: { name: "Ether", symbol: "ETH", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Muster",
-      symbol: "WMUST",
+      symbol: "WETH",
       decimals: 18,
       address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
     },
