@@ -20,12 +20,12 @@ const manifest: Manifest = {
   chainId: env.NEXT_PUBLIC_NETWORK_ID || 137,
 
   // Set to true if you want to use the native token for orders
-  useNativeTokenForOrders: true,
+  useNativeTokenForOrders: false,
   // The ERC20 token used if useNativeTokenForOrders is false
   erc20: {
-    name: "My Token",
-    symbol: "WETH",
-    address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
+    name: "USDC",
+    symbol: "USDC",
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
     decimals: 18,
     // put your logo in the '/public/tokens' folder and update the following line (example: "mytoken.png")
     thumb: "", 
