@@ -105,7 +105,7 @@ export function SigninDropdown({
                     // Check if user has already added this device
                     await retrieveWalletAddressFromSigner(user.address);
                 } catch (error) {
-                    console.log('Error retrieving wallet address from the signer', error);
+                    console.log('Error retrieving wallet address from the signer:', error);
                     setIsModalOpen(true)
                 }
             } else {
