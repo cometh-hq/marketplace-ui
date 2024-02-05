@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 import { parseUnits } from "ethers/lib/utils"
-import { Loader } from "lucide-react"
 
+import globalConfig from "@/config/globalConfig"
 import { cn } from "@/lib/utils/utils"
 import { useMakeBuyOfferAssetButton } from "@/lib/web3/flows/make-buy-offer"
 import { useCorrectNetwork } from "@/lib/web3/network"
@@ -30,31 +30,34 @@ import { TransactionDialogButton } from "@/components/dialog-button"
 import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 import { Case, Switch } from "@/components/utils/Switch"
 
+import { AddGasStep } from "../transaction-steps/add-gas"
 import { AllowanceStep } from "../transaction-steps/allowance"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/confirm-make-buy-offer"
-import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { FundsStep } from "../transaction-steps/funds"
 import { WrapStep } from "../transaction-steps/wrap"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
   isVariantLink?: boolean
+  variant?: string
 }
 
 export function MakeBuyOfferPriceDialog({
   onSubmit,
   asset,
   isVariantLink,
+  variant,
 }: {
   onSubmit: (price: BigNumber, validity: string) => void
   asset: AssetWithTradeData
   isVariantLink?: boolean
+  variant?: string
 }) {
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
-  const bn = useMemo(() => {
+  const orderParams = useMemo(() => {
     try {
-      const parsedPrice = parseUnits(price, 18)
+      const parsedPrice = parseUnits(price, globalConfig.ordersErc20.decimals)
       return { price: parsedPrice, validity }
     } catch (e) {
       return null
@@ -68,11 +71,11 @@ export function MakeBuyOfferPriceDialog({
       <DialogTrigger asChild>
         <Button
           size={isVariantLink ? "default" : "lg"}
-          variant={isVariantLink ? "link" : "default"}
+          variant={isVariantLink ? "link" : (variant as any) || "default"}
           className={cn(isVariantLink ? "h-auto p-0" : "")}
           disabled={!isChainSupported}
         >
-          Make offer
+          Make an offer
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -86,17 +89,19 @@ export function MakeBuyOfferPriceDialog({
 
         <div className="mt-4 flex gap-4">
           <div className="flex flex-col gap-3 md:w-2/3">
-            <Label htmlFor="make-buy-offer-price">Offer price *</Label>
+            <Label htmlFor="make-buy-offer-price">
+              Offer price in {globalConfig.ordersDisplayCurrency.symbol} *
+            </Label>
             <Input
               id="make-buy-offer-price"
               type="number"
-              onChange={(e) => setPrice(e.target.value)}
+              onInputUpdate={(inputValue) => setPrice(inputValue)}
               min={0}
             />
           </div>
           <div className="flex flex-col gap-3 md:w-1/3">
-            <Label htmlFor="make-buy-offer-price">Validity time *</Label>
-            <Select onValueChange={(v) => setValidity(v)}>
+            <Label htmlFor="make-buy-offer-price">Validity time</Label>
+            <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="" />
               </SelectTrigger>
@@ -104,16 +109,18 @@ export function MakeBuyOfferPriceDialog({
                 <SelectItem value="1">24h</SelectItem>
                 <SelectItem value="2">48h</SelectItem>
                 <SelectItem value="3">72h</SelectItem>
+                <SelectItem value="10">10 days</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
         <Button
           size="lg"
-          disabled={!bn}
-          onClick={() => onSubmit(bn!.price, bn!.validity)}
+          disabled={!orderParams || !orderParams.price}
+          onClick={() => onSubmit(orderParams!.price, orderParams!.validity)}
         >
-          Make offer for&nbsp;<Price amount={bn?.price} />
+          Make offer for&nbsp;
+          <Price amount={orderParams?.price} />
         </Button>
       </DialogContent>
     </Dialog>
@@ -123,6 +130,7 @@ export function MakeBuyOfferPriceDialog({
 export function MakeBuyOfferButton({
   asset,
   isVariantLink,
+  variant,
 }: MakeBuyOfferProps) {
   const [open, setOpen] = useState(false)
   const {
@@ -151,11 +159,12 @@ export function MakeBuyOfferButton({
         onSubmit={(newPrice, newValidity) => {
           setPrice(newPrice), setValidity(newValidity)
         }}
+        variant={variant}
       />
     )
   }
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <ButtonLoading
         size={isVariantLink ? "default" : "lg"}
@@ -163,6 +172,8 @@ export function MakeBuyOfferButton({
         className={cn(isVariantLink && "h-auto p-0")}
       />
     )
+  }
+
   if (!requiredSteps?.length || !currentStep) return null
 
   const onClose = () => {
@@ -175,7 +186,7 @@ export function MakeBuyOfferButton({
   return (
     <TransactionDialogButton
       open={open}
-      label="Make offer"
+      label="Make an offer"
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={onClose}
@@ -184,6 +195,9 @@ export function MakeBuyOfferButton({
       isDisabled={isLoading}
     >
       <Switch value={currentStep.value}>
+        <Case value="add-gas">
+          <AddGasStep onValid={nextStep} />
+        </Case>
         <Case value="add-funds">
           <FundsStep price={price} onValid={nextStep} />
         </Case>
@@ -198,11 +212,8 @@ export function MakeBuyOfferButton({
             asset={asset}
             price={price}
             validity={validity ?? "1"}
-            onValid={nextStep}
+            onValid={onClose}
           />
-        </Case>
-        <Case value="confirmation">
-          <ConfirmationStep asset={asset} onValid={onClose} />
         </Case>
       </Switch>
     </TransactionDialogButton>

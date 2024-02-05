@@ -7,7 +7,8 @@ export function useStorageWallet() {
     const keysInStorage = Object.keys(localStorage);
     for (let key of keysInStorage) {
       if (key.startsWith("cometh-connect")) {
-        const address = key.split("-")[2];
+        const keyParts = key.split("-");
+        const address = keyParts[keyParts.length - 1];
         setComethWalletAddressInStorage(address);
         break;
       }

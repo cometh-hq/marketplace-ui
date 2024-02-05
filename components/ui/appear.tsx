@@ -1,8 +1,8 @@
-import React from 'react'
-import { animated, config, useSpring } from 'react-spring'
-import { useIntersectionObserver } from 'usehooks-ts'
-
-import { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from "react"
+import { useInView } from "react-intersection-observer"
+import { animated, config, useSpring } from "react-spring"
+import { useIntersectionObserver } from "usehooks-ts"
+import { useSigner } from '../../lib/web3/auth';
 
 export function useVisibility(when: boolean) {
   const [visible, setVisible] = useState(false)
@@ -13,7 +13,6 @@ export function useVisibility(when: boolean) {
 
   return visible
 }
-
 
 export function Appear({
   children,
@@ -29,30 +28,35 @@ export function Appear({
   visible?: boolean
   className?: string
 }) {
-  const ref = React.useRef<HTMLDivElement>(null)
-  const entry = useIntersectionObserver(ref, {
-    rootMargin: '0px',
-    freezeOnceVisible: true,
+  const { ref: appearRef, inView } = useInView({
+    threshold: 0,
+    rootMargin: "0px 0px 100px 0px",
+    triggerOnce: true
   })
-  const isInViewPort = !!entry?.isIntersecting
-  const visible = useVisibility(condition && isInViewPort)
-
+  const [shouldAppear, setShouldAppear] = useState(false)
+  useEffect(() => {
+    if (inView && condition) {
+      setShouldAppear(true)
+    }
+  }, [inView, condition])
   const spring = useSpring({
     enter: {
       opacity: 0,
-      transform: 'translateY(50px)',
+      transform: "translateY(50px)",
     },
     to: {
-      opacity: visible ? 1 : 0,
-      transform: visible ? 'translateY(0)' : 'translateY(50px)',
+      opacity: shouldAppear ? 1 : 0,
+      transform: shouldAppear ? "translateY(0)" : "translateY(50px)",
     },
     delay: delay,
     config: { ...config.wobbly, friction: 20 },
   })
 
   return (
-    <animated.div {...props} style={enabled ? spring : {}} ref={ref}>
-      {children ?? null}
-    </animated.div>
+    <>
+      <animated.div {...props} style={enabled ? spring : {}} ref={appearRef}>
+        {children ?? null}
+      </animated.div>
+    </>
   )
 }

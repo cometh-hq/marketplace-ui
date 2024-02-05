@@ -1,9 +1,7 @@
 "use client"
 
-import { useEffect } from "react"
-import { manifest } from "@/manifests"
-import { useFormatMainBalance } from "@/services/balance/main"
-import { useFormatWrappedBalance } from "@/services/balance/wrapped"
+import { useCallback, useEffect } from "react"
+import { useBalance } from "@/services/balance/balance"
 import { useUnwrapToken } from "@/services/exchange/unwrap-token"
 import { useWrapToken } from "@/services/exchange/wrap-token"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -12,6 +10,7 @@ import { ArrowDownUp } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import globalConfig from "@/config/globalConfig"
 import { useCorrectNetwork } from "@/lib/web3/network"
 import { Button } from "@/components/ui/button"
 import {
@@ -23,12 +22,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 import { SwitchNetwork } from "../asset-actions/buttons/switch-network"
 
@@ -39,12 +32,23 @@ export type WrapDialogFormProps = {
 }
 
 type TokenInputFieldProps = {
-  label: string
+  label: React.ReactNode
   placeholder?: string
   value?: string
   disabled?: boolean
   tokenName: string
   useFieldProps?: boolean
+}
+
+const tokenNames = {
+  send: {
+    wrap: globalConfig.network.nativeToken.symbol,
+    unwrap: globalConfig.network.wrappedNativeToken.symbol,
+  },
+  receive: {
+    wrap: globalConfig.network.wrappedNativeToken.symbol,
+    unwrap: globalConfig.network.nativeToken.symbol,
+  },
 }
 
 export function WrapDialogForm({
@@ -55,11 +59,10 @@ export function WrapDialogForm({
   const { isChainSupported } = useCorrectNetwork()
   const wrapToken = useWrapToken()
   const unwrapToken = useUnwrapToken()
-  const balance = useFormatMainBalance()
-  const wBalance = useFormatWrappedBalance()
+  const balance = useBalance()
 
   const tokenAction = isUnwrap ? unwrapToken : wrapToken
-  const maxBalance = isUnwrap ? wBalance : balance
+  const maxBalance = isUnwrap ? balance.wrapped : balance.native
 
   useEffect(() => {
     if (tokenAction.isSuccess) onClose()
@@ -82,19 +85,20 @@ export function WrapDialogForm({
 
   const receivedAmount = form.watch("amount")
 
-  const handleSubmitForm = async (values: { amount: string }) => {
-    const parsedAmount = parseUnits(values.amount, 18)
-    tokenAction.mutate({ amount: parsedAmount })
-  }
+  const handleSubmitForm = useCallback(
+    async (values: { amount: string }) => {
+      const parsedAmount = parseUnits(values.amount, globalConfig.ordersErc20.decimals)
+      tokenAction.mutate({ amount: parsedAmount })
+    },
+    [tokenAction]
+  )
 
-  const renderTokenName = (isMain = true) => {
-    return isMain
-      ? isUnwrap
-        ? manifest.currency.wrapped.name
-        : manifest.currency.main.name
-      : isUnwrap
-      ? manifest.currency.main.name
-      : manifest.currency.wrapped.name
+  const handleToggleMode = useCallback(() => {
+    onToggleMode && onToggleMode()
+  }, [onToggleMode])
+
+  const renderTokenName = (field: "send" | "receive") => {
+    return tokenNames[field][isUnwrap ? "unwrap" : "wrap"]
   }
 
   return (
@@ -104,48 +108,43 @@ export function WrapDialogForm({
         className="space-y-6"
       >
         <TokenInputField
-          label={`Amount of ${renderTokenName()} to convert`}
-          placeholder="Enter a amount"
-          tokenName={renderTokenName()}
+          label={
+            <>
+              {<b>You send</b>} (Max amount is {maxBalance}{" "}
+              {renderTokenName("send")})
+            </>
+          }
+          placeholder="Enter an amount"
+          tokenName={renderTokenName("send")}
           name="amount"
         />
 
         <div className="flex flex-col items-center">
-          <TooltipProvider delayDuration={200}>
-            <Tooltip defaultOpen={false}>
-              <TooltipTrigger asChild>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={onToggleMode}
-                >
-                  <ArrowDownUp size="16" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="text-sm font-semibold">
-                  Switch to {isUnwrap ? "Wrap" : "Unwrap"}
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={handleToggleMode}
+          >
+            <ArrowDownUp size="16" />
+          </Button>
         </div>
 
         <TokenInputField
-          label={`You receive ${renderTokenName(false)}`}
+          label={<b>You receive</b>}
           value={receivedAmount}
           disabled={true}
-          tokenName={renderTokenName(false)}
+          tokenName={renderTokenName("receive")}
           name="receivedAmount"
         />
+
         <SwitchNetwork>
           <Button
             type="submit"
             size="lg"
             className="w-full"
-            disabled={!isChainSupported || tokenAction.isLoading}
-            isLoading={tokenAction.isLoading}
+            disabled={!isChainSupported || tokenAction.isPending}
+            isLoading={tokenAction.isPending}
           >
             Convert
           </Button>

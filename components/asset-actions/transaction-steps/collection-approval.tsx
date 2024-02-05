@@ -14,7 +14,7 @@ export function CollectionApprovalStep({
   asset,
   onValid,
 }: CollectionApprovalStepProps) {
-  const { mutate: approveCollection, isLoading } = useApproveCollection({
+  const { mutate: approveCollection, isPending } = useApproveCollection({
     tokenId: asset.tokenId,
     onSuccess: onValid,
   })
@@ -22,11 +22,11 @@ export function CollectionApprovalStep({
   return (
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Permissions</h3>
-      <p>
-        {manifest.name} would like to be able to transfer your NFT, when a user
-        buys it. Your wallet is going to ask you to approve that.
+      <p className="text-center">
+        {manifest.collectionName} would like to be able to transfer your NFT,
+        when a user buys it. Your wallet is going to ask you to approve that allowance.
       </p>
-      {isLoading ? (
+      {isPending ? (
         <ButtonLoading />
       ) : (
         <Button size="sm" onClick={() => approveCollection()}>

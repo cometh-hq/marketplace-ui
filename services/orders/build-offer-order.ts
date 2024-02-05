@@ -1,9 +1,9 @@
 import { useCallback } from "react"
-import { manifest } from "@/manifests"
 import {
   AssetWithTradeData,
   Collection,
   CollectionFees,
+  TradeDirection,
 } from "@cometh/marketplace-sdk"
 import {
   UserFacingERC20AssetDataSerializedV4,
@@ -13,26 +13,32 @@ import {
 import { BigNumber, ethers } from "ethers"
 import { DateTime } from "luxon"
 
+import globalConfig from "@/config/globalConfig"
 import {
   calculateAmountWithoutFees,
   calculateFeesAmount,
-  totalFeesFromCollection,
+  totalFeesFromCollection
 } from "@/lib/utils/fees"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
-export type BuildBuyOfferOrderOptions = {
+export type BuildOfferOrderOptions = {
   asset: AssetWithTradeData
   price: BigNumber
   validity: string
   collection: Collection & { collectionFees: CollectionFees }
 }
-export const useBuildBuyOfferOrder = () => {
+
+export const useBuildOfferOrder = ({
+  tradeDirection,
+}: {
+  tradeDirection: TradeDirection
+}) => {
   const viewer = useCurrentViewerAddress()
   const nftSwapSdk = useNFTSwapv4()
 
   return useCallback(
-    ({ asset, price, validity, collection }: BuildBuyOfferOrderOptions) => {
+    ({ asset, price, validity, collection }: BuildOfferOrderOptions) => {
       if (!nftSwapSdk || !viewer || !collection.collectionFees) return null
 
       const expiry = DateTime.now()
@@ -64,8 +70,13 @@ export const useBuildBuyOfferOrder = () => {
         type: "ERC721",
       }
 
+      const tokenAddress =
+        tradeDirection === TradeDirection.SELL
+          ? globalConfig.ordersTokenAddress
+          : globalConfig.ordersErc20.address
+
       const erc20Asset: UserFacingERC20AssetDataSerializedV4 = {
-        tokenAddress: manifest.currency.wrapped.address,
+        tokenAddress,
         amount: price.sub(totalFeesFromCollection(fees)).toString(),
         type: "ERC20",
       }
@@ -73,7 +84,7 @@ export const useBuildBuyOfferOrder = () => {
       return nftSwapSdk.buildNftAndErc20Order(
         erc721Asset,
         erc20Asset,
-        "buy",
+        tradeDirection,
         viewer,
         {
           fees,

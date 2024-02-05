@@ -22,7 +22,6 @@ export function ProductBlock({ asset }: ProductBlockProps) {
   const sellBlock = viewerIsOwner && !isOnSale
   const buyBlock = !viewerIsOwner && isOnSale
   const viewerListingBlock = viewerIsOwner && isOnSale
-  // TODO: ongoing auction block
   
   if (sellBlock) return <SellProductBlock asset={asset} />
   if (buyBlock) return <BuyProductBlock asset={asset} />

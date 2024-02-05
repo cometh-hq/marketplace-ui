@@ -28,8 +28,8 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
   return (
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
-        <AssetStatusBadge status="listed" />
-        <Price amount={asset.orderbookStats.lowestSalePrice} />
+        <ProductBlockLabel>Price</ProductBlockLabel>
+        <Price amount={asset.orderbookStats.lowestListingPrice} />
       </ProductBlockDividedColumn>
 
       <ProductBlockDividedColumn>
@@ -47,7 +47,7 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
-        <ConnectButton>
+        <ConnectButton fullVariant>
           <SwitchNetwork>
             <CancelListingButton asset={asset} />
           </SwitchNetwork>

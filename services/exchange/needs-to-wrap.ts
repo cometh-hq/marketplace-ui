@@ -1,10 +1,12 @@
-import { manifest } from "@/manifests"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
+
 import { fetchHasSufficientFunds } from "../balance/has-sufficient-funds"
-import { fetchWrappedBalance } from "../balance/wrapped"
+import { getOrdersERC20Balance } from "../balance/balanceService"
+import { balanceToBigNumber } from "../balance/format"
 
 export type FetchNeedsToWrapOptions = {
   price: BigNumber
@@ -24,16 +26,14 @@ export const fetchNeedsToWrap = async ({
 }: FetchNeedsToWrapOptions): Promise<boolean> => {
   const hasSufficientFunds = await fetchHasSufficientFunds({
     address,
-    price,
-    wrappedContractAddress,
+    price
   })
   if (!hasSufficientFunds) return false
 
-  const wrappedBalance = await fetchWrappedBalance(
-    address,
-    wrappedContractAddress
+  const wrappedBalance = await getOrdersERC20Balance(
+    address
   )
-  return !wrappedBalance.gte(price)
+  return !balanceToBigNumber(wrappedBalance).gte(price)
 }
 
 export type UseNeedsToWrapOptions = {
@@ -42,14 +42,14 @@ export type UseNeedsToWrapOptions = {
 }
 
 export const useNeedsToWrap = ({ price, address }: UseNeedsToWrapOptions) => {
-  return useQuery(
-    ["needsToWrap", price, address],
-    async () =>
+  return useQuery({
+    queryKey: ["needsToWrap", price, address],
+    queryFn: async () =>
       fetchNeedsToWrap({
         price: price!,
         address: address!,
-        wrappedContractAddress: manifest.currency.wrapped.address,
+        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
       }),
-    { enabled: !!address && !!price }
-  )
+    enabled: !!address && !!price,
+  })
 }

@@ -71,3 +71,11 @@
     font-feature-settings: "rlig" 1 "calt" 1;
   }
 }
+
+
+/* Fix Gas fees Connect Wallet */
+#cometh-gas-modal-wrapper {
+  pointer-events: auto;
+  position: fixed;
+  z-index: 1000;
+}

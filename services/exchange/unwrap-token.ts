@@ -1,13 +1,11 @@
-import { manifest } from "@/manifests"
 import { useMutation } from "@tanstack/react-query"
 import { BigNumber, Signer } from "ethers"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import { IWETH__factory } from "@/lib/generated/contracts/weth/IWETH__factory"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
-
-import { handleOrderbookError } from "../errors"
 
 export type UnwrapTokenOptions = {
   amount: BigNumber
@@ -23,9 +21,10 @@ export async function unwrapToken({
   wrapContractAddress,
 }: UnwrapTokenOptions) {
   const contract = IWETH__factory.connect(wrapContractAddress, signer)
-  return await contract?.withdraw(amount, {
+  const tx =  await contract?.withdraw(amount, {
     from: account,
   })
+  await tx.wait()
 }
 
 export type UnwrapTokenMutationOptions = {
@@ -36,10 +35,10 @@ export const useUnwrapToken = () => {
   const viewerAddress = useCurrentViewerAddress()
   const signer = useSigner()
 
-  return useMutation(
-    ["unwrap"],
-    async ({ amount }: UnwrapTokenMutationOptions) => {
-      if (!viewerAddress || !signer || !manifest?.currency?.wrapped?.address) {
+  return useMutation({
+    mutationKey: ["unwrap"],
+    mutationFn: async ({ amount }: UnwrapTokenMutationOptions) => {
+      if (!viewerAddress || !signer) {
         throw new Error("Could not unwrap token")
       }
 
@@ -47,25 +46,14 @@ export const useUnwrapToken = () => {
         amount,
         account: viewerAddress,
         signer,
-        wrapContractAddress: manifest.currency.wrapped.address,
+        wrapContractAddress: globalConfig.network.wrappedNativeToken.address,
       })
     },
-    {
-      onSuccess: () => {
-        toast({
-          title: "Token unwrapped!",
-        })
-      },
-      onError: (error) => {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            500: "Internal orderbook server error",
-          }),
-        })
-      },
+
+    onSuccess: () => {
+      toast({
+        title: "Token unwrapped!",
+      })
     }
-  )
+  })
 }

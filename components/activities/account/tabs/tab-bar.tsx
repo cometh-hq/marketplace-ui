@@ -9,7 +9,7 @@ type TabBarProps = {
 
 export const TabBar = ({ receivedCounter, sentCounter }: TabBarProps) => {
   return (
-    <TabsList className="mb-8 h-auto gap-x-6 text-xl">
+    <TabsList className="mb-4 h-auto gap-x-6 overflow-x-auto text-xl sm:mb-8">
       <TabsTrigger value="search-assets">
         <WalletIcon size="18" className="mr-2" /> My NFTs
       </TabsTrigger>

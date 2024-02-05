@@ -15,7 +15,7 @@ export const findAssetInSearchResults = (
   tokenId: string
 ) => {
   for (const [_, result] of search) {
-    const assets = result?.data?.pages?.flat()
+    const assets = result?.data
     const asset = assets?.find((asset) => asset.tokenId === tokenId)
     if (asset) {
       return asset

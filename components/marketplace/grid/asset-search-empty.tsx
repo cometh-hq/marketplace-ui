@@ -3,7 +3,7 @@ export const AssetsSearchEmpty = () => {
   return (
     <div className="my-20">
       <h1 className="text-center text-2xl font-bold">
-        No assets found.
+        No asset found.
       </h1>
       <p className="mt-2 text-center text-sm">
         Try adjusting your search or filters.

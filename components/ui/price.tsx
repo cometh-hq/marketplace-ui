@@ -1,19 +1,15 @@
 import { forwardRef } from "react"
 import Image from "next/image"
-import { VariantProps, cva, cx } from "class-variance-authority"
+import { cva, cx, VariantProps } from "class-variance-authority"
 import { BigNumberish } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
 
+import { env } from "@/config/env"
+import globalConfig from "@/config/globalConfig"
+import { smartRounding } from "@/lib/utils/priceUtil"
 import { cn } from "@/lib/utils/utils"
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./tooltip"
-
-const priceTriggerVariants = cva("font-bold", {
+const priceTriggerVariants = cva("", {
   variants: {
     variant: {
       default: "",
@@ -23,25 +19,24 @@ const priceTriggerVariants = cva("font-bold", {
     size: {
       default: "text-base",
       sm: "text-sm",
-      lg: "text-lg",
-      xl: "text-xl",
-      "3xl": "text-3xl font-extrabold",
+    },
+    fontWeight: {
+      default: "font-bold",
+      normal: "",
     },
   },
   defaultVariants: {
     size: "default",
     variant: "default",
+    fontWeight: "default",
   },
 })
 
 const iconVariants = cva("object-contain", {
   variants: {
     size: {
-      default: "w-6 h-6",
-      sm: "w-5 h-5",
-      lg: "w-6 h-6",
-      xl: "w-6 h-6",
-      "3xl": "w-7 h-7",
+      default: "w-5 h-5",
+      sm: "w-4 h-4",
     },
   },
   defaultVariants: {
@@ -54,28 +49,52 @@ export type PriceTriggerVariants = VariantProps<typeof priceTriggerVariants>
 export type PriceTriggerProps = {
   formattedAmount: string
   hideIcon?: boolean
+  hideSymbol?: boolean
   className?: string
+  isNativeToken?: boolean
 } & PriceTriggerVariants
 
 const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
-  ({ formattedAmount, size, variant, hideIcon = false, className }, ref) => {
+  (
+    {
+      formattedAmount,
+      size,
+      variant,
+      fontWeight,
+      hideIcon = false,
+      hideSymbol = true,
+      className,
+      isNativeToken,
+    },
+    ref
+  ) => {
+    const roundedAmount = smartRounding(
+      formattedAmount,
+      globalConfig.decimals.displayMaxSmallDecimals
+    )
+    const currency = isNativeToken
+      ? globalConfig.network.nativeToken
+      : globalConfig.ordersErc20
     return (
       <span
         ref={ref}
-        className="relative inline-flex items-center align-middle"
+        className={cn(
+          "inline-flex items-center gap-x-1.5 align-middle",
+          priceTriggerVariants({ size, variant, className, fontWeight })
+        )}
       >
-        {!hideIcon && (
-          <span className={cn("relative -ml-1", iconVariants({ size }))}>
+        {!hideIcon && currency.thumb && (
+          <span className={cn("relative", iconVariants({ size }))}>
             <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_PATH}/icons/chains/polygon.svg`}
-              alt={formattedAmount.toString()}
+              src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${currency.thumb}`}
+              alt={currency.symbol}
               fill
             />
           </span>
         )}
-        <span className={cn(priceTriggerVariants({ size, variant, className }))}>
-          {formattedAmount.toString()}
-        </span>
+        {`${roundedAmount}${
+          !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
+        }`}
       </span>
     )
   }
@@ -86,15 +105,25 @@ PriceTrigger.displayName = "PriceTrigger"
 export type PriceProps = {
   amount?: BigNumberish | null | undefined
   hideIcon?: boolean
+  hideSymbol?: boolean
   className?: string
+  isNativeToken?: boolean
 } & PriceTriggerVariants
 
-export const Price = ({ amount, ...rest }: PriceProps) => {
+export const Price = ({ amount, isNativeToken, ...rest }: PriceProps) => {
   if (!amount) return "-"
-
-  const formattedAmount = (+formatUnits(amount.toString(), 18)).toString()
+  const formattedAmount = (+formatUnits(
+    amount.toString(),
+    isNativeToken
+      ? globalConfig.decimals.nativeTokenDecimals
+      : globalConfig.ordersErc20.decimals
+  )).toString()
 
   return (
-    <PriceTrigger {...rest} formattedAmount={formattedAmount} />
-    )
+    <PriceTrigger
+      {...rest}
+      isNativeToken={isNativeToken}
+      formattedAmount={formattedAmount}
+    />
+  )
 }

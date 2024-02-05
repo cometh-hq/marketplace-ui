@@ -1,4 +1,4 @@
-export type AssetStatus = "listed" | "auction" | "bought" | "not-listed"
+export type AssetStatus = "listed" | "not-listed"
 
 export type CardFiltersRaw = {
   orderBy?: string
