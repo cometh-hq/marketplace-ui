@@ -25,7 +25,7 @@ export const useBuyAsset = () => {
 
       const order = await getFirstListing(asset.tokenId)
 
-      const signature = {...order.signature} || {
+      const signature = order.signature ? order.signature :  {
         signatureType: 4,
         v: 0,
         r: "0x0000000000000000000000000000000000000000000000000000000000000000",

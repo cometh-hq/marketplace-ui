@@ -12,7 +12,7 @@ export type AssetCellProps = {
 }
 
 export const AssetCell = ({ row }: AssetCellProps) => {
-  const assetName = row.original.trade.asset.metadata.name
+  const assetName = row.original.trade.asset?.metadata.name
   const tokenId = row.original.trade.tokenId
 
   return (
