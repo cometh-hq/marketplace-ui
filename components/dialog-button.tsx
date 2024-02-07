@@ -31,11 +31,17 @@ export function TransactionDialogButton<T extends Step>({
   variant,
   ...props
 }: TransactionDialogProps<T>) {
+
+  const componentOnOpenChange = (newOpen: boolean) => {
+    onOpenChange?.(newOpen)
+    if(!newOpen) onClose()
+  } 
+
   return (
     <Dialog
       open={open}
       modal
-      onOpenChange={(v) => onOpenChange?.(v) || (!v && onClose())}
+      onOpenChange={componentOnOpenChange}
     >
       <DialogTrigger asChild>
         <Button

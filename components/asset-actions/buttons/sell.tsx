@@ -1,22 +1,25 @@
+import { useState } from "react"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 
+import { cn } from "@/lib/utils/utils"
 import { useSellAssetButton } from "@/lib/web3/flows/sell"
+import { ButtonLoading } from "@/components/button-loading"
 import { TransactionDialogButton } from "@/components/dialog-button"
 import { Case, Switch } from "@/components/utils/Switch"
 
+import { AddGasStep } from "../transaction-steps/add-gas"
 import { CollectionApprovalStep } from "../transaction-steps/collection-approval"
 import { SellStep } from "../transaction-steps/sell"
-import { AddGasStep } from "../transaction-steps/add-gas"
-import { ButtonLoading } from "@/components/button-loading"
-import { cn } from "@/lib/utils/utils"
-import { useState } from "react"
 
 export type SellAssetButtonProps = {
   asset: AssetWithTradeData
   isVariantLink?: boolean
 }
 
-export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) {
+export function SellAssetButton({
+  asset,
+  isVariantLink,
+}: SellAssetButtonProps) {
   const [open, setOpen] = useState(false)
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useSellAssetButton({ asset })
@@ -33,8 +36,7 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
 
   if (!requiredSteps?.length || !currentStep) return null
 
-  const handleClose = () => {
-    reset()
+  const closeDialog = () => {
     setOpen(false)
   }
 
@@ -45,7 +47,7 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
       currentStep={currentStep}
       steps={requiredSteps}
       onOpenChange={setOpen}
-      onClose={handleClose}
+      onClose={reset}
       isVariantLink={isVariantLink}
       isLoading={isLoading}
       isDisabled={isLoading}
@@ -58,7 +60,7 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
           <CollectionApprovalStep asset={asset} onValid={nextStep} />
         </Case>
         <Case value="sell">
-          <SellStep asset={asset} onClose={handleClose}/>
+          <SellStep asset={asset} onClose={closeDialog} />
         </Case>
       </Switch>
     </TransactionDialogButton>

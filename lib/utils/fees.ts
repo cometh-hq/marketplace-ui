@@ -18,15 +18,6 @@ export const calculateAmountWithoutFees = (
 
   const scaledPercentage = _scalePrecision(feePercentage).div(100)
 
-console.info({
-  priceWithFees:priceWithFees.toString(),
-  feePercentage:feePercentage.toString(),
-  scaledPercentage:scaledPercentage.toString(),
-  result:  _scalePrecision(priceWithFees).div(
-    _scalePrecision(1).add(scaledPercentage)
-  ).toString()
-})
-
   return _scalePrecision(priceWithFees).div(
     _scalePrecision(1).add(scaledPercentage)
   )

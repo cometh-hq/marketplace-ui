@@ -158,5 +158,6 @@ export const useAssetDetails = (contractAddress: Address, assetId: string) => {
       >({ queryKey: ["cometh", "search"] })
       return findAssetInSearchResults(search, assetId)
     },
+    refetchInterval: 2000
   })
 }

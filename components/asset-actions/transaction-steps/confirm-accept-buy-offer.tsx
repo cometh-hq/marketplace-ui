@@ -12,9 +12,10 @@ import { ButtonLoading } from "@/components/button-loading"
 
 export type ConfirmBuyOfferStepProps = {
   offer: BuyOffer
+  onValid: () => void
 }
 
-export function ConfirmAcceptBuyOfferStep({ offer }: ConfirmBuyOfferStepProps) {
+export function ConfirmAcceptBuyOfferStep({ offer, onValid }: ConfirmBuyOfferStepProps) {
   const {
     mutateAsync: acceptBuyOffer,
     isPending,
@@ -25,9 +26,10 @@ export function ConfirmAcceptBuyOfferStep({ offer }: ConfirmBuyOfferStepProps) {
     const tx = await acceptBuyOffer({ offer })
     if (isSuccess) {
       toast({
-        title: "Your offer has been accepted.",
+        title: "The purchase offer for your NFT has been accepted with success!",
         description: `${globalConfig.network.explorer}/${tx.transactionHash}`,
       })
+      onValid()
     }
   }, [acceptBuyOffer, offer, isSuccess])
 

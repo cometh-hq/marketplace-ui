@@ -85,7 +85,7 @@ export const useAcceptBuyOffer = () => {
         queryKey: ["cometh", "received-buy-offers", offer.owner.address],
       })
       toast({
-        title: "Order filled!",
+        title: "Purchased order filled!",
       })
     }
   })

@@ -176,16 +176,20 @@ export function MakeBuyOfferButton({
 
   if (!requiredSteps?.length || !currentStep) return null
 
-  const onClose = () => {
-    reset()
+  const closeDialog = () => {
     setOpen(false)
+  }
+
+  const onClose = () => {
     setPrice(null)
     setValidity(null)
+    reset()
   }
 
   return (
     <TransactionDialogButton
       open={open}
+      onOpenChange={setOpen}
       label="Make an offer"
       currentStep={currentStep}
       steps={requiredSteps}
@@ -212,7 +216,7 @@ export function MakeBuyOfferButton({
             asset={asset}
             price={price}
             validity={validity ?? "1"}
-            onValid={onClose}
+            onValid={closeDialog}
           />
         </Case>
       </Switch>
