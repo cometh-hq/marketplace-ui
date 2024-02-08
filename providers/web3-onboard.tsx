@@ -1,9 +1,9 @@
 "use client"
 
 import {
+  createContext,
   Dispatch,
   SetStateAction,
-  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -20,6 +20,7 @@ import {
 } from "@cometh/connect-sdk"
 
 import "@web3-onboard/common"
+
 import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import Onboard, { OnboardAPI } from "@web3-onboard/core"
 import injectedModule from "@web3-onboard/injected-wallets"
@@ -55,17 +56,18 @@ const Web3OnboardContext = createContext<{
   isConnected: false,
   setIsconnected: () => {},
   reconnecting: false,
-  initNewSignerRequest: () => Promise.resolve({
-    walletAddress: "",
-    signerAddress: "",
-    deviceData: {
-      browser: "",
-      os: "",
-      platform: "",
-    },
-    type: NewSignerRequestType.WEBAUTHN,
-  }),
-    retrieveWalletAddressFromSigner: () => Promise.resolve(),
+  initNewSignerRequest: () =>
+    Promise.resolve({
+      walletAddress: "",
+      signerAddress: "",
+      deviceData: {
+        browser: "",
+        os: "",
+        platform: "",
+      },
+      type: NewSignerRequestType.WEBAUTHN,
+    }),
+  retrieveWalletAddressFromSigner: () => Promise.resolve(),
 })
 
 export function useWeb3OnboardContext() {
@@ -91,9 +93,9 @@ export function Web3OnboardProvider({
       chainId: SupportedNetworks.MUSTER_TESTNET,
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
       baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
-    });
+    })
 
-    return await connectAuthAdaptor.initNewSignerRequest(walletAddress);
+    return await connectAuthAdaptor.initNewSignerRequest(walletAddress)
   }
 
   const retrieveWalletAddressFromSigner = async (walletAddress: string) => {
@@ -101,16 +103,16 @@ export function Web3OnboardProvider({
       chainId: SupportedNetworks.MUSTER_TESTNET,
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
       baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
-    });
+    })
 
     const wallet = new ComethWallet({
       authAdapter: connectAuthAdaptor,
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
     })
 
-    console.log("walletAddress", walletAddress);
-    await wallet.connect(walletAddress);
-    console.log("wallet connected", walletAddress);
+    console.log("walletAddress", walletAddress)
+    await wallet.connect(walletAddress)
+    console.log("wallet connected", walletAddress)
   }
 
   const initOnboard = useCallback((options: SetOnboardOptions) => {
@@ -124,11 +126,11 @@ export function Web3OnboardProvider({
       } as any
 
       const connectAdaptor = new ConnectAdaptor({
-        chainId: numberToHex(env.NEXT_PUBLIC_NETWORK_ID) as SupportedNetworks,
+        chainId: SupportedNetworks.MUSTER_TESTNET,
         apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+        baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
       })
       let addressToUse = options.walletAddress
-
 
       const connectConnector = ConnectOnboardConnector({
         apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
@@ -215,7 +217,7 @@ export function Web3OnboardProvider({
         setIsconnected,
         reconnecting,
         initNewSignerRequest,
-        retrieveWalletAddressFromSigner
+        retrieveWalletAddressFromSigner,
       }}
     >
       {children}

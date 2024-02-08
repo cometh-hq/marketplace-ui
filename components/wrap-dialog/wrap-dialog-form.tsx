@@ -87,7 +87,10 @@ export function WrapDialogForm({
 
   const handleSubmitForm = useCallback(
     async (values: { amount: string }) => {
-      const parsedAmount = parseUnits(values.amount, globalConfig.ordersErc20.decimals)
+      const parsedAmount = parseUnits(
+        values.amount,
+        globalConfig.ordersErc20.decimals
+      )
       tokenAction.mutate({ amount: parsedAmount })
     },
     [tokenAction]

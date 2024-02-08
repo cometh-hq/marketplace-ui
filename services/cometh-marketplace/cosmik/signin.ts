@@ -5,15 +5,9 @@ import { toast } from "@/components/ui/toast/use-toast"
 
 import { cosmikClient } from "../client"
 
-interface LoginCredentials {
+interface SignInBody {
   username: string
   password: string
-}
-
-interface LoginResponse {
-  success: boolean
-  user?: User
-  errorKey?: string
 }
 
 export type User = {
@@ -30,8 +24,8 @@ export const useCosmikSignin = () => {
 
   return useMutation({
     mutationKey: ["cosmik, signin"],
-    mutationFn: async (credentials: LoginCredentials) => {
-      const { data } = await cosmikClient.post<LoginResponse>(
+    mutationFn: async (credentials: SignInBody) => {
+      const { data } = await cosmikClient.post(
         "/login",
         credentials
       )
@@ -40,6 +34,7 @@ export const useCosmikSignin = () => {
     onSuccess: async (data) => {
       if (data.user) {
         localStorage.setItem("user", JSON.stringify(data.user))
+        // On ne veut peut-être pas déclancher cette action sur la page /wallets (voir avec Fred). Peut-être qu'il faudra déplacer cette action dans le composant qui appelle useCosmikSignin
         // Tenter de récupérer l'adresse du portefeuille à partir du signataire
         try {
           await retrieveWalletAddressFromSigner(data.user.address)

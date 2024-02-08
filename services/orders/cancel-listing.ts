@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
-import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
+import { useWalletAdapter } from "@/services/adapters/use-wallet-adapter"
 
 import { useSigner } from "../../lib/web3/auth"
 import { getFirstListing } from "../cometh-marketplace/offers"

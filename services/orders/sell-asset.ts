@@ -4,7 +4,7 @@ import { BigNumber } from "ethers"
 
 import { useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
-import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
+import { useWalletAdapter } from "@/services/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { useBuildOfferOrder } from "./build-offer-order"

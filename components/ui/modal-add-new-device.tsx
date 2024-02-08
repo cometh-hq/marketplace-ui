@@ -12,6 +12,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { User } from "@/components/account-dropdown/signin-dropdown"
+import axios from "axios"
+import { toast } from "./toast/use-toast"
 
 type AddNewDeviceDialogProps = {
   setIsOpen: Dispatch<SetStateAction<boolean>>
@@ -22,7 +24,7 @@ export function AddNewDeviceDialog({
   setIsOpen,
   onClose,
 }: AddNewDeviceDialogProps) {
-  const { initNewSignerRequest } = useWeb3OnboardContext()
+  const { initNewSignerRequest, retrieveWalletAddressFromSigner } = useWeb3OnboardContext()
   const {
     mutateAsync: newSignerRequest,
     isPending,
@@ -37,35 +39,61 @@ export function AddNewDeviceDialog({
       const user: User = JSON.parse(userFromLocalStorage)
       setUser(user)
     }
-  }, [])
+  }, [isSuccess])
 
   const handleNewSignerRequest = async () => {
-    const addSignerRequest = await initNewSignerRequest(user!.address)
-    const response = await newSignerRequest(addSignerRequest)
-    console.log("response in handleNewSignerRequest", response)
-    if (response.success) {
-      // setIsOpen(false)
-      setStep(1)
-    }
-    // try {
-    //   console.log(user!.address)
-    //   const addSignerRequest = await initNewSignerRequest(user!.address)
-    //   const response = await axios.post(
-    //     "https://api.develop.cosmikbattle.com/api/new-signer-request",
-    //     addSignerRequest,
-    //     {
-    //       withCredentials: true,
-    //     }
-    //   )
-    //   setIsOpen(false)
-    // } catch (error) {
-    //   console.error("Error", error)
-    //   setIsOpen(false)
+    // const addSignerRequest = await initNewSignerRequest(user!.address)
+    // console.log("addSignerRequest", addSignerRequest)
+    // const signerRequest = await newSignerRequest(addSignerRequest)
+    // console.log("signerRequest in handleNewSignerRequest", signerRequest)
+    // if (signerRequest.success && step === 0) {
+    //   setStep(1)
+    // } else if (signerRequest.success && step === 1) {
+    //   // setIsOpen(false)
+    //   console.log("on est là")
+    //   const retrieveWalletAddress = await retrieveWalletAddressFromSigner(user?.address!)
+    //   console.log("retrieveWalletAddress", retrieveWalletAddress)
+    //   // display success toaster
     // }
+
+    try {
+      console.log(user!.address)
+      const addSignerRequest = await initNewSignerRequest(user!.address)
+      const response = await axios.post(
+        "https://api.develop.cosmikbattle.com/api/new-signer-request",
+        addSignerRequest,
+        {
+          withCredentials: true,
+        }
+      )
+      // setIsOpen(false)
+      if (response.data.success && step === 0) {
+        setStep(1)
+      } else if (response.data.success && step === 1) {
+        console.log("response", response.data)
+        setIsOpen(false)
+      }
+    } catch (error) {
+      console.error("Error in handleNewSignerRequest", error)
+      // setIsOpen(false)
+    }
   }
 
-  const handleRefreshSignerRequest = async () => {
-   
+  const handleRefresh = async () => {
+    try {
+      const retrieveWalletAddress = await retrieveWalletAddressFromSigner(user?.address!)
+      console.log("retrieveWalletAddress", retrieveWalletAddress)
+      // display toast 
+      toast({
+        title: "Device succesfully Authorized!",
+        description: "Your Cosmik Battle account has been successfully linked to the marketplace.",
+        variant: "default"
+      })
+      setIsOpen(false)
+    } catch (error) {
+      console.error("Error in handleRefresh", error)
+      setIsOpen(false)
+    }
   }
 
   return (
@@ -106,9 +134,7 @@ export function AddNewDeviceDialog({
         ) : (
           <Button
             size="lg"
-            onClick={handleRefreshSignerRequest}
-            // isLoading={isPending}
-            // disabled={isPending}
+            onClick={handleRefresh}
           >
             Refresh
           </Button>

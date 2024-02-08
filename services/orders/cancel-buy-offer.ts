@@ -5,7 +5,7 @@ import { isAddressEqual } from "viem"
 import { BuyOffer } from "@/types/buy-offers"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
+import { useWalletAdapter } from "@/services/adapters/use-wallet-adapter"
 
 export type UseCanCancelBuyOfferParams = {
   offer: BuyOffer

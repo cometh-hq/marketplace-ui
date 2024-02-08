@@ -1,15 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { useCosmikSignin } from "@/services/cometh-marketplace/cosmik/signin"
-import axios from "axios"
-import { cx } from "class-variance-authority"
 import { WalletIcon } from "lucide-react"
 
 import { env } from "@/config/env"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +16,7 @@ import {
 import { Input } from "../ui/input"
 import { AddNewDeviceDialog } from "../ui/modal-add-new-device"
 import { AccountWallet } from "./account-wallet"
+import { cx } from "class-variance-authority"
 
 export type SigninDropdownProps = {
   disabled: boolean
@@ -56,11 +54,9 @@ export function SigninDropdown({
       : []),
   ]
 
-  const [email, setEmail] = useState("lorraine.steve@cometh.io")
-  const [password, setPassword] = useState("darkVador83!")
-  const [signinButton, setSigninButton] = useState("Login")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [walletsRendered, setWalletsRendered] = useState(false)
-  const { retrieveWalletAddressFromSigner } = useWeb3OnboardContext()
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const {
@@ -73,46 +69,71 @@ export function SigninDropdown({
 
   useEffect(() => {
     if (isSuccess && data?.user) {
-      console.log("on est dans le isSuccess")
-      console.log("data", data)
       setCurrentUser(data.user)
-      localStorage.setItem("user", JSON.stringify(data.user))
-      // Mettre à jour l'état pour refléter le nom d'utilisateur dans le bouton de connexion
-      setSigninButton(data.user.userName)
       setWalletsRendered(true)
-      console.log("currentUser", currentUser)
     }
   }, [isSuccess, data])
 
   useEffect(() => {
     if (error) {
-      console.error("Error during signin:", error)
       setIsModalOpen(true)
     }
   }, [error])
 
+  useEffect(() => {
+    if (!currentUser) {
+      const userString = localStorage.getItem("user")
+      if (userString) {
+        const user: User = JSON.parse(userString)
+        setWalletsRendered(true)
+        setCurrentUser(user)
+      }
+    }
+  }, [currentUser])
+
   const handleLogout = () => {
     localStorage.removeItem("user")
     setCurrentUser(null)
-    setSigninButton("Sign in")
     setWalletsRendered(false)
-  }
-
-  const handleProfile = () => {
-    if (currentUser) {
-      console.log("currentUser", currentUser)
-      // const profileUrl = `http://localhost:3001/profile/${currentUser.address}`
-      // window.location.href = profileUrl
-    }
   }
 
   const handleModalOpen = () => {
     setIsModalOpen(false)
   }
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     signin({ username: email, password })
+
+    // try {
+    //   const response = await axios.post(
+    //     "https://api.develop.cosmikbattle.com/api/login",
+    //     {
+    //       username: email,
+    //       password: password,
+    //     },
+    //     { withCredentials: true }
+    //   )
+
+    //   if (response.data.success) {
+    //     const user = response.data.user
+    //     if (user.userName) {
+    //       setWalletsRendered(true)
+    //       localStorage.setItem("user", JSON.stringify(user))
+    //     }
+    //     try {
+    //       // Check if user has already added this device
+    //       await retrieveWalletAddressFromSigner(user.address)
+    //     } catch (error) {
+    //       console.log("Error retrieving wallet address from signer", error)
+    //       setIsModalOpen(true)
+    //     }
+    //   } else {
+    //     console.log("Login failed", response.data.errorKey)
+    //   }
+    // } catch (error) {
+    //   console.error("Error adding new device", error)
+    // }
   }
 
   return (
@@ -131,10 +152,7 @@ export function SigninDropdown({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
-        <Card className="p-4" style={{ width: "324px" }}>
-          {/* <CardHeader className="mb-3 p-0">
-            <CardTitle className="text-xl">Login</CardTitle>
-          </CardHeader> */}
+        <Card className="mt-1 p-4" style={{ width: "324px" }}>
           {!walletsRendered && (
             <CardContent className="space-y-3 p-0">
               <p>
@@ -142,7 +160,7 @@ export function SigninDropdown({
                 with your Cosmik Battle credentials. No account? Download Cosmik
                 Battle
               </p>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className="space-y-2">
                 <Input
                   type="email"
                   value={email}
@@ -157,7 +175,8 @@ export function SigninDropdown({
                 />
                 {error && <p className="text-red-500">{error.message}</p>}
                 <Button
-                  className="mt-2"
+                  size="lg"
+                  className="w-full"
                   type="submit"
                   isLoading={isPending}
                   disabled={isPending}
@@ -168,17 +187,20 @@ export function SigninDropdown({
             </CardContent>
           )}
           {walletsRendered && (
-            <CardContent className="space-y-3 p-0">
-              {wallets.map((wallet) => (
-                <AccountWallet
-                  key={wallet.name}
-                  name={wallet.name}
-                  icon={wallet.icon}
-                  isComethWallet={wallet.isComethWallet}
-                  handleConnect={handleConnect}
-                />
-              ))}
-            </CardContent>
+            <>
+              <Button onClick={handleLogout}>Logout</Button>
+              <CardContent className="space-y-3 p-0">
+                {wallets.map((wallet) => (
+                  <AccountWallet
+                    key={wallet.name}
+                    name={wallet.name}
+                    icon={wallet.icon}
+                    isComethWallet={wallet.isComethWallet}
+                    handleConnect={handleConnect}
+                  />
+                ))}
+              </CardContent>
+            </>
           )}
           {isModalOpen && (
             <AddNewDeviceDialog
