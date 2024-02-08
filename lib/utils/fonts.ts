@@ -1,11 +1,8 @@
-import { JetBrains_Mono as FontMono, Inter as FontSans } from "next/font/google"
+import { Chakra_Petch } from "next/font/google";
 
-export const fontSans = FontSans({
+export const ChakraFont = Chakra_Petch({
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-sans",
-})
-
-export const fontMono = FontMono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
+  display: "swap",
+  variable: '--font-chakra-petch'
+});

@@ -53,7 +53,7 @@ export function CurrentAccountDropdown({
             <div className="flex items-center gap-2">
               <Image src={walletIcon} alt="" width={40} height={40} />
               <div>
-                <CardTitle className="relative -mb-2 text-sm font-semibold">
+                <CardTitle className="relative -mb-2 text-sm font-semibold uppercase">
                   Account
                 </CardTitle>
                 <div className="flex items-center">

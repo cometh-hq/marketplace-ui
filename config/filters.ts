@@ -5,22 +5,22 @@ import {
 
 export const FILTERS_SORT = [
   {
-    label: "Sort by Price: Low to High",
+    label: "Low to High",
     orderBy: FilterOrderBy.PRICE,
     direction: FilterDirection.ASC,
   },
   {
-    label: "Sort by Price: High to Low",
+    label: "High to Low",
     orderBy: FilterOrderBy.PRICE,
     direction: FilterDirection.DESC,
   },
   {
-    label: "Sort by Newest Listings",
+    label: "Newest Listings",
     orderBy: FilterOrderBy.LISTING_DATE,
     direction: FilterDirection.DESC,
   },
   {
-    label: "Sort by Oldest Listings",
+    label: "Oldest Listings",
     orderBy: FilterOrderBy.LISTING_DATE,
     direction: FilterDirection.ASC,
   },

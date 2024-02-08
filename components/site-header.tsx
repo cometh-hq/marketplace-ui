@@ -2,14 +2,16 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { cx } from "class-variance-authority"
 import { X } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
-import { Icons } from "@/components/icons"
+import { env } from "@/config/env"
+import { cx } from "class-variance-authority"
 
 import { ConnectButton } from "./connect-button"
 import { MainNav } from "./main-nav"
+
+import Image from "next/image"
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -18,7 +20,7 @@ export function SiteHeader() {
 
   return (
     <div className="container mx-auto py-5 sm:py-10">
-      <header className="flex items-center gap-x-5 md:justify-between">
+      <header className="flex items-center gap-x-10 md:justify-between">
         <div
           onClick={() => !isOpen && setIsOpen(true)}
           className={cx("w-[20px] cursor-pointer md:hidden", {
@@ -58,19 +60,6 @@ export function SiteHeader() {
           </div>
         </div>
 
-        <Link
-          href="/marketplace"
-          className={cx(
-            "flex items-center space-x-2 text-2xl",
-            isOpen && "text-primary-foreground"
-          )}
-        >
-          <Icons.logo className="h-6 w-6 text-current" />
-          <span className="mr-10 text-base font-bold opacity-90 md:inline md:text-lg">
-            {siteConfig.name}
-          </span>
-        </Link>
-
         <div className="max-md:hidden">
           <MainNav
             items={siteConfig.mainNav}
@@ -78,7 +67,22 @@ export function SiteHeader() {
           />
         </div>
 
-        <div className="ml-auto">
+        <Link
+          href="/marketplace"
+          className={cx(
+            "flex items-center space-x-2 text-2xl hover:transform hover:scale-105 transition-transform duration-300 ease-in-out",
+            isOpen && "text-primary-foreground"
+          )}
+        >
+          <Image
+            src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
+            alt=""
+            width={140}
+            height={56}
+          />
+        </Link>
+
+        <div className="">
           <ConnectButton />
         </div>
       </header>

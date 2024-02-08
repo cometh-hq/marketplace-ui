@@ -172,7 +172,7 @@ const ActivityEventCell = ({
   Icon: React.ElementType
   label: string
 }) => (
-  <div className="flex text-sm">
+  <div className="flex items-center">
     <Icon className="mr-2" size={16} />
     {label}
   </div>

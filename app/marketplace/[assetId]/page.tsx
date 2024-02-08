@@ -38,21 +38,23 @@ export default function DetailsPage({
   const loading = !asset || !assetTransfers || !assetOrders
 
   return (
-    <div className="container py-10">
-      {loading && <Loading />}
-      {!loading && (
-        <div className="flex w-full flex-col flex-wrap gap-6 md:gap-12 lg:flex-row lg:items-center">
-          <AssetHeaderImage asset={asset} />
-          <AssetDetails asset={asset} />
-          {assetTransfers && (
-            <AssetActivities
-              asset={asset}
-              assetOrders={assetOrders?.orders}
-              assetTransfers={assetTransfers}
-            />
-          )}
-        </div>
-      )}
-    </div>
+    <>
+      <div className="container py-10">
+        {loading && <Loading />}
+        {!loading && (
+          <div className="container-mask p-10 flex w-full flex-col flex-wrap gap-6 md:gap-12 lg:flex-row lg:items-center">
+            <AssetHeaderImage asset={asset} />
+            <AssetDetails asset={asset} />
+            {assetTransfers && (
+              <AssetActivities
+                asset={asset}
+                assetOrders={assetOrders?.orders}
+                assetTransfers={assetTransfers}
+              />
+            )}
+          </div>
+        )}
+      </div>
+    </>
   )
 }

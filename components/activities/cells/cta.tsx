@@ -18,7 +18,6 @@ const CancelBuyOfferCell = ({ row }: CTACellProps) => {
 
   return (
     <Button
-      variant="link"
       onClick={async () => await cancel({ offer: row.original })}
       isLoading={isPending}
       disabled={isPending}

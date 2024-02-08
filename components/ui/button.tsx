@@ -6,18 +6,19 @@ import { Loader } from "lucide-react"
 import { cn } from "@/lib/utils/utils"
 
 const buttonVariants = cva(
-  "shrink-0 inline-flex items-center justify-center whitespace-nowrap text-sm font-bold ring-offset-background duration-75 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-70",
+  "relative shrink-0 inline-flex items-center justify-center whitespace-nowrap font-bold focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "btn-default",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-input hover:bg-accent hover:text-accent-foreground",
+          "font-semibold",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+          "btn-secondary",
+        third: "btn-third",
+        ghost: "hover:bg-white/[0.05] hover:text-accent-foreground",
         muted: "bg-muted/80 text-muted-foreground hover:bg-muted",
         link: "underline-offset-4 hover:underline text-primary",
         linkDestructive: "underline-offset-4 hover:underline text-destructive",

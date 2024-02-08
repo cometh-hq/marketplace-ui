@@ -23,6 +23,7 @@ import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/make-buy-
 import { SellAssetButton } from "@/components/asset-actions/buttons/sell"
 import { SwitchNetwork } from "@/components/asset-actions/buttons/switch-network"
 import { ConnectButton } from "@/components/connect-button"
+import Image from "next/image"
 
 import { Price } from "../../ui/price"
 
@@ -61,11 +62,9 @@ export function AssetImageContainer({
     to: {
       transform: hover.value
         ? `rotateX(2deg) rotateY(0deg) rotateZ(0deg) translateY(-8px) scale(${
-            active.value ? 0.95 : 1.01
+            active.value ? 1 : 1.01
           })`
-        : `rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(0px) scale(${
-            active.value ? 0.95 : 1
-          })`,
+        : "rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(0px) scale(1)",
     },
     config: config.gentle,
   })
@@ -81,8 +80,8 @@ export function AssetImageContainer({
     >
       <div
         className={cn(
-          "relative h-auto w-[84px] overflow-hidden rounded-md px-2 py-5 max-sm:rounded-md sm:h-[380px] sm:w-full sm:px-4 sm:py-10",
-          !color && "bg-muted",
+          "relative h-auto w-[84px] overflow-hidden rounded-md max-sm:rounded-md sm:h-[380px] sm:w-full",
+          // !color && "bg-[rgba(255,255,255,0.01)]",
           className
         )}
       >
@@ -107,8 +106,11 @@ export function AssetCardBase({
       className="relative w-full justify-self-center"
     >
       <Card
+        // className={cn(
+        //   "flex w-full flex-1 flex-row items-center border-transparent bg-card/30 p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2"
+        // )}
         className={cn(
-          "flex w-full flex-1 flex-row items-center gap-3 border-transparent bg-transparent p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2"
+          "flex w-full flex-1 flex-row items-center border-transparent card-ghost p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2"
         )}
       >
         <Link href={`/marketplace/${asset.tokenId}`} className="sm:w-full">
@@ -126,7 +128,7 @@ export function AssetCardBase({
             />
           </AssetImageContainer>
         </Link>
-        <div className="w-full">{children}</div>
+        <div className="w-full p-5 pt-0">{children}</div>
       </Card>
     </Appear>
   )
@@ -180,11 +182,11 @@ export function AssetCard({ asset, children }: AssetCardProps) {
       owner={owner}
       asset={asset}
     >
-      <div>
+      <>
         <Link
           href={`/marketplace/${asset.tokenId}`}
           className={cn(
-            "mb-4 flex flex-nowrap items-center text-base font-semibold leading-tight text-primary sm:mb-2"
+            "mb-4 flex flex-nowrap items-center text-xl font-semibold text-white"
           )}
         >
           <span className="inline-block max-w-[100%_-_80px] truncate">
@@ -192,31 +194,30 @@ export function AssetCard({ asset, children }: AssetCardProps) {
           </span>
           <span>&nbsp;#{shortenTokenId(asset.tokenId, 5)}</span>
         </Link>
-        <div className="w-full rounded-lg bg-muted/80 p-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm font-medium">Price</div>
-              {asset.orderbookStats.lowestListingPrice ? (
-                <Price amount={asset.orderbookStats.lowestListingPrice} />
-              ) : owner ? (
-                <SellAssetButton
-                  asset={asset as unknown as AssetWithTradeData}
-                  isVariantLink
-                />
-              ) : (
-                "No listed yet"
-              )}
-            </div>
-            <div>
-              {asset.orderbookStats.highestOfferPrice && (
-                <div className="text-sm font-medium">Best offer</div>
-              )}
-              <div className="text-end">{renderAssetActions(asset, owner)}</div>
-            </div>
+        {/* <Image src="/separator.png" width="107" height="25" alt="" /> */}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-sm font-medium">Price</div>
+            {asset.orderbookStats.lowestListingPrice ? (
+              <Price amount={asset.orderbookStats.lowestListingPrice} />
+            ) : owner ? (
+              <SellAssetButton
+                asset={asset as unknown as AssetWithTradeData}
+                isVariantLink
+              />
+            ) : (
+              "No listed yet"
+            )}
+          </div>
+          <div>
+            {asset.orderbookStats.highestOfferPrice && (
+              <div className="text-sm font-medium">Best offer</div>
+            )}
+            <div className="text-end">{renderAssetActions(asset, owner)}</div>
           </div>
         </div>
         {children}
-      </div>
+      </>
     </AssetCardBase>
   )
 }

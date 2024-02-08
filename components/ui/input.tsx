@@ -47,7 +47,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div
         className={cn(
-          "relative flex h-12 items-center rounded-md border border-input bg-background px-3 py-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          "relative flex h-12 items-center rounded-md border border-input px-3 py-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
       >
@@ -56,12 +56,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           value={value}
           onChange={handleChange}
-          className="h-full w-full bg-background text-sm font-medium outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:font-semibold placeholder:text-muted-foreground"
+          className="h-full w-full bg-transparent font-medium outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:font-semibold placeholder:text-muted-foreground pr-5"
           ref={ref}
           {...props}
         />
         {value && (
-          <button onClick={handleClear} className="ml-2 text-sm">
+          <button onClick={handleClear} className="ml-2 absolute right-3">
             <XIcon size={16} />
           </button>
         )}

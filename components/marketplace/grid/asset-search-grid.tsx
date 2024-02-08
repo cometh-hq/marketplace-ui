@@ -71,7 +71,7 @@ export const AssetsSearchGrid = ({
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <div className="relative  flex w-full flex-wrap items-center justify-between gap-4">
+      <div className="relative flex w-full flex-wrap items-center justify-between gap-4">
         <NFTStateFilters assets={assets} results={totalNbAssets} />
         <div className="flex items-center gap-x-3">
           <SearchAsset onChange={setSearch} />
@@ -80,7 +80,7 @@ export const AssetsSearchGrid = ({
           <MarketplaceSortDropdown />
         </div>
       </div>
-      <p className="mb-10 mt-3 w-full pl-2 text-left text-sm">
+      <p className="mb-10 mt-3 w-full pl-2 text-left">
         <strong>
           {totalNbAssets} asset{totalNbAssets > 1 && "s"}
         </strong>{" "}

@@ -10,7 +10,7 @@ export function ProductBlockContainer({
   children,
 }: ProductBlockContainerProps) {
   return (
-    <Card>
+    <Card className="card-secondary">
       <CardContent className="py-[22px]">
         <div className="flex h-full flex-wrap items-stretch justify-between gap-4">
           {children}
@@ -56,5 +56,5 @@ export type ProductBlockColumnLabel = {
 }
 
 export function ProductBlockLabel({ children }: ProductBlockColumnLabel) {
-  return <span className="text-sm font-semibold">{children}</span>
+  return <span className="font-semibold">{children}</span>
 }

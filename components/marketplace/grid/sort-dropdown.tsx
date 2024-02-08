@@ -65,8 +65,8 @@ export function MarketplaceSortDropdown({
             ""
           ) : (
             <>
-              {currentLabel}
-              <ChevronDown size="16" className="ml-2 shrink-0 opacity-50" />
+              Sort by {currentLabel}
+              <ChevronDown size="18" className="ml-2 shrink-0 opacity-70" />
             </>
           )}
         </Button>

@@ -19,7 +19,7 @@ export function AssetMetadata({ asset }: { asset: AssetWithTradeData }) {
   return (
     <TabsContent value="overview">
       <Card className="border-0 shadow-none">
-        <CardHeader className="bg-background pt-0">
+        <CardHeader className="pt-0">
           <CardTitle>Description</CardTitle>
           <CardDescription>
             Item #{asset.tokenId} of the {manifest.collectionName} collection.
