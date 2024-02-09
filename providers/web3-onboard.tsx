@@ -127,7 +127,7 @@ export function Web3OnboardProvider({
       } as any
 
       const connectAdaptor = new ConnectAdaptor({
-        chainId: SupportedNetworks.MUSTER_TESTNET,
+        chainId: numberToHex(env.NEXT_PUBLIC_NETWORK_ID) as SupportedNetworks,
         apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
         baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
       })

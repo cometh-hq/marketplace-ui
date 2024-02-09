@@ -6,7 +6,8 @@ import { wagmiConfig } from "@/providers/wagmi"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { cosmikClient } from "@/services/cometh-marketplace/client"
 import { User } from "@/services/cometh-marketplace/cosmik/signin"
-import { signMessage } from "@wagmi/core"
+import { getAccount, signMessage } from "@wagmi/core"
+import { ethers } from 'ethers'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,6 +18,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { SignUpForm } from "@/components/signup-form"
+import { SupportedNetworks } from "@cometh/connect-sdk"
+import { env } from "@/config/env"
+import { SiweMessage } from "siwe";
+
+function numberToHex(value: number): string {
+  return `0x${value.toString(16)}`
+}
 
 export default function WalletsPage() {
   const { initOnboard, onboard } = useWeb3OnboardContext()
@@ -29,18 +37,22 @@ export default function WalletsPage() {
   }
 
   const handleAddExternalWallet = async () => {
+    console.log("handleAddExternalWallet")
     initOnboard({
       isComethWallet: false,
     })
 
+    console.log("onboard", onboard)
+
     if (!onboard) {
       console.error("Onboard not initialized")
       return
-    }
+    } 
 
-    const walletState = await onboard?.connectWallet()
-    console.log("walletState", walletState)
-    const walletAddress = walletState?.[0].accounts[0]?.address
+    const wallets = await onboard?.connectWallet()
+
+    console.log("wallets", wallets)
+    const walletAddress = wallets?.[0].accounts[0]?.address
     console.log("walletAddress", walletAddress)
     // const nonceResponse = await fetch('https://api.develop.cosmikbattle.com/api/auth/init');
     // const { nonce } = await nonceResponse.json();
@@ -61,10 +73,30 @@ export default function WalletsPage() {
       console.error("Error adding new device", error)
     }
 
-    const message = "Veuillez signer ce message pour vérifier votre identité."
-    const sign = await signMessage(wagmiConfig, { message: message })
+    const domain = window.location.host;
+    const origin = window.location.origin;
 
-    console.log("sign", sign)
+    const message = new SiweMessage({
+      domain,
+      address: "0xaCAEeda102b64678F6B9cc06FBE7B8E813acdb44",
+      statement: 'Add external wallet to link existing assets to your cosmik Battle Account',
+      uri: origin,
+      version: '1',
+      chainId: Number(numberToHex(env.NEXT_PUBLIC_NETWORK_ID) as SupportedNetworks)
+    });
+    console.log("message", message)
+    // const signer = _getSigner();
+
+    const ethersProvider = new ethers.providers.Web3Provider(wallets[0].provider, 'any')
+
+    const signer = ethersProvider.getSigner()
+
+    console.log("signer", signer)
+    // return siweMessage.prepareMessage();
+    
+    const messageToSign = message.prepareMessage();
+    const signature = await signer.signMessage(messageToSign);
+    console.log("signature", signature)
 
     try {
       const verifyResponse = await cosmikClient.patch(
@@ -72,7 +104,7 @@ export default function WalletsPage() {
         {
           walletAddress,
           nonce: nonce?.data.nonce,
-          signature: sign,
+          signature,
           message,
         }
       )
