@@ -1,7 +1,7 @@
 import { SearchOrdersRequest } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 
-import { comethMarketplaceClient } from "./client"
+import { comethMarketplaceClient } from "../clients"
 
 export const useSearchOrders = (searchRequest: SearchOrdersRequest) => {
   return useQuery({

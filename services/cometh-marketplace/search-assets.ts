@@ -16,7 +16,7 @@ import globalConfig from "@/config/globalConfig"
 import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { findAssetInSearchResults } from "@/lib/utils/search"
 
-import { comethMarketplaceClient } from "./client"
+import { comethMarketplaceClient } from "../clients"
 
 export type SearchOptions = {
   filters?: Omit<AssetSearchFilters, "contractAddress">

@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react"
-import { User, useCosmikSignin } from "@/services/cometh-marketplace/cosmik/signin"
+import { User, useCosmikSignin } from "@/services/cosmik/signin"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -16,11 +16,11 @@ import {
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 
-interface SignUpFormProps {
+interface SignInFormProps {
   onLoginSuccess: (user: User) => void
 }
 
-export function SignUpForm({ onLoginSuccess }: SignUpFormProps) {
+export function SignInForm({ onLoginSuccess }: SignInFormProps) {
   const {
     mutate: signin,
     error,
@@ -28,7 +28,6 @@ export function SignUpForm({ onLoginSuccess }: SignUpFormProps) {
     data: userData,
     isPending,
   } = useCosmikSignin()
-
 
   useEffect(() => {
     if (isSuccess && userData) {

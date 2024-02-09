@@ -1,26 +1,26 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useCosmikSignin } from "@/services/cometh-marketplace/cosmik/signin"
+import { useCallback, useEffect, useState } from "react"
+import { useWeb3OnboardContext } from "@/providers/web3-onboard"
+import { useCosmikSignin } from "@/services/cosmik/signin"
+import { cx } from "class-variance-authority"
 import { WalletIcon } from "lucide-react"
 
-import { env } from "@/config/env"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { SignInForm } from "@/components/signin-form"
 
-import { Input } from "../ui/input"
 import { AddNewDeviceDialog } from "../ui/modal-add-new-device"
-import { AccountWallet } from "./account-wallet"
-import { cx } from "class-variance-authority"
+import { toast } from "../ui/toast/use-toast"
 
 export type SigninDropdownProps = {
   disabled: boolean
-  handleConnect?: (isComethWallet: boolean) => Promise<void>
+  handleConnect: (isComethWallet: boolean) => Promise<void>
   fullVariant?: boolean
   customText?: string
   isLinkVariant?: boolean
@@ -42,98 +42,44 @@ export function SigninDropdown({
   customText,
   isLinkVariant,
 }: SigninDropdownProps) {
-  const wallets = [
-    ...(env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY
-      ? [
-          {
-            name: "Cometh Connect",
-            icon: `${env.NEXT_PUBLIC_BASE_PATH}/cometh-connect.png`,
-            isComethWallet: true,
-          },
-        ]
-      : []),
-  ]
-
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [walletsRendered, setWalletsRendered] = useState(false)
-  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const { retrieveWalletAddressFromSigner } = useWeb3OnboardContext()
+  // const [user, setUser] = useState<User | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const {
-    mutate: signin,
-    error,
-    isSuccess,
-    data,
-    isPending,
-  } = useCosmikSignin()
+  // const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { isSuccess, data } = useCosmikSignin()
+
+  const handleLoginSuccess = useCallback(
+    (user: User) => {
+      // setIsLoggedIn(true)
+      // setUser(user)
+      // Tentative de récupération de l'adresse du portefeuille pour vérifier si c'est la première connexion
+      retrieveWalletAddressFromSigner(user.address).catch(() => {
+        // En cas d'erreur, probablement une première connexion, afficher la modale d'autorisation
+        setIsModalOpen(true)
+      }).finally(() => {
+        // Après avoir géré la récupération de l'adresse, tentez de connecter automatiquement au wallet Cometh Connect
+        handleConnect(true);
+      });
+    },
+    [retrieveWalletAddressFromSigner]
+  )
 
   useEffect(() => {
-    if (isSuccess && data?.user) {
-      setCurrentUser(data.user)
-      setWalletsRendered(true)
+    if (isSuccess) {
+      handleLoginSuccess(data.user)
+      // setWalletsRendered(true)
     }
-  }, [isSuccess, data])
+  }, [isSuccess, handleLoginSuccess])
 
-  useEffect(() => {
-    if (error) {
-      setIsModalOpen(true)
-    }
-  }, [error])
-
-  useEffect(() => {
-    if (!currentUser) {
-      const userString = localStorage.getItem("user")
-      if (userString) {
-        const user: User = JSON.parse(userString)
-        setWalletsRendered(true)
-        setCurrentUser(user)
-      }
-    }
-  }, [currentUser])
-
-  const handleLogout = () => {
-    localStorage.removeItem("user")
-    setCurrentUser(null)
-    setWalletsRendered(false)
-  }
+  // const handleLogout = () => {
+  //   localStorage.removeItem("user")
+  //   setUser(null)
+  //   setIsLoggedIn(false)
+  //   setWalletsRendered(false)
+  // }
 
   const handleModalOpen = () => {
     setIsModalOpen(false)
-  }
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    signin({ username: email, password })
-
-    // try {
-    //   const response = await axios.post(
-    //     "https://api.develop.cosmikbattle.com/api/login",
-    //     {
-    //       username: email,
-    //       password: password,
-    //     },
-    //     { withCredentials: true }
-    //   )
-
-    //   if (response.data.success) {
-    //     const user = response.data.user
-    //     if (user.userName) {
-    //       setWalletsRendered(true)
-    //       localStorage.setItem("user", JSON.stringify(user))
-    //     }
-    //     try {
-    //       // Check if user has already added this device
-    //       await retrieveWalletAddressFromSigner(user.address)
-    //     } catch (error) {
-    //       console.log("Error retrieving wallet address from signer", error)
-    //       setIsModalOpen(true)
-    //     }
-    //   } else {
-    //     console.log("Login failed", response.data.errorKey)
-    //   }
-    // } catch (error) {
-    //   console.error("Error adding new device", error)
-    // }
   }
 
   return (
@@ -153,58 +99,22 @@ export function SigninDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
         <Card className="mt-1 p-4" style={{ width: "324px" }}>
-          {!walletsRendered && (
-            <CardContent className="space-y-3 p-0">
-              <p>
-                In order to access the marketplace and trade cards please log-in
-                with your Cosmik Battle credentials. <br />
-                No account? <a href="#!" className="font-medium underline">Download Cosmik Battle</a>
-              </p>
-              <form onSubmit={handleSubmit} className="space-y-2">
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
-                />
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                />
-                {/* {error && <p className="text-red-500">{error.message}</p>} */}
-                <Button
-                  size="lg"
-                  className="w-full"
-                  type="submit"
-                  isLoading={isPending}
-                  disabled={isPending}
-                >
-                  Connect my account
-                </Button>
-              </form>
-            </CardContent>
-          )}
-          {walletsRendered && (
-            <>
-              <div className="flex items-center justify-between pb-10">
-                <div className="text-lg font-medium">@{currentUser?.userName}</div>
-                <Button onClick={handleLogout}>Logout</Button>
-              </div>
-              {/* <CardContent className="space-y-3 p-0">
-                {wallets.map((wallet) => (
-                  <AccountWallet
-                    key={wallet.name}
-                    name={wallet.name}
-                    icon={wallet.icon}
-                    isComethWallet={wallet.isComethWallet}
-                    handleConnect={handleConnect}
-                  />
-                ))}
-              </CardContent> */}
-            </>
-          )}
+          <CardContent className="space-y-3 p-0">
+            <p>
+              To access the marketplace and trade cards, please log in with
+              your Cosmik Battle credentials. <br />
+              No account?{" "}
+              <a
+                href="https://store.epicgames.com/fr/p/cosmik-battle-f6dbf4"
+                className="font-medium underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Download Cosmik Battle
+              </a>
+            </p>
+            <SignInForm onLoginSuccess={handleLoginSuccess} />
+          </CardContent>
           {isModalOpen && (
             <AddNewDeviceDialog
               setIsOpen={setIsModalOpen}

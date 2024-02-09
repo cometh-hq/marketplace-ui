@@ -1,7 +1,7 @@
 import { TradeDirection, TradeStatus } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 
-import { comethMarketplaceClient } from "./client"
+import { comethMarketplaceClient } from "../clients"
 
 export function useReceivedBuyOffers(userAddress: string) {
   const { data, isLoading } = useQuery({

@@ -4,8 +4,8 @@ import { useState } from "react"
 import Image from "next/image"
 import { wagmiConfig } from "@/providers/wagmi"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
-import { cosmikClient } from "@/services/cometh-marketplace/client"
-import { User } from "@/services/cometh-marketplace/cosmik/signin"
+import { cosmikClient } from "@/services/clients"
+import { User } from "@/services/cosmik/signin"
 import { SupportedNetworks } from "@cometh/connect-sdk"
 import { getAccount, signMessage } from "@wagmi/core"
 import { ethers } from "ethers"
@@ -20,7 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { SignUpForm } from "@/components/signup-form"
+import { SignInForm } from "@/components/signin-form"
 
 function numberToHex(value: number): string {
   return `0x${value.toString(16)}`
@@ -138,7 +138,7 @@ export default function WalletsPage() {
                 Enter your Comsmik Battle credential to...
               </div>
             </DialogDescription>
-            <SignUpForm onLoginSuccess={handleLoginSuccess} />
+            <SignInForm onLoginSuccess={handleLoginSuccess} />
           </DialogContent>
         </Dialog>
       ) : (
@@ -164,7 +164,7 @@ export default function WalletsPage() {
               Add an external wallet to link existing assets to your cosmik
               Battle Account
             </DialogDescription>
-            {/* <SignUpForm onLoginSuccess={handleLoginSuccess} /> */}
+            {/* <SignInForm onLoginSuccess={handleLoginSuccess} /> */}
             <Button size="lg" onClick={() => handleAddExternalWallet()}>
               Add external wallet
             </Button>

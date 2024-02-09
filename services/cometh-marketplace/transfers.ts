@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 
-import { comethMarketplaceClient } from "./client"
+import { comethMarketplaceClient } from "../clients"
 
 export type fetchAssetOptions = {
   contractAddress: Address

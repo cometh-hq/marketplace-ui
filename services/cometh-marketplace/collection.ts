@@ -3,7 +3,7 @@ import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 
-import { comethMarketplaceClient } from "./client"
+import { comethMarketplaceClient } from "../clients"
 
 export const fetchGetCollection = async (contractAddress: Address) => {
   return comethMarketplaceClient.collection.getCollection(

@@ -1,4 +1,4 @@
-import { comethMarketplaceClient } from "@/services/cometh-marketplace/client"
+import { comethMarketplaceClient } from "@/services/clients"
 import {
   CancelOrderRequest,
   NewOrder,

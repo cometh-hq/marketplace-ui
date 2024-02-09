@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
-import { useNewSignerRequest } from "@/services/cometh-marketplace/cosmik/new-signer-request"
+import { useNewSignerRequest } from "@/services/cosmik/new-signer-request"
 
 import { Button } from "@/components/ui/button"
 import {
