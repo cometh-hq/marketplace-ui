@@ -32,6 +32,7 @@ export function AddNewDeviceDialog({
   } = useNewSignerRequest()
   const [user, setUser] = useState<User | null>(null)
   const [step, setStep] = useState(0)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const userFromLocalStorage = localStorage.getItem("user")
@@ -80,6 +81,7 @@ export function AddNewDeviceDialog({
   }
 
   const handleRefresh = async () => {
+    setLoading(true)
     try {
       const retrieveWalletAddress = await retrieveWalletAddressFromSigner(user?.address!)
       console.log("retrieveWalletAddress", retrieveWalletAddress)
@@ -93,6 +95,8 @@ export function AddNewDeviceDialog({
     } catch (error) {
       console.error("Error in handleRefresh", error)
       setIsOpen(false)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -135,6 +139,8 @@ export function AddNewDeviceDialog({
           <Button
             size="lg"
             onClick={handleRefresh}
+            isLoading={loading}
+            disabled={loading}
           >
             Refresh
           </Button>

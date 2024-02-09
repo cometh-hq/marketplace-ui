@@ -157,8 +157,8 @@ export function SigninDropdown({
             <CardContent className="space-y-3 p-0">
               <p>
                 In order to access the marketplace and trade cards please log-in
-                with your Cosmik Battle credentials. No account? Download Cosmik
-                Battle
+                with your Cosmik Battle credentials. <br />
+                No account? <a href="#!" className="font-medium underline">Download Cosmik Battle</a>
               </p>
               <form onSubmit={handleSubmit} className="space-y-2">
                 <Input
@@ -173,7 +173,7 @@ export function SigninDropdown({
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                 />
-                {error && <p className="text-red-500">{error.message}</p>}
+                {/* {error && <p className="text-red-500">{error.message}</p>} */}
                 <Button
                   size="lg"
                   className="w-full"
@@ -188,8 +188,11 @@ export function SigninDropdown({
           )}
           {walletsRendered && (
             <>
-              <Button onClick={handleLogout}>Logout</Button>
-              <CardContent className="space-y-3 p-0">
+              <div className="flex items-center justify-between pb-10">
+                <div className="text-lg font-medium">@{currentUser?.userName}</div>
+                <Button onClick={handleLogout}>Logout</Button>
+              </div>
+              {/* <CardContent className="space-y-3 p-0">
                 {wallets.map((wallet) => (
                   <AccountWallet
                     key={wallet.name}
@@ -199,7 +202,7 @@ export function SigninDropdown({
                     handleConnect={handleConnect}
                   />
                 ))}
-              </CardContent>
+              </CardContent> */}
             </>
           )}
           {isModalOpen && (

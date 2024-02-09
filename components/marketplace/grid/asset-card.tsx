@@ -154,7 +154,8 @@ function renderAssetActions(
     return <Price amount={asset.orderbookStats.highestOfferPrice} />
   } else if (!owner) {
     return (
-      <ConnectButton isLinkVariant customText="Login to buy">
+      // <ConnectButton isLinkVariant customText="Login to buy">
+      <ConnectButton customText="Buy">
         <SwitchNetwork>
           <MakeBuyOfferButton
             asset={asset as unknown as AssetWithTradeData}

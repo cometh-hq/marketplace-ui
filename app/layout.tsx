@@ -47,7 +47,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <AppContent>{children}</AppContent>
           </div>
 
-          <TailwindIndicator />
+          {/* <TailwindIndicator /> */}
         </AppProviders>
         <Toaster />
       </body>
