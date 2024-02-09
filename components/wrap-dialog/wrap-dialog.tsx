@@ -36,11 +36,9 @@ export function WrapDialog({
             Convert Your Tokens
           </DialogTitle>
         </DialogHeader>
-        <DialogDescription>
-          <p className="font-medium">
-            Easily convert your tokens in one click. <br />
-            This allows you to use your {globalConfig.network.nativeToken.name} across various platforms more efficiently.
-          </p>
+        <DialogDescription className="font-medium">
+          Easily convert your tokens in one click. <br />
+          This allows you to use your {globalConfig.network.nativeToken.name} across various platforms more efficiently.
         </DialogDescription>
         <Separator />
         <WrapDialogForm
