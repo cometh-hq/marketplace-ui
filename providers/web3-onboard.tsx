@@ -16,6 +16,7 @@ import {
   ConnectOnboardConnector,
   NewSignerRequestBody,
   NewSignerRequestType,
+  SendTransactionResponse,
   SupportedNetworks,
 } from "@cometh/connect-sdk"
 
@@ -49,7 +50,7 @@ const Web3OnboardContext = createContext<{
   setIsconnected: Dispatch<SetStateAction<boolean>>
   reconnecting: boolean
   initNewSignerRequest: (walletAddress: string) => Promise<NewSignerRequestBody>
-  retrieveWalletAddressFromSigner: (walletAddress: string) => Promise<void>
+  retrieveWalletAddressFromSigner: (walletAddress: string) => Promise<void>,
 }>({
   onboard: null,
   initOnboard: () => {},

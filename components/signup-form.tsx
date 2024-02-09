@@ -29,10 +29,10 @@ export function SignUpForm({ onLoginSuccess }: SignUpFormProps) {
     isPending,
   } = useCosmikSignin()
 
-  console.log("userData", userData)
 
   useEffect(() => {
     if (isSuccess && userData) {
+      console.log("userData", userData)
       onLoginSuccess(userData.user)
     }
   }, [isSuccess, userData, onLoginSuccess])
@@ -56,33 +56,36 @@ export function SignUpForm({ onLoginSuccess }: SignUpFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="Email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input type="password" placeholder="Password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <div className="space-y-2">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="Email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input type="password" placeholder="Password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <Button
-          className="mt-4"
+          className="w-full"
+          size="lg"
           type="submit"
           isLoading={isPending}
           disabled={isPending}

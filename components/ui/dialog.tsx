@@ -34,8 +34,10 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    shouldDisplayCloseBtn?: boolean;
+  }
+>(({ className, children, shouldDisplayCloseBtn = true, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -50,10 +52,12 @@ const DialogContent = React.forwardRef<
       <span className="borders-x" />
       <span className="background" />
       <div className="grid gap-4 sm:gap-6">{children}</div>
-      <DialogPrimitive.Close className="absolute right-6 top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-        <Image src="/buttons/close.png" width={32} height={32} alt="" />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
+      {shouldDisplayCloseBtn && (
+        <DialogPrimitive.Close className="absolute right-6 top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+          <Image src="/buttons/close.png" width={32} height={32} alt="" />
+          <span className="sr-only">Close</span>
+        </DialogPrimitive.Close>
+      )}
     </DialogPrimitive.Content>
   </DialogPortal>
 ))

@@ -7,7 +7,6 @@ import { ChakraFont } from "@/lib/utils/fonts"
 import { cn } from "@/lib/utils/utils"
 import { Toaster } from "@/components/ui/toast/toaster"
 import { AppContent } from "@/components/content"
-import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 
 export const metadata: Metadata = {
@@ -43,7 +42,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         <AppProviders>
           <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
-            <SiteHeader />
             <AppContent>{children}</AppContent>
           </div>
 
