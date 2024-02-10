@@ -42,7 +42,7 @@ export function ShareButton({ size = "sm", textToShow }: ShareButtonProps) {
             <DropdownMenuTrigger asChild>
               <Button
                 size={size === "sm" ? "sm" : "default"}
-                variant="third"
+                variant="secondary"
                 // className="!bg-muted"
               >
                 {size === "lg" && "Share"}

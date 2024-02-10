@@ -26,8 +26,8 @@ export default function ProfilePage({
   return (
     <div className="container mx-auto flex w-full flex-col items-start gap-4 py-4 max-sm:pt-4">
       <Link href={`/marketplace`}>
-        <Button variant="secondary" className="gap-1.5">
-          <ArrowLeftIcon size="14" />
+        <Button variant="secondary" className="gap-1.5 text-base">
+          <ArrowLeftIcon size="16" />
           Back to marketplace
         </Button>
       </Link>

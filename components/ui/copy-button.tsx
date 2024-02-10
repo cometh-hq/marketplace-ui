@@ -31,7 +31,7 @@ export function CopyButton({ size = 'sm', textToCopy }: CopyButtonProps) {
       <Tooltip defaultOpen={false}>
         <TooltipTrigger asChild>
           <Button
-            variant="third"
+            variant="neutral"
             className={cx(`${variants[size]}`, "")}
             size="icon"
             onClick={() => copy(textToCopy)}
