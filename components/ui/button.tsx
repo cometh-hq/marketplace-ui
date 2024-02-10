@@ -13,12 +13,12 @@ const buttonVariants = cva(
         default: "btn-default",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline:
-          "font-semibold",
+        neutral:
+          "",
         secondary:
-          "btn-secondary",
-        third: "btn-third",
-        ghost: "hover:bg-white/[0.05] hover:text-accent-foreground",
+          "btn-default bg-primary/60 before:bg-primary/20 hover:bg-primary/40 after:content-none text-white",
+        third: "btn-default bg-third-foreground 500 before:bg-third hover:bg-third/35 after:content-none text-white", 
+        ghost: "hover:btn-default hover:bg-primary/[.5] hover:before:bg-transparent hover:text-current",
         muted: "bg-muted/80 text-muted-foreground hover:bg-muted",
         link: "underline-offset-4 hover:underline text-primary",
         linkDestructive: "underline-offset-4 hover:underline text-destructive",

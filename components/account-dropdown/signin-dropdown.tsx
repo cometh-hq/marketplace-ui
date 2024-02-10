@@ -61,7 +61,7 @@ export function SigninDropdown({
         })
         .finally(() => {
           // Après avoir géré la récupération de l'adresse, tentez de connecter automatiquement au wallet Cometh Connect
-          // handleConnect(true)
+          handleConnect(true)
         })
     },
     [retrieveWalletAddressFromSigner]

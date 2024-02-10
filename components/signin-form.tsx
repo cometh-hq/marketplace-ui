@@ -31,7 +31,6 @@ export function SignInForm({ onLoginSuccess }: SignInFormProps) {
 
   useEffect(() => {
     if (isSuccess && userData) {
-      console.log("userData", userData)
       onLoginSuccess(userData.user)
     }
   }, [isSuccess, userData, onLoginSuccess])

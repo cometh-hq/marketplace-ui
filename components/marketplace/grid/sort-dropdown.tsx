@@ -52,7 +52,7 @@ export function MarketplaceSortDropdown({
     <Popover open={open} onOpenChange={setOpen} {...props}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="secondary"
           size={isSmallScreen ? "icon" : "default"}
           role="combobox"
           aria-label="Load a sort..."
@@ -71,7 +71,7 @@ export function MarketplaceSortDropdown({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[250px] p-0">
+      <PopoverContent align="end" className="w-[264px] p-0">
         <Command>
           <CommandEmpty>No options found.</CommandEmpty>
           <CommandGroup>
@@ -121,7 +121,7 @@ const DropdownElement = ({
       {label}
       <Check
         className={cn(
-          "ml-auto h-4 w-4",
+          "ml-auto size-4",
           isSelected ? "opacity-100" : "opacity-0"
         )}
       />

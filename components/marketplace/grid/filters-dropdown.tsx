@@ -72,7 +72,10 @@ const FilterMultiCombobox = ({
     <Popover>
       <div className="flex w-full flex-col justify-between">
         <PopoverTrigger asChild>
-          <Button variant="ghost" className="flex justify-between gap-2 p-2">
+          <Button
+            variant="neutral"
+            className="flex justify-between gap-2 p-2 hover:bg-white/[0.05] hover:text-accent-foreground"
+          >
             <span className="font-medium capitalize">
               {label}
               {checkedCount && (
@@ -172,7 +175,11 @@ export const MarketplaceFiltersDropdown = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button id="radix-:R1irb9ipj9:" variant="outline" className="relative">
+        <Button
+          id="radix-:R1irb9ipj9:"
+          variant="secondary"
+          className="relative"
+        >
           <FilterIcon size="16" className="mr-2" />
           Attributes filters
           <FiltersBadgeCounter counter={filtersCounter} />

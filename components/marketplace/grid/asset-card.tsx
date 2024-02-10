@@ -23,7 +23,6 @@ import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/make-buy-
 import { SellAssetButton } from "@/components/asset-actions/buttons/sell"
 import { SwitchNetwork } from "@/components/asset-actions/buttons/switch-network"
 import { ConnectButton } from "@/components/connect-button"
-import Image from "next/image"
 
 import { Price } from "../../ui/price"
 
@@ -102,22 +101,17 @@ export function AssetCardBase({
     <Appear
       enabled={false}
       condition={true}
-      delay={getRandomArrayElement([0,25, 50, 75, 100])}
+      delay={getRandomArrayElement([0, 25, 50, 75, 100])}
       className="relative w-full justify-self-center"
     >
       <Card
-        // className={cn(
-        //   "flex w-full flex-1 flex-row items-center border-transparent bg-card/30 p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2"
-        // )}
         className={cn(
-          "flex w-full flex-1 flex-row items-center border-transparent card-ghost p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2"
+          "card-ghost flex w-full flex-1 flex-row items-center border-transparent p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2",
+          owner && "bg-[#f4f2e8]/[.02]"
         )}
       >
         <Link href={`/marketplace/${asset.tokenId}`} className="sm:w-full">
-          <AssetImageContainer
-            color={getAssetColor(asset)}
-            className={cn(owner && "bg-[#f4f2e8]")}
-          >
+          <AssetImageContainer color={getAssetColor(asset)}>
             <AssetImage
               src={src}
               fallback={fallback}
@@ -195,16 +189,17 @@ export function AssetCard({ asset, children }: AssetCardProps) {
           </span>
           <span>&nbsp;#{shortenTokenId(asset.tokenId, 5)}</span>
         </Link>
-        {/* <Image src="/separator.png" width="107" height="25" alt="" /> */}
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-sm font-medium">Price</div>
+            {!owner && (
+              <div className="mb-1 text-sm font-medium">Price</div>
+            )}
             {asset.orderbookStats.lowestListingPrice ? (
               <Price amount={asset.orderbookStats.lowestListingPrice} />
             ) : owner ? (
               <SellAssetButton
                 asset={asset as unknown as AssetWithTradeData}
-                isVariantLink
+                // isVariantLink
               />
             ) : (
               "No listed yet"

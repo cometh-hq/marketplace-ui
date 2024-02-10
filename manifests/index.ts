@@ -23,8 +23,8 @@ const manifest: Manifest = {
   useNativeTokenForOrders: false,
   // The ERC20 token used if useNativeTokenForOrders is false
   erc20: {
-    name: "MTK",
-    symbol: "MTK",
+    name: "USDC",
+    symbol: "USDC",
     address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
     decimals: 18,
     // put your logo in the '/public/tokens' folder and update the following line (example: "mytoken.png")

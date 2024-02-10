@@ -22,7 +22,7 @@ export function CopyButton({ size = 'sm', textToCopy }: CopyButtonProps) {
   const [_, copy] = useClipboard()
 
   const variants = {
-    sm: "h-7 w-7",
+    sm: "h-8 w-8",
     lg: "h-10 w-10"
   } as Record<string, string>
 
@@ -31,8 +31,8 @@ export function CopyButton({ size = 'sm', textToCopy }: CopyButtonProps) {
       <Tooltip defaultOpen={false}>
         <TooltipTrigger asChild>
           <Button
-            variant="secondary"
-            className={cx(`${variants[size]}`, "bg-muted")}
+            variant="third"
+            className={cx(`${variants[size]}`, "")}
             size="icon"
             onClick={() => copy(textToCopy)}
           >

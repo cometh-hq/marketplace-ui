@@ -41,8 +41,8 @@
   --secondary: 233 31% 11%;
   --secondary-foreground: 0 0% 100%;
 
-  --third: 235 40% 18%;
-  --third-foreground: 234 28% 75%;
+  --third: 240 38% 21%;
+  --third-foreground: 225 54% 70%;
 
   --accent: 234 28% 75%;
   --accent-foreground: 61 100% 84%;
@@ -62,7 +62,6 @@
   --ring: 215 20.2% 65.1%;
 
   --radius: 4px;
-
 
   /* Onboard custom styles */
 
@@ -105,58 +104,6 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-}
-
-/* Buttons */
-.btn-default {
-  clip-path: polygon(
-    10px 0%,
-    100% 0,
-    100% calc(100% - 10px),
-    calc(100% - 10px) 100%,
-    0 100%,
-    0 10px
-  );
-  background-size: contain;
-  border-radius: 0 !important;
-  width: auto;
-  @apply bg-primary-foreground text-primary-foreground z-[1];
-}
-
-.btn-default::before {
-  content: "";
-  clip-path: polygon(
-    10px 0%,
-    100% 0,
-    100% calc(100% - 10px),
-    calc(100% - 10px) 100%,
-    0 100%,
-    0 10px
-  );
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: calc(100% - 4px);
-  height: calc(100% - 4px);
-  @apply bg-primary z-[-2];
-}
-
-.btn-default::after {
-  content: "";
-  height: 155px;
-  left: -75px;
-  opacity: 0.2;
-  position: absolute;
-  top: -50px;
-  transform: rotate(35deg);
-  transition: all 750ms cubic-bezier(0.19, 1, 0.22, 1);
-  width: 50px;
-  @apply bg-primary-foreground z-[-1];
-}
-
-.btn-default:hover::after {
-  left: 120%;
-  transition: all 750ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 /* Tabs trigger */
@@ -203,7 +150,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  @apply bg-gradient-to-b from-card/20 from-0% via-transparent via-50% to-card/20 to-100% z-[-1] border border-border/5;
+  @apply bg-gradient-to-b from-card/10 from-0% via-transparent via-50% to-card/20 to-100% z-[-1] border border-border/[.05];
 }
 
 .card-secondary {
@@ -225,7 +172,64 @@
   inset: 0;
   @apply bg-secondary z-[-1] border border-border;
 }
+
+.dropdown {
+  @apply btn-default bg-primary/60 before:bg-primary/60 before:backdrop-blur-sm after:content-none text-white;
+}
+
 @layer components {
+  /* Buttons */
+  .btn-default {
+    clip-path: polygon(
+      10px 0%,
+      100% 0,
+      100% calc(100% - 10px),
+      calc(100% - 10px) 100%,
+      0 100%,
+      0 10px
+    );
+    background-size: contain;
+    border-radius: 0 !important;
+    width: auto;
+    @apply bg-primary-foreground text-primary-foreground z-[1];
+  }
+
+  .btn-default::before {
+    content: "";
+    clip-path: polygon(
+      10px 0%,
+      100% 0,
+      100% calc(100% - 10px),
+      calc(100% - 10px) 100%,
+      0 100%,
+      0 10px
+    );
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    @apply bg-primary z-[-2];
+  }
+
+  .btn-default::after {
+    content: "";
+    height: 155px;
+    left: -75px;
+    opacity: 0.2;
+    position: absolute;
+    top: -50px;
+    transform: rotate(35deg);
+    transition: all 750ms cubic-bezier(0.19, 1, 0.22, 1);
+    width: 50px;
+    @apply bg-current z-[-1];
+  }
+
+  .btn-default:hover::after {
+    left: 120%;
+    transition: all 750ms cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
   .card-third {
     background:
       url("/cards/third-top-left.png") top left no-repeat,

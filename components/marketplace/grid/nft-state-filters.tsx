@@ -1,10 +1,7 @@
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
-import {
-  LayoutGridIcon,
-  TagIcon,
-  UserIcon,
-} from "lucide-react"
+import cx from "classnames"
+import { LayoutGridIcon, TagIcon, UserIcon } from "lucide-react"
 
 import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
@@ -28,8 +25,8 @@ const NFTStateFilterItem = ({
   return (
     <Button
       onClick={() => update({ isOnSale })}
-      variant={isSelected ? "secondary" : "ghost"}
-      className="font-semibold"
+      variant={isSelected ? "default" : "ghost"}
+      className={cx("font-semibold", isSelected && "bg-accent-foreground text-accent-foreground")}
     >
       {iconComponent ? iconComponent : ""}
       {label}
@@ -48,7 +45,6 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
   const viewerAddress = useCurrentViewerAddress()
 
   const isOnProfilePage = pathname.includes(`/profile`)
-
 
   return (
     <div className="flex gap-5">

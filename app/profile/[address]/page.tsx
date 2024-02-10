@@ -26,8 +26,8 @@ export default function ProfilePage({
   return (
     <div className="container mx-auto flex w-full flex-col items-start gap-4 py-4 max-sm:pt-4">
       <Link href={`/marketplace`}>
-        <Button variant="secondary" className="gap-1">
-          <ArrowLeftIcon size="16" />
+        <Button variant="secondary" className="gap-1.5">
+          <ArrowLeftIcon size="14" />
           Back to marketplace
         </Button>
       </Link>
@@ -37,7 +37,7 @@ export default function ProfilePage({
             <UserIcon size="28" className="mr-2" />
             User profile ({shortenAddress(params.address)})
           </h1>
-          <CopyButton size="lg" textToCopy={params.address} />
+          <CopyButton size="sm" textToCopy={params.address} />
         </div>
         <ShareButton textToShow={`Check my assets on`} />
       </div>
