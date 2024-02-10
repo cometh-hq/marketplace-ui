@@ -43,7 +43,7 @@ export function SignInForm({ onLoginSuccess }: SignInFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    // defaultValues: { email: "", password: "" },
+    defaultValues: { email: "", password: "" },
   })
 
   const handleSubmit = useCallback(

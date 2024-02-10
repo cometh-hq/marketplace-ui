@@ -95,7 +95,7 @@ export const AssetsSearchGrid = ({
         <>
           <AssetCardsList>
             {assets.map((asset, index) => (
-              <AssetCard key={asset.tokenId} asset={asset} />
+              <AssetCard key={`${asset.tokenId}-${index}`} asset={asset} />
             ))}
           </AssetCardsList>
           <div ref={loadMoreRef} className="py-10">

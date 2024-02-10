@@ -47,7 +47,7 @@ export const StepperStep = ({ index, active, name }: StepperStepProps) => {
     <div className="relative flex flex-col items-center">
       <div
         className={cn(
-          "flex h-[24px] w-[24px] items-center justify-center rounded-lg",
+          "flex size-[24px] items-center justify-center rounded-lg",
           active ? "bg-primary" : "bg-primary/20"
         )}
       >

@@ -16,7 +16,7 @@ import {
 import { SignInForm } from "@/components/signin-form"
 
 import { AddNewDeviceDialog } from "../ui/modal-add-new-device"
-import { toast } from "../ui/toast/use-toast"
+import { AuthorizationProcess } from "../connect-actions/buttons/authorization-process"
 
 export type SigninDropdownProps = {
   disabled: boolean
@@ -43,7 +43,7 @@ export function SigninDropdown({
   isLinkVariant,
 }: SigninDropdownProps) {
   const { retrieveWalletAddressFromSigner } = useWeb3OnboardContext()
-  // const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   // const [isLoggedIn, setIsLoggedIn] = useState(false)
   const { isSuccess, data } = useCosmikSignin()
@@ -51,15 +51,18 @@ export function SigninDropdown({
   const handleLoginSuccess = useCallback(
     (user: User) => {
       // setIsLoggedIn(true)
-      // setUser(user)
+      setUser(user)
+      console.log("user", user)
       // Tentative de récupération de l'adresse du portefeuille pour vérifier si c'est la première connexion
-      retrieveWalletAddressFromSigner(user.address).catch(() => {
-        // En cas d'erreur, probablement une première connexion, afficher la modale d'autorisation
-        setIsModalOpen(true)
-      }).finally(() => {
-        // Après avoir géré la récupération de l'adresse, tentez de connecter automatiquement au wallet Cometh Connect
-        handleConnect(true);
-      });
+      retrieveWalletAddressFromSigner(user.address)
+        .catch(() => {
+          // En cas d'erreur, probablement une première connexion, afficher la modale d'autorisation
+          setIsModalOpen(true)
+        })
+        .finally(() => {
+          // Après avoir géré la récupération de l'adresse, tentez de connecter automatiquement au wallet Cometh Connect
+          // handleConnect(true)
+        })
     },
     [retrieveWalletAddressFromSigner]
   )
@@ -77,10 +80,6 @@ export function SigninDropdown({
   //   setIsLoggedIn(false)
   //   setWalletsRendered(false)
   // }
-
-  const handleModalOpen = () => {
-    setIsModalOpen(false)
-  }
 
   return (
     <DropdownMenu>
@@ -101,8 +100,8 @@ export function SigninDropdown({
         <Card className="mt-1 p-4" style={{ width: "324px" }}>
           <CardContent className="space-y-3 p-0">
             <p>
-              To access the marketplace and trade cards, please log in with
-              your Cosmik Battle credentials. <br />
+              To access the marketplace and trade cards, please log in with your
+              Cosmik Battle credentials. <br />
               No account?{" "}
               <a
                 href="https://store.epicgames.com/fr/p/cosmik-battle-f6dbf4"
@@ -116,10 +115,11 @@ export function SigninDropdown({
             <SignInForm onLoginSuccess={handleLoginSuccess} />
           </CardContent>
           {isModalOpen && (
-            <AddNewDeviceDialog
-              setIsOpen={setIsModalOpen}
-              onClose={handleModalOpen}
-            ></AddNewDeviceDialog>
+            <AuthorizationProcess isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} user={user} />
+            // <AddNewDeviceDialog
+            //   setIsOpen={setIsModalOpen}
+            //   onClose={handleModalOpen}
+            // ></AddNewDeviceDialog>
           )}
         </Card>
       </DropdownMenuContent>

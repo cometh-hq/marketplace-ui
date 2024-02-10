@@ -11,7 +11,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-
 export function AccountLogAction() {
   const wallet = useWallet()
   const logout = useDisconnect()

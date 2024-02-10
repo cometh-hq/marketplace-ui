@@ -1,8 +1,9 @@
 "use client"
 
 import * as React from "react"
-import * as DialogPrimitive from "@radix-ui/react-dialog"
 import Image from "next/image"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+
 import { cn } from "@/lib/utils/utils"
 
 const Dialog = DialogPrimitive.Root
@@ -24,7 +25,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 backdrop-blur-sm bg-black/15 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 z-50 bg-black/15 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
     {...props}
@@ -35,7 +36,7 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
-    shouldDisplayCloseBtn?: boolean;
+    shouldDisplayCloseBtn?: boolean
   }
 >(({ className, children, shouldDisplayCloseBtn = true, ...props }, ref) => (
   <DialogPortal>
@@ -43,14 +44,15 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-5 z-50 grid w-[calc(100%-24px)] max-w-[600px] translate-x-[-50%] gap-4 dialog p-6 sm:p-8 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:top-[50%] sm:w-full sm:translate-y-[-50%] overflow-auto max-h-[100%]",
+        "dialog fixed left-[50%] top-5 z-50 grid max-h-[100%] w-[calc(100%-24px)] max-w-[600px] translate-x-[-50%] gap-4 overflow-auto p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:top-[50%] sm:w-full sm:translate-y-[-50%] sm:p-8",
         className
       )}
       {...props}
     >
-      <span className="borders-y" />
-      <span className="borders-x" />
-      <span className="background" />
+      <div className="dialog-background">
+        <span className="dialog-corners-y" />
+        <span className="dialog-corners-x" />
+      </div>
       <div className="grid gap-4 sm:gap-6">{children}</div>
       {shouldDisplayCloseBtn && (
         <DialogPrimitive.Close className="absolute right-6 top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
@@ -97,10 +99,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn(
-      "text-2xl font-semibold uppercase leading-none",
-      className
-    )}
+    className={cn("text-2xl font-semibold uppercase leading-none", className)}
     {...props}
   />
 ))

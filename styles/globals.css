@@ -278,8 +278,8 @@
   @apply bg-card;
 }
 
-.dialog .borders-x::before,
-.dialog .borders-x::after {
+.dialog-corners-x::before,
+.dialog-corners-x::after {
   content: "";
   position: absolute;
   height: calc(100% - 100px);
@@ -288,18 +288,18 @@
   @apply border-[#2A76C3];
 }
 
-.dialog .borders-x::before {
+.dialog-corners-x::before {
   left: 0;
   @apply border-l;
 }
 
-.dialog .borders-x::after {
+.dialog-corners-x::after {
   right: 0;
   @apply border-r;
 }
 
-.dialog .borders-y::before,
-.dialog .borders-y::after {
+.dialog-corners-y::before,
+.dialog-corners-y::after {
   content: "";
   position: absolute;
   width: calc(100% - 100px);
@@ -309,17 +309,17 @@
   z-index: -1;
 }
 
-.dialog .borders-y::before {
+.dialog-corners-y::before {
   top: 0;
   @apply border-t-2;
 }
 
-.dialog .borders-y::after {
+.dialog-corners-y::after {
   bottom: 0;
   @apply border-b-2;
 }
 
-.dialog .background {
+.dialog-background {
   position: absolute;
   top: 10px;
   bottom: 10px;
@@ -330,8 +330,8 @@
   @apply bg-card z-[-2];
 }
 
-.dialog .background::before,
-.dialog .background::after {
+.dialog-background::before,
+.dialog-background::after {
   content: "";
   position: absolute;
   height: 10px;
@@ -341,11 +341,11 @@
   @apply bg-card;
 }
 
-.dialog .background::before {
+.dialog-background::before {
   top: -9px;
 }
 
-.dialog .background::after {
+.dialog-background::after {
   bottom: -9px;
 }
 

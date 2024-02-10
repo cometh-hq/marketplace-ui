@@ -4,7 +4,7 @@ import { Address } from "viem"
 import { BuyOffer } from "@/types/buy-offers"
 import { useStepper } from "@/lib/utils/stepper"
 
-import { fetchHasApprovedCollection } from "../../../services/token-approval/has-approved-collection"
+import { fetchHasApprovedCollection } from "@/services/token-approval/has-approved-collection"
 import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
 import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"

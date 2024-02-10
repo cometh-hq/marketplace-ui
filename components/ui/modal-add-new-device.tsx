@@ -14,6 +14,7 @@ import {
 import { User } from "@/components/account-dropdown/signin-dropdown"
 import axios from "axios"
 import { toast } from "./toast/use-toast"
+import { cosmikClient } from "@/services/clients"
 
 type AddNewDeviceDialogProps = {
   setIsOpen: Dispatch<SetStateAction<boolean>>
@@ -43,25 +44,11 @@ export function AddNewDeviceDialog({
   }, [isSuccess])
 
   const handleNewSignerRequest = async () => {
-    // const addSignerRequest = await initNewSignerRequest(user!.address)
-    // console.log("addSignerRequest", addSignerRequest)
-    // const signerRequest = await newSignerRequest(addSignerRequest)
-    // console.log("signerRequest in handleNewSignerRequest", signerRequest)
-    // if (signerRequest.success && step === 0) {
-    //   setStep(1)
-    // } else if (signerRequest.success && step === 1) {
-    //   // setIsOpen(false)
-    //   console.log("on est là")
-    //   const retrieveWalletAddress = await retrieveWalletAddressFromSigner(user?.address!)
-    //   console.log("retrieveWalletAddress", retrieveWalletAddress)
-    //   // display success toaster
-    // }
-
     try {
       console.log(user!.address)
       const addSignerRequest = await initNewSignerRequest(user!.address)
-      const response = await axios.post(
-        "https://api.develop.cosmikbattle.com/api/new-signer-request",
+      const response = await cosmikClient.post(
+        "/new-signer-request",
         addSignerRequest,
         {
           withCredentials: true,
