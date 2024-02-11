@@ -96,7 +96,7 @@ export function SigninDropdown({
           {customText ? customText : "Login"}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" asChild>
+      <DropdownMenuContent variant="dialog" align="end" asChild>
         <Card className="mt-1 p-4" style={{ width: "324px" }}>
           <CardContent className="space-y-3 p-0">
             <p>

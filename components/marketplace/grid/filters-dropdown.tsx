@@ -178,7 +178,7 @@ export const MarketplaceFiltersDropdown = ({
         <Button
           id="radix-:R1irb9ipj9:"
           variant="secondary"
-          className="relative"
+          className="relative text-white"
         >
           <FilterIcon size="16" className="mr-2" />
           Attributes filters

@@ -26,7 +26,7 @@ const NFTStateFilterItem = ({
     <Button
       onClick={() => update({ isOnSale })}
       variant={isSelected ? "default" : "ghost"}
-      className={cx("font-semibold", isSelected && "bg-accent-foreground text-accent-foreground")}
+      className={cx("font-medium", isSelected ? "bg-accent-foreground text-accent-foreground after:content-none" : "hover:text-accent-foreground")}
     >
       {iconComponent ? iconComponent : ""}
       {label}
@@ -54,7 +54,7 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
         iconComponent={<LayoutGridIcon size="16" className="mr-2" />}
       />
       <NFTStateFilterItem
-        label="On sale"
+        label="On Sale"
         isOnSale
         isSelected={Boolean(get("isOnSale"))}
         iconComponent={<TagIcon size="16" className="mr-2" />}

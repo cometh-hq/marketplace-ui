@@ -17,9 +17,7 @@ export const ActivitiesTransfersTabContent = ({
 }: ActivitiesTransfersTabContentProps) => {
   return (
     <TabsContent value="activity">
-      <Card>
-        <TransfersList assetTransfers={assetTransfers} assetOrders={assetOrders} />
-      </Card>
+      <TransfersList assetTransfers={assetTransfers} assetOrders={assetOrders} />
     </TabsContent>
   )
 }

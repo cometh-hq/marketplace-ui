@@ -33,7 +33,7 @@ export default function ProfilePage({
       </Link>
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <h1 className="inline-flex items-center text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="inline-flex items-center text-2xl font-semibold tracking-tight sm:text-3xl">
             <UserIcon size="28" className="mr-2" />
             User profile ({shortenAddress(params.address)})
           </h1>

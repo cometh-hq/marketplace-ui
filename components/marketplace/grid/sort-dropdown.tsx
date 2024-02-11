@@ -58,7 +58,7 @@ export function MarketplaceSortDropdown({
           aria-label="Load a sort..."
           aria-expanded={open}
           aria-controls="radix-:Rirb9ipj9:"
-          className="shrink-0"
+          className="shrink-0 text-white"
         >
           <ListFilter size="16" className={isSmallScreen ? '' : 'mr-2'} />
           {isSmallScreen ? (

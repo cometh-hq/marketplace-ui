@@ -32,7 +32,7 @@ export function CopyButton({ size = 'sm', textToCopy }: CopyButtonProps) {
         <TooltipTrigger asChild>
           <Button
             variant="neutral"
-            className={cx(`${variants[size]}`, "")}
+            className={cx(`${variants[size]} text-accent hover:text-white`)}
             size="icon"
             onClick={() => copy(textToCopy)}
           >

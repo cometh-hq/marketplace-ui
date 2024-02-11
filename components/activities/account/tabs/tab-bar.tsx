@@ -9,16 +9,16 @@ type TabBarProps = {
 
 export const TabBar = ({ receivedCounter, sentCounter }: TabBarProps) => {
   return (
-    <TabsList className="mb-4 h-auto gap-x-6 text-xl sm:mb-8">
+    <TabsList className="mb-4 h-auto gap-x-8 text-xl sm:mb-8">
       <TabsTrigger value="search-assets">
         <WalletIcon size="18" className="mr-2" /> My NFTs
       </TabsTrigger>
       <TabsTrigger value="received-offers">
-        <InboxIcon size="18" className="mr-2" /> Received Offers (
-        {receivedCounter})
+        <InboxIcon size="18" className="mr-2" /> Received Offers <small className="ml-1">(
+        {receivedCounter})</small>
       </TabsTrigger>
       <TabsTrigger value="sent-offers">
-        <SendIcon size="18" className="mr-2" /> Sent Offers ({sentCounter})
+        <SendIcon size="18" className="mr-2" /> Sent Offers <small className="ml-1">({sentCounter})</small>
       </TabsTrigger>
     </TabsList>
   )

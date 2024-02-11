@@ -56,7 +56,7 @@ const TableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      "whitespace-nowrap transition-colors data-[state=selected]:bg-muted",
+      "whitespace-nowrap transition-colors data-[state=selected]:bg-muted text-accent",
       className
     )}
     {...props}
@@ -71,7 +71,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-lg text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      "h-12 px-4 text-left align-middle font-medium text-base text-muted-foreground [&:has([role=checkbox])]:pr-0",
       className
     )}
     {...props}

@@ -22,7 +22,14 @@ import { Address, isAddressEqual } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 import { CopyButton } from "../ui/copy-button"
 import { Price } from "../ui/price"
@@ -172,7 +179,7 @@ const ActivityEventCell = ({
   Icon: React.ElementType
   label: string
 }) => (
-  <div className="flex items-center">
+  <div className="flex items-center gap-0.5 font-medium text-accent hover:text-white">
     <Icon className="mr-2" size={16} />
     {label}
   </div>
@@ -228,7 +235,7 @@ const renderTimestampCell = (activity: AssetActivity) => {
           href={`${globalConfig.network.explorer?.url}/tx/${activity.transfer.transactionHash}`}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-end gap-2 text-sm font-medium text-muted-foreground hover:text-secondary-foreground"
+          className="flex items-center gap-2 font-medium text-accent hover:text-white"
         >
           {timeFromNow}
           <ExternalLink size="18" className="" />
@@ -256,21 +263,24 @@ const renderActivitiesRows = (
     const isOpenedOrderActivity =
       isOrderActivity(activity) &&
       activity.order.orderStatus === TradeStatus.OPEN
+    console.log("isOrderActivity(activity)", isOrderActivity(activity))
 
     return (
       <TableRow key={getActivityId(activity)}>
-        <TableCell className=" items-center">
+        <TableCell className="items-center">
           {renderActivityEventCell(activity)}
         </TableCell>
 
         <TableCell>
-          {isOrderActivity(activity) && (
+          {isOrderActivity(activity) ? (
             <Price
               size="sm"
               amount={BigNumber.from(activity.order.erc20TokenAmount)
                 .add(activity.order.totalFees)
                 .toString()}
             />
+          ) : (
+            <span>-</span>
           )}
         </TableCell>
         <TableCell className="justify-start">
@@ -279,7 +289,7 @@ const renderActivitiesRows = (
             <CopyButton textToCopy={activityEmitter.address} />
             {!isOpenedOrderActivity && (
               <>
-                <ArrowRightIcon size={18} />
+                <ArrowRightIcon size={18} className="text-accent" />
                 <UserButton user={activityReceiver} />
                 <CopyButton textToCopy={activityReceiver.address} />
               </>
@@ -304,6 +314,14 @@ export function TransfersList({
 
   return (
     <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Event</TableHead>
+          <TableHead>Amount</TableHead>
+          <TableHead>From / To</TableHead>
+          <TableHead>Date</TableHead>
+        </TableRow>
+      </TableHeader>
       <TableBody>
         {assetActivities?.length ? (
           renderActivitiesRows(assetActivities, viewerAddress)

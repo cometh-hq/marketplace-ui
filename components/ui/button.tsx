@@ -6,19 +6,20 @@ import { Loader } from "lucide-react"
 import { cn } from "@/lib/utils/utils"
 
 const buttonVariants = cva(
-  "overflow-hidden relative shrink-0 inline-flex items-center justify-center whitespace-nowrap font-bold focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed",
+  "overflow-hidden relative shrink-0 inline-flex items-center justify-center whitespace-nowrap font-semibold focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
+        neutral: "",
         default: "btn-default",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        neutral:
-          "",
         secondary:
-          "btn-default bg-primary/60 before:bg-primary/20 hover:bg-primary/40 after:content-none text-white",
-        third: "btn-default bg-third-foreground 500 before:bg-third hover:bg-third/35 after:content-none text-white", 
-        ghost: "hover:btn-default hover:bg-primary/[.5] hover:before:bg-transparent hover:text-current",
+          "btn-default bg-primary/60 before:bg-primary/20 hover:bg-primary/40 after:content-none text-accent",
+        third:
+          "btn-default bg-third-foreground before:bg-third hover:bg-third-foreground/80 after:content-none text-accent hover:text-white",
+        ghost:
+          "hover:btn-default hover:bg-primary/[.5] hover:before:bg-transparent hover:text-current",
         muted: "bg-muted/80 text-muted-foreground hover:bg-muted",
         link: "underline-offset-4 hover:underline text-primary",
         linkDestructive: "underline-offset-4 hover:underline text-destructive",
