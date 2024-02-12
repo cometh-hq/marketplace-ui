@@ -1,7 +1,6 @@
 "use client"
 
 import { useMemo } from "react"
-import { Row } from "@tanstack/react-table"
 import { BigNumber } from "ethers"
 import { Address, isAddressEqual } from "viem"
 
@@ -10,6 +9,7 @@ import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { DataTable } from "@/components/data-table"
 
 import { columns } from "./column"
+import { useUsernames } from "@/services/user/use-username"
 
 export type BuyOffersTableProps = {
   offers: BuyOffer[]
@@ -17,6 +17,18 @@ export type BuyOffersTableProps = {
 
 export function BuyOffersTable({ offers }: BuyOffersTableProps) {
   const viewer = useCurrentViewerAddress()
+
+  const addresses = useMemo(() => {
+    return Array.from(
+      new Set(
+        offers.flatMap((offer) => [offer.emitter.address, offer.owner.address])
+      )
+    )
+  }, [offers])
+
+  const { usernames } = useUsernames(addresses)
+
+  console.log("addresses", addresses)
 
   const data = useMemo(() => {
     return offers

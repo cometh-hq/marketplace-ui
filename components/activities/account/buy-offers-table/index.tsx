@@ -15,7 +15,7 @@ export type AccountBuyOffersTableProps = {
 
 export function AccountBuyOffersTable({ offers }: AccountBuyOffersTableProps) {
   const viewer = useCurrentViewerAddress()
-  
+
   const data = useMemo(() => {
     return offers
       .filter((offer) => {

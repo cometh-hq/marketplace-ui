@@ -263,7 +263,6 @@ const renderActivitiesRows = (
     const isOpenedOrderActivity =
       isOrderActivity(activity) &&
       activity.order.orderStatus === TradeStatus.OPEN
-    console.log("isOrderActivity(activity)", isOrderActivity(activity))
 
     return (
       <TableRow key={getActivityId(activity)}>
