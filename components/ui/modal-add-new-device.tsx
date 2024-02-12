@@ -72,7 +72,6 @@ export function AddNewDeviceDialog({
     try {
       const retrieveWalletAddress = await retrieveWalletAddressFromSigner(user?.address!)
       console.log("retrieveWalletAddress", retrieveWalletAddress)
-      // display toast 
       toast({
         title: "Device succesfully Authorized!",
         description: "Your Cosmik Battle account has been successfully linked to the marketplace.",

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import { useWalletConnect } from "@/services/web3/use-wallet-connect"
@@ -13,7 +13,6 @@ export function ConnectButton({
   fullVariant = false,
   customText = undefined,
   isLinkVariant  = undefined
-  
 }: {
   children?: React.ReactNode
   fullVariant?: boolean,

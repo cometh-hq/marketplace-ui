@@ -51,7 +51,6 @@ export function useWalletConnect(): {
 
       try {
         const wallets = await onboard.connectWallet(onboardConfig)
-        console.log("on est là", wallets)
 
         if (wallets?.[0]) {
           await _selectdCorrectChain(onboard, wallets[0])

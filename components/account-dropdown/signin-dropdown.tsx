@@ -15,8 +15,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { SignInForm } from "@/components/signin/signin-form"
 
-import { AddNewDeviceDialog } from "../ui/modal-add-new-device"
 import { AuthorizationProcess } from "../connect-actions/buttons/authorization-process"
+import { AddNewDeviceDialog } from "../ui/modal-add-new-device"
+import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 
 export type SigninDropdownProps = {
   disabled: boolean
@@ -47,6 +48,7 @@ export function SigninDropdown({
   const [isModalOpen, setIsModalOpen] = useState(false)
   // const [isLoggedIn, setIsLoggedIn] = useState(false)
   const { isSuccess, data } = useCosmikSignin()
+  const { comethWalletAddressInStorage } = useStorageWallet()
 
   const handleLoginSuccess = useCallback(
     (user: User) => {
@@ -74,12 +76,22 @@ export function SigninDropdown({
     }
   }, [isSuccess, handleLoginSuccess])
 
-  // const handleLogout = () => {
-  //   localStorage.removeItem("user")
-  //   setUser(null)
-  //   setIsLoggedIn(false)
-  //   setWalletsRendered(false)
-  // }
+  if (comethWalletAddressInStorage) {
+   return (
+      <Button
+        className={cx({
+          "h-12 w-full": fullVariant,
+        })}
+        variant={isLinkVariant ? "link" : "default"}
+        disabled={disabled}
+        isLoading={disabled}
+        onClick={() => handleConnect(true)}
+      >
+        {!isLinkVariant && <WalletIcon size="16" className="mr-2" />}
+        {customText ? customText : "Login"}
+      </Button>
+    )
+  }
 
   return (
     <DropdownMenu>
@@ -96,6 +108,7 @@ export function SigninDropdown({
           {customText ? customText : "Login"}
         </Button>
       </DropdownMenuTrigger>
+      {}
       <DropdownMenuContent variant="dialog" align="end" asChild>
         <Card className="mt-1 p-4" style={{ width: "324px" }}>
           <CardContent className="space-y-3 p-0">
@@ -115,11 +128,11 @@ export function SigninDropdown({
             <SignInForm onLoginSuccess={handleLoginSuccess} />
           </CardContent>
           {isModalOpen && (
-            <AuthorizationProcess isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} user={user} />
-            // <AddNewDeviceDialog
-            //   setIsOpen={setIsModalOpen}
-            //   onClose={handleModalOpen}
-            // ></AddNewDeviceDialog>
+            <AuthorizationProcess
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              user={user}
+            />
           )}
         </Card>
       </DropdownMenuContent>
