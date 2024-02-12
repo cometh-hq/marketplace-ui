@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
-import { useCosmikSignin } from "@/services/cosmik/signin"
+import { User, useCosmikSignin } from "@/services/cosmik/signin"
+import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import { cx } from "class-variance-authority"
 import { WalletIcon } from "lucide-react"
 
@@ -13,11 +14,8 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { AuthorizationProcess } from "@/components/connect-actions/buttons/authorization-process"
 import { SignInForm } from "@/components/signin/signin-form"
-
-import { AuthorizationProcess } from "../connect-actions/buttons/authorization-process"
-import { AddNewDeviceDialog } from "../ui/modal-add-new-device"
-import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 
 export type SigninDropdownProps = {
   disabled: boolean
@@ -25,15 +23,6 @@ export type SigninDropdownProps = {
   fullVariant?: boolean
   customText?: string
   isLinkVariant?: boolean
-}
-
-export type User = {
-  id: string
-  address: string
-  userName: string
-  email: string
-  coins: number
-  aurium: number
 }
 
 export function SigninDropdown({
@@ -52,17 +41,14 @@ export function SigninDropdown({
 
   const handleLoginSuccess = useCallback(
     (user: User) => {
-      // setIsLoggedIn(true)
       setUser(user)
-      console.log("user", user)
-      // Tentative de récupération de l'adresse du portefeuille pour vérifier si c'est la première connexion
+      // Attempt to retrieve the wallet address to determine if it is the first connection
       retrieveWalletAddressFromSigner(user.address)
         .catch(() => {
-          // En cas d'erreur, probablement une première connexion, afficher la modale d'autorisation
+          // If an error occurs, likely due to a first-time connection, display the authorization modal
           setIsModalOpen(true)
         })
         .finally(() => {
-          // Après avoir géré la récupération de l'adresse, tentez de connecter automatiquement au wallet Cometh Connect
           handleConnect(true)
         })
     },
@@ -72,12 +58,11 @@ export function SigninDropdown({
   useEffect(() => {
     if (isSuccess) {
       handleLoginSuccess(data.user)
-      // setWalletsRendered(true)
     }
   }, [isSuccess, handleLoginSuccess])
 
   if (comethWalletAddressInStorage) {
-   return (
+    return (
       <Button
         className={cx({
           "h-12 w-full": fullVariant,
@@ -108,7 +93,6 @@ export function SigninDropdown({
           {customText ? customText : "Login"}
         </Button>
       </DropdownMenuTrigger>
-      {}
       <DropdownMenuContent variant="dialog" align="end" asChild>
         <Card className="mt-1 p-4" style={{ width: "324px" }}>
           <CardContent className="space-y-3 p-0">
@@ -127,7 +111,7 @@ export function SigninDropdown({
             </p>
             <SignInForm onLoginSuccess={handleLoginSuccess} />
           </CardContent>
-          {isModalOpen && (
+          {isModalOpen && user && (
             <AuthorizationProcess
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}

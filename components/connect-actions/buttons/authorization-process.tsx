@@ -20,7 +20,7 @@ const authorizationSteps = [
 export type AuthorizationProcessProps = {
   isOpen: boolean
   onClose: () => void
-  user: User | null
+  user: User
 }
 
 export function AuthorizationProcess({
