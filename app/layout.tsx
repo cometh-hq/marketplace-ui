@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toast/toaster"
 import { AppContent } from "@/components/content"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
+import { env } from "@/config/env"
 
 export const metadata: Metadata = {
   title: {
@@ -38,7 +39,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={cn(
           ChakraFont.variable,
-          `min-h-screen bg-[url('/main-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased`
+          `bg-[url(' min-h-screen${env.NEXT_PUBLIC_BASE_PATH}/main-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased`
         )}
       >
         <AppProviders>
