@@ -37,8 +37,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={cn(
           ChakraFont.variable,
-          "min-h-screen bg-[url('/main-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased"
+          "min-h-screen bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased"
         )}
+        style={{ backgroundImage: "url('/main-bg.jpg')"}}
       >
         <AppProviders>
           <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
