@@ -1,13 +1,11 @@
-import { manifest } from "@/manifests"
 import { useMutation } from "@tanstack/react-query"
 import { BigNumber, Signer } from "ethers"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import { IWETH__factory } from "@/lib/generated/contracts/weth/IWETH__factory"
 import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
-
-import { handleOrderbookError } from "../errors"
 
 export type WrapTokenOptions = {
   amount: BigNumber
@@ -16,17 +14,18 @@ export type WrapTokenOptions = {
   wrapContractAddress: Address
 }
 
-export function wrapToken({
+export async function wrapToken({
   amount,
   account,
   signer,
   wrapContractAddress,
 }: WrapTokenOptions) {
   const contract = IWETH__factory.connect(wrapContractAddress, signer)
-  return contract?.deposit({
+  const tx = await contract?.deposit({
     from: account,
     value: amount,
   })
+  await tx.wait()
 }
 
 export type WrapTokenMutationOptions = {
@@ -37,10 +36,14 @@ export const useWrapToken = () => {
   const viewerAddress = useCurrentViewerAddress()
   const signer = useSigner()
 
-  return useMutation(
-    ["wrap"],
-    async ({ amount }: WrapTokenMutationOptions) => {
-      if (!viewerAddress || !signer || !manifest.currency.wrapped.address) {
+  return useMutation({
+    mutationKey: ["wrap"],
+    mutationFn: async ({ amount }: WrapTokenMutationOptions) => {
+      if (
+        !viewerAddress ||
+        !signer ||
+        !globalConfig.network.wrappedNativeToken.address
+      ) {
         throw new Error("Could not wrap token")
       }
 
@@ -48,26 +51,15 @@ export const useWrapToken = () => {
         amount,
         account: viewerAddress!,
         signer,
-        wrapContractAddress: manifest.currency.wrapped.address,
+        wrapContractAddress: globalConfig.network.wrappedNativeToken.address,
       })
     },
-    {
-      onSuccess: () => {
-        toast({
-          title: "Token wrapped!",
-          description: "Your token has been wrapped.",
-        })
-      },
-      onError: (error) => {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            500: "Internal orderbook server error",
-          }),
-        })
-      },
+
+    onSuccess: () => {
+      toast({
+        title: "Token wrapped!",
+        description: "Your token has been wrapped.",
+      })
     }
-  )
+  })
 }

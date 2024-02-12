@@ -34,7 +34,7 @@ export function AssetImage({
   if (imageData && imageData.startsWith("<svg")) {
     return (
       <div
-        className="z-10 h-full w-full bg-background"
+        className="z-10 size-full bg-background"
         dangerouslySetInnerHTML={{ __html: imageData }}
       />
     )

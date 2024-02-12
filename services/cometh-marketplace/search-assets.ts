@@ -5,21 +5,21 @@ import {
   type AssetSearchFilters,
 } from "@cometh/marketplace-sdk"
 import {
-  UseInfiniteQueryResult,
   useInfiniteQuery,
+  UseInfiniteQueryResult,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
 import { Address } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { findAssetInSearchResults } from "@/lib/utils/search"
 
-import { comethMarketplaceClient } from "./client"
-import { manifest } from "@/manifests"
+import { comethMarketplaceClient } from "../clients"
 
 export type SearchOptions = {
-  filters?: Omit<AssetSearchFilters, 'contractAddress'>
+  filters?: Omit<AssetSearchFilters, "contractAddress">
   page: number
   assetsPerPage: number
 }
@@ -32,14 +32,14 @@ export type UseSearchOptions = {
 }
 
 const defaultFilters = {
-  contractAddress: manifest.contractAddress,
+  contractAddress: globalConfig.contractAddress,
   limit: 200,
 }
 
 const ASSETS_PER_PAGE = 20
 
 export async function getAssetsPaginated(
-  filters?: Omit<AssetSearchFilters, 'contractAddress'>,
+  filters?: Omit<AssetSearchFilters, "contractAddress">,
   page: number = 1,
   assetsPerPage: number = ASSETS_PER_PAGE
 ) {
@@ -47,22 +47,8 @@ export async function getAssetsPaginated(
     ...defaultFilters,
     ...filters,
     skip: (page - 1) * assetsPerPage,
-    limit: assetsPerPage
+    limit: assetsPerPage,
   })
-
-  await Promise.all(
-    nfts.assets.map(async (asset: any) => {
-      if (!asset.metadata.attributes) {
-        const metadata = await fetchAsset({
-          contractAddress: manifest.contractAddress,
-          assetId: asset.tokenId,
-        })
-
-        if (metadata) {
-          asset.metadata.attributes = metadata.metadata.attributes
-        }
-      }
-    }))
 
   const total = nfts.total
   const totalPages = Math.ceil(total / assetsPerPage)
@@ -112,14 +98,14 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(
-    ["cometh", "search", filters, options?.page, options?.search],
-    ({ pageParam = 1 }) => {
+  } = useInfiniteQuery({
+    queryKey: ["cometh", "search", JSON.stringify(filters), options?.page, options?.search],
+    queryFn: ({ pageParam }) => {
       return getAssetsPaginated(
         {
-          isOnSale: (filters.isOnSale),
-          orderBy: (filters.orderBy) ?? FilterOrderBy.PRICE,
-          direction: (filters.direction) ?? FilterDirection.ASC,
+          isOnSale: filters.isOnSale,
+          orderBy: filters.orderBy ?? FilterOrderBy.LISTING_DATE,
+          direction: filters.direction ?? FilterDirection.DESC,
           ...(parsedAttributes.length > 0
             ? { attributes: parsedAttributes }
             : {}),
@@ -127,16 +113,15 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
           ...(options?.owner && { owner: options.owner }),
         },
         pageParam,
-        ASSETS_PER_PAGE,
-     )
+        ASSETS_PER_PAGE
+      )
     },
-    {
-      cacheTime: 0,
-      getNextPageParam: (_, lastPage) => {
-        return lastPage.length + 1
-      },
-    }
-  )
+    initialPageParam: 1,
+    gcTime: 0,
+    getNextPageParam: (_, lastPage) => {
+      return lastPage.length + 1
+    },
+  })
 
   return {
     data,
@@ -144,7 +129,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     isLoading,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage
+    isFetchingNextPage,
   }
 }
 
@@ -163,16 +148,15 @@ export const fetchAsset = async ({
 export const useAssetDetails = (contractAddress: Address, assetId: string) => {
   const client = useQueryClient()
 
-  return useQuery(
-    ["cometh", "assets", assetId],
-    () => fetchAsset({ contractAddress, assetId }),
-    {
-      initialData: () => {
-        const search = client.getQueriesData<
-          UseInfiniteQueryResult<AssetWithTradeData[]>
-        >(["cometh", "search"])
-        return findAssetInSearchResults(search, assetId)
-      },
-    }
-  )
+  return useQuery({
+    queryKey: ["cometh", "assets", assetId],
+    queryFn: () => fetchAsset({ contractAddress, assetId }),
+
+    initialData: () => {
+      const search = client.getQueriesData<
+        UseInfiniteQueryResult<AssetWithTradeData[]>
+      >({ queryKey: ["cometh", "search"] })
+      return findAssetInSearchResults(search, assetId)
+    },
+  })
 }

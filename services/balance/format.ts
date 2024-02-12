@@ -1,17 +1,22 @@
 import { BigNumber } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
-import { useBalance } from "wagmi"
 
-export const balanceToBigNumber = (
-  balance?: ReturnType<typeof useBalance>["data"] | null
-) => {
+import globalConfig from "@/config/globalConfig"
+
+export const balanceToBigNumber = (balance?: bigint | null) => {
   if (!balance) return BigNumber.from(0)
-  return BigNumber.from(balance.value)
+  return BigNumber.from(balance)
 }
 
 export const balanceToString = (
-  balance = balanceToBigNumber()
+  balance = balanceToBigNumber(),
+  isNativeToken = false
 ) => {
   if (!balance) return "0"
-  return (+formatUnits(balance.toString(), 18)).toFixed(2)
+  return (+formatUnits(
+    balance.toString(),
+    isNativeToken
+      ? globalConfig.decimals.nativeTokenDecimals
+      : globalConfig.ordersErc20.decimals
+  )).toFixed(2)
 }

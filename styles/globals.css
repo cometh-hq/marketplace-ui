@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {
-
   /* 
    * Main colors used for backgrounds and text.
    * "foreground" is used for text and icons in these states.
@@ -12,8 +11,9 @@
    * ==> https://www.figma.com/file/Zu4BtlBGkkDfCULfrPmYsk/Alembic-Marketplace-CSS?type=design&t=G8sE3G9G6kDVz4UK-6
    */
 
-   --background: 270 21% 11%;
-   --foreground: 0 0% 100%;
+  /* --background: 270 21% 11%; */
+  --background: 248 27% 13%;
+  --foreground: 0 0% 100%;
 
   /* Background for NFTs and actions */
   --muted: 223 37% 19%;
@@ -23,43 +23,50 @@
   --popover: 223 37% 19%;
   --popover-foreground: 0 0% 100%;
 
-  --border: 188 90% 73%;
-  --input: 276 9% 31%;
+  --border: 235 30% 31%;
+  --input: 219 32% 40%;
 
   /* Background for Attributes and Last activities */
-  --card: 223 37% 19%;
+  --card: 222 38% 19%;
   --card-foreground: 0 0% 100%;
-
 
   /* 
    * Main colors used for ui buttons, badges, links, and other elements that need to stand out.
    * "foreground" is used for text and icons in these states.
    */
 
-   --primary: 187 88% 52%;
-   --primary-foreground: 270 21% 11%;
+  --primary: 240 37% 21%;
+  --primary-foreground: 182 100% 43%;
 
-   --secondary: 220 37% 12%;
-   --secondary-foreground: 0 0% 100%;
- 
-   --accent: 191 92% 21%;
-   --accent-foreground: 0 0% 100%;
- 
-   --pending: 30 100% 50%;
-   --pending-foreground: 0 0% 100%;
- 
-   --success: 120 40% 50%;
-   --success-foreground: 0 0% 100%;
- 
-   --destructive: 0 60% 50%;
-   --destructive-foreground: 210 40% 98%;
- 
-   --info: 194 78% 97%;
-   --info-foreground: 195 35% 60%;
- 
-   --ring: 215 20.2% 65.1%;
- 
-   --radius: 8px;
+  --secondary: 233 31% 11%;
+  --secondary-foreground: 0 0% 100%;
+
+  --third: 240 38% 21%;
+  --third-foreground: 225 54% 70%;
+
+  --accent: 234 28% 75%;
+  --accent-foreground: 61 100% 84%;
+
+  --pending: 30 100% 50%;
+  --pending-foreground: 0 0% 100%;
+
+  --success: 120 40% 50%;
+  --success-foreground: 0 0% 100%;
+
+  --destructive: 0 60% 50%;
+  --destructive-foreground: 210 40% 98%;
+
+  --info: 194 78% 97%;
+  --info-foreground: 195 35% 60%;
+
+  --ring: 215 20.2% 65.1%;
+
+  --radius: 4px;
+
+  /* Onboard custom styles */
+
+  /* --account-select-modal-font-family-normal: 'font-chakra-petch'; */
+  --onboard-modal-z-index: 100;
 }
 
 @layer base {
@@ -70,4 +77,290 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1 "calt" 1;
   }
+}
+
+.container-mask {
+  position: relative;
+  /* background:
+    url("/cards/container-top-right.png") top right no-repeat,
+    url("/cards/container-bottom-left.png") bottom left no-repeat; */
+}
+
+.container-mask::before {
+  background-image: linear-gradient(360deg, rgb(255 255 255 / 0%) 0%, rgba(23, 23, 50, 0.4) 100%);
+  backdrop-filter: blur(2px);
+  content: "";
+  clip-path: polygon(
+    1.8% 0,
+    98.5% 0,
+    100% 1.8%,
+    100% 98.5%,
+    98.5% 100%,
+    1.8% 100%,
+    0 98.5%,
+    0 1.8%
+  );
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.tabs-trigger[aria-selected="true"] {
+  position: relative;
+}
+
+.tabs-trigger[aria-selected="true"]::before {
+  content: "";
+  width: 107px;
+  height: 25px;
+  bottom: -7px;
+  @apply bg-[url('/separator.png')] bg-center bg-no-repeat bg-contain absolute;
+}
+
+/* Cards */
+.card-primary,
+.card-ghost {
+  background:
+    url("/cards/primary-top-left.png") top left no-repeat,
+    url("/cards/primary-top-right.png") top right no-repeat,
+    url("/cards/primary-bottom-left.png") bottom left no-repeat,
+    url("/cards/primary-bottom-right.png") bottom right no-repeat;
+  background-size: auto;
+  border-radius: 0 !important;
+  width: auto;
+  position: relative;
+  @apply bg-primary/20 text-secondary-foreground;
+  
+}
+
+.card-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  @apply bg-primary z-[-1];
+}
+
+.card-ghost::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  @apply backdrop-blur-[2px] bg-transparent z-[-1];
+}
+
+.card-secondary {
+  background:
+    url("/cards/primary-top-left.png") top left no-repeat,
+    url("/cards/primary-top-right.png") top right no-repeat,
+    url("/cards/primary-bottom-left.png") bottom left no-repeat,
+    url("/cards/primary-bottom-right.png") bottom right no-repeat;
+  background-size: auto;
+  border-radius: 0 !important;
+  width: auto;
+  position: relative;
+  @apply text-secondary-foreground;
+}
+
+.card-secondary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  @apply bg-secondary z-[-1] border border-border;
+}
+
+.dropdown {
+  @apply btn-default bg-primary/60 before:bg-primary/60 before:backdrop-blur-sm after:content-none text-white;
+}
+
+@layer components {
+  /* Buttons */
+  .btn-default {
+    clip-path: polygon(
+      10px 0%,
+      100% 0,
+      100% calc(100% - 10px),
+      calc(100% - 10px) 100%,
+      0 100%,
+      0 10px
+    );
+    background-size: contain;
+    border-radius: 0 !important;
+    width: auto;
+    @apply bg-primary-foreground text-primary-foreground z-[1];
+  }
+
+  .btn-default::before {
+    content: "";
+    clip-path: polygon(
+      10px 0%,
+      100% 0,
+      100% calc(100% - 10px),
+      calc(100% - 10px) 100%,
+      0 100%,
+      0 10px
+    );
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    @apply bg-primary z-[-2];
+  }
+
+  .btn-default::after {
+    content: "";
+    height: 155px;
+    left: -75px;
+    opacity: 0.2;
+    position: absolute;
+    top: -50px;
+    transform: rotate(35deg);
+    transition: all 750ms cubic-bezier(0.19, 1, 0.22, 1);
+    width: 50px;
+    @apply bg-current z-[-1];
+  }
+
+  .btn-default:hover::after {
+    left: 120%;
+    transition: all 750ms cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  .card-third {
+    background:
+      url("/cards/third-top-left.png") top left no-repeat,
+      url("/cards/third-top-right.png") top right no-repeat,
+      url("/cards/third-bottom-left.png") bottom left no-repeat,
+      url("/cards/third-bottom-right.png") bottom right no-repeat;
+    background-size: auto;
+    border-radius: 0 !important;
+    width: auto;
+    position: relative;
+    @apply text-third-foreground;
+  }
+
+  .card-third::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    @apply bg-primary z-[-1] border border-border;
+  }
+}
+
+/* Dialog (💀) */
+.dialog {
+  background-size: auto;
+  border-radius: 0 !important;
+  width: auto;
+  position: relative;
+}
+
+.dialog::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    url("/cards/dialog-top-left.png") top left no-repeat,
+    url("/cards/dialog-top-right.png") top right no-repeat,
+    url("/cards/dialog-bottom-left.png") bottom left no-repeat,
+    url("/cards/dialog-bottom-right.png") bottom right no-repeat;
+  /* clip-path: polygon(
+    1.8% 0,
+    98.5% 0,
+    100% 1.8%,
+    100% 98.5%,
+    98.5% 100%,
+    1.8% 100%,
+    0 98.5%,
+    0 1.8%
+  ); */
+  z-index: -1;
+  @apply bg-card;
+}
+
+.dialog-corners-x::before,
+.dialog-corners-x::after {
+  content: "";
+  position: absolute;
+  height: calc(100% - 100px);
+  top: 50px;
+  bottom: 50px;
+  @apply border-[#2A76C3];
+}
+
+.dialog-corners-x::before {
+  left: 0;
+  @apply border-l;
+}
+
+.dialog-corners-x::after {
+  right: 0;
+  @apply border-r;
+}
+
+.dialog-corners-y::before,
+.dialog-corners-y::after {
+  content: "";
+  position: absolute;
+  width: calc(100% - 100px);
+  left: 50px;
+  right: 50px;
+  @apply border-[#2A76C3];
+  z-index: -1;
+}
+
+.dialog-corners-y::before {
+  top: 0;
+  @apply border-t-2;
+}
+
+.dialog-corners-y::after {
+  bottom: 0;
+  @apply border-b-2;
+}
+
+.dialog-background {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 1px;
+  right: 1px;
+  height: calc(100% - 20px);
+  width: calc(100% - 2px);
+  @apply bg-card z-[-2];
+}
+
+.dialog-background::before,
+.dialog-background::after {
+  content: "";
+  position: absolute;
+  height: 10px;
+  width: calc(100% - 80px);
+  left: 40px;
+  right: 40px;
+  @apply bg-card;
+}
+
+.dialog-background::before {
+  top: -9px;
+}
+
+.dialog-background::after {
+  bottom: -9px;
+}
+
+/* Fix Gas fees Connect Wallet */
+#cometh-gas-modal-wrapper {
+  pointer-events: auto;
+  position: fixed;
+  z-index: 1000;
+}
+
+/* Inputs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: white;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px var(--input);
 }

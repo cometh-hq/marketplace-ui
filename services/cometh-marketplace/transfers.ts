@@ -1,8 +1,7 @@
-import {
-  useQuery,
-} from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
-import { comethMarketplaceClient } from "./client"
+
+import { comethMarketplaceClient } from "../clients"
 
 export type fetchAssetOptions = {
   contractAddress: Address
@@ -11,16 +10,22 @@ export type fetchAssetOptions = {
 
 export const fetchAssetTransfers = async ({
   contractAddress,
-  tokenId
+  tokenId,
 }: fetchAssetOptions) => {
-  return comethMarketplaceClient.transfer.getAssetTransfers(contractAddress, tokenId)
+  return comethMarketplaceClient.transfer.getAssetTransfers(
+    contractAddress,
+    tokenId
+  )
 }
 
-export const useAssetTransfers = (contractAddress: Address, tokenId: string) => {
-  return useQuery(
-    ["cometh", "assetTransfers", tokenId],
-    () => {
+export const useAssetTransfers = (
+  contractAddress: Address,
+  tokenId: string
+) => {
+  return useQuery({
+    queryKey: ["cometh", "assetTransfers", tokenId],
+    queryFn: () => {
       return fetchAssetTransfers({ contractAddress, tokenId })
     },
-  )
+  })
 }

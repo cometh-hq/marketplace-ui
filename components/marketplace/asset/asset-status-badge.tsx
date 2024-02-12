@@ -4,17 +4,13 @@ import { AssetStatus } from "@/types/assets"
 import { Badge } from "@/components/ui/badge"
 
 const colors: Record<AssetStatus, ComponentProps<typeof Badge>["variant"]> = {
-  listed: "pending",
+  listed: "success",
   "not-listed": "background",
-  auction: "pending",
-  bought: "success",
 } as const
 
 const content: Record<AssetStatus, string> = {
   listed: "Listed",
   "not-listed": "Not Listed",
-  auction: "Auction",
-  bought: "Bought",
 } as const
 
 export type AssetStatusBadgeProps = {
@@ -22,5 +18,6 @@ export type AssetStatusBadgeProps = {
 }
 
 export function AssetStatusBadge({ status }: AssetStatusBadgeProps) {
-  return <Badge size="xs" variant={colors[status]}>{content[status]}</Badge>
+  // return <Badge variant={colors[status]}>{content[status]}</Badge>
+  return <div className="text-lg font-medium text-accent">{content[status]}</div>
 }

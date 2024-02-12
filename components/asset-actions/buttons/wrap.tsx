@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button"
-import { WrapDialog } from "@/components/wrap-dialog"
-import { manifest } from "@/manifests"
 import { useState } from "react"
+
+import globalConfig from "@/config/globalConfig"
+import { Button } from "@/components/ui/button"
+import { WrapDialog } from "@/components/wrap-dialog/wrap-dialog"
 
 type WrapButtonProps = {
   isUnwrap?: boolean
@@ -23,11 +24,8 @@ export function WrapButton({ isUnwrap, onToggleMode }: WrapButtonProps) {
       onToggleMode={onToggleMode}
       asChild
     >
-      <Button
-        variant="secondary"
-        onClick={() => setIsOpen(true)}
-      >
-        Swap {manifest.currency.wrapped.name}
+      <Button variant="secondary" onClick={() => setIsOpen(true)}>
+        Swap {globalConfig.network.wrappedNativeToken.name}
       </Button>
     </WrapDialog>
   )

@@ -26,7 +26,7 @@ import { FILTERS_SORT } from "../../../config/filters"
 
 interface MarketplaceSortDropdownProps extends PopoverProps {}
 
-const DEFAULT_SORT_LABEL = FILTERS_SORT[0].label
+const DEFAULT_SORT_LABEL = FILTERS_SORT[2].label
 
 export function MarketplaceSortDropdown({
   ...props
@@ -52,26 +52,26 @@ export function MarketplaceSortDropdown({
     <Popover open={open} onOpenChange={setOpen} {...props}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="secondary"
           size={isSmallScreen ? "icon" : "default"}
           role="combobox"
           aria-label="Load a sort..."
           aria-expanded={open}
           aria-controls="radix-:Rirb9ipj9:"
-          className="shrink-0"
+          className="shrink-0 text-white"
         >
           <ListFilter size="16" className={isSmallScreen ? '' : 'mr-2'} />
           {isSmallScreen ? (
             ""
           ) : (
             <>
-              {currentLabel}
-              <ChevronDown size="16" className="ml-2 shrink-0 opacity-50" />
+              Sort by {currentLabel}
+              <ChevronDown size="18" className="ml-2 shrink-0 opacity-70" />
             </>
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[250px] p-0">
+      <PopoverContent align="end" className="w-[264px] p-0">
         <Command>
           <CommandEmpty>No options found.</CommandEmpty>
           <CommandGroup>
@@ -121,7 +121,7 @@ const DropdownElement = ({
       {label}
       <Check
         className={cn(
-          "ml-auto h-4 w-4",
+          "ml-auto size-4",
           isSelected ? "opacity-100" : "opacity-0"
         )}
       />

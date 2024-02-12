@@ -1,17 +1,15 @@
-import { manifest } from "@/manifests"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { toast } from "@/components/ui/toast/use-toast"
 
 import { getFirstListing } from "../cometh-marketplace/offers"
-import { handleOrderbookError } from "../errors"
 
 export type BuyAssetOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeDataCore
 }
 
 export const useBuyAsset = () => {
@@ -19,22 +17,22 @@ export const useBuyAsset = () => {
   const nftSwapSdk = useNFTSwapv4()
   const viewerAddress = useCurrentViewerAddress()
 
-  return useMutation(
-    ["buy-asset"],
-    async ({ asset }: BuyAssetOptions) => {
+  return useMutation({
+    mutationKey: ["buy-asset"],
+    mutationFn: async ({ asset }: BuyAssetOptions) => {
       if (!nftSwapSdk || !viewerAddress)
         throw new Error("Could not initialize SDK")
 
       const order = await getFirstListing(asset.tokenId)
 
-      const signature = order.signature || {
+      const signature = {...order.signature} || {
         signatureType: 4,
         v: 0,
         r: "0x0000000000000000000000000000000000000000000000000000000000000000",
         s: "0x0000000000000000000000000000000000000000000000000000000000000000",
       }
 
-      const fillTx: ContractTransaction = await nftSwapSdk.fillSignedOrder({
+      const formattedZeroXOrder = {
         direction: 0,
         maker: order.maker,
         taker: order.taker,
@@ -46,14 +44,18 @@ export const useBuyAsset = () => {
           return {
             recipient: fee.recipient,
             amount: fee.amount,
-            feeData: fee.feeData || '0x',
+            feeData: fee.feeData || "0x",
           }
         }),
-        erc721Token: manifest.contractAddress,
+        erc721Token: globalConfig.contractAddress,
         erc721TokenId: order.tokenId,
         erc721TokenProperties: [],
         signature: signature,
-      })
+      }
+
+      const fillTx: ContractTransaction = await nftSwapSdk.fillSignedOrder(
+        formattedZeroXOrder
+      )
 
       const fillTxReceipt = await fillTx.wait()
       console.log(
@@ -61,23 +63,10 @@ export const useBuyAsset = () => {
       )
       return fillTxReceipt
     },
-    {
-      onSuccess: (_, { asset }) => {
-        client.invalidateQueries(["cometh", "assets", asset.tokenId])
-        toast({
-          title: "NFT bought!",
-        })
-      },
-      onError: (error) => {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            500: "Internal orderbook server error",
-          }),
-        })
-      },
+    onSuccess: (_, { asset }) => {
+      client.invalidateQueries({
+        queryKey: ["cometh", "assets", asset.tokenId],
+      })
     }
-  )
+  })
 }

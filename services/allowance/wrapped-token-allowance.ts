@@ -1,9 +1,10 @@
-import { manifest } from "@/manifests"
+import { wagmiConfig } from "@/providers/wagmi"
 import { useMutation } from "@tanstack/react-query"
-import { erc20ABI, getWalletClient, readContract } from "@wagmi/core"
-import { BigNumber, BigNumberish, ContractTransaction, Signer } from "ethers"
-import { Address } from "viem"
+import { readContract } from "@wagmi/core"
+import { BigNumberish } from "ethers"
+import { Address, erc20Abi } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import { ERC20__factory } from "@/lib/generated/contracts"
 import { useSigner } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
@@ -18,9 +19,9 @@ export const fetchWrappedAllowance = async ({
   contractAddress: Address
 }) => {
   try {
-    const result = await readContract({
+    const result = await readContract(wagmiConfig, {
       address: contractAddress,
-      abi: erc20ABI,
+      abi: erc20Abi,
       functionName: "allowance",
       args: [address, spender],
     })
@@ -40,22 +41,27 @@ export type WrappedTokenAllowParams = {
   amount: BigNumberish
 }
 
-export const useWrappedTokenAllow = (price: BigNumberish, options?: {
-  onSuccess?: () => void
-}) => {
+export const useERC20Allow = (
+  price: BigNumberish,
+  options?: {
+    onSuccess?: () => void
+  }
+) => {
   const nftSwapSdk = useNFTSwapv4()
   const signer = useSigner()
 
-  return useMutation(["wrappedTokenAllow"], async () => {
-    if (!signer || !nftSwapSdk) return
-    const spender = nftSwapSdk?.exchangeProxyContractAddress!
-    const erc20 = ERC20__factory.connect(
-      manifest.currency.wrapped.address,
-      signer
-    )
-    const tx = await erc20.approve(spender, price)
-    return tx.wait()
-  }, {
+  return useMutation({
+    mutationKey: ["wrappedTokenAllow"],
+    mutationFn: async () => {
+      if (!signer || !nftSwapSdk) return
+      const spender = nftSwapSdk?.exchangeProxyContractAddress!
+      const erc20 = ERC20__factory.connect(
+        globalConfig.ordersErc20.address,
+        signer
+      )
+      const tx = await erc20.approve(spender, price)
+      return tx.wait()
+    },
     ...options,
     onSuccess: () => {
       options?.onSuccess?.()

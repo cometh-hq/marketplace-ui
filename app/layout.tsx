@@ -1,15 +1,14 @@
-import '@/styles/globals.css'
+import "@/styles/globals.css"
+import { Metadata } from "next"
 import { AppProviders } from "@/providers"
 
-import { Metadata } from "next"
-
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/utils/fonts"
+import { ChakraFont } from "@/lib/utils/fonts"
 import { cn } from "@/lib/utils/utils"
+import { Toaster } from "@/components/ui/toast/toaster"
 import { AppContent } from "@/components/content"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { Toaster } from "@/components/ui/toast/toaster"
 
 export const metadata: Metadata = {
   title: {
@@ -38,17 +37,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          ChakraFont.variable,
+          "min-h-screen bg-[url('/main-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased"
         )}
       >
         <AppProviders>
-          <div className="relative flex min-h-screen w-full flex-col">
+          <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
             <SiteHeader />
             <AppContent>{children}</AppContent>
           </div>
 
-          <TailwindIndicator />
+          {/* <TailwindIndicator /> */}
         </AppProviders>
         <Toaster />
       </body>

@@ -49,9 +49,9 @@ export const FilterContainer = ({
 
 const FilterLabel = ({ children }: { children: string }) => {
   return (
-    <span className="text-uppercase px-4 text-sm font-semibold text-primary/80">
+    <div className="my-2 px-2 text-sm font-bold uppercase tracking-wider text-accent-foreground">
       {children}
-    </span>
+    </div>
   )
 }
 
@@ -72,8 +72,11 @@ const FilterMultiCombobox = ({
     <Popover>
       <div className="flex w-full flex-col justify-between">
         <PopoverTrigger asChild>
-          <Button variant="ghost" className="flex justify-between gap-2">
-            <span className="text-sm font-medium capitalize">
+          <Button
+            variant="neutral"
+            className="flex justify-between gap-2 p-2 hover:bg-white/[0.05] hover:text-accent-foreground"
+          >
+            <span className="font-medium capitalize">
               {label}
               {checkedCount && (
                 <span className="ml-2 text-xs font-bold text-primary/80">
@@ -129,8 +132,8 @@ export const CheckboxFilter = ({
     let newValues = Array.isArray(currentValues)
       ? [...currentValues]
       : currentValues
-      ? [currentValues]
-      : []
+        ? [currentValues]
+        : []
 
     if (!newValues.includes(queryValue)) {
       newValues.push(queryValue)
@@ -172,7 +175,11 @@ export const MarketplaceFiltersDropdown = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button id="radix-:R1irb9ipj9:" variant="outline" className="relative">
+        <Button
+          id="radix-:R1irb9ipj9:"
+          variant="secondary"
+          className="relative text-white"
+        >
           <FilterIcon size="16" className="mr-2" />
           Attributes filters
           <FiltersBadgeCounter counter={filtersCounter} />
@@ -180,12 +187,11 @@ export const MarketplaceFiltersDropdown = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[250px]">
         <FilterLabel>Attributes</FilterLabel>
-        <div className="mt-2 flex flex-col">
+        <div className="flex flex-col">
           {filtersCategories.map(([k, v]) => (
             <FilterMultiCombobox key={k} label={k} values={v.values} />
           ))}
         </div>
-        <DropdownMenuSeparator className="mb-1" />
       </DropdownMenuContent>
     </DropdownMenu>
   )

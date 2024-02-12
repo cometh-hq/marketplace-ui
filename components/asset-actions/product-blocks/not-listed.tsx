@@ -12,8 +12,8 @@ import {
 } from "@/components/product-block"
 
 import { MakeBuyOfferButton } from "../buttons/make-buy-offer"
-import { BestOfferColumn } from "./columns/best-offer-column"
 import { SwitchNetwork } from "../buttons/switch-network"
+import { BestOfferColumn } from "./columns/best-offer-column"
 
 export type NotListedProductBlockProps = {
   asset: AssetWithTradeData
@@ -23,9 +23,10 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
   return (
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
-        <AssetStatusBadge status="not-listed" />-
+        <ProductBlockLabel>Price</ProductBlockLabel>
+        <AssetStatusBadge status="not-listed" />
       </ProductBlockDividedColumn>
-      
+
       <BestOfferColumn asset={asset} />
 
       <ProductBlockDividedColumn>
@@ -38,9 +39,11 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
-        <SwitchNetwork>
-          <MakeBuyOfferButton asset={asset} />
-        </SwitchNetwork>
+        <ConnectButton customText="Login to make an offer" fullVariant>
+          <SwitchNetwork>
+            <MakeBuyOfferButton asset={asset} />
+          </SwitchNetwork>
+        </ConnectButton>
       </ProductBlockCenteredColumn>
     </ProductBlockContainer>
   )

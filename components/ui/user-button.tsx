@@ -60,9 +60,9 @@ export const UserLink = memo(function UserLink({
     <Link
       {...rest}
       href={userProfileHref}
-      className={cn("flex items-center font-semibold", className)}
+      className={cn("flex items-center text-lg font-medium", className)}
     >
-      {!hideIcon && <User className="mr-2 h-4 w-4" />} {content}
+      {!hideIcon && <User className="mr-2 size-4" />} {content}
     </Link>
   )
 })
@@ -81,8 +81,8 @@ export const UserButton = function UserButton({
   }, [user])
 
   return (
-    <Link href={userProfileHref}>
-      <Button variant={variant ?? "ghost"} className="font-medium" {...props}>
+    <Link href={userProfileHref} className="color-inherit">
+      <Button variant={variant ?? "third"} className="font-medium" {...props}>
         {icon(user)} {content}
       </Button>
     </Link>

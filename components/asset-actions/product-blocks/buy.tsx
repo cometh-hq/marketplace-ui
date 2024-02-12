@@ -22,13 +22,13 @@ export type BuyProductBlockProps = {
 }
 
 export function BuyProductBlock({ asset }: BuyProductBlockProps) {
-  const listingPrice = asset.orderbookStats.lowestSalePrice
+  const listingPrice = asset.orderbookStats.lowestListingPrice
 
   return (
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
-        <AssetStatusBadge status="listed" />
-        <Price amount={listingPrice} size="xl" />
+        <ProductBlockLabel>Price</ProductBlockLabel>
+        <Price amount={listingPrice} />
       </ProductBlockDividedColumn>
 
       <BestOfferColumn asset={asset} />
@@ -42,10 +42,10 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
         />
       </ProductBlockDividedColumn>
       <ProductBlockCenteredColumn>
-        <ConnectButton>
+        <ConnectButton fullVariant customText="Login to buy">
           <SwitchNetwork>
-            <MakeBuyOfferButton asset={asset} />
             <BuyAssetButton asset={asset} />
+            <MakeBuyOfferButton variant="secondary" asset={asset} />
           </SwitchNetwork>
         </ConnectButton>
       </ProductBlockCenteredColumn>

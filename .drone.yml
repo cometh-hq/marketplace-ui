@@ -16,24 +16,17 @@ steps:
       build_args_from_env:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
-        - NEXT_PUBLIC_BASE_PATH
-        - NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS
-        - NEXT_PUBLIC_CONTRACT_ADDRESS
-        - NEXT_PUBLIC_NETWORK_ID
         - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
         - NEXT_PUBLIC_MARKETPLACE_API_KEY
         - NEXT_PUBLIC_COMETH_CONNECT_BASE_URL
         - NEXT_PUBLIC_COMETH_CONNECT_API_KEY
+        - NEXT_PUBLIC_BASE_PATH
+        - NEXT_PUBLIC_CONTRACT_ADDRESS
+        - NEXT_PUBLIC_NETWORK_ID
+        - NEXT_PUBLIC_RPC_URL
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
-      NEXT_PUBLIC_BASE_PATH: "/marketplace"
-      NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
-        from_secret: zero_ex_contract_address
-      NEXT_PUBLIC_CONTRACT_ADDRESS:
-        from_secret: dev_contract_address
-      NEXT_PUBLIC_NETWORK_ID:
-        from_secret: network_id
       NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: dev_marketplace_api_url
       NEXT_PUBLIC_MARKETPLACE_API_KEY:
@@ -42,6 +35,12 @@ steps:
         from_secret: dev_connect_base_url
       NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
         from_secret: dev_connect_api_key
+      NEXT_PUBLIC_BASE_PATH: "/marketplace"
+      NEXT_PUBLIC_CONTRACT_ADDRESS:
+        from_secret: dev_contract_address
+      NEXT_PUBLIC_NETWORK_ID: 137
+      NEXT_PUBLIC_RPC_URL:
+        from_secret: polygon_rpc_url
       
   - name: rolling update
     image: gcr.io/cometh-service/app-rolling-update:latest
@@ -78,7 +77,84 @@ trigger:
     include:
       - push
 image_pull_secrets:
-  - service_dockerconfigjson
+  - core_dockerconfigjson
+---
+kind: pipeline
+type: docker
+name: debug release
+steps:
+  - name: build and push
+    image: plugins/gcr
+    settings:
+      dockerfile: Dockerfile
+      registry: gcr.io/cometh-core
+      repo: ${DRONE_REPO_NAME}
+      cache_from: gcr.io/cometh-core/${DRONE_REPO_NAME}:debug
+      tags:
+        - debug
+      json_key:
+        from_secret: core_google_credentials
+      build_args_from_env:
+        - NODE_ENV
+        - NEXT_PUBLIC_NODE_ENV
+        - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
+        - NEXT_PUBLIC_MARKETPLACE_API_KEY
+        - NEXT_PUBLIC_COMETH_CONNECT_API_KEY
+        - NEXT_PUBLIC_BASE_PATH
+        - NEXT_PUBLIC_CONTRACT_ADDRESS
+        - NEXT_PUBLIC_NETWORK_ID
+        - NEXT_PUBLIC_RPC_URL
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_NODE_ENV: development
+      NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
+        from_secret: debug_cometh_api_url
+      NEXT_PUBLIC_MARKETPLACE_API_KEY:
+        from_secret: debug_marketplace_api_key
+      NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
+        from_secret: debug_connect_api_key
+      NEXT_PUBLIC_NETWORK_ID: 80001
+      NEXT_PUBLIC_BASE_PATH: ""
+      NEXT_PUBLIC_CONTRACT_ADDRESS:
+        from_secret: debug_contract_address
+      NEXT_PUBLIC_RPC_URL:
+        from_secret: debug_rpc_url
+  - name: rolling update
+    image: gcr.io/cometh-core/app-rolling-update:latest
+    environment:
+      GCP_SA:
+        from_secret: core_google_credentials
+      SERVICE: ${DRONE_REPO_NAME}
+      ENVIRONMENT: develop
+    depends_on: [build and push]
+  - name: discord notification
+    image: appleboy/drone-discord
+    settings:
+      webhook_id:
+        from_secret: discord_webhook_id
+      webhook_token:
+        from_secret: discord_webhook_token
+      username: drone
+      message: >
+        {{#success build.status}}
+          build push and rolling update for debug {{repo.name}} succeeded.
+          {{build.link}}
+        {{else}}
+           build push and rolling update for debug {{repo.name}} failed. Fix me please.
+          {{build.link}}
+        {{/success}}
+    when:
+      status: [success, failure]
+    depends_on: [rolling update]
+trigger:
+  branch:
+    include:
+      - debug
+  event:
+    include:
+      - push
+image_pull_secrets:
+  - core_dockerconfigjson
 ---
 kind: pipeline
 type: docker
@@ -98,17 +174,16 @@ steps:
       build_args_from_env:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
-        - NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS
         - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
         - NEXT_PUBLIC_MARKETPLACE_API_KEY
         - NEXT_PUBLIC_COMETH_CONNECT_API_KEY
         - NEXT_PUBLIC_BASE_PATH
         - NEXT_PUBLIC_CONTRACT_ADDRESS
+        - NEXT_PUBLIC_NETWORK_ID
+        - NEXT_PUBLIC_RPC_URL
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
-      NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
-        from_secret: zero_ex_contract_address
       NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: staging_cometh_api_url
       NEXT_PUBLIC_MARKETPLACE_API_KEY:
@@ -118,6 +193,9 @@ steps:
       NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_CONTRACT_ADDRESS:
         from_secret: staging_contract_address
+      NEXT_PUBLIC_NETWORK_ID: 137
+      NEXT_PUBLIC_RPC_URL:
+        from_secret: polygon_rpc_url
   - name: rolling update
     image: gcr.io/cometh-service/app-rolling-update:latest
     environment:
@@ -173,17 +251,16 @@ steps:
       build_args_from_env:
         - NODE_ENV
         - NEXT_PUBLIC_NODE_ENV
-        - NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS
         - NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL
         - NEXT_PUBLIC_MARKETPLACE_API_KEY
         - NEXT_PUBLIC_COMETH_CONNECT_API_KEY
         - NEXT_PUBLIC_BASE_PATH
         - NEXT_PUBLIC_CONTRACT_ADDRESS
+        - NEXT_PUBLIC_NETWORK_ID
+        - NEXT_PUBLIC_RPC_URL
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_NODE_ENV: production
-      NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
-        from_secret: zero_ex_contract_address
       NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL:
         from_secret: prod_cometh_api_url
       NEXT_PUBLIC_MARKETPLACE_API_KEY:
@@ -193,6 +270,9 @@ steps:
       NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_CONTRACT_ADDRESS:
         from_secret: prod_contract_address
+      NEXT_PUBLIC_NETWORK_ID: 137
+      NEXT_PUBLIC_RPC_URL:
+        from_secret: polygon_rpc_url
   - name: rolling update
     image: gcr.io/cometh-service/app-rolling-update:latest
     environment:
