@@ -13,7 +13,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { SignInForm } from "@/components/signin-form"
+import { SignInForm } from "@/components/signin/signin-form"
 
 import { AddNewDeviceDialog } from "../ui/modal-add-new-device"
 import { AuthorizationProcess } from "../connect-actions/buttons/authorization-process"

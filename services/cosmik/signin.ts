@@ -15,6 +15,7 @@ export type User = {
   email: string
   coins: number
   aurium: number
+  externalAddresses: Array<string>
 }
 
 export const useCosmikSignin = () => {

@@ -13,8 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
 
 interface SignInFormProps {
   onLoginSuccess: (user: User) => void
@@ -23,7 +23,6 @@ interface SignInFormProps {
 export function SignInForm({ onLoginSuccess }: SignInFormProps) {
   const {
     mutate: signin,
-    error,
     isSuccess,
     data: userData,
     isPending,

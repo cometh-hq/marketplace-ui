@@ -13,14 +13,14 @@ export function AccountBalance() {
   const [isUnwrap, setIsUnwrap] = useState(false)
   return (
     <>
-      <div className="mb-3 space-y-3 rounded-md border border-border p-3">
+      <div className="mb-3 space-y-3 rounded-md border border-accent/10 p-3">
         <div className="flex flex-col gap-2">
           <AccountBalanceLine
             balance={balance.native}
             currency={globalConfig.network.nativeToken.symbol}
             logo={globalConfig.network.nativeToken.thumb}
           />
-          <Separator />
+          <Separator className="bg-accent/10" />
           <AccountBalanceLine
             balance={
               globalConfig.useNativeForOrders ? balance.wrapped : balance.ERC20
