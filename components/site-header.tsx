@@ -12,11 +12,17 @@ import { ConnectButton } from "./connect-button"
 import { MainNav } from "./main-nav"
 
 import Image from "next/image"
+import { usePathname } from 'next/navigation'
 
 export function SiteHeader() {
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const toggleMenu = () => setIsOpen(!isOpen)
+
+  if (pathname === "/wallets") {
+    return null
+  }
 
   return (
     <div className="container mx-auto py-5 sm:py-10">

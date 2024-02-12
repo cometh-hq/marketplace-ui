@@ -16,7 +16,6 @@ import {
   ConnectOnboardConnector,
   NewSignerRequestBody,
   NewSignerRequestType,
-  SendTransactionResponse,
   SupportedNetworks,
 } from "@cometh/connect-sdk"
 
