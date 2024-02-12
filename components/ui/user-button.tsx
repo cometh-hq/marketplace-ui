@@ -12,6 +12,7 @@ import { useCurrentViewerAddress } from "@/lib/web3/auth"
 
 import { Button } from "./button"
 import { Link } from "./link"
+import { useUsername } from "@/services/user/use-username"
 
 export type UserButtonProps = {
   user: AnyUser

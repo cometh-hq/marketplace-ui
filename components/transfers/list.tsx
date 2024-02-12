@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useMemo } from "react"
+import { useUsernames } from "@/services/user/use-username"
 import {
   AssetTransfer,
   AssetTransfers,
@@ -64,12 +65,6 @@ type OrderActivity = {
 
 type AssetActivity = TransferActivity | OrderActivity
 
-const getUsername = (address: Address, viewerAddress?: Address) => {
-  if (viewerAddress && isAddressEqual(address, viewerAddress)) {
-    return "You"
-  }
-}
-
 const isTransferActivity = (
   assetActivity: AssetActivity
 ): assetActivity is TransferActivity => {
@@ -99,7 +94,10 @@ const getActivityTimestamp = (assetActivity: AssetActivity) => {
 
 const getFormattedUser = (userAddress: Address, viewerAddress?: Address) => {
   return {
-    username: getUsername(userAddress as Address, viewerAddress),
+    username:
+      viewerAddress && isAddressEqual(userAddress, viewerAddress)
+        ? "You"
+        : undefined,
     address: userAddress,
   }
 }
@@ -205,6 +203,7 @@ const renderActivityEventCell = (activity: AssetActivity) => {
     return <ActivityEventCell Icon={ShoppingCartIcon} label={label} />
   }
 }
+
 const TimestampTooltip = ({
   children,
   tooltipContent,
@@ -255,15 +254,27 @@ const renderTimestampCell = (activity: AssetActivity) => {
 
 const renderActivitiesRows = (
   assetActivities: AssetActivity[],
+  usernames: Record<string, string>,
   viewerAddress?: Address
 ) => {
   return assetActivities.map((activity) => {
     const activityEmitter = getActivityEmitter(activity, viewerAddress)
     const activityReceiver = getActivityReceiver(activity, viewerAddress)
+
+    if (activityEmitter.username === undefined) {
+      activityEmitter.username =
+        usernames[activityEmitter.address.toLowerCase()] ||
+        undefined
+    }
+    if (activityReceiver.username === undefined) {
+      activityReceiver.username =
+        usernames[activityReceiver.address.toLowerCase()] ||
+        undefined
+    }
+
     const isOpenedOrderActivity =
       isOrderActivity(activity) &&
       activity.order.orderStatus === TradeStatus.OPEN
-    console.log("isOrderActivity(activity)", isOrderActivity(activity))
 
     return (
       <TableRow key={getActivityId(activity)}>
@@ -308,9 +319,26 @@ export function TransfersList({
   assetOrders,
 }: TransfersListProps) {
   const viewerAddress = useCurrentViewerAddress()
+
   const assetActivities = useMemo(() => {
     return getAssetActivities(assetTransfers, assetOrders, maxTransfersToShow)
   }, [assetTransfers, assetOrders, maxTransfersToShow])
+
+  const allAddresses = useMemo(() => {
+    const addresses = new Set<string>()
+    assetActivities.forEach((activity) => {
+      if (isTransferActivity(activity)) {
+        addresses.add(activity.transfer.fromAddress)
+        addresses.add(activity.transfer.toAddress)
+      } else if (isOrderActivity(activity)) {
+        addresses.add(activity.order.maker)
+        addresses.add(activity.order.taker)
+      }
+    })
+    return Array.from(addresses)
+  }, [assetActivities])
+
+  const { usernames } = useUsernames(allAddresses)
 
   return (
     <Table>
@@ -324,7 +352,7 @@ export function TransfersList({
       </TableHeader>
       <TableBody>
         {assetActivities?.length ? (
-          renderActivitiesRows(assetActivities, viewerAddress)
+          renderActivitiesRows(assetActivities, usernames, viewerAddress)
         ) : (
           <TableRow>
             <TableCell className="h-24 text-center">
