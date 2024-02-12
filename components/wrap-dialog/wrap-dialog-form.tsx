@@ -125,7 +125,7 @@ export function WrapDialogForm({
         <div className="flex flex-col items-center">
           <Button
             type="button"
-            variant="outline"
+            variant="secondary"
             size="icon"
             onClick={handleToggleMode}
           >
