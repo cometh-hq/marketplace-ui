@@ -12,7 +12,7 @@ export const useGetUserNonce = () => {
       const { data } = await cosmikClient.post(
         "/auth/init",
         {
-          walletAddress,
+          address: walletAddress,
         }
       )
       return data
