@@ -8,7 +8,6 @@ type WalletListProps = {
 }
 
 const WalletList = ({ wallets }: WalletListProps) => {
-  console.log("wallets", wallets)
   return (
     <>
       {wallets.map(({ address, items }) => (

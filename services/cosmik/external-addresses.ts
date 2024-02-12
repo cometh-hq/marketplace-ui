@@ -6,7 +6,7 @@ import { Address } from "viem"
 import { toast } from "@/components/ui/toast/use-toast"
 
 export type AddExternalWalletMutationOptions = {
-  walletAddress: Address
+  walletAddress: string
   nonce: string
   signature: string
   message: SiweMessage
@@ -29,8 +29,7 @@ export const useAddExternalWallet = () => {
       })
       return data
     },
-    onSuccess: async (data) => {
-      console.log(data, "on success")
+    onSuccess: async () => {
       toast({
         title: "Wallet added",
         description: "Your wallet has been added to your account",

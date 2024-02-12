@@ -28,8 +28,6 @@ export function BuyOffersTable({ offers }: BuyOffersTableProps) {
 
   const { usernames } = useUsernames(addresses)
 
-  console.log("addresses", addresses)
-
   const data = useMemo(() => {
     return offers
       .filter((offer) => {
@@ -53,6 +51,22 @@ export function BuyOffersTable({ offers }: BuyOffersTableProps) {
         if (bigA.gt(bigB)) return -1
         if (bigA.lt(bigB)) return 1
         return 0
+      })
+      .map((offer) => {
+        const emitterUsername = usernames[offer.emitter.address]
+        const ownerUsername = usernames[offer.owner.address]
+
+        return {
+          ...offer,
+          emitter: {
+            ...offer.emitter,
+            username: emitterUsername,
+          },
+          owner: {
+            ...offer.owner,
+            username: ownerUsername,
+          },
+        }
       })
   }, [offers, viewer])
 

@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
-import Image from "next/image"
+import { useEffect, useRef, useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { comethMarketplaceClient } from "@/services/clients"
 import { useAddExternalWallet } from "@/services/cosmik/external-addresses"
@@ -9,7 +8,6 @@ import { SupportedNetworks } from "@cometh/connect-sdk"
 import { AssetSearchFilters } from "@cometh/marketplace-sdk"
 import { ethers } from "ethers"
 import { SiweMessage } from "siwe"
-import { Address } from "viem"
 
 import { env } from "@/config/env"
 import globalConfig from "@/config/globalConfig"
@@ -35,7 +33,7 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
   const { onboard } = useWeb3OnboardContext()
 
   const { mutateAsync: getUserNonceAsync } = useGetUserNonce()
-  const addExternalWallet = useAddExternalWallet()
+  const { mutateAsync: addExternalWallet} = useAddExternalWallet()
 
   const walletAddress = useRef<string | null>(null)
   const walletState = useRef<any | null>(null)
@@ -50,35 +48,36 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
       ...user.externalAddresses.map((address) => ({ address, items: 0 })),
     ]
     setWallets(initialWallets)
-    console.log("on reload l'user")
-    updateAssetsCounts(initialWallets.map(({ address }) => address))
   }, [user])
 
-  async function updateAssetsCounts(walletAddresses: string[]) {
-    const promises = walletAddresses.map(async (address) => {
-      const filters: AssetSearchFilters = {
-        contractAddress: globalConfig.contractAddress,
-        owner: address,
-        limit: 1,
-      }
+  useEffect(() => {
+    async function updateItemsCounts() {
+      const promises = wallets.map(async (wallet) => {
+        try {
+          const filters: AssetSearchFilters = {
+            contractAddress: globalConfig.contractAddress,
+            owner: wallet.address,
+            limit: 1,
+          }
+          const response =
+            await comethMarketplaceClient.asset.searchAssets(filters)
+          return { address: wallet.address, items: response.total }
+        } catch (error) {
+          console.error(
+            "Error fetching assets count for address:",
+            wallet.address,
+            error
+          )
+          return { address: wallet.address, items: 0 }
+        }
+      })
 
-      try {
-        const response =
-          await comethMarketplaceClient.asset.searchAssets(filters)
-        return { address, items: response.total }
-      } catch (error) {
-        console.error(
-          "Error fetching assets count for address:",
-          address,
-          error
-        )
-        return { address, items: 0 }
-      }
-    })
+      const results = await Promise.all(promises)
+      setWallets(results)
+    }
 
-    const results = await Promise.all(promises)
-    setWallets(results)
-  }
+    updateItemsCounts()
+  }, [wallets])
 
   function getRefsValues() {
     return {
@@ -117,8 +116,8 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
   }) {
     const { wallet, walletAddress } = getRefsValues()
 
-    if (!window || !wallet) {
-      throw new Error("No window nor wallet")
+    if (!window || !wallet || !walletAddress) {
+      throw new Error("No window or wallet")
     }
 
     const domain = window.location.host
@@ -126,7 +125,7 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
 
     const message = new SiweMessage({
       domain,
-      address: walletAddress as Address,
+      address: walletAddress,
       statement,
       uri,
       version: "1",
@@ -171,17 +170,13 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
         throw new Error("No signature")
       }
 
-      addExternalWallet.mutate(
-        { walletAddress: walletAddr as Address, nonce, signature, message },
+      addExternalWallet(
+        { walletAddress: walletAddr, nonce, signature, message },
         {
           onSuccess: () => {
             setWallets((prevWallets) => [
               ...prevWallets,
               { address: walletAddr, items: 0 },
-            ])
-            updateAssetsCounts([
-              ...wallets.map((wallet) => wallet.address),
-              walletAddr,
             ])
           },
         }

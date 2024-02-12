@@ -1,9 +1,10 @@
 "use client"
 
+import { useState } from "react"
 import { User } from "@/services/cosmik/signin"
+
 import { SignInDialog } from "@/components/signin/signin-dialog"
 import { WalletsDialog } from "@/components/wallets-dialog"
-import { useState } from "react"
 
 export default function WalletsPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -16,11 +17,8 @@ export default function WalletsPage() {
 
   return (
     <div className="container mx-auto flex items-center justify-center gap-4 py-5 sm:py-6">
-      {!isLoggedIn ? (
-        <SignInDialog onLoginSuccess={handleLoginSuccess} />
-      ) : (
-        <WalletsDialog user={user!} />
-      )}
+      {!isLoggedIn && <SignInDialog onLoginSuccess={handleLoginSuccess} />}
+      {isLoggedIn && user && <WalletsDialog user={user} />}
     </div>
   )
 }
