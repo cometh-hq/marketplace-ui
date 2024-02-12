@@ -13,7 +13,7 @@ export const useUsername = (walletAddress: string) => {
   })
 
   return {
-    username: data?.data?.user?.username,
+    username: data?.data.userName,
     isFetchingUsername: isFetching,
   }
 }
