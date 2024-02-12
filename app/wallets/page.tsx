@@ -147,6 +147,7 @@ export default function WalletsPage() {
       chainId: Number(
         numberToHex(env.NEXT_PUBLIC_NETWORK_ID) as SupportedNetworks
       ),
+      nonce,
     })
 
     return message
