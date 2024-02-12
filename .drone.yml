@@ -77,7 +77,7 @@ trigger:
     include:
       - push
 image_pull_secrets:
-  - core_dockerconfigjson
+  - service_dockerconfigjson
 ---
 kind: pipeline
 type: docker
