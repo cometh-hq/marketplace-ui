@@ -29,7 +29,8 @@ export const useAddExternalWallet = () => {
       })
       return data
     },
-    onSuccess: async () => {
+    onSuccess: async (data) => {
+      console.log(data, "on success")
       toast({
         title: "Wallet added",
         description: "Your wallet has been added to your account",

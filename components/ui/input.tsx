@@ -56,7 +56,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           value={value}
           onChange={handleChange}
-          className="input size-full !bg-transparent pr-5 font-medium outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:font-semibold placeholder:text-muted-foreground"
+          className="input size-full !bg-transparent pr-5 font-medium outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-white/50"
           ref={ref}
           {...props}
         />

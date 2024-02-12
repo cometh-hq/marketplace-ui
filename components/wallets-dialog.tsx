@@ -6,10 +6,7 @@ import { useAddExternalWallet } from "@/services/cosmik/external-addresses"
 import { User } from "@/services/cosmik/signin"
 import { useGetUserNonce } from "@/services/cosmik/user-nonce"
 import { SupportedNetworks } from "@cometh/connect-sdk"
-import {
-  AssetSearchFilters,
-  SearchAssetResponse,
-} from "@cometh/marketplace-sdk"
+import { AssetSearchFilters } from "@cometh/marketplace-sdk"
 import { ethers } from "ethers"
 import { SiweMessage } from "siwe"
 import { Address } from "viem"
@@ -38,7 +35,7 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
   const { onboard } = useWeb3OnboardContext()
 
   const { mutateAsync: getUserNonceAsync } = useGetUserNonce()
-  const { mutateAsync: addExternalWalletAsync } = useAddExternalWallet()
+  const addExternalWallet = useAddExternalWallet()
 
   const walletAddress = useRef<string | null>(null)
   const walletState = useRef<any | null>(null)
@@ -174,12 +171,21 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
         throw new Error("No signature")
       }
 
-      addExternalWalletAsync({
-        walletAddress: walletAddr as Address,
-        nonce,
-        signature,
-        message,
-      })
+      addExternalWallet.mutate(
+        { walletAddress: walletAddr as Address, nonce, signature, message },
+        {
+          onSuccess: () => {
+            setWallets((prevWallets) => [
+              ...prevWallets,
+              { address: walletAddr, items: 0 },
+            ])
+            updateAssetsCounts([
+              ...wallets.map((wallet) => wallet.address),
+              walletAddr,
+            ])
+          },
+        }
+      )
     } catch (error) {
       console.error("Error connecting wallet", error)
     }
