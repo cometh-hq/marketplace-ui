@@ -2,13 +2,14 @@ import { cosmikClient } from "@/services/clients"
 import { useMutation } from "@tanstack/react-query"
 import { SiweMessage } from "siwe"
 import { Address } from "viem"
+
 import { toast } from "@/components/ui/toast/use-toast"
 
 export type AddExternalWalletMutationOptions = {
-  walletAddress: Address,
-  nonce: string,
-  signature: string,
-  message: SiweMessage,
+  walletAddress: Address
+  nonce: string
+  signature: string
+  message: SiweMessage
 }
 
 export const useAddExternalWallet = () => {
@@ -20,15 +21,12 @@ export const useAddExternalWallet = () => {
       signature,
       message,
     }: AddExternalWalletMutationOptions) => {
-      const { data } = await cosmikClient.patch(
-        "/me/external-addresses",
-        {
-          walletAddress,
-          nonce,
-          signature,
-          message,
-        }
-      )
+      const { data } = await cosmikClient.patch("/me/external-addresses", {
+        walletAddress,
+        nonce,
+        signature,
+        message,
+      })
       return data
     },
     onSuccess: async () => {
