@@ -23,7 +23,6 @@ interface SignInFormProps {
 export function SignInForm({ onLoginSuccess }: SignInFormProps) {
   const {
     mutate: signin,
-    error,
     isSuccess,
     data: userData,
     isPending,

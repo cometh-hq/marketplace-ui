@@ -1,17 +1,24 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { wagmiConfig } from "@/providers/wagmi"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
-import { cosmikClient } from "@/services/clients"
+import { comethMarketplaceClient, cosmikClient } from "@/services/clients"
+import { useAddExternalWallet } from "@/services/cosmik/external-addresses"
 import { User } from "@/services/cosmik/signin"
+import { useGetUserNonce } from "@/services/cosmik/user-nonce"
+import { useWalletConnect } from "@/services/web3/use-wallet-connect"
 import { SupportedNetworks } from "@cometh/connect-sdk"
-import { getAccount, signMessage } from "@wagmi/core"
+import {
+  AssetSearchFilters,
+  SearchAssetResponse,
+} from "@cometh/marketplace-sdk"
 import { ethers } from "ethers"
 import { SiweMessage } from "siwe"
+import { Address } from "viem"
 
 import { env } from "@/config/env"
+import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -21,6 +28,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { SignInForm } from "@/components/signin-form"
+import WalletList from "@/components/wallets/wallet-list"
 
 function numberToHex(value: number): string {
   return `0x${value.toString(16)}`
@@ -30,89 +38,166 @@ export default function WalletsPage() {
   const { initOnboard, onboard } = useWeb3OnboardContext()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState<User | null>(null)
-  console.log("user", user)
-  const handleLoginSuccess = (user: User) => {
+  const [assetsCounts, setAssetsCounts] = useState<{ [key: Address]: number }>(
+    {}
+  )
+  const walletAddress = useRef<string | null>(null)
+  const walletState = useRef<any | null>(null)
+  const { mutateAsync: getUserNonceAsync } = useGetUserNonce()
+  const { mutateAsync: addExternalWalletAsync } = useAddExternalWallet()
+
+  const allAddresses = [
+    user?.address,
+    ...(user?.externalAddresses || []),
+  ].filter(Boolean) as Address[]
+
+  useEffect(() => {
+    const fetchAssetsCounts = async () => {
+      const counts = await fetchAssetsForAddresses(allAddresses)
+      setAssetsCounts(counts)
+    }
+
+    if (user?.address || user?.externalAddresses?.length) {
+      fetchAssetsCounts()
+    }
+  }, [user?.address, user?.externalAddresses])
+
+  async function fetchAssetsForAddresses(addresses: Array<Address>) {
+    const counts: { [key: string]: number } = {}
+    const promises = addresses.map(async (address) => {
+      const filters: AssetSearchFilters = {
+        contractAddress: globalConfig.contractAddress,
+        owner: address,
+        limit: 1,
+      }
+
+      try {
+        const response: SearchAssetResponse =
+          await comethMarketplaceClient.asset.searchAssets(filters)
+        counts[address] = response.total
+      } catch (error) {
+        console.error(
+          "Erreur lors de la recherche d'assets pour l'adresse",
+          address,
+          error
+        )
+        counts[address] = 0
+      }
+    })
+
+    await Promise.all(promises)
+    return counts
+  }
+
+  function handleLoginSuccess(user: User) {
     setIsLoggedIn(true)
     setUser(user)
   }
 
-  const handleAddExternalWallet = async () => {
-    console.log("handleAddExternalWallet")
-    initOnboard({
-      isComethWallet: false,
-    })
+  function getRefsValues() {
+    return {
+      walletAddress: walletAddress.current,
+      wallet: walletState.current,
+    }
+  }
 
-    console.log("onboard", onboard)
-
-    if (!onboard) {
-      console.error("Onboard not initialized")
-      return
+  function getSigner() {
+    const { wallet } = getRefsValues()
+    const provider = new ethers.providers.Web3Provider(wallet[0].provider)
+    const signer = provider?.getSigner()
+    if (!signer) {
+      throw new Error("No signer")
     }
 
-    const wallets = await onboard?.connectWallet()
-    const walletAddress = wallets?.[0].accounts[0]?.address
+    return signer
+  }
 
+  async function getUserNonce() {
+    const { walletAddress } = getRefsValues()
     if (!walletAddress) {
-      console.error("No wallet address found")
-      return
+      throw new Error("No wallet address")
     }
+    const { nonce } = await getUserNonceAsync({ walletAddress });
 
-    let nonce
+    return nonce
+  }
 
-    try {
-      nonce = await cosmikClient.post("/auth/init", {
-        walletAddress,
-      })
-      console.log("nonce", nonce)
-    } catch (error) {
-      console.error("Error adding new device", error)
+  async function createMessage({
+    nonce,
+    statement,
+  }: {
+    nonce: string
+    statement: string
+  }) {
+    const { wallet, walletAddress } = getRefsValues()
+
+    if (!window || !wallet) {
+      throw new Error("No window nor wallet")
     }
 
     const domain = window.location.host
-    const origin = window.location.origin
+    const uri = window.location.origin
 
     const message = new SiweMessage({
       domain,
-      address: "0xaCAEeda102b64678F6B9cc06FBE7B8E813acdb44",
-      statement:
-        "Add external wallet to link existing assets to your cosmik Battle Account",
-      uri: origin,
+      address: walletAddress as Address,
+      statement,
+      uri,
       version: "1",
       chainId: Number(
         numberToHex(env.NEXT_PUBLIC_NETWORK_ID) as SupportedNetworks
       ),
     })
-    console.log("message", message)
-    // const signer = _getSigner();
 
-    const ethersProvider = new ethers.providers.Web3Provider(
-      wallets[0].provider,
-      "any"
-    )
+    return message
+  }
 
-    const signer = ethersProvider.getSigner()
-
-    console.log("signer", signer)
-    // return siweMessage.prepareMessage();
-
-    const messageToSign = message.prepareMessage()
-    const signature = await signer.signMessage(messageToSign)
-    console.log("signature", signature)
-
+  async function handleAddExternalWallet() {
     try {
-      const verifyResponse = await cosmikClient.patch(
-        "/me/external-addresses",
-        {
-          walletAddress,
-          nonce: nonce?.data.nonce,
-          signature,
-          message,
-        }
-      )
+      // initOnboard({
+      //   isComethWallet: false,
+      // })
 
-      console.log("verifyResponse", verifyResponse)
+      const wallet = await onboard?.connectWallet()
+      walletState.current = wallet
+
+      const walletAddr = ethers.utils.getAddress(
+        wallet?.[0].accounts[0]?.address as Address
+      )
+      walletAddress.current = walletAddr
+
+      if (!walletAddr) {
+        throw new Error("No wallet address found")
+      }
+
+      const nonce = await getUserNonce()
+      const message = await createMessage({
+        nonce,
+        statement: "Connect to Ultimate Numbers",
+      })
+
+      if (!message) {
+        throw new Error("No message")
+      }
+
+      const signer = getSigner()
+      const messageToSign = message.prepareMessage()
+      console.log("messageToSign", messageToSign)
+      const signature = await signer.signMessage(messageToSign)
+      console.log("signature", signature)
+
+      if (!signature) {
+        throw new Error("No signature")
+      }
+
+      addExternalWalletAsync({
+        walletAddress: walletAddr as Address,
+        nonce,
+        signature,
+        message,
+      })
     } catch (error) {
-      console.error("Error adding new device", error)
+      console.error("Error connecting wallet", error)
     }
   }
 
@@ -134,9 +219,8 @@ export default function WalletsPage() {
               />
             </DialogHeader>
             <DialogDescription>
-              <div className="font-medium">
-                Enter your Comsmik Battle credential to...
-              </div>
+              Enter your Comsmik Battle credentials to view or add external
+              wallets
             </DialogDescription>
             <SignInForm onLoginSuccess={handleLoginSuccess} />
           </DialogContent>
@@ -151,20 +235,17 @@ export default function WalletsPage() {
               <DialogTitle className="normal-case">
                 @{user?.userName}
               </DialogTitle>
-              <Button size="sm">Logout</Button>
             </DialogHeader>
-            <DialogDescription>
-              Internal address (@{user?.address.substring(0, 6)}...): <br />
-              <div className="font-bold">
-                You have <span className="underline">{"34"} items</span>
-                &nbsp;attached to your Cosmik Battle Account through
-              </div>
-            </DialogDescription>
-            <DialogDescription>
+            <ul className="space-y-3">
+              <WalletList
+                addresses={allAddresses}
+                assetsCounts={assetsCounts}
+              />
+            </ul>
+            <div className="text-muted-foreground">
               Add an external wallet to link existing assets to your cosmik
               Battle Account
-            </DialogDescription>
-            {/* <SignInForm onLoginSuccess={handleLoginSuccess} /> */}
+            </div>
             <Button size="lg" onClick={() => handleAddExternalWallet()}>
               Add external wallet
             </Button>

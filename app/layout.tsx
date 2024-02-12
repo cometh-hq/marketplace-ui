@@ -39,7 +39,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={cn(
           ChakraFont.variable,
-          `bg-[url(' min-h-screen${env.NEXT_PUBLIC_BASE_PATH}/main-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased`
+          `min-h-screen bg-[url('/main-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased`
         )}
       >
         <AppProviders>
@@ -48,7 +48,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <AppContent>{children}</AppContent>
           </div>
 
-          {/* <TailwindIndicator /> */}
+          <TailwindIndicator />
         </AppProviders>
         <Toaster />
       </body>
