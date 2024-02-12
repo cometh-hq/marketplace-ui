@@ -38,7 +38,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={cn(
           ChakraFont.variable,
-          "min-h-screen bg-[url('/main-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased"
+          `min-h-screen bg-[url('/main-bg.jpg')] bg-cover bg-fixed bg-center bg-no-repeat font-sans antialiased`
         )}
       >
         <AppProviders>
