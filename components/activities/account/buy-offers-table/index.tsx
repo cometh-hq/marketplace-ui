@@ -1,7 +1,8 @@
 "use client"
 
 import { useMemo } from "react"
-import { Address, isAddressEqual } from "viem"
+import { useUsernames } from "@/services/user/use-username"
+import { isAddressEqual } from "viem"
 
 import { BuyOffer } from "@/types/buy-offers"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
@@ -15,6 +16,16 @@ export type AccountBuyOffersTableProps = {
 
 export function AccountBuyOffersTable({ offers }: AccountBuyOffersTableProps) {
   const viewer = useCurrentViewerAddress()
+
+  const addresses = useMemo(() => {
+    return Array.from(
+      new Set(
+        offers.flatMap((offer) => [offer.emitter.address, offer.owner.address])
+      )
+    )
+  }, [offers])
+
+  const { usernames } = useUsernames(addresses)
 
   const data = useMemo(() => {
     return offers
@@ -34,7 +45,23 @@ export function AccountBuyOffersTable({ offers }: AccountBuyOffersTableProps) {
         if (dateA < dateB) return 1
         return 0
       })
-  }, [offers, viewer])
+      .map((offer) => {
+        const emitterUsername = usernames[offer.emitter.address]
+        const ownerUsername = usernames[offer.owner.address]
+
+        return {
+          ...offer,
+          emitter: {
+            ...offer.emitter,
+            username: emitterUsername,
+          },
+          owner: {
+            ...offer.owner,
+            username: ownerUsername,
+          },
+        }
+      })
+  }, [offers, viewer, usernames])
 
   return <DataTable columns={columns} data={data} />
 }

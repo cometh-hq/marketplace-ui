@@ -36,13 +36,13 @@ export function SiteHeader() {
           <span
             className={cx(
               "my-[5px] block h-[2px] w-5 rounded-sm",
-              isOpen ? "bg-white" : "bg-black"
+              isOpen ? "bg-white" : "bg-white"
             )}
           ></span>
           <span
             className={cx(
               "my-[5px] block h-[2px] w-5 rounded-sm",
-              isOpen ? "bg-white" : "bg-black"
+              isOpen ? "bg-white" : "bg-white"
             )}
           ></span>
           <div
