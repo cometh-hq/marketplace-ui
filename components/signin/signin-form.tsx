@@ -9,7 +9,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 
@@ -18,9 +17,10 @@ import { Input } from "../ui/input"
 
 interface SignInFormProps {
   onLoginSuccess: (user: User) => void
+  isDisabled: boolean
 }
 
-export function SignInForm({ onLoginSuccess }: SignInFormProps) {
+export function SignInForm({ onLoginSuccess, isDisabled }: SignInFormProps) {
   const {
     mutate: signin,
     isSuccess,
@@ -41,7 +41,7 @@ export function SignInForm({ onLoginSuccess }: SignInFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: "lorraine.steve@cometh.io", password: "darkVador83!" },
   })
 
   const handleSubmit = useCallback(
@@ -84,8 +84,8 @@ export function SignInForm({ onLoginSuccess }: SignInFormProps) {
           className="w-full"
           size="lg"
           type="submit"
-          isLoading={isPending}
-          disabled={isPending}
+          isLoading={isPending || isDisabled}
+          disabled={isPending || isDisabled}
         >
           Connect my account
         </Button>

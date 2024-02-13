@@ -25,12 +25,14 @@ export const useBuyAsset = () => {
 
       const order = await getFirstListing(asset.tokenId)
 
-      const signature = {...order.signature} || {
-        signatureType: 4,
-        v: 0,
-        r: "0x0000000000000000000000000000000000000000000000000000000000000000",
-        s: "0x0000000000000000000000000000000000000000000000000000000000000000",
-      }
+      const signature = order.signature
+        ? order.signature
+        : {
+            signatureType: 4,
+            v: 0,
+            r: "0x0000000000000000000000000000000000000000000000000000000000000000",
+            s: "0x0000000000000000000000000000000000000000000000000000000000000000",
+          }
 
       const formattedZeroXOrder = {
         direction: 0,
@@ -53,9 +55,8 @@ export const useBuyAsset = () => {
         signature: signature,
       }
 
-      const fillTx: ContractTransaction = await nftSwapSdk.fillSignedOrder(
-        formattedZeroXOrder
-      )
+      const fillTx: ContractTransaction =
+        await nftSwapSdk.fillSignedOrder(formattedZeroXOrder)
 
       const fillTxReceipt = await fillTx.wait()
       console.log(
@@ -67,6 +68,6 @@ export const useBuyAsset = () => {
       client.invalidateQueries({
         queryKey: ["cometh", "assets", asset.tokenId],
       })
-    }
+    },
   })
 }

@@ -265,7 +265,7 @@
     url("/cards/dialog-top-right.png") top right no-repeat,
     url("/cards/dialog-bottom-left.png") bottom left no-repeat,
     url("/cards/dialog-bottom-right.png") bottom right no-repeat;
-  /* clip-path: polygon(
+    clip-path: polygon(
     1.8% 0,
     98.5% 0,
     100% 1.8%,
@@ -274,7 +274,7 @@
     1.8% 100%,
     0 98.5%,
     0 1.8%
-  ); */
+  );
   z-index: -1;
   @apply bg-card;
 }

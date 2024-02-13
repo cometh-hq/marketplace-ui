@@ -17,6 +17,7 @@ export function useReceivedBuyOffers(userAddress: string) {
         ) ?? []
       )
     },
+    refetchInterval: 5000
   })
 
   return {

@@ -49,7 +49,7 @@ const Web3OnboardContext = createContext<{
   setIsconnected: Dispatch<SetStateAction<boolean>>
   reconnecting: boolean
   initNewSignerRequest: (walletAddress: string) => Promise<NewSignerRequestBody>
-  retrieveWalletAddressFromSigner: (walletAddress: string) => Promise<void>,
+  retrieveWalletAddressFromSigner: (walletAddress: string) => Promise<void>
 }>({
   onboard: null,
   initOnboard: () => {},
@@ -110,9 +110,7 @@ export function Web3OnboardProvider({
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
     })
 
-    console.log("walletAddress", walletAddress)
     await wallet.connect(walletAddress)
-    console.log("wallet connected", walletAddress)
   }
 
   const initOnboard = useCallback((options: SetOnboardOptions) => {

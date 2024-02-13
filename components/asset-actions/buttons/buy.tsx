@@ -14,6 +14,7 @@ import { AllowanceStep } from "../transaction-steps/allowance"
 import { BuyStep } from "../transaction-steps/buy"
 import { FundsStep } from "../transaction-steps/funds"
 import { UnwrapStep } from "../transaction-steps/unwrapStep"
+import { useState } from "react"
 
 export type BuyAssetButtonProps = {
   asset: SearchAssetWithTradeData | AssetWithTradeData
@@ -28,10 +29,15 @@ export function BuyAssetButton({
 }: BuyAssetButtonProps) {
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useBuyAssetButton({ asset })
+  const [open, setOpen] = useState(false)
 
   if (!requiredSteps?.length || !currentStep) return null
 
   const assetPrice = asset.orderbookStats.lowestListingPrice ?? 0
+
+  const closeDialog = () => {
+    setOpen(false)
+  }
 
   return (
     <TransactionDialogButton
@@ -47,6 +53,8 @@ export function BuyAssetButton({
           )}
         </>
       }
+      open={open}
+      onOpenChange={setOpen}
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
@@ -77,7 +85,7 @@ export function BuyAssetButton({
           />
         </Case>
         <Case value="buy">
-          <BuyStep asset={asset} onValid={reset} />
+          <BuyStep asset={asset} onValid={closeDialog} />
         </Case>
       </Switch>
     </TransactionDialogButton>

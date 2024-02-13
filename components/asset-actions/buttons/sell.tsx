@@ -16,7 +16,10 @@ export type SellAssetButtonProps = {
   isVariantLink?: boolean
 }
 
-export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) {
+export function SellAssetButton({
+  asset,
+  isVariantLink,
+}: SellAssetButtonProps) {
   const [open, setOpen] = useState(false)
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useSellAssetButton({ asset })
@@ -33,8 +36,7 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
 
   if (!requiredSteps?.length || !currentStep) return null
 
-  const handleClose = () => {
-    reset()
+  const closeDialog = () => {
     setOpen(false)
   }
 
@@ -45,7 +47,7 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
       currentStep={currentStep}
       steps={requiredSteps}
       onOpenChange={setOpen}
-      onClose={handleClose}
+      onClose={reset}
       isVariantLink={isVariantLink}
       isLoading={isLoading}
       isDisabled={isLoading}
@@ -58,7 +60,7 @@ export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) 
           <CollectionApprovalStep asset={asset} onValid={nextStep} />
         </Case>
         <Case value="sell">
-          <SellStep asset={asset} onClose={handleClose}/>
+          <SellStep asset={asset} onClose={closeDialog} />
         </Case>
       </Switch>
     </TransactionDialogButton>

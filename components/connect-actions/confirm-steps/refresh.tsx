@@ -1,14 +1,9 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
-import {
-  fetchHasEnoughGas,
-  useHasEnoughGas,
-} from "@/services/balance/has-enough-gas"
+import { useStorageWallet } from "@/services/web3/use-storage-wallet"
+import { useWalletConnect } from "@/services/web3/use-wallet-connect"
 
-import globalConfig from "@/config/globalConfig"
-import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
-import { Price } from "@/components/ui/price"
 import { toast } from "@/components/ui/toast/use-toast"
 
 export type RefreshStepProps = {
@@ -20,20 +15,30 @@ export const RefreshStep: React.FC<RefreshStepProps> = ({
   userAddress,
   onValid,
 }) => {
-  const { initNewSignerRequest, retrieveWalletAddressFromSigner } =
+  const { initOnboard, retrieveWalletAddressFromSigner, setIsconnected } =
     useWeb3OnboardContext()
   const [isLoading, setIsLoading] = useState(false)
+  const { connect: connectWallet, connecting } = useWalletConnect()
+  const { comethWalletAddressInStorage } = useStorageWallet()
 
   const handleRefresh = async () => {
     setIsLoading(true)
     try {
       await retrieveWalletAddressFromSigner(userAddress)
+
       toast({
         title: "Device succesfully Authorized!",
         description:
           "Your Cosmik Battle account has been successfully linked to the marketplace.",
         variant: "default",
       })
+
+      initOnboard({
+        isComethWallet: true,
+        walletAddress: comethWalletAddressInStorage!,
+      })
+      await connectWallet({ isComethWallet: true })
+      setIsconnected(true)
     } catch (error) {
       console.error("Error in handleRefresh", error)
     } finally {

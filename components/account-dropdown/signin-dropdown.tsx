@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
-import { User, useCosmikSignin } from "@/services/cosmik/signin"
+import { useCosmikSignin, User } from "@/services/cosmik/signin"
 import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import { cx } from "class-variance-authority"
 import { WalletIcon } from "lucide-react"
@@ -19,7 +19,6 @@ import { SignInForm } from "@/components/signin/signin-form"
 
 export type SigninDropdownProps = {
   disabled: boolean
-  handleConnect: (isComethWallet: boolean) => Promise<void>
   fullVariant?: boolean
   customText?: string
   isLinkVariant?: boolean
@@ -27,17 +26,16 @@ export type SigninDropdownProps = {
 
 export function SigninDropdown({
   disabled,
-  handleConnect,
   fullVariant,
   customText,
   isLinkVariant,
 }: SigninDropdownProps) {
-  const { retrieveWalletAddressFromSigner } = useWeb3OnboardContext()
+  const {
+    retrieveWalletAddressFromSigner,
+  } = useWeb3OnboardContext()
   const [user, setUser] = useState<User | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  // const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const { isSuccess, data } = useCosmikSignin()
-  const { comethWalletAddressInStorage } = useStorageWallet()
+  const { isSuccess, isPending, data } = useCosmikSignin()
 
   const handleLoginSuccess = useCallback(
     (user: User) => {
@@ -47,9 +45,6 @@ export function SigninDropdown({
         .catch(() => {
           // If an error occurs, likely due to a first-time connection, display the authorization modal
           setIsModalOpen(true)
-        })
-        .finally(() => {
-          handleConnect(true)
         })
     },
     [retrieveWalletAddressFromSigner]
@@ -61,23 +56,6 @@ export function SigninDropdown({
     }
   }, [isSuccess, handleLoginSuccess])
 
-  if (comethWalletAddressInStorage) {
-    return (
-      <Button
-        className={cx({
-          "h-12 w-full": fullVariant,
-        })}
-        variant={isLinkVariant ? "link" : "default"}
-        disabled={disabled}
-        isLoading={disabled}
-        onClick={() => handleConnect(true)}
-      >
-        {!isLinkVariant && <WalletIcon size="16" className="mr-2" />}
-        {customText ? customText : "Login"}
-      </Button>
-    )
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -86,8 +64,8 @@ export function SigninDropdown({
             "h-12 w-full": fullVariant,
           })}
           variant={isLinkVariant ? "link" : "default"}
-          disabled={disabled}
-          isLoading={disabled}
+          disabled={disabled || isPending}
+          isLoading={disabled || isPending}
         >
           {!isLinkVariant && <WalletIcon size="16" className="mr-2" />}
           {customText ? customText : "Login"}
@@ -109,7 +87,10 @@ export function SigninDropdown({
                 Download Cosmik Battle
               </a>
             </p>
-            <SignInForm onLoginSuccess={handleLoginSuccess} />
+            <SignInForm
+              onLoginSuccess={handleLoginSuccess}
+              isDisabled={disabled}
+            />
           </CardContent>
           {isModalOpen && user && (
             <AuthorizationProcess

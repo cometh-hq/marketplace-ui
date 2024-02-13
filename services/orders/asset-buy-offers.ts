@@ -33,7 +33,7 @@ const skeletonTrade = (trade: OrderWithAsset, asset?: AssetWithTradeData) => {
 
   return {
     trade,
-    owner: { address: tradeAsset.owner } as UnknownUser,
+    owner: { address: tradeAsset?.owner } as UnknownUser,
     emitter: { address: maker } as UnknownUser,
     amount: erc20TokenAmount,
     date: DateTime.fromISO(signedAt),

@@ -13,11 +13,11 @@ export type RequestAuthorizationStepProps = {
 export const RequestAuthorizationStep: React.FC<
   RequestAuthorizationStepProps
 > = ({ userAddress, onValid }) => {
-  const { initNewSignerRequest } = useWeb3OnboardContext() // No need initNewSignerRequest in Web3OnboardContext
+  const { initNewSignerRequest } = useWeb3OnboardContext()
 
   const handleNewSignerRequest = async () => {
     try {
-      const addSignerRequest = await initNewSignerRequest(userAddress) // Utilisation de userAddress
+      const addSignerRequest = await initNewSignerRequest(userAddress)
       const response = await cosmikClient.post(
         "new-signer-request",
         addSignerRequest

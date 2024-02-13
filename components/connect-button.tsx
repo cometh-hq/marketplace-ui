@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
-import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import { useWalletConnect } from "@/services/web3/use-wallet-connect"
+import { WalletIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
@@ -12,29 +12,21 @@ export function ConnectButton({
   children,
   fullVariant = false,
   customText = undefined,
-  isLinkVariant  = undefined
+  isLinkVariant = undefined,
 }: {
   children?: React.ReactNode
-  fullVariant?: boolean,
+  fullVariant?: boolean
   customText?: string
   isLinkVariant?: boolean
 }) {
-  const { initOnboard, isConnected, setIsconnected, reconnecting } =
-    useWeb3OnboardContext()
+  const { isConnected, setIsconnected, reconnecting } = useWeb3OnboardContext()
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
-  const { comethWalletAddressInStorage } = useStorageWallet()
+  const userInStorage = localStorage.getItem("user")
 
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
     try {
-      initOnboard({
-        isComethWallet,
-        ...(comethWalletAddressInStorage && {
-          walletAddress: comethWalletAddressInStorage,
-        }),
-      })
-
       await connectWallet({ isComethWallet })
       setIsconnected(true)
     } catch (error) {
@@ -58,10 +50,22 @@ export function ConnectButton({
     )
   }
 
+  if (userInStorage && (!isConnected || isLoading || connecting)) {
+    return (
+      <Button
+        size={fullVariant ? "lg" : "default"}
+        isLoading={isLoading || connecting || reconnecting}
+        disabled={isLoading || connecting || reconnecting}
+        onClick={() => handleConnect(true)}
+      >
+        <WalletIcon size="16" className="mr-2" /> Login
+      </Button>
+    )
+  }
+
   if (!isConnected || isLoading || connecting) {
     return (
       <SigninDropdown
-        handleConnect={handleConnect}
         disabled={isLoading || connecting || reconnecting}
         fullVariant={fullVariant}
         customText={customText}
