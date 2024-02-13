@@ -1,18 +1,17 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { cx } from "class-variance-authority"
 import { X } from "lucide-react"
 
-import { siteConfig } from "@/config/site"
 import { env } from "@/config/env"
-import { cx } from "class-variance-authority"
+import { siteConfig } from "@/config/site"
 
 import { ConnectButton } from "./connect-button"
 import { MainNav } from "./main-nav"
-
-import Image from "next/image"
-import { usePathname } from 'next/navigation'
 
 export function SiteHeader() {
   const pathname = usePathname()
@@ -47,7 +46,7 @@ export function SiteHeader() {
           ></span>
           <div
             className={cx(
-              "bottom-0 left-0 right-0 top-0 z-50 h-full w-full overflow-hidden bg-primary p-5 text-primary-foreground",
+              "bottom-0 left-0 right-0 top-0 z-50 h-full w-full overflow-hidden bg-card p-5 text-white",
               isOpen ? "fixed" : "hidden"
             )}
           >
@@ -76,7 +75,7 @@ export function SiteHeader() {
         <Link
           href="/marketplace"
           className={cx(
-            "flex items-center space-x-2 text-2xl hover:transform hover:scale-105 transition-transform duration-300 ease-in-out",
+            "mx-auto flex items-center space-x-2 text-2xl hover:transform hover:scale-105 transition-transform duration-300 ease-in-out",
             isOpen && "text-primary-foreground"
           )}
         >

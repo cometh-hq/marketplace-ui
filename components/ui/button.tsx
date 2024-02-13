@@ -21,7 +21,7 @@ const buttonVariants = cva(
         ghost:
           "hover:btn-default hover:bg-primary/[.5] hover:before:bg-transparent hover:text-current",
         muted: "bg-muted/80 text-muted-foreground hover:bg-muted",
-        link: "underline-offset-4 hover:underline text-primary",
+        link: "underline-offset-4 hover:underline text-white",
         linkDestructive: "underline-offset-4 hover:underline text-destructive",
       },
       size: {

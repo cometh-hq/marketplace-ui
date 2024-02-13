@@ -8,8 +8,10 @@ export const FiltersResetBtn = () => {
 
   return filtersCounter ? (
     <Button variant="secondary" onClick={reset} disabled={filtersCounter === 0}>
-      <XIcon size="16"  className="mr-2"/>
-      Reset filters 
+      <XIcon size="16" className="md:mr-2" />
+      <span className="max-md:hidden">Reset filters</span>
     </Button>
-  ) : ''
+  ) : (
+    ""
+  )
 }

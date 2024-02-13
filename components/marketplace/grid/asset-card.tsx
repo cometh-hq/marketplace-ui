@@ -122,7 +122,7 @@ export function AssetCardBase({
             />
           </AssetImageContainer>
         </Link>
-        <div className="w-full p-5 pt-0">{children}</div>
+        <div className="w-full p-5">{children}</div>
       </Card>
     </Appear>
   )

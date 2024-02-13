@@ -22,9 +22,10 @@ export default function ProfilePage({
   const { username, isFetchingUsername } = useUsername(params.address)
   console.log("username", username)
 
-  const user = isFetchingUsername
-    ? "..."
-    : `@${username}` ?? `${shortenAddress(params.address)}`
+  const user =
+    username && !isFetchingUsername
+      ? `@${username}`
+      : shortenAddress(params.address)
 
   if (!filtersRaw) {
     return null

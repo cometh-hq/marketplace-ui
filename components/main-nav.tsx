@@ -35,9 +35,9 @@ export function MainNav({ items, onLinkClick }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    `text-base font-bold opacity-50 md:text-lg ${
+                    `text-base font-bold md:text-lg ${
                       isActiveLink(item.href) &&
-                      "opacity-100 max-md:text-primary-foreground"
+                      "opacity-100 max-md:text-accent-foreground"
                     }`
                   )}
                   onClick={onLinkClick}

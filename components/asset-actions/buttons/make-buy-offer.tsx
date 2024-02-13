@@ -87,7 +87,7 @@ export function MakeBuyOfferPriceDialog({
           <AssetHeaderImage asset={asset} />
         </div>
 
-        <div className="mt-4 flex gap-4">
+        <div className="mt-4 flex flex-col gap-4 md:flex-row">
           <div className="flex flex-col gap-3 md:w-2/3">
             <Label htmlFor="make-buy-offer-price">
               Offer price in {globalConfig.ordersDisplayCurrency.symbol} *
@@ -99,10 +99,10 @@ export function MakeBuyOfferPriceDialog({
               min={0}
             />
           </div>
-          <div className="flex flex-col gap-3 md:w-1/3">
+          <div className="flex w-full flex-col gap-3 md:w-1/3">
             <Label htmlFor="make-buy-offer-price">Validity time</Label>
             <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="md:w-[180px]">
                 <SelectValue placeholder="" />
               </SelectTrigger>
               <SelectContent>
