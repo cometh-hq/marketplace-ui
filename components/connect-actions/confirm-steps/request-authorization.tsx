@@ -23,7 +23,6 @@ export const RequestAuthorizationStep: React.FC<
         addSignerRequest
       )
       if (response.data.success) {
-        console.log("response", response)
         onValid()
       }
     } catch (error) {

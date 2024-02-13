@@ -26,19 +26,19 @@ export const RefreshStep: React.FC<RefreshStepProps> = ({
     try {
       await retrieveWalletAddressFromSigner(userAddress)
 
-      toast({
-        title: "Device succesfully Authorized!",
-        description:
-          "Your Cosmik Battle account has been successfully linked to the marketplace.",
-        variant: "default",
-      })
-
       initOnboard({
         isComethWallet: true,
         walletAddress: comethWalletAddressInStorage!,
       })
       await connectWallet({ isComethWallet: true })
       setIsconnected(true)
+
+      toast({
+        title: "Device succesfully Authorized!",
+        description:
+          "Your Cosmik Battle account has been successfully linked to the marketplace.",
+        variant: "default",
+      })
     } catch (error) {
       console.error("Error in handleRefresh", error)
     } finally {

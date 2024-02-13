@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { useWalletConnect } from "@/services/web3/use-wallet-connect"
 import { WalletIcon } from "lucide-react"
@@ -22,7 +22,12 @@ export function ConnectButton({
   const { isConnected, setIsconnected, reconnecting } = useWeb3OnboardContext()
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
-  const userInStorage = localStorage.getItem("user")
+  const [userInStorage, setUserInStorage] = useState<string | null>(null)
+
+  useEffect(() => {
+    const user = localStorage.getItem("user")
+    setUserInStorage(user)    
+  }, [])
 
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
@@ -53,6 +58,7 @@ export function ConnectButton({
   if (userInStorage && (!isConnected || isLoading || connecting)) {
     return (
       <Button
+        variant="default"
         size={fullVariant ? "lg" : "default"}
         isLoading={isLoading || connecting || reconnecting}
         disabled={isLoading || connecting || reconnecting}
