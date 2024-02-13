@@ -20,7 +20,7 @@ const manifest: Manifest = {
   chainId: env.NEXT_PUBLIC_NETWORK_ID || 137,
 
   // Set to true if you want to use the native token for orders
-  useNativeTokenForOrders: false,
+  useNativeTokenForOrders: true,
   // The ERC20 token used if useNativeTokenForOrders is false
   erc20: {
     name: "My Token",
