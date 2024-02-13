@@ -12,23 +12,23 @@
    * ==> https://www.figma.com/file/Zu4BtlBGkkDfCULfrPmYsk/Alembic-Marketplace-CSS?type=design&t=G8sE3G9G6kDVz4UK-6
    */
 
-  --background: 0 0% 100%;
-  --foreground: 222.2 47.4% 11.2%;
+  --background: 180, 9%, 10%;
+  --foreground: 0, 0%, 100%;
 
   /* Background for NFTs and actions */
-  --muted: 0 0% 96%;
-  --muted-foreground: 240 1% 46.9%;
+  --muted: 180, 20%, 7%;
+  --muted-foreground: 0, 0%, 100%;
 
   /* Background colors for dropdown */
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 47.4% 11.2%;
+  --popover: 180, 20%, 7%;
+  --popover-foreground: 0, 0%, 100%;
 
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
+  --border: 48, 86%, 78%;
+  --input: 48, 86%, 78%;
 
   /* Background for Attributes and Last activities */
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 47.4% 11.2%;
+  --card: 180, 9%, 10%%;
+  --card-foreground: 0, 0%, 100%;
 
 
   /* 
@@ -36,23 +36,23 @@
    * "foreground" is used for text and icons in these states.
    */
 
-  --primary: 0 0% 14%;
-  --primary-foreground: 210 40% 98%;
+  --primary: 48, 86%, 78%;
+  --primary-foreground: 180, 20%, 7%;
 
-  --secondary: 0 0% 96%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 180, 20%, 7%;
+  --secondary-foreground:  0, 0%, 100%;
 
-  --accent: 0 0% 96%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --accent: 180, 20%, 7%;
+  --accent-foreground:  0, 0%, 100%;
 
   --pending: 30 100% 50%;
-  --pending-foreground: 0 0% 100%;
+  --pending-foreground: 180, 9%, 10%%;
 
   --success: 120 40% 50%;
-  --success-foreground: 0 0% 100%;
+  --success-foreground: 180, 9%, 10%%;
 
   --destructive: 0 60% 50%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive-foreground: 48, 86%, 78%;
 
   --info: 194 78% 97%;
   --info-foreground: 195 35% 60%;

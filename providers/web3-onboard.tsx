@@ -74,29 +74,29 @@ export function Web3OnboardProvider({
     const wallets = [injectedModule()]
     if (options.isComethWallet) {
       // TODO: Remove hack once connect is fixed and removed the spread
-      const uiConfig = {
-        uiConfig: {
-          displayValidationModal: false,
-        },
-      } as any
+      // const uiConfig = {
+      //   uiConfig: {
+      //     displayValidationModal: false,
+      //   },
+      // } as any
 
-      const connectAdaptor = new ConnectAdaptor({
-        chainId: numberToHex(env.NEXT_PUBLIC_NETWORK_ID) as SupportedNetworks,
-        apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
-      })
-      let addressToUse = options.walletAddress
+      // const connectAdaptor = new ConnectAdaptor({
+      //   chainId: numberToHex(env.NEXT_PUBLIC_NETWORK_ID) as SupportedNetworks,
+      //   apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+      // })
+      // let addressToUse = options.walletAddress
 
 
-      const connectConnector = ConnectOnboardConnector({
-        apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
-        authAdapter: connectAdaptor,
-        ...(addressToUse && {
-          walletAddress: addressToUse,
-        }),
-        uiConfig: uiConfig,
-      })
+      // const connectConnector = ConnectOnboardConnector({
+      //   apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
+      //   authAdapter: connectAdaptor,
+      //   ...(addressToUse && {
+      //     walletAddress: addressToUse,
+      //   }),
+      //   uiConfig: uiConfig,
+      // })
 
-      wallets.push(connectConnector)
+      // wallets.push(connectConnector)
     }
 
     const web3OnboardInstance = Onboard({

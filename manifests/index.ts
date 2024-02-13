@@ -4,7 +4,7 @@ import { Manifest } from "@/types/manifest"
 import { env } from "@/config/env"
 
 const manifest: Manifest = {
-  collectionName: "My NFT collection",
+  collectionName: "The Warlords of Champions Tactics",
   contractAddress: env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
   themeClass: "theme-base",
 
