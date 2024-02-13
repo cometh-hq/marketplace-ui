@@ -47,8 +47,8 @@ export const StepperStep = ({ index, active, name }: StepperStepProps) => {
     <div className="relative flex flex-col items-center">
       <div
         className={cn(
-          "flex h-[24px] w-[24px] items-center justify-center rounded-lg",
-          active ? "bg-primary" : "bg-primary/20"
+          "flex h-[24px] w-[24px] items-center justify-center rounded-lg bg-primary",
+          active ? "" : "opacity-40"
         )}
       >
         <span className={"text-sm font-bold text-primary-foreground"}>
@@ -57,8 +57,8 @@ export const StepperStep = ({ index, active, name }: StepperStepProps) => {
       </div>
       <p
         className={cn(
-          "absolute translate-y-[32px] whitespace-nowrap text-sm font-bold ",
-          active ? "text-primary/70" : "text-primary/20"
+          "absolute translate-y-[32px] whitespace-nowrap text-sm font-bold text-primary",
+          active ? "" : "opacity-40"
         )}
       >
         {name}
@@ -71,8 +71,8 @@ const StepperSeparator = ({ active }: { active: boolean }) => {
   return (
     <div
       className={cn(
-        "h-0.5 flex-1 translate-y-[12px]",
-        active ? "bg-primary" : "bg-primary/20"
+        "h-0.5 flex-1 translate-y-[12px] bg-primary",
+        active ? "" : "opacity-40 "
       )}
     />
   )
