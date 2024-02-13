@@ -30,7 +30,7 @@ export function SignInDialog({ onLoginSuccess }: SignInFormProps) {
         <DialogDescription>
           Enter your Comsmik Battle credentials to view or add external wallets
         </DialogDescription>
-        <SignInForm onLoginSuccess={onLoginSuccess} />
+        <SignInForm onLoginSuccess={onLoginSuccess}  />
       </DialogContent>
     </Dialog>
   )

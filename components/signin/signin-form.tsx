@@ -17,7 +17,7 @@ import { Input } from "../ui/input"
 
 interface SignInFormProps {
   onLoginSuccess: (user: User) => void
-  isDisabled: boolean
+  isDisabled?: boolean
 }
 
 export function SignInForm({ onLoginSuccess, isDisabled }: SignInFormProps) {
@@ -41,7 +41,7 @@ export function SignInForm({ onLoginSuccess, isDisabled }: SignInFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { email: "lorraine.steve@cometh.io", password: "darkVador83!" },
+    defaultValues: { email: "", password: "" },
   })
 
   const handleSubmit = useCallback(
