@@ -63,7 +63,7 @@ export function SigninDropdown({
           className={cx({
             "h-12 w-full": fullVariant,
           })}
-          variant={isLinkVariant ? "link" : "default"}
+          // variant={isLinkVariant ? "link" : "default"}
           disabled={disabled || isPending}
           isLoading={disabled || isPending}
         >

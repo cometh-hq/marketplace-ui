@@ -24,7 +24,7 @@ export function WrapButton({ isUnwrap, onToggleMode }: WrapButtonProps) {
       onToggleMode={onToggleMode}
       asChild
     >
-      <Button variant="secondary" onClick={() => setIsOpen(true)}>
+      <Button onClick={() => setIsOpen(true)}>
         Swap {globalConfig.network.wrappedNativeToken.name}
       </Button>
     </WrapDialog>

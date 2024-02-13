@@ -55,7 +55,7 @@ export function ConnectButton({
     )
   }
 
-  if (userInStorage && (!isConnected || isLoading || connecting)) {
+  if (!userInStorage && (!isConnected || isLoading || connecting)) {
     return (
       <Button
         variant="default"
