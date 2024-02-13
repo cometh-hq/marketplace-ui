@@ -18,15 +18,6 @@ export function AccountBuyOffersTable({ offers }: AccountBuyOffersTableProps) {
   
   const data = useMemo(() => {
     return offers
-      .filter((offer) => {
-        if (!viewer) return true
-        if (
-          isAddressEqual(offer.emitter.address, viewer) &&
-          isAddressEqual(offer.owner.address, viewer)
-        )
-          return false
-        return true
-      })
       .sort((a, b) => {
         const dateA = new Date(a.date.valueOf())
         const dateB = new Date(b.date.valueOf())
@@ -34,7 +25,7 @@ export function AccountBuyOffersTable({ offers }: AccountBuyOffersTableProps) {
         if (dateA < dateB) return 1
         return 0
       })
-  }, [offers, viewer])
+  }, [offers])
 
   return <DataTable columns={columns} data={data} />
 }

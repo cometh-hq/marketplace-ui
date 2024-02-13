@@ -22,15 +22,6 @@ export function BuyOffersTable({ offers }: BuyOffersTableProps) {
     return offers
       .filter((offer) => {
         if (offer.trade.tokenId !== offer.asset?.tokenId) return false
-        if (
-          viewer &&
-          isAddressEqual(offer.emitter.address, viewer) &&
-          isAddressEqual(
-            (offer.asset?.owner as Address) ?? offer.owner.address,
-            viewer
-          )
-        )
-          return false
         return true
       })
       .sort((a, b) => {
@@ -42,7 +33,7 @@ export function BuyOffersTable({ offers }: BuyOffersTableProps) {
         if (bigA.lt(bigB)) return 1
         return 0
       })
-  }, [offers, viewer])
+  }, [offers])
 
   return <DataTable columns={columns} data={data} />
 }
