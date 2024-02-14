@@ -1,9 +1,9 @@
 "use client"
 
 import {
+  createContext,
   Dispatch,
   SetStateAction,
-  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -17,6 +17,7 @@ import {
 } from "@cometh/connect-sdk"
 
 import "@web3-onboard/common"
+
 import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import Onboard, { OnboardAPI } from "@web3-onboard/core"
 import injectedModule from "@web3-onboard/injected-wallets"
@@ -86,7 +87,6 @@ export function Web3OnboardProvider({
       })
       let addressToUse = options.walletAddress
 
-
       const connectConnector = ConnectOnboardConnector({
         apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
         authAdapter: connectAdaptor,
@@ -129,38 +129,56 @@ export function Web3OnboardProvider({
     initOnboard({ isComethWallet: false })
   }, [])
 
+  // useEffect(() => {
+  //   if (onboard) {
+  //     const walletsSub = onboard.state.select("wallets")
+  //     const { unsubscribe } = walletsSub.subscribe((wallets) => {
+  //       const connectedWallets = wallets.map(({ label }) => label)
+  //       // window.localStorage.setItem(
+  //       //   "connectedWallets",
+  //       //   JSON.stringify(connectedWallets)
+  //       // )
+  //     })
+
+  //     // return () => unsubscribe();
+  //   }
+  // }, [onboard])
+
   useEffect(() => {
-    const currentWalletInStorage = localStorage.getItem("selectedWallet")
-    const isComethWallet =
-      currentWalletInStorage === COMETH_CONNECT_STORAGE_LABEL
-    if (isComethWallet) {
+    const previouslyConnectedWallet = localStorage.getItem("selectedWallet")
+
+    if (
+      previouslyConnectedWallet === COMETH_CONNECT_STORAGE_LABEL &&
+      comethWalletAddressInStorage
+    ) {
       initOnboard({
-        isComethWallet,
-        walletAddress: comethWalletAddressInStorage!,
+        isComethWallet: true,
+        walletAddress: comethWalletAddressInStorage,
       })
     }
 
-    const startReconnecting = async () => {
-      if (currentWalletInStorage) {
+    const reconnecting = async () => {
+      if (previouslyConnectedWallet) {
         setReconnecting(true)
         try {
           const connectionResult = await onboard?.connectWallet({
             autoSelect: {
-              label: currentWalletInStorage,
+              label: previouslyConnectedWallet,
               disableModals: true,
             },
           })
           if (connectionResult?.length) {
             setIsconnected(true)
-            setReconnecting(false)
           }
         } catch (error) {
           console.error("Error reconnecting wallet", error)
+        } finally {
           setReconnecting(false)
         }
       }
     }
-    startReconnecting()
+
+    reconnecting()
   }, [initOnboard, onboard, comethWalletAddressInStorage])
 
   return (
