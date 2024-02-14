@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { comethMarketplaceClient } from "@/services/clients"
 import { useAddExternalWallet } from "@/services/cosmik/external-addresses"
@@ -42,6 +42,10 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
     []
   )
 
+  const walletAddressesRef = useRef<string[]>([]);
+
+  console.log("user", user)
+
   useEffect(() => {
     const initialWallets = [
       { address: user.address, items: 0 },
@@ -50,34 +54,30 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
     setWallets(initialWallets)
   }, [user])
 
-  useEffect(() => {
-    async function updateItemsCounts() {
-      const promises = wallets.map(async (wallet) => {
-        try {
-          const filters: AssetSearchFilters = {
-            contractAddress: globalConfig.contractAddress,
-            owner: wallet.address,
-            limit: 1,
-          }
-          const response =
-            await comethMarketplaceClient.asset.searchAssets(filters)
-          return { address: wallet.address, items: response.total }
-        } catch (error) {
-          console.error(
-            "Error fetching assets count for address:",
-            wallet.address,
-            error
-          )
-          return { address: wallet.address, items: 0 }
+  const updateItemsCounts = useCallback(async () => {
+    const promises = walletAddressesRef.current.map(async (address) => {
+      try {
+        const filters: AssetSearchFilters = {
+          contractAddress: globalConfig.contractAddress,
+          owner: address,
+          limit: 1,
         }
-      })
+        const response = await comethMarketplaceClient.asset.searchAssets(filters)
+        return { address, items: response.total }
+      } catch (error) {
+        console.error("Error fetching assets count", error)
+        return { address, items: 0 }
+      }
+    })
 
-      const results = await Promise.all(promises)
-      setWallets(results)
-    }
+    const results = await Promise.all(promises)
+    setWallets(results)
+  }, [])
 
-    updateItemsCounts()
-  }, [wallets])
+  useEffect(() => {
+    walletAddressesRef.current = [user.address, ...user.externalAddresses];
+    updateItemsCounts();
+  }, [user.address, user.externalAddresses, updateItemsCounts])
 
   function getRefsValues() {
     return {
@@ -193,7 +193,7 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
           <DialogTitle className="normal-case">@{user?.userName}</DialogTitle>
         </DialogHeader>
         <ul className="space-y-3">
-          <WalletList wallets={wallets} />
+         <WalletList wallets={wallets} mainAddress={user.address} />
         </ul>
         <div className="text-muted-foreground">
           Add an external wallet to link existing assets to your cosmik Battle
