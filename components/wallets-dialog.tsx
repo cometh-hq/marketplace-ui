@@ -155,7 +155,7 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
       const nonce = await getUserNonce()
       const message = await createMessage({
         nonce,
-        statement: "Connect to Ultimate Numbers",
+        statement: "Connect to Cosmik Battle to link your wallet.",
       })
 
       if (!message) {
