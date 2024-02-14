@@ -33,16 +33,16 @@ export const RefreshStep: React.FC<RefreshStepProps> = ({
         variant: "default",
       })
 
-      try {
-        initOnboard({
-          isComethWallet: true,
-          walletAddress: comethWalletAddressInStorage!,
-        })
-        await connectWallet({ isComethWallet: true })
-        setIsconnected(true)
-      } catch (error) {
-        console.error("Error connecting wallet", error)
-      }
+      // try {
+      //   initOnboard({
+      //     isComethWallet: true,
+      //     walletAddress: comethWalletAddressInStorage!,
+      //   })
+      //   await connectWallet({ isComethWallet: true })
+      //   setIsconnected(true)
+      // } catch (error) {
+      //   console.error("Error connecting wallet", error)
+      // }
     } catch (error) {
       console.error("Error in handleRefresh", error)
     } finally {
