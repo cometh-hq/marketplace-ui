@@ -120,6 +120,9 @@ export function Web3OnboardProvider({
           enabled: false,
         },
       },
+      connect: {
+        autoConnectLastWallet: true,
+      }
     })
 
     setOnboard(web3OnboardInstance)
@@ -128,21 +131,6 @@ export function Web3OnboardProvider({
   useEffect(() => {
     initOnboard({ isComethWallet: false })
   }, [])
-
-  // useEffect(() => {
-  //   if (onboard) {
-  //     const walletsSub = onboard.state.select("wallets")
-  //     const { unsubscribe } = walletsSub.subscribe((wallets) => {
-  //       const connectedWallets = wallets.map(({ label }) => label)
-  //       // window.localStorage.setItem(
-  //       //   "connectedWallets",
-  //       //   JSON.stringify(connectedWallets)
-  //       // )
-  //     })
-
-  //     // return () => unsubscribe();
-  //   }
-  // }, [onboard])
 
   useEffect(() => {
     const previouslyConnectedWallet = localStorage.getItem("selectedWallet")
