@@ -331,8 +331,8 @@ const NETWORKS: Record<number, NetworkConfig> = {
     },
     nativeToken: { name: "Ether", symbol: "ETH", decimals: 18 },
     wrappedNativeToken: {
-      name: "Wrapped Muster",
-      symbol: "WMUST",
+      name: "Wrapped ETH",
+      symbol: "WETH",
       decimals: 18,
       address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
     },

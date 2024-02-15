@@ -15,6 +15,7 @@ const priceTriggerVariants = cva("", {
       default: "",
       destructive: "text-destructive",
       success: "text-success",
+      accent: "text-accent-foreground",
     },
     size: {
       default: "text-base",

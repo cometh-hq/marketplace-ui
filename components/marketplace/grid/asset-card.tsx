@@ -194,7 +194,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
               <div className="mb-1 text-sm font-medium">Price</div>
             )}
             {asset.orderbookStats.lowestListingPrice ? (
-              <Price amount={asset.orderbookStats.lowestListingPrice} />
+              <Price variant="accent" amount={asset.orderbookStats.lowestListingPrice} />
             ) : owner ? (
               <SellAssetButton
                 asset={asset as unknown as AssetWithTradeData}
