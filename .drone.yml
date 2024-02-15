@@ -38,7 +38,7 @@ steps:
       NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_CONTRACT_ADDRESS:
         from_secret: dev_contract_address
-      NEXT_PUBLIC_NETWORK_ID: dev_network_id
+      NEXT_PUBLIC_NETWORK_ID: 2121337
       NEXT_PUBLIC_RPC_URL:
         from_secret: polygon_rpc_url
       
