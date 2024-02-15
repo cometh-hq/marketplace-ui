@@ -25,7 +25,7 @@ export function SiteHeader() {
 
   return (
     <div className="container mx-auto py-5 sm:py-10">
-      <header className="flex items-center gap-x-10 md:justify-between">
+      <header className="relative flex items-center gap-x-10 md:justify-between">
         <div
           onClick={() => !isOpen && setIsOpen(true)}
           className={cx("w-[20px] cursor-pointer md:hidden", {
@@ -75,7 +75,7 @@ export function SiteHeader() {
         <Link
           href="/marketplace"
           className={cx(
-            "mx-auto flex items-center space-x-2 text-2xl hover:transform hover:scale-105 transition-transform duration-300 ease-in-out",
+            "mx-auto md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 flex items-center space-x-2 text-2xl hover:transform hover:scale-105 transition-transform duration-300 ease-in-out",
             isOpen && "text-primary-foreground"
           )}
         >

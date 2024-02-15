@@ -70,9 +70,8 @@ export function MakeBuyOfferPriceDialog({
     <Dialog modal>
       <DialogTrigger asChild>
         <Button
-          // size={isVariantLink ? "default" : "lg"}
-          variant={isVariantLink ? "link" : (variant as any) || "default"}
-          className={cn(isVariantLink ? "h-auto p-0" : "")}
+          size={isVariantLink ? "default" : "lg"}
+          variant="default"
           disabled={!isChainSupported}
         >
           Make an offer
@@ -167,7 +166,7 @@ export function MakeBuyOfferButton({
   if (isLoading) {
     return (
       <ButtonLoading
-        // size={isVariantLink ? "default" : "lg"}
+        size={isVariantLink ? "default" : "lg"}
         variant={isVariantLink ? "link" : "default"}
         className={cn(isVariantLink && "h-auto p-0")}
       />

@@ -27,9 +27,9 @@ export function SellAssetButton({
   if (isLoading) {
     return (
       <ButtonLoading
-        // size={isVariantLink ? "default" : "lg"}
-        variant={isVariantLink ? "link" : "default"}
-        className={cn(isVariantLink && "h-auto p-0")}
+        size={isVariantLink ? "default" : "lg"}
+        variant="default"
+        // className={cn(isVariantLink && "h-auto p-0")}
       />
     )
   }

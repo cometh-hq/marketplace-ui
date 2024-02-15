@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 
 import { CurrentAccountDropdown } from "./account-dropdown/current-account-dropdown"
 import { SigninDropdown } from "./account-dropdown/signin-dropdown"
+import { useRetrieveWalletAddress, useStorageWallet } from "@/services/web3/use-storage-wallet"
 
 export function ConnectButton({
   children,
@@ -19,19 +20,21 @@ export function ConnectButton({
   customText?: string
   isLinkVariant?: boolean
 }) {
-  const { isConnected, setIsconnected, reconnecting } = useWeb3OnboardContext()
+  const { initOnboard, isConnected, setIsconnected, reconnecting } = useWeb3OnboardContext()
   const { connect: connectWallet, connecting } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
-  const [userInStorage, setUserInStorage] = useState<string | null>(null)
-
-  useEffect(() => {
-    const user = localStorage.getItem("user")
-    setUserInStorage(user)    
-  }, [])
+  const { comethWalletAddressInStorage } = useStorageWallet()
+  const { hasRetrieveWalletAddressInStorage } = useRetrieveWalletAddress()
 
   async function handleConnect(isComethWallet = false) {
     setIsLoading(true)
     try {
+      initOnboard({
+        isComethWallet,
+        ...(comethWalletAddressInStorage && {
+          walletAddress: comethWalletAddressInStorage,
+        }),
+      })
       await connectWallet({ isComethWallet })
       setIsconnected(true)
     } catch (error) {
@@ -55,7 +58,9 @@ export function ConnectButton({
     )
   }
 
-  if (userInStorage && (!isConnected || isLoading || connecting)) {
+  if (
+    hasRetrieveWalletAddressInStorage && !isConnected
+  ) {
     return (
       <Button
         variant="default"
@@ -64,12 +69,13 @@ export function ConnectButton({
         disabled={isLoading || connecting || reconnecting}
         onClick={() => handleConnect(true)}
       >
-        <WalletIcon size="16" className="mr-2" /> Login
+        <WalletIcon size="16" className="mr-2" />
+        Login
       </Button>
     )
   }
 
-  if (!isConnected || isLoading || connecting) {
+  if (!hasRetrieveWalletAddressInStorage || !isConnected || isLoading || connecting) {
     return (
       <SigninDropdown
         disabled={isLoading || connecting || reconnecting}

@@ -36,7 +36,7 @@ export function SignInForm({ onLoginSuccess, isDisabled }: SignInFormProps) {
   
   const formSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(8),
+    password: z.string(),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({

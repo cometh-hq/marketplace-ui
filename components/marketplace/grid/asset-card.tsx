@@ -140,19 +140,19 @@ function renderAssetActions(
     return (
       <ConnectButton isLinkVariant customText="Login to buy">
         <SwitchNetwork>
-          <BuyAssetButton isSmall asset={asset} />
+          <BuyAssetButton isSmall asset={asset} isLinkVariant />
         </SwitchNetwork>
       </ConnectButton>
     )
   } else if (asset.orderbookStats.highestOfferPrice) {
-    return <Price amount={asset.orderbookStats.highestOfferPrice} />
+    return <Price variant="accent" amount={asset.orderbookStats.highestOfferPrice} />
   } else if (!owner) {
     return (
       <ConnectButton customText="Buy">
         <SwitchNetwork>
           <MakeBuyOfferButton
             asset={asset as unknown as AssetWithTradeData}
-            // isVariantLink
+            isVariantLink
           />
         </SwitchNetwork>
       </ConnectButton>
@@ -198,7 +198,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
             ) : owner ? (
               <SellAssetButton
                 asset={asset as unknown as AssetWithTradeData}
-                // isVariantLink
+                isVariantLink
               />
             ) : (
               "No listed yet"

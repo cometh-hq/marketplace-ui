@@ -26,8 +26,15 @@ export const useCosmikSignin = () => {
       return data
     },
     onSuccess: async (data) => {
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user))
+      // if (data.user) {
+      //   localStorage.setItem("user", JSON.stringify(data.user))
+      // }
+      const hasRetrieveWalletAddressInStorage = localStorage.getItem("hasRetrieveWalletAddress")
+      if (hasRetrieveWalletAddressInStorage) {
+        toast({
+          title: "Login successful",
+          duration: 3000,
+        })
       }
     },
     onError: (error: any) => {

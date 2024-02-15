@@ -244,7 +244,7 @@ const renderTimestampCell = (activity: AssetActivity) => {
   } else if (isOrderActivity(activity)) {
     return (
       <TimestampTooltip tooltipContent={readableDate}>
-        <div className="text-right text-sm font-medium text-muted-foreground">
+        <div className="text-sm font-medium text-muted-foreground">
           {timeFromNow}
         </div>
       </TimestampTooltip>

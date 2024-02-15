@@ -18,14 +18,15 @@ export const RefreshStep: React.FC<RefreshStepProps> = ({
   const { initOnboard, retrieveWalletAddressFromSigner, setIsconnected } =
     useWeb3OnboardContext()
   const [isLoading, setIsLoading] = useState(false)
-  const { connect: connectWallet, connecting } = useWalletConnect()
+  const { connect: connectWallet } = useWalletConnect()
   const { comethWalletAddressInStorage } = useStorageWallet()
 
   const handleRefresh = async () => {
     setIsLoading(true)
     try {
       await retrieveWalletAddressFromSigner(userAddress)
-
+      localStorage.setItem("hasRetrieveWalletAddress", "true")
+      
       try {
         initOnboard({
           isComethWallet: true,
