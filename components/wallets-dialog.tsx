@@ -46,6 +46,17 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
 
   console.log("user", user)
 
+  async function fetchItemsCount (address: string) {
+    const filters: AssetSearchFilters = {
+      contractAddress: globalConfig.contractAddress,
+      owner: address,
+      limit: 1,
+    }
+    const response = await comethMarketplaceClient.asset.searchAssets(filters)
+    return { address, items: response.total }
+  }
+
+
   useEffect(() => {
     const initialWallets = [
       { address: user.address, items: 0 },
@@ -199,6 +210,7 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
           Add an external wallet to link existing assets to your cosmik Battle
           Account
         </div>
+        {/* <button onClick={() => fetchItemsCount("0x710dE92cf3a6459933f709D1D2664aA7036c57e8")}>Test address</button> */}
         <Button size="lg" onClick={() => handleAddExternalWallet()}>
           Add external wallet
         </Button>

@@ -265,7 +265,7 @@
     url("/cards/dialog-top-right.png") top right no-repeat,
     url("/cards/dialog-bottom-left.png") bottom left no-repeat,
     url("/cards/dialog-bottom-right.png") bottom right no-repeat;
-    clip-path: polygon(
+  clip-path: polygon(
     4px 0px,
     98.5% 0,
     100% 4px,
