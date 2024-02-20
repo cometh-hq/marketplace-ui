@@ -12,10 +12,12 @@ import { siteConfig } from "@/config/site"
 
 import { ConnectButton } from "./connect-button"
 import { MainNav } from "./main-nav"
+import { useMediaQuery } from "usehooks-ts"
 
 export function SiteHeader() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const isSmallDevice = useMediaQuery('minWidth: 640px')
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
@@ -25,10 +27,10 @@ export function SiteHeader() {
 
   return (
     <div className="container mx-auto py-5 sm:py-10">
-      <header className="relative flex items-center gap-x-10 md:justify-between">
+      <header className="relative flex items-center justify-between gap-x-10">
         <div
           onClick={() => !isOpen && setIsOpen(true)}
-          className={cx("w-[20px] cursor-pointer md:hidden", {
+          className={cx("w-[20px] cursor-pointer sm:hidden", {
             block: isOpen,
           })}
         >
@@ -75,15 +77,15 @@ export function SiteHeader() {
         <Link
           href="/marketplace"
           className={cx(
-            "mx-auto md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 flex items-center space-x-2 text-2xl hover:transform hover:scale-105 transition-transform duration-300 ease-in-out",
+            "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center space-x-2 text-2xl hover:transform hover:scale-105 transition-transform duration-300 ease-in-out",
             isOpen && "text-primary-foreground"
           )}
         >
           <Image
             src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
             alt=""
-            width={140}
-            height={56}
+            width={isSmallDevice ? 140 : 100}
+            height={isSmallDevice ? 56 : 40}
           />
         </Link>
 

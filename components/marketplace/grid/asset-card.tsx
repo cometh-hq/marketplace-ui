@@ -106,7 +106,7 @@ export function AssetCardBase({
     >
       <Card
         className={cn(
-          "card-ghost flex size-full flex-1 flex-row items-center border-transparent p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2",
+          "card-ghost flex size-full flex-1 flex-row items-center border-transparent p-2 pr-4 sm:p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2",
           owner && "bg-[#f4f2e8]/[.02]"
         )}
       >
@@ -125,7 +125,7 @@ export function AssetCardBase({
             />
           </AssetImageContainer>
         </Link>
-        <div className="w-full p-5">{children}</div>
+        <div className="w-full pl-2 sm:p-5">{children}</div>
       </Card>
     </Appear>
   )

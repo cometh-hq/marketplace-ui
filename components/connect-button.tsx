@@ -53,7 +53,7 @@ export function ConnectButton({
         isLoading={reconnecting}
         disabled={reconnecting}
       >
-        Reconnecting
+       Reconnecting
       </Button>
     )
   }
