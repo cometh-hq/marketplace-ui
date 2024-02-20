@@ -1,22 +1,22 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
+import { useUsername } from "@/services/user/use-username"
 import { User } from "lucide-react"
 import { useWindowSize } from "usehooks-ts"
 
 import { env } from "@/config/env"
+import { shortenAddress } from "@/lib/utils/addresses"
 import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button, ButtonProps } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { UserLink } from "@/components/ui/user-button"
-import { ButtonLoading } from "@/components/button-loading"
 
-import { CopyButton } from "../ui/copy-button"
 import { AccountBalance } from "./account-balance"
 import { AccountLogAction } from "./log-actions"
 
@@ -30,6 +30,7 @@ export function CurrentAccountDropdown({
 }: AccountDropdownProps) {
   const isComethWallet = useIsComethWallet()
   const viewerAddress = useCurrentViewerAddress()
+  const { username, isFetchingUsername } = useUsername(viewerAddress as string)
   const { width } = useWindowSize()
 
   const isMobile = width < 640
@@ -52,24 +53,20 @@ export function CurrentAccountDropdown({
             <AccountLogAction />
             <div className="flex items-center gap-2">
               <Image src={walletIcon} alt="" width={40} height={40} />
-              <div>
-                <CardTitle className="relative -mb-0.5 text-sm font-semibold uppercase">
-                  Account
-                </CardTitle>
-                <div className="flex items-center">
-                  {viewerAddress && (
-                    <>
-                      <UserLink
-                        user={{ address: viewerAddress }}
-                        className="mr-2 text-sm"
-                        hideIcon
-                        forceDisplayAddress
-                      />
-                      {/* <CopyButton textToCopy={viewerAddress} /> */}
-                    </>
+              <Link href={`/profile/${viewerAddress}`}>
+                <div className="relative -mb-0.5 text-base font-bold uppercase">
+                  {isFetchingUsername ? (
+                    <span>...</span>
+                  ) : (
+                    <span>@{username}</span>
                   )}
                 </div>
-              </div>
+                {viewerAddress && (
+                  <div className="mr-2 text-sm font-medium text-accent hover:text-white">
+                    {shortenAddress(viewerAddress, 4)}
+                  </div>
+                )}
+              </Link>
             </div>
           </CardHeader>
           <CardContent className="p-0">

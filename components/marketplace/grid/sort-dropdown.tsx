@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/popover"
 
 import { FILTERS_SORT } from "../../../config/filters"
+import { useGetCardsMetadata } from "@/services/cosmik/cards-metadata"
 
 interface MarketplaceSortDropdownProps extends PopoverProps {}
 
@@ -40,6 +41,9 @@ export function MarketplaceSortDropdown({
 
   const orderBy = get("orderBy")
   const direction = get("direction")
+
+  // const { cardsMetadata, isLoading } = useGetCardsMetadata()
+  // console.log("cardsMetadata", cardsMetadata)
 
   useEffect(() => {
     const matchingLabel = FILTERS_SORT.find(
