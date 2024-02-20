@@ -93,6 +93,7 @@
     rgba(23, 23, 50, 0.4) 100%
   );
   backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   content: "";
   clip-path: polygon(
     1.8% 0,
@@ -233,9 +234,11 @@
       url("/cards/third-top-right.png") top right no-repeat,
       url("/cards/third-bottom-left.png") bottom left no-repeat,
       url("/cards/third-bottom-right.png") bottom right no-repeat;
+    background-repeat: no-repeat;
     background-size: auto;
     border-radius: 0 !important;
-    width: auto;
+    height: auto;
+    width: 100%;
     position: relative;
     @apply text-third-foreground;
   }

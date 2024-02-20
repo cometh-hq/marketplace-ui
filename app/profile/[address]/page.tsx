@@ -20,7 +20,6 @@ export default function ProfilePage({
 }) {
   const { filtersRaw } = useFilters()
   const { username, isFetchingUsername } = useUsername(params.address)
-  console.log("username", username)
 
   const user =
     username && !isFetchingUsername

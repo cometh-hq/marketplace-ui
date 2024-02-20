@@ -44,7 +44,7 @@ export function PriceDetails({ fullPrice, isEthersFormat = true }: PriceDetailsP
   }, [price, sumOfFeesPercentages])
 
   return (
-    <div className="rounded border p-4 shadow">
+    <div className="rounded border border-input p-4 shadow">
       <div className="flex  flex-col justify-between sm:flex-row">
         <span>You will receive:</span>
         <span>
@@ -57,7 +57,7 @@ export function PriceDetails({ fullPrice, isEthersFormat = true }: PriceDetailsP
           <Price fontWeight="normal" amount={feesAmount} />
         </span>
       </div>
-      <hr className="my-2" />
+      <hr className="my-2 border-input" />
       <div className="flex flex-col justify-between sm:flex-row">
         <span>Total price:</span>
         <span>

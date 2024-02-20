@@ -106,11 +106,14 @@ export function AssetCardBase({
     >
       <Card
         className={cn(
-          "card-ghost flex w-full flex-1 flex-row items-center border-transparent p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2",
+          "card-ghost flex size-full flex-1 flex-row items-center border-transparent p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2",
           owner && "bg-[#f4f2e8]/[.02]"
         )}
       >
-        <Link href={`/marketplace/${asset.tokenId}`} className="sm:w-full">
+        <Link
+          href={`/marketplace/${asset.tokenId}`}
+          className="sm:w-full sm:flex-1"
+        >
           <AssetImageContainer color={getAssetColor(asset)}>
             <AssetImage
               src={src}
@@ -145,7 +148,9 @@ function renderAssetActions(
       </ConnectButton>
     )
   } else if (asset.orderbookStats.highestOfferPrice) {
-    return <Price variant="accent" amount={asset.orderbookStats.highestOfferPrice} />
+    return (
+      <Price variant="accent" amount={asset.orderbookStats.highestOfferPrice} />
+    )
   } else if (!owner) {
     return (
       <ConnectButton customText="Buy">
@@ -190,11 +195,12 @@ export function AssetCard({ asset, children }: AssetCardProps) {
         </Link>
         <div className="flex items-center justify-between">
           <div>
-            {!owner && (
-              <div className="mb-1 text-sm font-medium">Price</div>
-            )}
+            {!owner && <div className="mb-1 text-sm font-medium">Price</div>}
             {asset.orderbookStats.lowestListingPrice ? (
-              <Price variant="accent" amount={asset.orderbookStats.lowestListingPrice} />
+              <Price
+                variant="accent"
+                amount={asset.orderbookStats.lowestListingPrice}
+              />
             ) : owner ? (
               <SellAssetButton
                 asset={asset as unknown as AssetWithTradeData}

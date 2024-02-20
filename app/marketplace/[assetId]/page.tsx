@@ -42,7 +42,7 @@ export default function DetailsPage({
       <div className="container py-6">
         {loading && <Loading />}
         {!loading && (
-          <div className="container-mask flex w-full flex-col flex-wrap gap-6 p-10 md:gap-12 lg:flex-row lg:items-center">
+          <div className="container-mask flex w-full flex-col flex-wrap gap-6 p-6 md:gap-12 md:p-10 lg:flex-row lg:items-center">
             <AssetHeaderImage asset={asset} />
             <AssetDetails asset={asset} />
             {assetTransfers && (

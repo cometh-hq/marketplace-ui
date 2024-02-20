@@ -54,6 +54,8 @@ export function SellStep({ asset, onClose }: SellStepProps) {
     onClose()
   }, [asset, onClose, orderParams, sell])
 
+  console.log("globalConfig.ordersErc20", globalConfig)
+
   return (
     <>
       <div className="flex w-full items-center justify-center">
@@ -63,7 +65,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
       <div className="mt-4 flex w-full  flex-col gap-4 sm:flex-row">
         <div className="flex flex-col gap-3 sm:w-2/3">
           <Label htmlFor="selling-price">
-            Selling price in {globalConfig.ordersErc20.symbol}*
+            Selling price in {globalConfig.ordersDisplayCurrency.symbol}*
           </Label>
           <Input
             onInputUpdate={(inputValue) => setPrice(inputValue)}
@@ -74,7 +76,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
           />
         </div>
 
-        <div className="flex flex-col gap-3 sm:w-1/3">
+        <div className="flex flex-col gap-3 sm:w-auto">
           <Label htmlFor="make-buy-offer-price">Validity time</Label>
           <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
             <SelectTrigger className="w-[180px]">

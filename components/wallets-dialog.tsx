@@ -44,8 +44,6 @@ export function WalletsDialog({ user }: WalletsDialogProps) {
 
   const walletAddressesRef = useRef<string[]>([]);
 
-  console.log("user", user)
-
   async function fetchItemsCount (address: string) {
     const filters: AssetSearchFilters = {
       contractAddress: globalConfig.contractAddress,
