@@ -27,7 +27,7 @@ export function SiteHeader() {
 
   return (
     <div className="container mx-auto py-5 sm:py-10">
-      <header className="relative flex items-center justify-between gap-x-10">
+      <header className="relative flex items-center justify-between gap-x-5 md:gap-x-10">
         <div
           onClick={() => !isOpen && setIsOpen(true)}
           className={cx("w-[20px] cursor-pointer md:hidden", {

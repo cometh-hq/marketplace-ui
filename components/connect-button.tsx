@@ -53,7 +53,8 @@ export function ConnectButton({
         isLoading={reconnecting}
         disabled={reconnecting}
       >
-       Reconnecting
+       <span className="max-sm:hidden">Reconnecting</span>
+       <span className="sm:hidden">Login</span>
       </Button>
     )
   }
