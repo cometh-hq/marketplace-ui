@@ -11,6 +11,14 @@ import { WalletIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
@@ -34,19 +42,20 @@ export function SigninDropdown({
   const { initOnboard, setIsconnected, retrieveWalletAddressFromSigner } =
     useWeb3OnboardContext()
   const [user, setUser] = useState<User | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isSigninDropdownOpen, setIsSigninDropdownOpen] = useState(false)
+  const [displayAutorizationProcess, setDisplayAutorizationProcess] =
+    useState(false)
+  const [displaySigninDialog, setDisplaySigninDialog] = useState(false)
   const { isSuccess, isPending, data } = useCosmikSignin()
   const { connect: connectWallet } = useWalletConnect()
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleDropdownOpenChange = useCallback(
+  const handleSigninDialogChange = useCallback(
     (open: boolean) => {
-      if (!open || !isModalOpen) {
-        setIsSigninDropdownOpen(open)
+      if (!open || !displayAutorizationProcess) {
+        setDisplaySigninDialog(open)
       }
     },
-    [isModalOpen]
+    [displayAutorizationProcess]
   )
 
   const handleLoginSuccess = useCallback(
@@ -65,13 +74,18 @@ export function SigninDropdown({
         setIsconnected(true)
       } catch (error) {
         // If an error occurs, likely due to a first-time connection, display the authorization modal
-        setIsSigninDropdownOpen(false)
-        setIsModalOpen(true)
+        setDisplaySigninDialog(false)
+        setDisplayAutorizationProcess(true)
       } finally {
         setIsLoading(false)
       }
     },
-    [user]
+    [
+      connectWallet,
+      initOnboard,
+      retrieveWalletAddressFromSigner,
+      setIsconnected,
+    ]
   )
 
   useEffect(() => {
@@ -82,51 +96,52 @@ export function SigninDropdown({
 
   return (
     <>
-      <DropdownMenu
-        open={isSigninDropdownOpen}
-        onOpenChange={handleDropdownOpenChange}
+      <Dialog
+        modal
+        open={displaySigninDialog}
+        onOpenChange={handleSigninDialogChange}
       >
-        <DropdownMenuTrigger asChild>
+        <DialogTrigger asChild>
           <Button
             className={cx({
               "h-12 w-full": fullVariant,
             })}
-            // variant={isLinkVariant ? "link" : "default"}
             disabled={disabled || isPending}
             isLoading={disabled || isPending}
           >
             {!isLinkVariant && <WalletIcon size="16" className="mr-2" />}
             {customText ? customText : "Login"}
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent variant="dialog" align="end" asChild>
-          <Card className="mt-1 p-4" style={{ width: "324px" }}>
-            <CardContent className="space-y-3 p-0">
-              <p>
-                To access the marketplace and trade cards, please log in with
-                your Cosmik Battle credentials. <br />
-                No account?{" "}
-                <a
-                  href="https://store.epicgames.com/fr/p/cosmik-battle-f6dbf4"
-                  className="font-medium underline"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Download Cosmik Battle
-                </a>
-              </p>
-              <SignInForm
-                onLoginSuccess={handleLoginSuccess}
-                isDisabled={disabled || isLoading}
-              />
-            </CardContent>
-          </Card>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      {isModalOpen && user && (
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle className="capitalize">Signin</DialogTitle>
+          </DialogHeader>
+          <p>
+            To access the marketplace and trade cards, please log in with your
+            Cosmik Battle credentials. <br />
+            No account?{" "}
+            <a
+              href="https://store.epicgames.com/fr/p/cosmik-battle-f6dbf4"
+              className="font-medium underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Download Cosmik Battle
+            </a>
+          </p>
+          <SignInForm
+            onLoginSuccess={handleLoginSuccess}
+            isDisabled={disabled}
+            isLoading={disabled || isLoading}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {displayAutorizationProcess && user && (
         <AuthorizationProcess
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          isOpen={displayAutorizationProcess}
+          onClose={() => setDisplayAutorizationProcess(false)}
           user={user}
         />
       )}

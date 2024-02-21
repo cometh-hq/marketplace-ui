@@ -18,9 +18,10 @@ import { Input } from "../ui/input"
 interface SignInFormProps {
   onLoginSuccess: (user: User) => void
   isDisabled?: boolean
+  isLoading?: boolean
 }
 
-export function SignInForm({ onLoginSuccess, isDisabled }: SignInFormProps) {
+export function SignInForm({ onLoginSuccess, isDisabled, isLoading }: SignInFormProps) {
   const {
     mutate: signin,
     isSuccess,
@@ -84,7 +85,7 @@ export function SignInForm({ onLoginSuccess, isDisabled }: SignInFormProps) {
           className="w-full"
           size="lg"
           type="submit"
-          isLoading={isPending || isDisabled}
+          isLoading={isPending || isLoading}
           disabled={isPending || isDisabled}
         >
           Connect my account
