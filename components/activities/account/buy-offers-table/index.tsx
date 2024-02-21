@@ -25,7 +25,7 @@ export function AccountBuyOffersTable({ offers }: AccountBuyOffersTableProps) {
     )
   }, [offers])
 
-  const { usernames } = useUsernames(addresses)
+  const { usernames, isFetchingUsernames } = useUsernames(addresses)
 
   const data = useMemo(() => {
     return offers

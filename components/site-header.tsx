@@ -48,7 +48,7 @@ export function SiteHeader() {
           ></span>
           <div
             className={cx(
-              "bottom-0 left-0 right-0 top-0 z-50 h-full w-full overflow-hidden bg-card p-5 text-white",
+              "bottom-0 left-0 right-0 top-0 z-50 h-full w-full overflow-hidden bg-background p-5 text-white",
               isOpen ? "fixed" : "hidden"
             )}
           >

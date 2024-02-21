@@ -53,7 +53,7 @@ export function CurrentAccountDropdown({
             <AccountLogAction />
             <div className="flex items-center gap-2">
               <Image src={walletIcon} alt="" width={40} height={40} />
-              <Link href={`/profile/${viewerAddress}`}>
+              <Link href={`/profile/${viewerAddress}`} className="group">
                 <div className="relative -mb-0.5 text-base font-bold uppercase">
                   {isFetchingUsername ? (
                     <span>...</span>
@@ -62,7 +62,7 @@ export function CurrentAccountDropdown({
                   )}
                 </div>
                 {viewerAddress && (
-                  <div className="mr-2 text-sm font-medium text-accent hover:text-white">
+                  <div className="mr-2 text-sm font-medium text-accent transition-colors group-hover:text-white">
                     {shortenAddress(viewerAddress, 4)}
                   </div>
                 )}

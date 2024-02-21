@@ -35,10 +35,10 @@ export function MainNav({ items, onLinkClick }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    `text-base font-semibold md:text-lg ${
+                    `text-xl font-semibold md:text-lg ${
                       isActiveLink(item.href) &&
                       "opacity-100 max-md:text-accent-foreground"
-                    }`
+                    }`, 
                   )}
                   onClick={onLinkClick}
                 >

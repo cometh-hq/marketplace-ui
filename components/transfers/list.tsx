@@ -244,9 +244,7 @@ const renderTimestampCell = (activity: AssetActivity) => {
   } else if (isOrderActivity(activity)) {
     return (
       <TimestampTooltip tooltipContent={readableDate}>
-        <div className="text-sm font-medium text-muted-foreground">
-          {timeFromNow}
-        </div>
+        <div className="font-medium text-accent">{timeFromNow}</div>
       </TimestampTooltip>
     )
   }
@@ -263,13 +261,11 @@ const renderActivitiesRows = (
 
     if (activityEmitter.username === undefined) {
       activityEmitter.username =
-        usernames[activityEmitter.address.toLowerCase()] ||
-        undefined
+        usernames[activityEmitter.address.toLowerCase()] || undefined
     }
     if (activityReceiver.username === undefined) {
       activityReceiver.username =
-        usernames[activityReceiver.address.toLowerCase()] ||
-        undefined
+        usernames[activityReceiver.address.toLowerCase()] || undefined
     }
 
     const isOpenedOrderActivity =
@@ -285,10 +281,10 @@ const renderActivitiesRows = (
         <TableCell>
           {isOrderActivity(activity) ? (
             <Price
-              size="sm"
               amount={BigNumber.from(activity.order.erc20TokenAmount)
                 .add(activity.order.totalFees)
                 .toString()}
+              fontWeight="normal"
             />
           ) : (
             <span>-</span>
@@ -338,7 +334,7 @@ export function TransfersList({
     return Array.from(addresses)
   }, [assetActivities])
 
-  const { usernames } = useUsernames(allAddresses)
+  const { usernames, isFetchingUsernames } = useUsernames(allAddresses)
 
   return (
     <Table>
@@ -351,12 +347,20 @@ export function TransfersList({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {assetActivities?.length ? (
-          renderActivitiesRows(assetActivities, usernames, viewerAddress)
+        {!isFetchingUsernames ? (
+          assetActivities?.length ? (
+            renderActivitiesRows(assetActivities, usernames, viewerAddress)
+          ) : (
+            <TableRow>
+              <TableCell className="h-24 text-center">
+                No transfer found for this asset.
+              </TableCell>
+            </TableRow>
+          )
         ) : (
           <TableRow>
-            <TableCell className="h-24 text-center">
-              No transfer found for this asset.
+            <TableCell colSpan={4} className="h-24 text-center">
+              Loading...
             </TableCell>
           </TableRow>
         )}
