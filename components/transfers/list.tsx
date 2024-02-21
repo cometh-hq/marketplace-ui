@@ -252,7 +252,7 @@ const renderTimestampCell = (activity: AssetActivity) => {
 
 const renderActivitiesRows = (
   assetActivities: AssetActivity[],
-  usernames: Record<string, string>,
+  usernames: Record<string, string | undefined>,
   viewerAddress?: Address
 ) => {
   return assetActivities.map((activity) => {

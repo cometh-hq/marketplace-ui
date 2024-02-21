@@ -24,10 +24,11 @@ export const useUsernames = (addresses: string[]) => {
   // filter addresses to determine which are not already in cache
   const addressesToFetch = addresses.filter((address) => {
     const allUsernames =
-      queryClient.getQueryData<Record<string, string>>(queryKey) || {}
+      queryClient.getQueryData<Record<string, string | undefined>>(queryKey) ||
+      {}
     return (
       address.toLowerCase() !== "0x0000000000000000000000000000000000000000" &&
-      !allUsernames[address.toLowerCase()]
+      !(address.toLowerCase() in allUsernames)
     )
   })
 
@@ -46,7 +47,9 @@ export const useUsernames = (addresses: string[]) => {
     )
 
     // update the global cache of usernames
-    const allUsernames = queryClient.getQueryData(queryKey) || {}
+    const allUsernames =
+      queryClient.getQueryData<Record<string, string | undefined>>(queryKey) ||
+      {}
     const updatedUsernames = { ...allUsernames, ...newUsernames }
     queryClient.setQueryData(queryKey, updatedUsernames)
 
@@ -57,18 +60,21 @@ export const useUsernames = (addresses: string[]) => {
   const { isFetching } = useQuery({
     queryKey: queryKey,
     queryFn: () => fetchUsernames(addressesToFetch),
-    enabled: addressesToFetch.length > 0
+    enabled: addressesToFetch.length > 0,
   })
 
   // retrieve all usernames from cache, including new ones
-  const allUsernames = queryClient.getQueryData(queryKey) || {}
+  const allUsernames =
+    queryClient.getQueryData<Record<string, string | undefined>>(queryKey) || {}
 
   // filter to get only the requested usernames
-  const usernames = addresses.reduce((acc, address) => {
-    // @ts-ignore
-    acc[address.toLowerCase()] = allUsernames[address.toLowerCase()]
-    return acc
-  }, {})
+  const usernames = addresses.reduce(
+    (acc: Record<string, string | undefined>, address) => {
+      acc[address.toLowerCase()] = allUsernames[address.toLowerCase()]
+      return acc
+    },
+    {}
+  )
 
   return { usernames, isFetchingUsernames: isFetching }
 }
