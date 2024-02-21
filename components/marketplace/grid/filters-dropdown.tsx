@@ -172,9 +172,9 @@ export const MarketplaceFiltersDropdown = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button id="radix-:R1irb9ipj9:" variant="outline" className="relative">
-          <FilterIcon size="16" className="mr-2" />
-          Attributes filters
+        <Button id="radix-:R1irb9ipj9:" variant="outline" className="relative max-md:px-3">
+          <FilterIcon size="16" className="md:mr-2" />
+          <span className="max-md:hidden">Attributes filters</span>
           <FiltersBadgeCounter counter={filtersCounter} />
         </Button>
       </DropdownMenuTrigger>

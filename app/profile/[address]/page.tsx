@@ -24,7 +24,7 @@ export default function ProfilePage({
   }
 
   return (
-    <div className="container mx-auto flex w-full flex-col items-start gap-4 py-4 max-sm:pt-4">
+    <div className="container mx-auto flex w-full flex-col items-start gap-4 py-4 max-sm:pt-2">
       <Link href={`/marketplace`}>
         <Button variant="secondary" className="gap-1">
           <ArrowLeftIcon size="16" />
@@ -34,8 +34,8 @@ export default function ProfilePage({
       <div className="flex w-full items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <h1 className="inline-flex items-center text-2xl font-bold tracking-tight sm:text-3xl">
-            <UserIcon size="28" className="mr-2" />
-            User profile ({shortenAddress(params.address)})
+            <UserIcon size="28" className="mr-2 max-sm:hidden" />
+            User <span className="max-sm:hidden">profile</span> ({shortenAddress(params.address)})
           </h1>
           <CopyButton size="lg" textToCopy={params.address} />
         </div>

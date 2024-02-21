@@ -121,7 +121,7 @@ const DropdownElement = ({
       {label}
       <Check
         className={cn(
-          "ml-auto h-4 w-4",
+          "ml-auto size-4",
           isSelected ? "opacity-100" : "opacity-0"
         )}
       />
