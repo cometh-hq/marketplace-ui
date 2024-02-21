@@ -76,7 +76,7 @@ export function ConnectButton({
     )
   }
 
-  if (!hasRetrieveWalletAddressInStorage || !isConnected || isLoading || connecting) {
+  if (!isConnected || isLoading || connecting) {
     return (
       <SigninDropdown
         disabled={isLoading || connecting || reconnecting}
