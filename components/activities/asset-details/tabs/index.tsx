@@ -23,7 +23,7 @@ export const AssetActivities = ({
   assetOrders,
 }: AssetActivitiesProps) => {
   return (
-    <Tabs defaultValue="overview" className="w-full lg:w-[100%]">
+    <Tabs defaultValue="overview" className="w-full">
       <TabBar />
       <AssetMetadata asset={asset} />
       <ActivitiesTransfersTabContent

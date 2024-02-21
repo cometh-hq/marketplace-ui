@@ -203,7 +203,6 @@
       url("/cards/third-top-right.png") top right no-repeat,
       url("/cards/third-bottom-left.png") bottom left no-repeat,
       url("/cards/third-bottom-right.png") bottom right no-repeat;
-    background-repeat: no-repeat;
     background-size: auto;
     border-radius: 0 !important;
     height: auto;
@@ -219,11 +218,10 @@
     @apply bg-primary z-[-1] border border-border;
   }
 
-
   .container-mask {
     position: relative;
   }
-  
+
   .container-mask::before {
     @apply backdrop-blur-[2px] absolute inset-0 -z-[1] content-[""];
     background-image: linear-gradient(
@@ -244,7 +242,7 @@
   }
 }
 
-/* Dialog (💀) */
+/* Dialog */
 .dialog {
   background-size: auto;
   border-radius: 0 !important;
@@ -275,76 +273,49 @@
   @apply bg-card;
 }
 
-/* .dialog-corners-x::before,
-.dialog-corners-x::after {
-  content: "";
+.dialog-background {
   position: absolute;
-  height: calc(100% - 100px);
-  top: 50px;
-  bottom: 50px;
-  @apply border-[#2A76C3];
 }
 
-.dialog-corners-x::before {
-  left: 0;
+/* Table */
+table tbody > tr {
+  @apply bg-primary text-third-foreground;
+}
+
+table tbody > tr td {
+  @apply relative border-y border-border;
+}
+
+
+
+table tbody tr > td:first-child {
   @apply border-l;
 }
 
-.dialog-corners-x::after {
-  right: 0;
+table tbody tr > td:last-child {
   @apply border-r;
 }
 
-.dialog-corners-y::before,
-.dialog-corners-y::after {
+table tbody > tr td:first-child:after,
+table tbody tr > td:last-child:after {
   content: "";
   position: absolute;
-  width: calc(100% - 100px);
-  left: 50px;
-  right: 50px;
-  @apply border-[#2A76C3];
-  z-index: -1;
+  inset: -1px;
 }
 
-.dialog-corners-y::before {
-  top: 0;
-  @apply border-t;
+table tbody > tr td:first-child:after {
+  background:
+    url("/cards/third-top-left.png") top left no-repeat,
+    url("/cards/third-bottom-left.png") bottom left no-repeat;
+  background-size: auto;
 }
 
-.dialog-corners-y::after {
-  bottom: 0;
-  @apply border-b;
-} */
-
-.dialog-background {
-  position: absolute;
-  /* top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  width: 100%;
-  @apply bg-card z-[-2]; */
+table tbody tr > td:last-child:after {
+  background:
+    url("/cards/third-top-right.png") top right no-repeat,
+    url("/cards/third-bottom-right.png") bottom right no-repeat;
+  background-size: auto;
 }
-
-/* .dialog-background::before,
-.dialog-background::after {
-  content: "";
-  position: absolute;
-  height: 10px;
-  width: calc(100% - 80px);
-  left: 40px;
-  right: 40px;
-  @apply bg-card;
-} */
-
-/* .dialog-background::before {
-  top: -9px;
-}
-
-.dialog-background::after {
-  bottom: -9px;
-} */
 
 /* Fix Gas fees Connect Wallet */
 #cometh-gas-modal-wrapper {
