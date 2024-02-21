@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react"
 import { manifest } from "@/manifests"
 import { CheckIcon, ChevronDown, FilterIcon } from "lucide-react"
+import { useMediaQuery } from "usehooks-ts"
 
 import { CardFiltersRaw } from "@/types/assets"
 import { useNFTFilters } from "@/lib/utils/nft-filters"
@@ -178,10 +179,10 @@ export const MarketplaceFiltersDropdown = ({
         <Button
           id="radix-:R1irb9ipj9:"
           variant="secondary"
-          className="relative text-white"
+          className="relative text-white max-md:px-3"
         >
-          <FilterIcon size="16" className="mr-2" />
-          Attributes filters
+          <FilterIcon size="16" className="md:mr-2" />
+          <span className="max-md:hidden">Attributes filters</span>
           <FiltersBadgeCounter counter={filtersCounter} />
         </Button>
       </DropdownMenuTrigger>

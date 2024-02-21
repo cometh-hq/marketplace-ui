@@ -37,7 +37,7 @@ export function MarketplaceSortDropdown({
   const { get } = useSearchParams()
 
   const { width } = useWindowSize()
-  const isSmallScreen = width && width < 540
+  const isSmallScreen = width && width < 768
 
   const orderBy = get("orderBy")
   const direction = get("direction")

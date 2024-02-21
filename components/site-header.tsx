@@ -17,7 +17,7 @@ import { useMediaQuery } from "usehooks-ts"
 export function SiteHeader() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const isSmallDevice = useMediaQuery('minWidth: 640px')
+  const isDesktop = useMediaQuery('minWidth: 768px')
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
@@ -30,7 +30,7 @@ export function SiteHeader() {
       <header className="relative flex items-center justify-between gap-x-10">
         <div
           onClick={() => !isOpen && setIsOpen(true)}
-          className={cx("w-[20px] cursor-pointer sm:hidden", {
+          className={cx("w-[20px] cursor-pointer md:hidden", {
             block: isOpen,
           })}
         >
@@ -84,8 +84,8 @@ export function SiteHeader() {
           <Image
             src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
             alt=""
-            width={isSmallDevice ? 140 : 100}
-            height={isSmallDevice ? 56 : 40}
+            width={isDesktop ? 140 : 100}
+            height={isDesktop ? 56 : 40}
           />
         </Link>
 

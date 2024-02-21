@@ -73,11 +73,13 @@ export const AssetsSearchGrid = ({
     <div className="flex w-full flex-col items-center justify-center">
       <div className="relative flex w-full flex-wrap items-center justify-between gap-4">
         <NFTStateFilters assets={assets} results={totalNbAssets} />
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex max-md:w-full items-center justify-between gap-3">
           <SearchAsset onChange={setSearch} />
-          <MarketplaceFiltersDropdown filters={filtersDefinition} />
-          <FiltersResetBtn />
-          <MarketplaceSortDropdown />
+          <div className="flex gap-3">
+            <MarketplaceFiltersDropdown filters={filtersDefinition} />
+            <FiltersResetBtn />
+            <MarketplaceSortDropdown />
+          </div>
         </div>
       </div>
       <p className="mb-10 mt-3 w-full pl-2 text-left">
@@ -99,11 +101,7 @@ export const AssetsSearchGrid = ({
             ))}
           </AssetCardsList>
           <div ref={loadMoreRef} className="py-10">
-            {isFetchingNextPage ? (
-              "Loading more NFTs..."
-            ) : (
-              <div></div>
-            )}
+            {isFetchingNextPage ? "Loading more NFTs..." : <div></div>}
           </div>
         </>
       )}
