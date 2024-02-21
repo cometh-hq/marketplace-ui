@@ -20,7 +20,7 @@ export const AssetHeaderImage = ({ asset }: { asset: SearchAssetWithTradeData | 
   return (
     <div
       className={cn(
-        "w-full overflow-hidden rounded-xl lg:w-[65%]",
+        "w-full overflow-hidden rounded-xl lg:w-[55%]",
         owner ? "bg-[#f4f2e8]" : "bg-muted"
       )}
     >

@@ -51,7 +51,7 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
 
 
   return (
-    <div className="flex gap-5">
+    <div className="flex gap-5 overflow-x-auto pb-1 max-md:-mx-5 max-md:px-5">
       <NFTStateFilterItem
         label={`All items`}
         isSelected={!get("isOnSale")}

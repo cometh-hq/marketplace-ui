@@ -22,7 +22,14 @@ import { Address, isAddressEqual } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
-import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 import { CopyButton } from "../ui/copy-button"
 import { Price } from "../ui/price"
@@ -172,7 +179,7 @@ const ActivityEventCell = ({
   Icon: React.ElementType
   label: string
 }) => (
-  <div className="flex text-sm">
+  <div className="flex items-center font-medium">
     <Icon className="mr-2" size={16} />
     {label}
   </div>
@@ -228,7 +235,7 @@ const renderTimestampCell = (activity: AssetActivity) => {
           href={`${globalConfig.network.explorer?.url}/tx/${activity.transfer.transactionHash}`}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-end gap-2 text-sm font-medium text-muted-foreground hover:text-secondary-foreground"
+          className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-secondary-foreground"
         >
           {timeFromNow}
           <ExternalLink size="18" className="" />
@@ -238,7 +245,7 @@ const renderTimestampCell = (activity: AssetActivity) => {
   } else if (isOrderActivity(activity)) {
     return (
       <TimestampTooltip tooltipContent={readableDate}>
-        <div className="text-right text-sm font-medium text-muted-foreground">
+        <div className="text-sm font-medium text-muted-foreground">
           {timeFromNow}
         </div>
       </TimestampTooltip>
@@ -270,6 +277,7 @@ const renderActivitiesRows = (
               amount={BigNumber.from(activity.order.erc20TokenAmount)
                 .add(activity.order.totalFees)
                 .toString()}
+                className="font-medium"
             />
           )}
         </TableCell>
@@ -304,6 +312,14 @@ export function TransfersList({
 
   return (
     <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Event</TableHead>
+          <TableHead>Amount</TableHead>
+          <TableHead className="pl-8">From / To</TableHead>
+          <TableHead>Date</TableHead>
+        </TableRow>
+      </TableHeader>
       <TableBody>
         {assetActivities?.length ? (
           renderActivitiesRows(assetActivities, viewerAddress)

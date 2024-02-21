@@ -143,7 +143,7 @@ function renderAssetActions(
   if (asset.orderbookStats.lowestListingPrice && !owner) {
     return (
       <ConnectButton isLinkVariant customText="Login to buy">
-        <SwitchNetwork>
+        <SwitchNetwork variant="link">
           <BuyAssetButton isSmall asset={asset} />
         </SwitchNetwork>
       </ConnectButton>
@@ -153,7 +153,7 @@ function renderAssetActions(
   } else if (!owner) {
     return (
       <ConnectButton isLinkVariant customText="Login to buy">
-        <SwitchNetwork>
+        <SwitchNetwork variant="link">
           <MakeBuyOfferButton
             asset={asset as unknown as AssetWithTradeData}
             isVariantLink

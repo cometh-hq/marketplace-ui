@@ -71,13 +71,15 @@ export const AssetsSearchGrid = ({
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <div className="relative  flex w-full flex-wrap items-center justify-between gap-4">
+      <div className="relative flex w-full flex-wrap items-center justify-between gap-4">
         <NFTStateFilters assets={assets} results={totalNbAssets} />
-        <div className="flex items-center gap-x-3">
+        <div className="flex items-center justify-between gap-3 max-md:w-full">
           <SearchAsset onChange={setSearch} />
-          <MarketplaceFiltersDropdown filters={filtersDefinition} />
-          <FiltersResetBtn />
-          <MarketplaceSortDropdown />
+          <div className="flex gap-3">
+            <MarketplaceFiltersDropdown filters={filtersDefinition} />
+            <FiltersResetBtn />
+            <MarketplaceSortDropdown />
+          </div>
         </div>
       </div>
       <p className="mb-10 mt-3 w-full pl-2 text-left text-sm">
@@ -94,7 +96,7 @@ export const AssetsSearchGrid = ({
       ) : (
         <>
           <AssetCardsList>
-            {assets.map((asset, index) => (
+            {assets.map((asset) => (
               <AssetCard key={asset.tokenId} asset={asset} />
             ))}
           </AssetCardsList>
