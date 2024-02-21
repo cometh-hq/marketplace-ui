@@ -1,3 +1,4 @@
+import { useUsername } from "@/services/user/use-username"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
@@ -20,6 +21,8 @@ export type NotListedProductBlockProps = {
 }
 
 export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
+  const { username, isFetchingUsername } = useUsername(asset.owner as Address)
+
   return (
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
@@ -31,11 +34,13 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
 
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Owned by</ProductBlockLabel>
-        <UserLink
-          variant="link"
-          className="mt-0.5"
-          user={{ address: asset.owner as Address }}
-        />
+        {!isFetchingUsername && (
+          <UserLink
+            variant="link"
+            className="mt-0.5"
+            user={{ address: asset.owner as Address, username: username }}
+          />
+        )}
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
