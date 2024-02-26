@@ -18,18 +18,20 @@ export function useFilters() {
     const fetchFilters = async () => {
       let filters = await seedFilters()
 
+      // for every type_id value, add card name to have (name + type_id) to the filter
       if (!isLoadingCardsMetadata && cardsMetadata) {
         const typeIdWithName = cardsMetadata.reduce((acc, card) => {
           const key = card.typeId.replace("0x", "")
           // @ts-ignore
-          acc[key] = `${card.name} ${card.typeId}`
+          acc[key] = `${card.name} ${key}`
           return acc
         }, {})
-
-        filters.set("type_id_name", {
+      
+        filters.set("type_id", {
           values: new Set(Object.values(typeIdWithName)),
         })
       }
+
 
       const serializedFilters = serializeFilters(filters)
       setFiltersRaw(serializedFilters)
