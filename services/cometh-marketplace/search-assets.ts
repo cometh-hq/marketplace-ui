@@ -91,17 +91,6 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     parsedAttributes.pop()
   }
 
-  // reformat filters.type_id to fit with API (type_id only, not name + type_id)
-  if (filters.type_id) {
-    const typeId =
-      filters.type_id[0].split(" ")[
-        filters.type_id[0].split(" ").length - 1
-      ]
-    parsedAttributes[0]["Type_id"] = [typeId]
-  }
-
-  console.log({ parsedAttributes })
-
   const {
     data,
     refetch,
