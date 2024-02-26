@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from "react"
 import { manifest } from "@/manifests"
 import { CheckIcon, ChevronDown, FilterIcon } from "lucide-react"
-import { useMediaQuery } from "usehooks-ts"
 
 import { CardFiltersRaw } from "@/types/assets"
 import { useNFTFilters } from "@/lib/utils/nft-filters"

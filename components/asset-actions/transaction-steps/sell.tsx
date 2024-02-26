@@ -54,8 +54,6 @@ export function SellStep({ asset, onClose }: SellStepProps) {
     onClose()
   }, [asset, onClose, orderParams, sell])
 
-  console.log("globalConfig.ordersErc20", globalConfig)
-
   return (
     <>
       <div className="flex w-full items-center justify-center">

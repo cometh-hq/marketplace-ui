@@ -91,6 +91,17 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     parsedAttributes.pop()
   }
 
+  // reformat filters.type_id to fit with API (type_id only, not name + type_id)
+  if (filters.type_id) {
+    const typeId =
+      filters.type_id[0].split(" ")[
+        filters.type_id[0].split(" ").length - 1
+      ]
+    parsedAttributes[0]["Type_id"] = [typeId]
+  }
+
+  console.log({ parsedAttributes })
+
   const {
     data,
     refetch,
@@ -99,7 +110,13 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["cometh", "search", JSON.stringify(filters), options?.page, options?.search],
+    queryKey: [
+      "cometh",
+      "search",
+      JSON.stringify(filters),
+      options?.page,
+      options?.search,
+    ],
     queryFn: ({ pageParam }) => {
       return getAssetsPaginated(
         {
@@ -158,6 +175,6 @@ export const useAssetDetails = (contractAddress: Address, assetId: string) => {
       >({ queryKey: ["cometh", "search"] })
       return findAssetInSearchResults(search, assetId)
     },
-    refetchInterval: 2000
+    refetchInterval: 2000,
   })
 }

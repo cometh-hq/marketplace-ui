@@ -29,6 +29,7 @@ export const useNFTFilters = () => {
     return formatAttributes
   }, [params])
 
+
   const update = useCallback(
     (newFilters: CardFiltersRaw) => {
       const params = new URLSearchParams()

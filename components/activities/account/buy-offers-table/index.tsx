@@ -25,10 +25,7 @@ export function AccountBuyOffersTable({ offers }: AccountBuyOffersTableProps) {
     )
   }, [offers])
 
-  console.log("addresses", addresses)
-
   const { usernames, isFetchingUsernames } = useUsernames(addresses);
-  console.log("usernames ici", usernames, "isFetchingUsernames", isFetchingUsernames)
 
   const data = useMemo(() => {
     return offers
