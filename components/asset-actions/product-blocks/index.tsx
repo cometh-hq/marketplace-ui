@@ -7,6 +7,7 @@ import { BuyProductBlock } from "./buy"
 import { NotListedProductBlock } from "./not-listed"
 import { SellProductBlock } from "./sell"
 import { ViewerListingProductBlock } from "./viewer-listing"
+import { useUsername } from "@/services/user/use-username"
 
 export type ProductBlockProps = {
   asset: AssetWithTradeData
@@ -15,14 +16,13 @@ export type ProductBlockProps = {
 export function ProductBlock({ asset }: ProductBlockProps) {
   const viewerAddress = useCurrentViewerAddress()
   const isOnSale = !!asset.orderbookStats.lowestListingPrice
-  // const isListed = !!asset.highestOfferPrice
 
   const viewerIsOwner =
     viewerAddress && isAddressEqual(asset.owner as Address, viewerAddress)
   const sellBlock = viewerIsOwner && !isOnSale
   const buyBlock = !viewerIsOwner && isOnSale
   const viewerListingBlock = viewerIsOwner && isOnSale
-  
+
   if (sellBlock) return <SellProductBlock asset={asset} />
   if (buyBlock) return <BuyProductBlock asset={asset} />
   if (viewerListingBlock) return <ViewerListingProductBlock asset={asset} />

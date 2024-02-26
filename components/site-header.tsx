@@ -17,8 +17,9 @@ import { useMediaQuery } from "usehooks-ts"
 export function SiteHeader() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const isDesktop = useMediaQuery('minWidth: 768px')
+  const isDesktop = useMediaQuery('(min-width: 768px)')
 
+console.log(isDesktop)
   const toggleMenu = () => setIsOpen(!isOpen)
 
   if (pathname === "/wallets") {
@@ -84,7 +85,7 @@ export function SiteHeader() {
           <Image
             src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
             alt=""
-            width={isDesktop ? 140 : 100}
+            width={isDesktop ? 120 : 100}
             height={isDesktop ? 56 : 40}
           />
         </Link>

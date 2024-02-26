@@ -6,6 +6,7 @@ import { useFilters } from "@/services/cometh-marketplace/filters"
 export default function MarketplacePage() {
   const { filtersRaw } = useFilters()
 
+
   if (!filtersRaw) {
     return null
   }

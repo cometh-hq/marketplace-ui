@@ -34,6 +34,7 @@ export const seedFilters = async (): Promise<
 
   try {
     attributes = await fetchCollectionAttributes()
+    console.log({attributes});
   } catch (e) {
     console.error("Cannot fetch collection attributes")
   }

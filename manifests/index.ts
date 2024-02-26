@@ -11,7 +11,7 @@ const manifest: Manifest = {
   pages: {
     asset: {
       // if you want to exclude some attributes from the filters, add them here
-      excludedAttributesInFilters: [],
+      excludedAttributesInFilters: ["type_id"], // type_id is get from Cosmik API and return name + type_id
       // main attributes shown in the asset page under the asset name
       mainAttributes: [],
     },
