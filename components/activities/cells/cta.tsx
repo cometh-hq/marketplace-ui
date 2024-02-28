@@ -14,14 +14,13 @@ export type CTACellProps = {
 }
 
 const CancelBuyOfferCell = ({ row }: CTACellProps) => {
-  const { mutateAsync: cancel, isLoading } = useCancelBuyOffer()
+  const { mutateAsync: cancel, isPending } = useCancelBuyOffer()
 
   return (
     <Button
-      variant="link"
       onClick={async () => await cancel({ offer: row.original })}
-      isLoading={isLoading}
-      disabled={isLoading}
+      isLoading={isPending}
+      disabled={isPending}
     >
       Cancel
     </Button>

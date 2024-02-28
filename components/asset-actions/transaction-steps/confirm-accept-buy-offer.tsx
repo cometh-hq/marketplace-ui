@@ -1,42 +1,53 @@
 import { useCallback } from "react"
 import { useAcceptBuyOffer } from "@/services/orders/accept-buy-offer"
+import { BigNumber } from "ethers"
 
 import { BuyOffer } from "@/types/buy-offers"
+import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
+import { PriceDetails } from "@/components/ui/priceDetails"
+import { toast } from "@/components/ui/toast/use-toast"
 import { ButtonLoading } from "@/components/button-loading"
-import { BigNumber } from "ethers"
 
 export type ConfirmBuyOfferStepProps = {
   offer: BuyOffer
   onValid: () => void
-  setTxHash: (txHash: string) => void
 }
 
-export function ConfirmAcceptBuyOfferStep({
-  offer,
-  onValid,
-  setTxHash,
-}: ConfirmBuyOfferStepProps) {
-  const { mutateAsync: acceptBuyOffer, isLoading, isError } = useAcceptBuyOffer()
+export function ConfirmAcceptBuyOfferStep({ offer, onValid }: ConfirmBuyOfferStepProps) {
+  const {
+    mutateAsync: acceptBuyOffer,
+    isPending,
+    isSuccess,
+  } = useAcceptBuyOffer()
 
   const onConfirm = useCallback(async () => {
     const tx = await acceptBuyOffer({ offer })
-    if (tx) setTxHash(tx.transactionHash)
-    if (!isError) onValid()
-  }, [acceptBuyOffer, offer, onValid])
+    if (isSuccess) {
+      toast({
+        title: "The purchase offer for your NFT has been accepted!",
+        description: `${globalConfig.network.explorer}/${tx.transactionHash}`,
+      })
+    }
+    onValid()
+  }, [acceptBuyOffer, offer, isSuccess])
 
   const amount = offer.trade.erc20TokenAmount
   const fees = offer.trade.totalFees
   const amountWithFees = BigNumber.from(amount).add(fees).toString()
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 pt-8">
-      <h3 className="text-xl font-semibold">Summary</h3>
-      <p>
-        You are about to accept an offer for <br />this asset for <Price size="default" amount={amountWithFees} /> (fees included)
+    <div className="flex w-full flex-col justify-center gap-4 pt-4">
+      <h3 className="w-full text-center text-xl font-semibold">Summary</h3>
+      <p className="text-center">
+        You are about to accept an offer for <br />
+        this asset for <Price size="default" amount={amountWithFees} /> (fees
+        included)
       </p>
-      {isLoading ? (
+      <PriceDetails fullPrice={amountWithFees} isEthersFormat={false} />
+
+      {isPending ? (
         <ButtonLoading />
       ) : (
         <Button onClick={onConfirm}>Confirm</Button>

@@ -1,9 +1,8 @@
-import { useState } from "react"
-import { manifest } from "@/manifests"
+import { useCallback, useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { OnboardAPI, WalletState } from "@web3-onboard/core"
-import { ethers } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
 import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
 
 export type RegisterFields = {
@@ -16,8 +15,11 @@ export interface ConnectParams {
 }
 
 async function _selectdCorrectChain(onboard: OnboardAPI, wallet: WalletState) {
-  const requiredChaindId = ethers.utils.hexlify(manifest.network.chainId)
-  if (wallet.chains?.[0].id !== requiredChaindId) {
+  const requiredChaindId = `0x${globalConfig.network.chainId.toString(16)}`
+  const walletChain = `0x${parseInt(wallet.chains?.[0].id ?? "0", 16).toString(
+    16
+  )}`
+  if (walletChain !== requiredChaindId) {
     await onboard.setChain({ chainId: requiredChaindId })
   }
 }
@@ -29,43 +31,45 @@ export function useWalletConnect(): {
   const { onboard } = useWeb3OnboardContext()
   const [connecting, setConnecting] = useState(false)
 
-  async function connect({
-    isComethWallet = false,
-  }: ConnectParams): Promise<WalletState> {
-    setConnecting(true)
+  const connectFunction = useCallback(
+    async ({
+      isComethWallet = false,
+    }: ConnectParams): Promise<WalletState> => {
+      setConnecting(true)
 
-    if (!onboard) throw new Error("Onboard is not initialized")
+      if (!onboard) throw new Error("Onboard is not initialized")
 
-    try {
-      const wallets = await onboard.connectWallet(
-        isComethWallet
-          ? {
-              autoSelect: {
-                label: COMETH_CONNECT_STORAGE_LABEL,
-                disableModals: true,
-              },
-            }
-          : undefined
-      )
-
-      if (wallets?.[0]) {
-        console.log("wallet0", wallets?.[0])
-        await _selectdCorrectChain(onboard, wallets[0])
-        localStorage.setItem("selectedWallet", wallets[0].label)
-        return wallets[0]
-      } else {
-        throw new Error("No wallet selected")
+      let onboardConfig = undefined
+      if (isComethWallet) {
+        onboardConfig = {
+          autoSelect: {
+            label: COMETH_CONNECT_STORAGE_LABEL,
+            disableModals: true,
+          },
+        }
       }
-    } catch (error) {
-      console.log(error)
-      throw new Error("Failed to connect wallet")
-    } finally {
-      setConnecting(false)
-    }
-  }
+
+      try {
+        const wallets = await onboard.connectWallet(onboardConfig)
+        if (wallets?.[0]) {
+          await _selectdCorrectChain(onboard, wallets[0])
+          localStorage.setItem("selectedWallet", wallets[0].label)
+          return wallets[0]
+        } else {
+          throw new Error("No wallet selected")
+        }
+      } catch (error) {
+        console.error(error)
+        throw new Error("Failed to connect wallet")
+      } finally {
+        setConnecting(false)
+      }
+    },
+    [onboard]
+  )
 
   return {
-    connect,
+    connect: connectFunction,
     connecting,
   }
 }

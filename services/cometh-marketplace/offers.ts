@@ -1,12 +1,12 @@
 import { TradeDirection, TradeStatus } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 
-import { comethMarketplaceClient } from "./client"
+import { comethMarketplaceClient } from "../clients"
 
 export function useReceivedBuyOffers(userAddress: string) {
-  const { data, isLoading } = useQuery(
-    ["cometh", "received-buy-offers", userAddress.toLowerCase()],
-    async () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["cometh", "received-buy-offers", userAddress.toLowerCase()],
+    queryFn: async () => {
       const response =
         await comethMarketplaceClient.order.getOffersReceivedByAddress(
           userAddress
@@ -16,8 +16,9 @@ export function useReceivedBuyOffers(userAddress: string) {
           (order) => order.direction === TradeDirection.BUY
         ) ?? []
       )
-    }
-  )
+    },
+    refetchInterval: 5000
+  })
 
   return {
     data: data ?? [],
@@ -26,20 +27,18 @@ export function useReceivedBuyOffers(userAddress: string) {
 }
 
 export function useSentBuyOffers(userAddress: string) {
-  const { data, isLoading } = useQuery(
-    ["cometh", "sent-buy-offers", userAddress.toLowerCase()],
-    async () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["cometh", "sent-buy-offers", userAddress.toLowerCase()],
+    queryFn: async () => {
       const response =
-        await comethMarketplaceClient.order.getOffersSentByAddress(
-          userAddress
-        )
+        await comethMarketplaceClient.order.getOffersSentByAddress(userAddress)
       return (
         response.orders?.filter(
           (order) => order.direction === TradeDirection.BUY
         ) ?? []
       )
-    }
-  )
+    },
+  })
 
   return {
     data: data ?? [],
@@ -48,17 +47,17 @@ export function useSentBuyOffers(userAddress: string) {
 }
 
 export function useListings(tokenId: string) {
-  const { data, isLoading } = useQuery(
-    ["cometh", "listings", tokenId],
-    async () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["cometh", "listings", tokenId],
+    queryFn: async () => {
       const response = await comethMarketplaceClient.order.searchOrders({
         tokenIds: [tokenId],
         statuses: [TradeStatus.OPEN],
         direction: TradeDirection.SELL,
       })
       return response.orders
-    }
-  )
+    },
+  })
 
   return {
     data: data ?? [],

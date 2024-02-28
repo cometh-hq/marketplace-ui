@@ -4,9 +4,10 @@ import { Address } from "viem"
 import { BuyOffer } from "@/types/buy-offers"
 import { useStepper } from "@/lib/utils/stepper"
 
-import { fetchHasApprovedCollection } from "../../../services/token-approval/has-approved-collection"
-import { useCurrentViewerAddress } from "../auth"
+import { fetchHasApprovedCollection } from "@/services/token-approval/has-approved-collection"
+import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
+import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 
 export type UseRequiredSellingStepsOptions = {
   offer: BuyOffer
@@ -23,31 +24,33 @@ export type AcceptBuyOfferStep = {
 }
 
 const defaultSteps = [
-  { label: "Pricing", value: "confirm-accept-buy-offer" },
-  { label: "All set", value: "confirmation" },
+  { label: "Pricing", value: "confirm-accept-buy-offer" }
 ] as AcceptBuyOfferStep[]
 
 export type FetchRequiredSellingStepsOptions = {
   offer: BuyOffer
   address: Address
   nftSwapSdk: NonNullable<ReturnType<typeof useNFTSwapv4>>
+  isComethWallet: boolean
 }
 
 export const fetchRequiredAcceptBuyOfferSteps = async ({
   offer,
   address,
   nftSwapSdk,
+  isComethWallet
 }: FetchRequiredSellingStepsOptions) => {
+  const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
+
   const hasApprovedCollection = await fetchHasApprovedCollection({
     address,
     tokenId: offer.asset?.tokenId ?? offer.trade.tokenId,
     nftSwapSdk,
-    contractAddress:
-      (offer.asset?.contractAddress as Address) ??
-      offer.trade.asset.contractAddress,
+    contractAddress: offer.trade.tokenAddress as Address
   })
 
   const sellingSteps = [
+    !hasEnoughGas && { value: "add-gas", label: "Add gas" },
     !hasApprovedCollection && { value: "token-approval", label: "Permissions" },
     ...defaultSteps,
   ].filter(Boolean) as AcceptBuyOfferStep[]
@@ -60,23 +63,23 @@ export const useRequiredAcceptBuyOfferSteps = ({
 }: UseRequiredSellingStepsOptions) => {
   const viewerAddress = useCurrentViewerAddress()
   const nftSwapSdk = useNFTSwapv4()
-
-  return useQuery(
-    ["requiredAcceptBuyOfferSteps", offer],
-    async () => {
+  const isComethWallet = useIsComethWallet()
+  return useQuery({
+    queryKey: ["requiredAcceptBuyOfferSteps", offer],
+    queryFn: async () => {
       if (!nftSwapSdk || !viewerAddress) return defaultSteps
       return fetchRequiredAcceptBuyOfferSteps({
         offer,
         address: viewerAddress,
         nftSwapSdk,
+        isComethWallet
       })
     },
-    {
-      staleTime: Infinity,
-      refetchOnWindowFocus: false,
-      enabled: !!nftSwapSdk && !!viewerAddress,
-    }
-  )
+
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    enabled: !!nftSwapSdk && !!viewerAddress,
+  })
 }
 
 export type UseAcceptBuyOfferButtonOptions = {

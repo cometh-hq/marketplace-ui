@@ -6,8 +6,8 @@ import { AssetSearchFilters } from "@cometh/marketplace-sdk"
 import { useInView } from "react-intersection-observer"
 
 import {
-  SerializedMarketplacePanelFilters,
   deserializeFilters,
+  SerializedMarketplacePanelFilters,
 } from "@/lib/utils/seed"
 import { Loading } from "@/components/ui/loading"
 
@@ -29,7 +29,10 @@ export const AssetsSearchGrid = ({
   filters: filtersRaw,
   filteredBy = {},
 }: any) => {
-  const { ref: loadMoreRef, inView } = useInView({ threshold: 1 })
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 0.01,
+    rootMargin: "0px 0px 2000px 0px",
+  })
   const [search, setSearch] = useState("")
   const [initialResults, setInitialResults] = useState<number | null>(null)
 
@@ -42,7 +45,6 @@ export const AssetsSearchGrid = ({
     refetch,
     isLoading,
     fetchNextPage,
-    hasNextPage,
     isFetchingNextPage,
   } = useFilterableNFTsQuery({
     search,
@@ -53,35 +55,39 @@ export const AssetsSearchGrid = ({
     return (nfts?.pages ?? []).map((r) => r?.nfts.assets).flat()
   }, [nfts?.pages])
 
-  const results = useMemo(() => {
+  const totalNbAssets = useMemo(() => {
     return nfts?.pages[0]?.total ?? 0
   }, [nfts?.pages])
 
   useEffect(() => {
-    if (results && initialResults === null) {
-      setInitialResults(results)
+    if (totalNbAssets && initialResults === null) {
+      setInitialResults(totalNbAssets)
     }
-  }, [results])
+  }, [totalNbAssets, initialResults, setInitialResults])
 
   useEffect(() => {
-    if (nfts) refetch()
-  }, [nfts])
-
-  useEffect(() => {
-    if (inView) fetchNextPage()
-  }, [inView])
+    if (inView && !isLoading) fetchNextPage()
+  }, [inView, isLoading, fetchNextPage])
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <div className="relative mb-10 flex w-full flex-wrap items-center justify-between gap-4">
-        <NFTStateFilters assets={assets} results={results} />
-        <div className="flex items-center gap-x-3">
+      <div className="relative flex w-full flex-wrap items-center justify-between gap-4">
+        <NFTStateFilters assets={assets} results={totalNbAssets} />
+        <div className="flex max-md:w-full items-center justify-between gap-3">
           <SearchAsset onChange={setSearch} />
-          <MarketplaceFiltersDropdown filters={filtersDefinition} />
-          <FiltersResetBtn />
-          <MarketplaceSortDropdown />
+          <div className="flex gap-3">
+            <MarketplaceFiltersDropdown filters={filtersDefinition} />
+            <FiltersResetBtn />
+            <MarketplaceSortDropdown />
+          </div>
         </div>
       </div>
+      <p className="mb-10 mt-3 w-full pl-2 text-left">
+        <strong>
+          {totalNbAssets} asset{totalNbAssets > 1 && "s"}
+        </strong>{" "}
+        matching your search
+      </p>
 
       {isLoading && <Loading />}
 
@@ -91,11 +97,11 @@ export const AssetsSearchGrid = ({
         <>
           <AssetCardsList>
             {assets.map((asset, index) => (
-              <AssetCard key={index} asset={asset} />
+              <AssetCard key={`${asset.tokenId}-${index}`} asset={asset} />
             ))}
           </AssetCardsList>
-          <div ref={loadMoreRef} className="mt-10">
-            {isFetchingNextPage ? "Loading NFTs..." : hasNextPage}
+          <div ref={loadMoreRef} className="py-10">
+            {isFetchingNextPage ? "Loading more NFTs..." : <div></div>}
           </div>
         </>
       )}

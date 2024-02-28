@@ -25,7 +25,7 @@ export const AccountAssetActivities = ({
   const sentOffers = useAssetSentOffers({ owner: walletAddress })
 
   return (
-    <Tabs defaultValue="search-assets" className="w-full">
+    <Tabs defaultValue="search-assets" className="w-full ">
       <TabBar
         receivedCounter={receivedOffers.length}
         sentCounter={sentOffers.length}

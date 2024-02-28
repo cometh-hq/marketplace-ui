@@ -43,7 +43,6 @@ export function ShareButton({ size = "sm", textToShow }: ShareButtonProps) {
               <Button
                 size={size === "sm" ? "sm" : "default"}
                 variant="secondary"
-                className="!bg-muted"
               >
                 {size === "lg" && "Share"}
                 <Share size={16} className={size === "lg" ? "ml-2" : ""} />
@@ -62,7 +61,7 @@ export function ShareButton({ size = "sm", textToShow }: ShareButtonProps) {
         <DropdownMenuItem
           onClick={() =>
             shareOnTwitter(
-              `${textToShow ?? `Check out this item on`} ${manifest.name}`
+              `${textToShow ?? `Check out this item on`} ${manifest.collectionName}`
             )
           }
         >

@@ -18,7 +18,7 @@ export const useClipboard = (): [CopiedValue, CopyFn] => {
       await navigator.clipboard.writeText(text)
       setCopiedText(text)
       toast({
-        title: "Copied to clipboard!",
+        title: "Copied!",
         description: text,
         duration: 3000,
       })

@@ -47,7 +47,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
   }, [attributes])
 
   return (
-    <div className="flex-1 lg:sticky lg:left-0 lg:top-[5%] lg:w-[45%] lg:pt-[100px]">
+    <div className="flex-1 lg:sticky lg:left-0 lg:top-[5%] lg:w-[35%] lg:pt-[100px]">
       <div className="mb-2 flex items-center justify-between">
         <BreadcrumbContainer>
           <BreadcrumbElement href="/marketplace">
@@ -60,7 +60,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
         </BreadcrumbContainer>
         <ShareButton />
       </div>
-      <div className="text-2xl font-bold opacity-90">#{shortenTokenId(asset.tokenId, 2)}</div>
+      <div className="text-2xl font-bold opacity-90">#{shortenTokenId(asset.tokenId, 7)}</div>
       <h1 className="text-3xl font-bold leading-[1.15] md:text-[48px]">
         {asset.metadata.name}
       </h1>

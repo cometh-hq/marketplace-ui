@@ -1,15 +1,13 @@
 import { useMemo } from "react"
-import { manifest } from "@/manifests"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
 import { Address, isAddressEqual } from "viem"
 
 import { BuyOffer } from "@/types/buy-offers"
+import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
-
-import { handleOrderbookError } from "../errors"
 
 export type AcceptBuyOfferOptions = {
   offer: BuyOffer
@@ -39,9 +37,9 @@ export const useAcceptBuyOffer = () => {
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
 
-  return useMutation(
-    ["accept-buy-offer"],
-    async ({ offer }: AcceptBuyOfferOptions) => {
+  return useMutation({
+    mutationKey: ["accept-buy-offer"],
+    mutationFn: async ({ offer }: AcceptBuyOfferOptions) => {
       if (!nftSwapSdk) throw new Error("Could not initialize SDK")
 
       const signature = offer.trade.signature || {
@@ -63,10 +61,10 @@ export const useAcceptBuyOffer = () => {
           return {
             recipient: fee.recipient,
             amount: fee.amount,
-            feeData: fee.feeData || '0x',
+            feeData: fee.feeData || "0x",
           }
         }),
-        erc721Token: manifest.contractAddress,
+        erc721Token: globalConfig.contractAddress,
         erc721TokenId: offer.trade.tokenId,
         erc721TokenProperties: [],
         signature: signature,
@@ -78,32 +76,17 @@ export const useAcceptBuyOffer = () => {
       )
       return fillTxReceipt
     },
-    {
-      onSuccess: (_, { offer }) => {
-        client.invalidateQueries(["cometh", "assets", offer.asset?.tokenId])
-        client.invalidateQueries([
-          "cometh",
-          "received-buy-offers",
-          offer.owner.address,
-        ])
-        toast({
-          title: "Order filled!",
-        })
-      },
-      onError: (error) => {
-        console.error(error)
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: handleOrderbookError(error, {
-            400: "Bad request",
-            404: "Order not found",
-            401: "Unauthorized",
-            403: "Forbidden",
-            500: "Internal orderbook server error",
-          }),
-        })
-      },
+
+    onSuccess: (_, { offer }) => {
+      client.invalidateQueries({
+        queryKey: ["cometh", "assets", offer.asset?.tokenId],
+      })
+      client.invalidateQueries({
+        queryKey: ["cometh", "received-buy-offers", offer.owner.address],
+      })
+      toast({
+        title: "Purchased order filled!",
+      })
     }
-  )
+  })
 }

@@ -1,7 +1,11 @@
-import { useEffect } from "react"
-import { useHasSufficientFunds } from "@/services/balance/has-sufficient-funds"
+import { useEffect, useState } from "react"
+import {
+  fetchHasSufficientFunds,
+  useHasSufficientFunds,
+} from "@/services/balance/has-sufficient-funds"
 import { BigNumber } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
@@ -13,6 +17,7 @@ export type FundsStepProps = {
 
 export function FundsStep({ price, onValid }: FundsStepProps) {
   const viewer = useCurrentViewerAddress()
+  const [isRefreshingBalance, setIsRefreshingBalance] = useState(false)
 
   const { data } = useHasSufficientFunds({
     address: viewer,
@@ -29,15 +34,35 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
 
   const { missingBalance } = data
 
+  const checkBalance = async () => {
+    setIsRefreshingBalance(true)
+    if (!viewer) return
+    const { hasSufficientFunds } = await fetchHasSufficientFunds({
+      address: viewer,
+      price,
+    })
+    if (hasSufficientFunds) {
+      onValid()
+    }
+    setIsRefreshingBalance(false)
+  }
+
   return (
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Top up your wallet</h3>
-      <p>
+      <p className="text-center">
         Looks like you don&rsquo;t have enough funds to complete this
-        transaction.
+        transaction. <br />
+        You are missing <Price amount={missingBalance} hideSymbol={false} />. Once you
+        have funded your wallet with some{" "}
+        <strong>{globalConfig.ordersDisplayCurrency.name}</strong>, please
+        refresh your balance.
       </p>
-      <Button onClick={onValid}>
-        Add <Price amount={missingBalance} />
+      <p>
+        Wallet address: <strong>{viewer}</strong>
+      </p>
+      <Button isLoading={isRefreshingBalance} onClick={checkBalance}>
+        Refresh balance
       </Button>
     </div>
   )

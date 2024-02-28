@@ -1,37 +1,47 @@
-import { manifest } from "@/manifests"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 
-import { fetchMainBalance } from "./main"
-import { fetchWrappedBalance } from "./wrapped"
+import globalConfig from "@/config/globalConfig"
+
+import { getNativeBalance, getOrdersERC20Balance } from "./balanceService"
+import { balanceToBigNumber } from "./format"
 
 export type FetchHasSufficientFundsOptions = {
   address: Address
   price?: BigNumber | null
-  wrappedContractAddress: Address
+  includeWrappedNative?: boolean
 }
 
 export type UseHasSufficientFundsOptions = {
   address?: Address | null
   price?: BigNumber | null
+  includeWrappedNative?: boolean
 }
 
 export const fetchHasSufficientFunds = async ({
   address,
   price,
-  wrappedContractAddress,
+  includeWrappedNative = true,
 }: FetchHasSufficientFundsOptions) => {
-  const [mainBalance, wrappedBalance] = await Promise.all([
-    fetchMainBalance(address),
-    fetchWrappedBalance(address, wrappedContractAddress),
+  const [mainBalance, erc20Balance] = await Promise.all([
+    getNativeBalance(address),
+    getOrdersERC20Balance(address),
   ])
 
-  const hasSufficientFunds = mainBalance.add(wrappedBalance).gte(price ?? 0)
+  let availableFunds = BigNumber.from(0)
+  if (includeWrappedNative || !globalConfig.useNativeForOrders) {
+    availableFunds = availableFunds.add(balanceToBigNumber(erc20Balance))
+  }
+  if (globalConfig.useNativeForOrders) {
+    availableFunds = availableFunds.add(mainBalance)
+  }
+
+  const hasSufficientFunds = availableFunds.gte(price ?? 0)
 
   const missingBalance = hasSufficientFunds
     ? BigNumber.from(0)
-    : price?.sub(mainBalance.add(wrappedBalance))
+    : price?.sub(availableFunds)
 
   return {
     hasSufficientFunds,
@@ -42,17 +52,17 @@ export const fetchHasSufficientFunds = async ({
 export const useHasSufficientFunds = ({
   address,
   price,
+  includeWrappedNative = true,
 }: UseHasSufficientFundsOptions) => {
-  return useQuery(
-    ["hasSufficientFunds", address, price],
-    async () =>
+  return useQuery({
+    queryKey: ["hasSufficientFunds", address, price],
+    queryFn: async () =>
       fetchHasSufficientFunds({
         address: address!,
         price,
-        wrappedContractAddress: manifest.currency.wrapped.address,
+        includeWrappedNative,
       }),
-    {
-      enabled: !!address && !!price,
-    }
-  )
+
+    enabled: !!address && !!price,
+  })
 }

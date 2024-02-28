@@ -1,23 +1,29 @@
-import * as React from "react"
 import { XIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils/utils"
-
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode
+  onInputUpdate?: (value: string) => void
 }
+
+import React from 'react';
+import { trimDecimals } from "@/lib/utils/priceUtil";
+import globalConfig from "@/config/globalConfig";
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, icon, ...props }, ref) => {
-    // State to manage the input value
     const [value, setValue] = React.useState("")
 
-    // Update the value state when input changes
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(event.target.value)
-      if (props.onChange) {
-        props.onChange(event)
+      let value = event.target.value
+      if(type == 'number') {
+        value = trimDecimals(event.target.value, globalConfig.decimals.inputMaxDecimals)
+      }
+
+      setValue(value)
+      if (props.onInputUpdate) {
+        props.onInputUpdate(value)
       }
     }
 
@@ -33,12 +39,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         // Dispatch the event from the input element
         ref.current.dispatchEvent(event)
       }
+      if (props.onInputUpdate) {
+        props.onInputUpdate("")
+      }
     }
 
     return (
       <div
         className={cn(
-          "relative flex h-12 items-center rounded-md border border-input bg-background px-3 py-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          "relative flex h-12 items-center rounded-md border border-input px-3 py-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
       >
@@ -46,13 +55,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={type}
           value={value}
-          onInput={handleChange}
-          className="h-full w-full bg-background text-sm font-medium outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:font-semibold placeholder:text-muted-foreground"
+          onChange={handleChange}
+          className="input size-full !bg-transparent pr-5 font-medium outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-white/50"
           ref={ref}
           {...props}
         />
         {value && (
-          <button onClick={handleClear} className="ml-2 text-sm">
+          <button onClick={handleClear} className="absolute right-3 ml-2">
             <XIcon size={16} />
           </button>
         )}

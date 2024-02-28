@@ -19,15 +19,15 @@ export function AssetMetadata({ asset }: { asset: AssetWithTradeData }) {
   return (
     <TabsContent value="overview">
       <Card className="border-0 shadow-none">
-        <CardHeader className="bg-background pt-0">
+        <CardHeader className="px-0 pt-0">
           <CardTitle>Description</CardTitle>
           <CardDescription>
-            Item #{asset.tokenId} of the {manifest.name} collection.
+            Item #{asset.tokenId} of the {manifest.collectionName} collection.
           </CardDescription>
         </CardHeader>
       </Card>
       <Card>
-        <CardHeader>
+        <CardHeader className="px-0 pt-0">
           <CardTitle className="flex items-center gap-2">Attributes</CardTitle>
         </CardHeader>
         <CardContent className="-mx-2 px-2 pb-2">

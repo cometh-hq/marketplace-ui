@@ -1,3 +1,4 @@
+import { useUsername } from "@/services/user/use-username"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
@@ -22,30 +23,33 @@ export type BuyProductBlockProps = {
 }
 
 export function BuyProductBlock({ asset }: BuyProductBlockProps) {
-  const listingPrice = asset.orderbookStats.lowestSalePrice
+  const listingPrice = asset.orderbookStats.lowestListingPrice
+  const { username, isFetchingUsername } = useUsername(asset.owner as Address)
 
   return (
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
-        <AssetStatusBadge status="listed" />
-        <Price amount={listingPrice} size="xl" />
+        <ProductBlockLabel>Price</ProductBlockLabel>
+        <Price amount={listingPrice} />
       </ProductBlockDividedColumn>
 
       <BestOfferColumn asset={asset} />
 
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Listed by</ProductBlockLabel>
-        <UserLink
-          variant="link"
-          className="mt-1"
-          user={{ address: asset.owner as Address }}
-        />
+        {!isFetchingUsername && (
+          <UserLink
+            variant="link"
+            className="mt-1"
+            user={{ address: asset.owner as Address, username: username }}
+          />
+        )}
       </ProductBlockDividedColumn>
       <ProductBlockCenteredColumn>
-        <ConnectButton>
+        <ConnectButton fullVariant customText="Login to buy">
           <SwitchNetwork>
-            <MakeBuyOfferButton asset={asset} />
             <BuyAssetButton asset={asset} />
+            <MakeBuyOfferButton asset={asset} />
           </SwitchNetwork>
         </ConnectButton>
       </ProductBlockCenteredColumn>

@@ -1,14 +1,7 @@
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
-import {
-  DollarSignIcon,
-  Icon,
-  IconNode,
-  LayoutGridIcon,
-  LucideIcon,
-  TagIcon,
-  UserIcon,
-} from "lucide-react"
+import cx from "classnames"
+import { LayoutGridIcon, TagIcon, UserIcon } from "lucide-react"
 
 import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
@@ -32,8 +25,8 @@ const NFTStateFilterItem = ({
   return (
     <Button
       onClick={() => update({ isOnSale })}
-      variant={isSelected ? "secondary" : "ghost"}
-      className="font-semibold"
+      variant={isSelected ? "default" : "ghost"}
+      className={cx("font-medium", isSelected ? "bg-accent-foreground text-accent-foreground after:content-none" : "hover:text-accent-foreground")}
     >
       {iconComponent ? iconComponent : ""}
       {label}
@@ -53,17 +46,15 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
 
   const isOnProfilePage = pathname.includes(`/profile`)
 
-  const result = results && results > 0 ? `(${results})` : ""
-
   return (
-    <div className="flex gap-5">
+    <div className="flex gap-5 overflow-x-auto pb-1 max-md:-mx-5 max-md:px-5">
       <NFTStateFilterItem
-        label={`All items ${result}`}
+        label={`All items`}
         isSelected={!get("isOnSale")}
         iconComponent={<LayoutGridIcon size="16" className="mr-2" />}
       />
       <NFTStateFilterItem
-        label="On sale"
+        label="On Sale"
         isOnSale
         isSelected={Boolean(get("isOnSale"))}
         iconComponent={<TagIcon size="16" className="mr-2" />}

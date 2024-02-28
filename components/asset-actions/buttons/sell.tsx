@@ -4,50 +4,63 @@ import { useSellAssetButton } from "@/lib/web3/flows/sell"
 import { TransactionDialogButton } from "@/components/dialog-button"
 import { Case, Switch } from "@/components/utils/Switch"
 
-import { ButtonLoading } from "../../../components/button-loading"
 import { CollectionApprovalStep } from "../transaction-steps/collection-approval"
-import { ConfirmationStep } from "../transaction-steps/confirmation"
 import { SellStep } from "../transaction-steps/sell"
+import { AddGasStep } from "../transaction-steps/add-gas"
+import { ButtonLoading } from "@/components/button-loading"
 import { cn } from "@/lib/utils/utils"
+import { useState } from "react"
 
 export type SellAssetButtonProps = {
   asset: AssetWithTradeData
   isVariantLink?: boolean
 }
 
-export function SellAssetButton({ asset, isVariantLink }: SellAssetButtonProps) {
-  /**
-   * TODO: Defer the calculation
-   */
+export function SellAssetButton({
+  asset,
+  isVariantLink,
+}: SellAssetButtonProps) {
+  const [open, setOpen] = useState(false)
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useSellAssetButton({ asset })
 
-  if (isLoading) return (
-    <ButtonLoading
-      size={isVariantLink ? "default" : "lg"}
-      variant={isVariantLink ? "link" : "default"}
-      className={cn(isVariantLink && "h-auto p-0")}
-    />
-  )
+  if (isLoading) {
+    return (
+      <ButtonLoading
+        size={isVariantLink ? "default" : "lg"}
+        variant="default"
+        // className={cn(isVariantLink && "h-auto p-0")}
+      />
+    )
+  }
+
   if (!requiredSteps?.length || !currentStep) return null
+
+  const closeDialog = () => {
+    setOpen(false)
+  }
 
   return (
     <TransactionDialogButton
+      open={open}
       label="Sell"
       currentStep={currentStep}
       steps={requiredSteps}
+      onOpenChange={setOpen}
       onClose={reset}
       isVariantLink={isVariantLink}
+      isLoading={isLoading}
+      isDisabled={isLoading}
     >
       <Switch value={currentStep.value}>
+        <Case value="add-gas">
+          <AddGasStep onValid={nextStep} />
+        </Case>
         <Case value="token-approval">
           <CollectionApprovalStep asset={asset} onValid={nextStep} />
         </Case>
         <Case value="sell">
-          <SellStep asset={asset} onValid={nextStep} />
-        </Case>
-        <Case value="confirmation">
-          <ConfirmationStep />
+          <SellStep asset={asset} onClose={closeDialog} />
         </Case>
       </Switch>
     </TransactionDialogButton>
