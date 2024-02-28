@@ -19,6 +19,18 @@ import { type Chain as ViemChain } from 'viem'
 
 import globalConfig from "@/config/globalConfig"
 
+export const muster = {
+  id: 4078,
+  name: 'Muster',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: {
+    default: { http: ['https://muster.alt.technologyy'] },
+  },
+  blockExplorers: {
+    default: { name: 'Muster anytrust', url: 'https://muster-explorer.alt.technology/' },
+  },
+  testnet: true
+} as const satisfies ViemChain
 export const musterTestnet = {
   id: 2121337,
   name: 'Muster Anytrust Sepolia',
@@ -44,6 +56,7 @@ const wagmiChains = [
   avalanche,
   polygonMumbai,
   musterTestnet,
+  muster
 ]
 
 const marketplaceChain = wagmiChains.find(
