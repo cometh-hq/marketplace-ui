@@ -85,7 +85,7 @@ console.log(isDesktop)
           <Image
             src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
             alt=""
-            width={isDesktop ? 128 : 100}
+            width={isDesktop ? 136 : 100}
             height={isDesktop ? 56 : 40}
           />
         </Link>
