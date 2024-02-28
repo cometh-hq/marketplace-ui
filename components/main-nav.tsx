@@ -43,6 +43,7 @@ export function MainNav({ items, onLinkClick }: MainNavProps) {
                   onClick={onLinkClick}
                 >
                   {item.title}
+                  <small className="opacity-90">{item.subtitle}</small>
                 </Link>
               )
           )}
