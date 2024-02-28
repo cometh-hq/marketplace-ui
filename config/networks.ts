@@ -317,6 +317,28 @@ const NETWORKS: Record<number, NetworkConfig> = {
     zeroExExchange: "0xf471d32cb40837bf24529fcf17418fc1a4807626",
     minimumBalanceForGas: parseEther("0.1"),
   },
+  4078: {
+    chainId: 4078,
+    hexaId: "0xfee",
+    name: "Muster Mainnet",
+    chain: "Muster",
+    network: "mainet",
+    explorer: {
+      name: "muster blockscout",
+      url: "https://muster-anytrust-explorer.alt.technology",
+      standard: "EIP3091",
+      blockUrl: "https://muster-anytrust-explorer.alt.technology/tx",
+    },
+    nativeToken: { name: "Ether", symbol: "ETH", decimals: 18 },
+    wrappedNativeToken: {
+      name: "Wrapped ETH",
+      symbol: "WETH",
+      decimals: 18,
+      address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
+    },
+    zeroExExchange: "0x9a6204dE86443eB0914059b291f667D8953e8aE1",
+    minimumBalanceForGas: parseEther("0.1"),
+  },
   2121337: {
     chainId: 2121337,
     hexaId: "0x205E79",
