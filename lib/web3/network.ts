@@ -39,6 +39,7 @@ export const useCorrectNetwork = () => {
       }
     }
   }, [])
+  
 
   const switchNetwork = async () => {
     setIsLoading(true)
