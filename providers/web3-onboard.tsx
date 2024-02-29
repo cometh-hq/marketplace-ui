@@ -88,9 +88,12 @@ export function Web3OnboardProvider({
   const [reconnecting, setReconnecting] = useState<boolean>(false)
   const { comethWalletAddressInStorage } = useStorageWallet()
 
+  const hexChainId = numberToHex(parseInt(process.env.NEXT_PUBLIC_NETWORK_ID || "0"))
+  const chainId = SupportedNetworks[hexChainId as keyof typeof SupportedNetworks]
+
   const initNewSignerRequest = async (walletAddress: string) => {
     const connectAuthAdaptor = new ConnectAdaptor({
-      chainId: SupportedNetworks.MUSTER_TESTNET,
+      chainId,
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
       baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
     })
@@ -100,7 +103,7 @@ export function Web3OnboardProvider({
 
   const retrieveWalletAddressFromSigner = async (walletAddress: string) => {
     const connectAuthAdaptor = new ConnectAdaptor({
-      chainId: SupportedNetworks.MUSTER_TESTNET,
+      chainId,
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
       baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
     })

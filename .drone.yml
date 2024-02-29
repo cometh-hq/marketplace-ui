@@ -124,8 +124,10 @@ steps:
       NEXT_PUBLIC_BASE_PATH: ""
       NEXT_PUBLIC_CONTRACT_ADDRESS:
         from_secret: prod_contract_address
-      NEXT_PUBLIC_NETWORK_ID: 4078
-      NEXT_PUBLIC_RPC_URL: "https://muster.alt.technology"
+      NEXT_PUBLIC_NETWORK_ID:
+        from_secret: prod_network_id
+      NEXT_PUBLIC_RPC_URL:
+        from_secret: prod_rpc_url
       NEXT_PUBLIC_COSMIK_BASE_URL:
         from_secret: prod_cosmik_url
   - name: rolling update

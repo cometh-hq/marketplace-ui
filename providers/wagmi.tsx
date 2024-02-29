@@ -27,7 +27,7 @@ export const muster = {
     default: { http: ['https://muster.alt.technologyy'] },
   },
   blockExplorers: {
-    default: { name: 'Muster anytrust', url: 'https://muster-explorer.alt.technology/' },
+    default: { name: 'Muster', url: 'https://muster-explorer.alt.technology/' },
   },
   testnet: true
 } as const satisfies ViemChain
