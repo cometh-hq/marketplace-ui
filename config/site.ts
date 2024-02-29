@@ -8,7 +8,7 @@ export const siteConfig = {
   mainNav: [
     {
       title: "Marketplace",
-      subtitle: " - Alpha",
+      subtitle: " (Alpha)",
       href: "/marketplace",
     },
   ],

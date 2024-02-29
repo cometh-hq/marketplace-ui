@@ -9,7 +9,6 @@ import { Toaster } from "@/components/ui/toast/toaster"
 import { AppContent } from "@/components/content"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { env } from "@/config/env"
 
 export const metadata: Metadata = {
   title: {
