@@ -20,7 +20,7 @@ export const useClipboard = (): [CopiedValue, CopyFn] => {
       toast({
         title: "Copied!",
         description: text,
-        duration: 3000,
+        duration: 1000,
       })
       return true
     } catch (error) {

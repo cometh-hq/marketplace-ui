@@ -82,12 +82,23 @@ console.log(isDesktop)
             isOpen && "text-primary-foreground"
           )}
         >
-          <Image
-            src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
-            alt=""
-            width={isDesktop ? 136 : 100}
-            height={isDesktop ? 56 : 40}
-          />
+          <span className="md:hidden">
+            <Image
+              src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
+              alt=""
+              width={100}
+              height={40}
+            />
+          </span>
+
+          <span className="max-md:hidden">
+            <Image
+              src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
+              alt=""
+              width={136}
+              height={56}
+            />
+          </span>
         </Link>
 
         <div className="">
