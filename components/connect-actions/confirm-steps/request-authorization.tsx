@@ -26,6 +26,7 @@ export const RequestAuthorizationStep: React.FC<
         onValid()
       }
     } catch (error) {
+      console.error("Error sending the authorization request", error)
       toast({
         title: "Error",
         description: "There was an error sending the authorization request.",

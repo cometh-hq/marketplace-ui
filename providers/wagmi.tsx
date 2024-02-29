@@ -24,12 +24,12 @@ export const muster = {
   name: 'Muster',
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
-    default: { http: ['https://muster.alt.technologyy'] },
+    default: { http: ['https://muster.alt.technology'] },
   },
   blockExplorers: {
     default: { name: 'Muster', url: 'https://muster-explorer.alt.technology/' },
   },
-  testnet: true
+  testnet: false
 } as const satisfies ViemChain
 export const musterTestnet = {
   id: 2121337,
