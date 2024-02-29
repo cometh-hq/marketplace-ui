@@ -11,6 +11,6 @@ export const comethMarketplaceClient = new MarketplaceSdk({
 })
 
 export const cosmikClient = axios.create({
-  baseURL: "https://api.develop.cosmikbattle.com/api",
+  baseURL: env.NEXT_PUBLIC_COSMIK_BASE_URL,
   withCredentials: true
 })
