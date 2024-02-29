@@ -78,6 +78,14 @@ function numberToHex(value: number): string {
   return `0x${value.toString(16)}`
 }
 
+function getSupportedNetworkId(
+  networkId: number
+): SupportedNetworks | undefined {
+  const networkHex = numberToHex(networkId)
+  const networks = Object.values(SupportedNetworks)
+  return networks.find((network) => network === networkHex)
+}
+
 export function Web3OnboardProvider({
   children,
 }: {
@@ -88,11 +96,15 @@ export function Web3OnboardProvider({
   const [reconnecting, setReconnecting] = useState<boolean>(false)
   const { comethWalletAddressInStorage } = useStorageWallet()
 
-  const hexChainId = numberToHex(parseInt(process.env.NEXT_PUBLIC_NETWORK_ID!)) as SupportedNetworks
+  const chainId = getSupportedNetworkId(env.NEXT_PUBLIC_NETWORK_ID)
+
+  if (!chainId) {
+    throw new Error("Network not supported by Cometh Connect.")
+  }
 
   const initNewSignerRequest = async (walletAddress: string) => {
     const connectAuthAdaptor = new ConnectAdaptor({
-      chainId: hexChainId,
+      chainId,
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
       baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
     })
@@ -102,7 +114,7 @@ export function Web3OnboardProvider({
 
   const retrieveWalletAddressFromSigner = async (walletAddress: string) => {
     const connectAuthAdaptor = new ConnectAdaptor({
-      chainId: hexChainId,
+      chainId,
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
       baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
     })

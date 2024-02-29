@@ -34,6 +34,7 @@ export const RefreshStep: React.FC<RefreshStepProps> = ({
         })
         await connectWallet({ isComethWallet: true })
         setIsconnected(true)
+        onValid()
       } catch (error) {
         console.error("Error connecting wallet", error)
       }
@@ -48,7 +49,6 @@ export const RefreshStep: React.FC<RefreshStepProps> = ({
       console.error("Error in handleRefresh", error)
     } finally {
       setIsLoading(false)
-      onValid()
     }
   }
 
