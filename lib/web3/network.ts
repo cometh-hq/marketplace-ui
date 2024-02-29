@@ -38,6 +38,7 @@ export const useCorrectNetwork = () => {
         subscribe.unsubscribe()
       }
     }
+    
   }, [])
   
 
