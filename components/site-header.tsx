@@ -12,14 +12,11 @@ import { siteConfig } from "@/config/site"
 
 import { ConnectButton } from "./connect-button"
 import { MainNav } from "./main-nav"
-import { useMediaQuery } from "usehooks-ts"
 
 export function SiteHeader() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const isDesktop = useMediaQuery('(min-width: 768px)')
 
-console.log(isDesktop)
   const toggleMenu = () => setIsOpen(!isOpen)
 
   if (pathname === "/wallets") {
@@ -78,27 +75,15 @@ console.log(isDesktop)
         <Link
           href="/marketplace"
           className={cx(
-            "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center space-x-2 text-2xl hover:transform hover:scale-105 transition-transform duration-300 ease-in-out",
+            "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center space-x-2 text-2xl max-md:w-[100px] w-[136px] max-md:h-[40px] h-[56px] hover:transform hover:scale-105 transition-transform duration-300 ease-in-out",
             isOpen && "text-primary-foreground"
           )}
         >
-          <span className="md:hidden">
-            <Image
-              src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
-              alt=""
-              width={100}
-              height={40}
-            />
-          </span>
-
-          <span className="max-md:hidden">
-            <Image
-              src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
-              alt=""
-              width={136}
-              height={56}
-            />
-          </span>
+          <Image
+            src={`${env.NEXT_PUBLIC_BASE_PATH}/cosmik-logo.png`}
+            alt="Cosmik Battle logo"
+            fill
+          />
         </Link>
 
         <div className="">
