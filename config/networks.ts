@@ -322,12 +322,12 @@ const NETWORKS: Record<number, NetworkConfig> = {
     hexaId: "0xfee",
     name: "Muster Mainnet",
     chain: "Muster",
-    network: "mainet",
+    network: "mainnet",
     explorer: {
       name: "muster blockscout",
       url: "https://muster-explorer.alt.technology/",
       standard: "EIP3091",
-      blockUrl: "https://muster-explorer.alt.technology//tx",
+      blockUrl: "https://muster-explorer.alt.technology/tx",
     },
     nativeToken: { name: "Ether", symbol: "ETH", decimals: 18 },
     wrappedNativeToken: {

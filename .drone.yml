@@ -42,7 +42,7 @@ steps:
       NEXT_PUBLIC_NETWORK_ID:
         from_secret: dev_network_id
       NEXT_PUBLIC_RPC_URL:
-        from_secret: dev_rpc_url,
+        from_secret: dev_rpc_url
       NEXT_PUBLIC_COSMIK_BASE_URL:
         from_secret: dev_cosmik_url
       
@@ -127,7 +127,7 @@ steps:
       NEXT_PUBLIC_NETWORK_ID:
         from_secret: prod_network_id
       NEXT_PUBLIC_RPC_URL:
-        from_secret: prod_rpc_url,
+        from_secret: prod_rpc_url
       NEXT_PUBLIC_COSMIK_BASE_URL:
         from_secret: prod_cosmik_url
   - name: rolling update
