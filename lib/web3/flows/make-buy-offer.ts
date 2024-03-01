@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { manifest } from "@/manifests"
 import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 import { fetchNeedsToWrap } from "@/services/exchange/needs-to-wrap"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
@@ -55,7 +54,8 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
   const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
   const displayAddGasStep = !hasEnoughGas
 
-  const displayAddFundsStep = price
+  try {
+    const displayAddFundsStep = price
     ? !(
         await fetchHasSufficientFunds({
           address,
@@ -90,6 +90,9 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
   ].filter(Boolean) as MakeBuyOfferStep[]
 
   return makeBuyOfferSteps
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export const useRequiredMakeBuyOfferSteps = ({
