@@ -25,6 +25,7 @@ steps:
         - NEXT_PUBLIC_NETWORK_ID
         - NEXT_PUBLIC_RPC_URL
         - NEXT_PUBLIC_COSMIK_BASE_URL
+        - NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
@@ -45,6 +46,8 @@ steps:
         from_secret: dev_rpc_url
       NEXT_PUBLIC_COSMIK_BASE_URL:
         from_secret: dev_cosmik_url
+      NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
+        from_secret: dev_zero_ex_address
       
   - name: rolling update
     image: gcr.io/cometh-service/app-rolling-update:latest
@@ -130,6 +133,8 @@ steps:
         from_secret: prod_rpc_url
       NEXT_PUBLIC_COSMIK_BASE_URL:
         from_secret: prod_cosmik_url
+      NEXT_PUBLIC_ZERO_EX_CONTRACT_ADDRESS:
+        from_secret: prod_zero_ex_address
   - name: rolling update
     image: gcr.io/cometh-service/app-rolling-update:latest
     environment:
