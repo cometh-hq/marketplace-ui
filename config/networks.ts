@@ -334,7 +334,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       name: "Wrapped ETH",
       symbol: "WETH",
       decimals: 18,
-      address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
+      address: "0x869Bf8814d77106323745758135b999D34C79a87",
     },
     zeroExExchange: "0x156980A14810259B08D3B8e8412274c479c09832",
     minimumBalanceForGas: parseEther("0.1"),

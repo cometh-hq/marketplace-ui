@@ -33,7 +33,7 @@ export type MakeBuyOfferStep = {
 }
 
 const suffixSteps: MakeBuyOfferStep[] = [
-  { label: "Confirm", value: "confirm-buy-offer" }
+  { label: "Confirm", value: "confirm-buy-offer" },
 ]
 
 export type FetchRequiredBuyingStepsOptions = {
@@ -54,8 +54,7 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
   const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
   const displayAddGasStep = !hasEnoughGas
 
-  try {
-    const displayAddFundsStep = price
+  const displayAddFundsStep = price
     ? !(
         await fetchHasSufficientFunds({
           address,
@@ -81,18 +80,15 @@ export const fetchRequiredMakeBuyOfferSteps = async ({
       })
     : false
 
-  const makeBuyOfferSteps = [
-    displayAddGasStep && { value: "add-gas", label: "Add gas" },
-    displayAddFundsStep && { value: "add-funds", label: "Add funds" },
-    displayWrapStep && { value: "wrap", label: "Wrap" },
-    displaysAllowanceStep && { value: "allowance", label: "Allowance" },
-    ...suffixSteps,
-  ].filter(Boolean) as MakeBuyOfferStep[]
-
-  return makeBuyOfferSteps
-  } catch (error) {
-    console.error(error)
-  }
+    const makeBuyOfferSteps = [
+      displayAddGasStep && { value: "add-gas", label: "Add gas" },
+      displayAddFundsStep && { value: "add-funds", label: "Add funds" },
+      displayWrapStep && { value: "wrap", label: "Wrap" },
+      displaysAllowanceStep && { value: "allowance", label: "Allowance" },
+      ...suffixSteps,
+    ].filter(Boolean) as MakeBuyOfferStep[]
+  
+    return makeBuyOfferSteps
 }
 
 export const useRequiredMakeBuyOfferSteps = ({
@@ -110,7 +106,8 @@ export const useRequiredMakeBuyOfferSteps = ({
       return fetchRequiredMakeBuyOfferSteps({
         price: price!,
         address: viewerAddress,
-        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
+        wrappedContractAddress:
+          globalConfig.network.wrappedNativeToken.address,
         spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
         isComethWallet,
       })
