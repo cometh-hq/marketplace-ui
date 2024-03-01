@@ -48,6 +48,7 @@ export function SellAssetButton({
       steps={requiredSteps}
       onOpenChange={setOpen}
       onClose={reset}
+      variant="third"
       isVariantLink={isVariantLink}
       isLoading={isLoading}
       isDisabled={isLoading}

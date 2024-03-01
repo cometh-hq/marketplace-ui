@@ -248,12 +248,7 @@
   border-radius: 0 !important;
   width: auto;
   position: relative;
-}
 
-.dialog::before {
-  content: "";
-  position: absolute;
-  inset: 0;
   background:
     url("/cards/dialog-top-left.png") top left no-repeat,
     url("/cards/dialog-top-right.png") top right no-repeat,
@@ -261,21 +256,20 @@
     url("/cards/dialog-bottom-right.png") bottom right no-repeat;
   clip-path: polygon(
     4px 0px,
-    98.5% 0,
+    calc(100% - 4px) 0,
     100% 4px,
-    100% 98.5%,
-    98.5% 100%,
+    100% calc(100% - 4px),
+    calc(100% - 4px) 100%,
     4px 100%,
-    0 98.5%,
+    0 calc(100% - 4px),
     0 4px
   );
-  z-index: -1;
   @apply bg-card;
 }
 
-.dialog-background {
+/* .dialog-background {
   position: absolute;
-}
+} */
 
 /* Table */
 table tbody > tr {

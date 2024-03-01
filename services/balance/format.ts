@@ -18,5 +18,5 @@ export const balanceToString = (
     isNativeToken
       ? globalConfig.decimals.nativeTokenDecimals
       : globalConfig.ordersErc20.decimals
-  )).toFixed(2)
+  )).toFixed(3)
 }

@@ -41,8 +41,7 @@ export function TransactionDialogButton<T extends Step>({
       <DialogTrigger asChild>
         <Button
           size={isVariantLink ? "default" : "lg"}
-          variant="default"
-          // className={cn(isVariantLink && "h-auto p-0", "!bg-muted")}
+          variant={variant ?? "default"}
           disabled={isDisabled}
           isLoading={isLoading}
           {...props}

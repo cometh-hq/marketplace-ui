@@ -47,7 +47,7 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
   const isOnProfilePage = pathname.includes(`/profile`)
 
   return (
-    <div className="flex gap-5 overflow-x-auto pb-1 max-md:-mx-5 max-md:px-5">
+    <div className="flex gap-5 overflow-x-auto pb-1 max-md:-mx-4 max-md:px-4">
       <NFTStateFilterItem
         label={`All items`}
         isSelected={!get("isOnSale")}
