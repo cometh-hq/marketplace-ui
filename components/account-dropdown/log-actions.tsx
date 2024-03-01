@@ -34,7 +34,7 @@ export function AccountLogAction() {
               <LogOut size="14" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent side="bottom">
             <p className="text-sm font-bold">Logout</p>
           </TooltipContent>
         </Tooltip>
