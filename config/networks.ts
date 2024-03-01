@@ -336,7 +336,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       decimals: 18,
       address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
     },
-    zeroExExchange: "0x9a6204dE86443eB0914059b291f667D8953e8aE1",
+    zeroExExchange: "0x156980A14810259B08D3B8e8412274c479c09832",
     minimumBalanceForGas: parseEther("0.1"),
   },
   2121337: {
