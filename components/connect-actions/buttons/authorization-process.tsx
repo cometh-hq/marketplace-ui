@@ -35,8 +35,8 @@ export function AuthorizationProcess({
   if (!currentStep || !user) return null
 
   return (
-    <Dialog open={isOpen}>
-      <DialogContent shouldDisplayCloseBtn={true}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{currentStep.label}</DialogTitle>
         </DialogHeader>
