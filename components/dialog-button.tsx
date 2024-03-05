@@ -31,23 +31,18 @@ export function TransactionDialogButton<T extends Step>({
   variant,
   ...props
 }: TransactionDialogProps<T>) {
-
   const componentOnOpenChange = (newOpen: boolean) => {
     onOpenChange?.(newOpen)
-    if(!newOpen) onClose()
-  } 
+    if (!newOpen) onClose()
+  }
 
   return (
-    <Dialog
-      open={open}
-      modal
-      onOpenChange={componentOnOpenChange}
-    >
+    <Dialog open={open} modal onOpenChange={componentOnOpenChange}>
       <DialogTrigger asChild>
         <Button
           size={isVariantLink ? "default" : "lg"}
           variant={isVariantLink ? "link" : variant || "default"}
-          className={cn(isVariantLink && "h-auto p-0", "!bg-muted")}
+          className={cn(isVariantLink && "h-auto p-0")}
           disabled={isDisabled}
           isLoading={isLoading}
           {...props}

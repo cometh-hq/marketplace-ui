@@ -22,7 +22,7 @@ export function AssetMetadata({ asset }: { asset: AssetWithTradeData }) {
         <CardHeader className="bg-background pt-0">
           <CardTitle>Description</CardTitle>
           <CardDescription>
-            Item #{asset.tokenId} of the {manifest.collectionName} collection.
+            Item #{asset.tokenId} of the {manifest.marketplaceName} collection.
           </CardDescription>
         </CardHeader>
       </Card>

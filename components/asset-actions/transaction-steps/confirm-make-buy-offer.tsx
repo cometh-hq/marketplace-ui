@@ -21,7 +21,7 @@ export function ConfirmMakeBuyOfferStep({
   validity,
   onValid,
 }: ConfirmBuyOfferStepProps) {
-  const { mutateAsync: makeBuyOffer, isPending } = useMakeBuyOfferAsset()
+  const { mutateAsync: makeBuyOffer, isPending } = useMakeBuyOfferAsset(asset)
 
   const onConfirm = useCallback(async () => {
     await makeBuyOffer({ asset, price, validity })

@@ -1,8 +1,7 @@
 import { comethMarketplaceClient } from "./client"
-import globalConfig from "@/config/globalConfig"
 
-export const fetchCollectionAttributes = async () => {
+export const fetchCollectionAttributes = async (collectionAddress: string) => {
   return comethMarketplaceClient.collection.getCollectionAttributes(
-    globalConfig.contractAddress
+    collectionAddress
   )
 }

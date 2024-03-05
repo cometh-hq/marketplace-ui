@@ -2,8 +2,8 @@ import init from "@web3-onboard/core"
 import { Address } from "viem"
 
 export type Manifest = {
-  collectionName: string
-  contractAddress: Address
+  marketplaceName: string
+  contractAddress: Address | Address[]
   themeClass: string
 
   pages: {
@@ -25,7 +25,7 @@ export type Manifest = {
     address: string
     decimals: number
     thumb?: string
-  } | null,
+  } | null
   rpcUrl?: string
   areContractsSponsored: boolean
 }

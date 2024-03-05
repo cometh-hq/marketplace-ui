@@ -1,3 +1,4 @@
+import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import {
   AssetWithTradeData,
   FilterDirection,
@@ -12,7 +13,6 @@ import {
 } from "@tanstack/react-query"
 import { Address } from "viem"
 
-import globalConfig from "@/config/globalConfig"
 import { useNFTFilters } from "@/lib/utils/nft-filters"
 import { findAssetInSearchResults } from "@/lib/utils/search"
 
@@ -32,14 +32,13 @@ export type UseSearchOptions = {
 }
 
 const defaultFilters = {
-  contractAddress: globalConfig.contractAddress,
   limit: 200,
 }
 
 const ASSETS_PER_PAGE = 20
 
 export async function getAssetsPaginated(
-  filters?: Omit<AssetSearchFilters, "contractAddress">,
+  filters: AssetSearchFilters,
   page: number = 1,
   assetsPerPage: number = ASSETS_PER_PAGE
 ) {
@@ -62,6 +61,7 @@ export async function getAssetsPaginated(
 
 export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
   const { filters } = useNFTFilters()
+  const { currentCollectionAddress } = useCurrentCollectionContext()
 
   const upperKey = (key: string) => key.charAt(0).toUpperCase() + key.slice(1)
 
@@ -99,10 +99,18 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["cometh", "search", JSON.stringify(filters), options?.page, options?.search],
+    queryKey: [
+      "cometh",
+      "search",
+      currentCollectionAddress,
+      JSON.stringify(filters),
+      options?.page,
+      options?.search,
+    ],
     queryFn: ({ pageParam }) => {
       return getAssetsPaginated(
         {
+          contractAddress: currentCollectionAddress,
           isOnSale: filters.isOnSale,
           orderBy: filters.orderBy ?? FilterOrderBy.LISTING_DATE,
           direction: filters.direction ?? FilterDirection.DESC,
@@ -158,6 +166,6 @@ export const useAssetDetails = (contractAddress: Address, assetId: string) => {
       >({ queryKey: ["cometh", "search"] })
       return findAssetInSearchResults(search, assetId)
     },
-    refetchInterval: 2000
+    refetchInterval: 2000,
   })
 }

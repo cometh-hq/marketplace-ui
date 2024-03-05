@@ -33,7 +33,7 @@ export function AllowanceStep({
   return (
     <div className="flex flex-col items-center justify-center">
       <p className="text-md mb-[32px] mt-[40px] text-center">
-        Let {manifest.collectionName} spend your{" "}
+        Let {manifest.marketplaceName} spend your{" "}
         <strong>{globalConfig.ordersErc20.name}</strong> to buy this NFT.
       </p>
 

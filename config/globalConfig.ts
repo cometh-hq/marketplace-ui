@@ -1,10 +1,12 @@
 import { manifest } from "@/manifests"
 import { Address, parseEther } from "viem"
+import { z } from "zod"
 
 import networks, { NetworkConfig } from "@/config/networks"
 
 type GlobalConfig = {
-  contractAddress: Address
+  contractAddresses: Address[]
+  defaultContractAddress: Address
   useNativeForOrders: boolean
   ordersErc20: {
     name: string
@@ -37,11 +39,18 @@ type GlobalConfig = {
 export const NATIVE_TOKEN_ADDRESS_AS_ERC20 =
   "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" as Address
 
-const { useNativeTokenForOrders } = manifest
+const { useNativeTokenForOrders, contractAddress } = manifest
 
-if (!manifest.contractAddress || manifest.contractAddress.indexOf("0x") !== 0) {
-  throw new Error("Contract address is not correctly defined in the manifest")
-}
+const addressSchema = z
+  .string()
+  .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid address format")
+const manifestAddressSchema = z
+  .array(addressSchema)
+  .min(1)
+  .or(addressSchema.transform((v) => [v]))
+const globalConfigContractAddresses =
+  manifestAddressSchema.parse(contractAddress)
+
 if (!useNativeTokenForOrders && !manifest.erc20) {
   throw new Error(
     "Incompatible settings. erc20 should be defined if useNativeTokenForOrders is false "
@@ -74,7 +83,8 @@ if (useNativeTokenForOrders) {
 const minimumBalanceForGas = network.minimumBalanceForGas
 
 const globalConfig: GlobalConfig = {
-  contractAddress: manifest.contractAddress as Address,
+  contractAddresses: globalConfigContractAddresses as Address[],
+  defaultContractAddress: globalConfigContractAddresses[0] as Address,
   useNativeForOrders: useNativeTokenForOrders,
   ordersErc20: {
     name: ordersErc20.name,
@@ -93,7 +103,7 @@ const globalConfig: GlobalConfig = {
   decimals: {
     displayMaxSmallDecimals: 4,
     inputMaxDecimals: 18,
-    nativeTokenDecimals: 18
+    nativeTokenDecimals: 18,
   },
 }
 
