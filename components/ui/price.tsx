@@ -32,7 +32,7 @@ const priceTriggerVariants = cva("", {
   },
 })
 
-const iconVariants = cva("object-contain", {
+const iconVariants = cva("rounded-full overflow-hidden object-contain", {
   variants: {
     size: {
       default: "w-5 h-5",

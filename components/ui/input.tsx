@@ -1,15 +1,15 @@
+import React from "react"
 import { XIcon } from "lucide-react"
 
+import globalConfig from "@/config/globalConfig"
+import { trimDecimals } from "@/lib/utils/priceUtil"
 import { cn } from "@/lib/utils/utils"
+
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode
   onInputUpdate?: (value: string) => void
 }
-
-import React from 'react';
-import { trimDecimals } from "@/lib/utils/priceUtil";
-import globalConfig from "@/config/globalConfig";
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, icon, ...props }, ref) => {
@@ -17,8 +17,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       let value = event.target.value
-      if(type == 'number') {
-        value = trimDecimals(event.target.value, globalConfig.decimals.inputMaxDecimals)
+      if (type == "number") {
+        value = trimDecimals(
+          event.target.value,
+          globalConfig.decimals.inputMaxDecimals
+        )
       }
 
       setValue(value)
@@ -56,7 +59,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           value={value}
           onChange={handleChange}
-          className="h-full w-full bg-background text-sm font-medium outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:font-semibold placeholder:text-muted-foreground"
+          className="size-full bg-background text-sm font-medium outline-none file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:font-semibold placeholder:text-muted-foreground"
           ref={ref}
           {...props}
         />

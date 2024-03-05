@@ -60,6 +60,6 @@ export const useWrapToken = () => {
         title: "Token wrapped!",
         description: "Your token has been wrapped.",
       })
-    }
+    },
   })
 }

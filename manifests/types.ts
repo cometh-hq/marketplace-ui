@@ -1,5 +1,6 @@
 import init from "@web3-onboard/core"
 import { Address } from "viem"
+import { SupportedCurrencies } from "../types/currencies"
 
 export type Manifest = {
   collectionName: string
@@ -28,4 +29,9 @@ export type Manifest = {
   } | null,
   rpcUrl?: string
   areContractsSponsored: boolean
+
+  fiatCurrency?: {
+    symbol: SupportedCurrencies
+    format: string
+  }
 }

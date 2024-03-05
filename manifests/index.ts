@@ -1,6 +1,6 @@
 import { Address } from "viem"
 
-import { Manifest } from "@/types/manifest"
+import { Manifest } from "@/manifests/types"
 import { env } from "@/config/env"
 
 const manifest: Manifest = {
@@ -20,7 +20,7 @@ const manifest: Manifest = {
   chainId: env.NEXT_PUBLIC_NETWORK_ID || 137,
 
   // Set to true if you want to use the native token for orders
-  useNativeTokenForOrders: false,
+  useNativeTokenForOrders: true,
   // The ERC20 token used if useNativeTokenForOrders is false
   erc20: {
     name: "My Token",
@@ -34,7 +34,17 @@ const manifest: Manifest = {
   rpcUrl: env.NEXT_PUBLIC_RPC_URL,
   // Set to true if contracts transactions are sponsored for Cometh Connect users.
   // Contracts to sponsor are your ERC721, 0x exchange and either the wrapped native token contract or your ERC20
-  areContractsSponsored: true
+  areContractsSponsored: true,
+
+  // Set to "eur" or "usd" to display the price in the asset page (leave empty to hide it)
+  // fiatCurrency: "usd",
+  // Set to true if you want to display the price of the assets
+  //displayFiatPrice: true,
+  // Set to true if you want to display the price of the assets in the list
+  fiatCurrency: {
+    symbol: "usd",
+    format: "$",
+  },
 }
 
 export { manifest }

@@ -35,6 +35,7 @@ import { AllowanceStep } from "../transaction-steps/allowance"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/confirm-make-buy-offer"
 import { FundsStep } from "../transaction-steps/funds"
 import { WrapStep } from "../transaction-steps/wrap"
+import PriceInput from "@/components/ui/price-input"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
@@ -92,7 +93,7 @@ export function MakeBuyOfferPriceDialog({
             <Label htmlFor="make-buy-offer-price">
               Offer price in {globalConfig.ordersDisplayCurrency.symbol} *
             </Label>
-            <Input
+            <PriceInput
               id="make-buy-offer-price"
               type="number"
               onInputUpdate={(inputValue) => setPrice(inputValue)}
