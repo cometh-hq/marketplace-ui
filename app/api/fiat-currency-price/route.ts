@@ -2,8 +2,6 @@ import { coingeckoClient } from "@/services/coingecko/client"
 
 export const revalidate = 60 * 10
 
-// /api/fiat-currency-price?id=bitcoin&currency=usd
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get("id")
@@ -31,11 +29,4 @@ export async function GET(request: Request) {
       status: 400,
     })
   }
-  // const res = await coingeckoClient.get(
-  //   `/simple/price?ids=${id}&vs_currencies=${currency}`
-  // )
-
-  // const currentFiatPrice = res.data
-
-  // return Response.json({ currentFiatPrice })
 }
