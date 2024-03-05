@@ -47,7 +47,7 @@ export const useBuyAsset = () => {
             feeData: fee.feeData || "0x",
           }
         }),
-        erc721Token: globalConfig.contractAddress,
+        erc721Token: order.tokenAddress,
         erc721TokenId: order.tokenId,
         erc721TokenProperties: [],
         signature: signature,

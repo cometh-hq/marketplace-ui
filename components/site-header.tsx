@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useGetCollection } from "@/services/cometh-marketplace/collection"
 import { cx } from "class-variance-authority"
 import { X } from "lucide-react"
 
@@ -13,6 +14,7 @@ import { MainNav } from "./main-nav"
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
@@ -65,7 +67,7 @@ export function SiteHeader() {
             isOpen && "text-primary-foreground"
           )}
         >
-          <Icons.logo className="h-6 w-6 text-current" />
+          <Icons.logo className="size-6 text-current" />
           <span className="mr-10 text-base font-bold opacity-90 md:inline md:text-lg">
             {siteConfig.name}
           </span>

@@ -1,5 +1,6 @@
 "use client"
 
+import { CurrentCollectionProvider } from "./currentCollection/currentCollectionProvider"
 import { ReactQueryProvider } from "./react-query"
 import { AppThemeProvider } from "./theme"
 import { MarketplaceWagmiProvider } from "./wagmi"
@@ -10,7 +11,9 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     <ReactQueryProvider>
       <Web3OnboardProvider>
         <AppThemeProvider>
-          <MarketplaceWagmiProvider>{children}</MarketplaceWagmiProvider>
+          <MarketplaceWagmiProvider>
+            <CurrentCollectionProvider>{children}</CurrentCollectionProvider>
+          </MarketplaceWagmiProvider>
         </AppThemeProvider>
       </Web3OnboardProvider>
     </ReactQueryProvider>

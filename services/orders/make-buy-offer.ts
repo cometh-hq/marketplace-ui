@@ -1,13 +1,14 @@
 import { AssetWithTradeData, TradeDirection } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
+import { Address } from "viem"
 
 import { useSigner } from "@/lib/web3/auth"
+import { toast } from "@/components/ui/toast/use-toast"
 import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { useBuildOfferOrder } from "./build-offer-order"
-import { toast } from "@/components/ui/toast/use-toast"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -15,13 +16,15 @@ export type MakeBuyOfferOptions = {
   validity: string
 }
 
-export const useMakeBuyOfferAsset = () => {
+export const useMakeBuyOfferAsset = (asset: AssetWithTradeData) => {
   const client = useQueryClient()
   const buildSignBuyOfferOrder = useBuildOfferOrder({
     tradeDirection: TradeDirection.BUY,
   })
+  const { data: collection } = useGetCollection(
+    asset.contractAddress as Address
+  )
   const signer = useSigner()
-  const { data: collection } = useGetCollection()
 
   const { getWalletTxs } = useWalletAdapter()
 
@@ -55,8 +58,8 @@ export const useMakeBuyOfferAsset = () => {
         queryKey: ["cometh", "received-buy-offers", asset.owner],
       })
       toast({
-        title: "Your offer has been submitted."
+        title: "Your offer has been submitted.",
       })
-    }
+    },
   })
 }

@@ -62,7 +62,7 @@ export function ShareButton({ size = "sm", textToShow }: ShareButtonProps) {
         <DropdownMenuItem
           onClick={() =>
             shareOnTwitter(
-              `${textToShow ?? `Check out this item on`} ${manifest.collectionName}`
+              `${textToShow ?? `Check out this item on`} ${manifest.marketplaceName}`
             )
           }
         >

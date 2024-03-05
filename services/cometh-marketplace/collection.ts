@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 
-import globalConfig from "@/config/globalConfig"
-
 import { comethMarketplaceClient } from "./client"
 
 export const fetchGetCollection = async (contractAddress: Address) => {
@@ -11,13 +9,12 @@ export const fetchGetCollection = async (contractAddress: Address) => {
   )
 }
 
-export const useGetCollection = () => {
-  const contractAddress = globalConfig.contractAddress
-
+export const useGetCollection = (collectionAddress: Address) => {
   return useQuery({
-    queryKey: ["cometh", "collection", contractAddress],
+    queryKey: ["cometh", "collection", collectionAddress],
     queryFn: () => {
-      return fetchGetCollection(contractAddress)
+      return fetchGetCollection(collectionAddress)
     },
+    staleTime: 1000 * 15
   })
 }

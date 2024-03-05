@@ -51,8 +51,7 @@ export const useAssetOffers = (
   if (isMakerBuyOffersOptions(props)) {
     return []
   }
-
-  const address = props.asset?.owner || props.owner
+  const address = props.asset ? props.asset.owner : props.owner
   const { data: trades } = useOffers(address as Address)
 
   return trades.map((trade) => skeletonTrade(trade, props.asset))
