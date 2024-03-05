@@ -34,7 +34,7 @@ const manifest: Manifest = {
   rpcUrl: env.NEXT_PUBLIC_RPC_URL,
   // Set to true if contracts transactions are sponsored for Cometh Connect users.
   // Contracts to sponsor are your ERC721, 0x exchange and either the wrapped native token contract or your ERC20
-  areContractsSponsored: false,
+  areContractsSponsored: true,
 }
 
 export { manifest }
