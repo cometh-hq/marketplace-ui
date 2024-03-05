@@ -41,7 +41,7 @@ NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL="https://api.marketplace.cometh.io/v1"
 NEXT_PUBLIC_COMETH_CONNECT_API_KEY=<API_KEY>
 NEXT_PUBLIC_MARKETPLACE_API_KEY=<API_KEY>
 
-COINGECKO_API_KEY=<API_KEY>
+NEXT_PUBLIC_COINGECKO_API_KEY=<API_KEY>
 ```
  
 🔧 Your keys `NEXT_PUBLIC_MARKETPLACE_API_KEY` and `NEXT_PUBLIC_COMETH_CONNECT_API_KEY` are available in your [cometh dashboard](https://app.cometh.io/), they are usually the same key.
@@ -101,6 +101,7 @@ In your manifest file, you will need to use currency settings such as this:
 useNativeTokenForOrders: false,
 // The ERC20 token used if useNativeTokenForOrders is false
 erc20: {
+  id: "mytoken-id", // The id of the token used by CoinGecko
   name: "My Token",
   symbol: "MTK",
   address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
@@ -114,14 +115,17 @@ In your manifest file, you will need to use currency settings such as this:
 
 ```typescript
 fiatCurrency: {
-  symbol: "USD",
-  format: "$",
+  enable: true,
+  currencyId: "USD",
+  currencySymbol: "$",
 },
 ```
 
 You can generate your own API key on the [CoinGecko website](https://docs.coingecko.com/v3.0.1/reference/setting-up-your-api-key).
+If you use ERC20 token, you need to manually add the id of the token specified by CoinGecko. [e.g for bitcoin](https://www.dropbox.com/scl/fi/gfnyt5momih7f4dp05101/Capture-d-cran-2024-03-05-20.29.49.png?rlkey=w5w5wjmvagqhdyekrknnxt1i9&dl=0).
 
-All supported fiat currencies can be found in `types/currencies.ts`.
+All supported `currencyId` can be found in `types/currencies.ts`.
+
 
 #### What is an RPC and why would I need one?
 
