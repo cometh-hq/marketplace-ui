@@ -1,6 +1,5 @@
-import { forwardRef, useEffect, useMemo, useState } from "react"
+import { forwardRef } from "react"
 import Image from "next/image"
-import { getFiatCurrencyPrice } from "@/services/coingecko/fiat-currency-price"
 import { cva, cx, VariantProps } from "class-variance-authority"
 import { BigNumberish } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
@@ -9,6 +8,8 @@ import { env } from "@/config/env"
 import globalConfig from "@/config/globalConfig"
 import { smartRounding } from "@/lib/utils/priceUtil"
 import { cn } from "@/lib/utils/utils"
+
+import { FiatPrice } from "./fiat-price"
 
 const priceTriggerVariants = cva("", {
   variants: {
@@ -71,8 +72,6 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
     },
     ref
   ) => {
-    const [fiatPrice, setFiatPrice] = useState<number | null>(null)
-
     const roundedAmount = smartRounding(
       formattedAmount,
       globalConfig.decimals.displayMaxSmallDecimals
@@ -80,24 +79,6 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
     const currency = isNativeToken
       ? globalConfig.network.nativeToken
       : globalConfig.ordersErc20
-
-    useEffect(() => {
-      const fetchFiatPrice = async () => {
-        if (roundedAmount) {
-          try {
-            const price = await getFiatCurrencyPrice(parseFloat(roundedAmount))
-            setFiatPrice(price)
-          } catch (error) {
-            console.error("Failed to fetch fiat price", error)
-            setFiatPrice(null)
-          }
-        }
-      }
-
-      if (shouldDisplayFiatPrice) {
-        fetchFiatPrice()
-      }
-    }, [])
 
     return (
       <span
@@ -119,10 +100,8 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {`${roundedAmount}${
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
-        {(shouldDisplayFiatPrice && fiatPrice) && (
-          <span className="text-xs font-normal text-muted-foreground">
-            ≈ {fiatPrice}{globalConfig.ordersDisplayCurrency.symbol}
-          </span>
+        {shouldDisplayFiatPrice && (
+          <FiatPrice amount={parseFloat(roundedAmount)} />
         )}
       </span>
     )

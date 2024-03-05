@@ -6,6 +6,7 @@ import { useDebounceValue } from "usehooks-ts"
 import { Input } from "@/components/ui/input"
 
 import { Label } from "./label"
+import { FiatPrice } from "./fiat-price"
 
 export interface PriceInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -16,27 +17,8 @@ export interface PriceInputProps
 const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
   ({ className, type, icon, ...props }, ref) => {
     const [inputValue, setInputValue] = useState<string>("")
-    const [fiatPrice, setFiatPrice] = useState<number | null>(null)
 
     const [debouncedValue] = useDebounceValue(inputValue, 500)
-
-    useEffect(() => {
-      const fetchFiatPrice = async () => {
-        if (debouncedValue) {
-          const value = parseFloat(debouncedValue)
-          if (!isNaN(value)) {
-            const price = await getFiatCurrencyPrice(value)
-            setFiatPrice(price)
-          } else {
-            setFiatPrice(null)
-          }
-        } else {
-          setFiatPrice(null)
-        }
-      }
-
-      fetchFiatPrice()
-    }, [debouncedValue])
 
     const handleChange = (value: string) => {
       setInputValue(value)
@@ -53,11 +35,7 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
           onInputUpdate={handleChange}
           min={0}
         />
-        {fiatPrice && (
-          <div className="mt-2 text-end text-xs font-medium leading-none text-muted-foreground">
-            ≈ {fiatPrice}{manifest.fiatCurrency?.format}
-          </div>
-        )}
+        <FiatPrice amount={parseFloat(debouncedValue)} />
       </div>
     )
   }

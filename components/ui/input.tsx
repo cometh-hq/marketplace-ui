@@ -54,7 +54,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className
         )}
       >
-        <span className="mr-3">{icon}</span>
+        {icon && <span className="mr-3">{icon}</span>}
         <input
           type={type}
           value={value}
