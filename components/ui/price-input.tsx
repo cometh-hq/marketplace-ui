@@ -55,8 +55,7 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
         />
         {fiatPrice && (
           <div className="mt-2 text-end text-xs font-medium leading-none text-muted-foreground">
-            ({manifest.fiatCurrency?.format}
-            {fiatPrice})
+            ≈ {fiatPrice}{manifest.fiatCurrency?.format}
           </div>
         )}
       </div>

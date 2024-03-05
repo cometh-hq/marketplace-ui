@@ -65,7 +65,7 @@ export function SiteHeader() {
             isOpen && "text-primary-foreground"
           )}
         >
-          <Icons.logo className="h-6 w-6 text-current" />
+          <Icons.logo className="size-6 text-current" />
           <span className="mr-10 text-base font-bold opacity-90 md:inline md:text-lg">
             {siteConfig.name}
           </span>

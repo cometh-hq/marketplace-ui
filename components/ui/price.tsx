@@ -1,5 +1,6 @@
-import { forwardRef } from "react"
+import { forwardRef, useEffect, useMemo, useState } from "react"
 import Image from "next/image"
+import { getFiatCurrencyPrice } from "@/services/coingecko/fiat-currency-price"
 import { cva, cx, VariantProps } from "class-variance-authority"
 import { BigNumberish } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
@@ -50,8 +51,9 @@ export type PriceTriggerProps = {
   formattedAmount: string
   hideIcon?: boolean
   hideSymbol?: boolean
-  className?: string
   isNativeToken?: boolean
+  shouldDisplayFiatPrice?: boolean
+  className?: string
 } & PriceTriggerVariants
 
 const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
@@ -63,11 +65,14 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       fontWeight,
       hideIcon = false,
       hideSymbol = true,
-      className,
       isNativeToken,
+      shouldDisplayFiatPrice = false,
+      className,
     },
     ref
   ) => {
+    const [fiatPrice, setFiatPrice] = useState<number | null>(null)
+
     const roundedAmount = smartRounding(
       formattedAmount,
       globalConfig.decimals.displayMaxSmallDecimals
@@ -75,6 +80,25 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
     const currency = isNativeToken
       ? globalConfig.network.nativeToken
       : globalConfig.ordersErc20
+
+    useEffect(() => {
+      const fetchFiatPrice = async () => {
+        if (roundedAmount) {
+          try {
+            const price = await getFiatCurrencyPrice(parseFloat(roundedAmount))
+            setFiatPrice(price)
+          } catch (error) {
+            console.error("Failed to fetch fiat price", error)
+            setFiatPrice(null)
+          }
+        }
+      }
+
+      if (shouldDisplayFiatPrice) {
+        fetchFiatPrice()
+      }
+    }, [])
+
     return (
       <span
         ref={ref}
@@ -95,6 +119,11 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {`${roundedAmount}${
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
+        {(shouldDisplayFiatPrice && fiatPrice) && (
+          <span className="text-xs font-normal text-muted-foreground">
+            ≈ {fiatPrice}{globalConfig.ordersDisplayCurrency.symbol}
+          </span>
+        )}
       </span>
     )
   }
@@ -106,8 +135,9 @@ export type PriceProps = {
   amount?: BigNumberish | null | undefined
   hideIcon?: boolean
   hideSymbol?: boolean
-  className?: string
   isNativeToken?: boolean
+  shouldDisplayFiatPrice?: boolean
+  className?: string
 } & PriceTriggerVariants
 
 export const Price = ({ amount, isNativeToken, ...rest }: PriceProps) => {
