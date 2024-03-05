@@ -41,6 +41,7 @@ NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL="https://api.marketplace.cometh.io/v1"
 NEXT_PUBLIC_COMETH_CONNECT_API_KEY=<API_KEY>
 NEXT_PUBLIC_MARKETPLACE_API_KEY=<API_KEY>
 
+COINGECKO_API_KEY=<API_KEY>
 ```
  
 🔧 Your keys `NEXT_PUBLIC_MARKETPLACE_API_KEY` and `NEXT_PUBLIC_COMETH_CONNECT_API_KEY` are available in your [cometh dashboard](https://app.cometh.io/), they are usually the same key.
@@ -104,9 +105,23 @@ erc20: {
   symbol: "MTK",
   address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
   // put your logo in the '/public/tokens' folder and update the following line (example: "mytoken.png")
-  thumb: "", 
+  thumb: "",
 },
 ```
+
+#### How do I add fiat currency to my marketplace?
+In your manifest file, you will need to use currency settings such as this:
+
+```typescript
+fiatCurrency: {
+  symbol: "USD",
+  format: "$",
+},
+```
+
+You can generate your own API key on the [CoinGecko website](https://docs.coingecko.com/v3.0.1/reference/setting-up-your-api-key).
+
+All supported fiat currencies can be found in `types/currencies.ts`.
 
 #### What is an RPC and why would I need one?
 

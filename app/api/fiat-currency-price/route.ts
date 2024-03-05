@@ -23,8 +23,7 @@ export async function GET(request: Request) {
         "content-type": "application/json",
       },
     })
-  } catch (e) {
-    console.error(e)
+  } catch (e: any) {
     return new Response(e.message, {
       status: 400,
     })

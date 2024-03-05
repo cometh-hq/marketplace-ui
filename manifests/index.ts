@@ -36,14 +36,9 @@ const manifest: Manifest = {
   // Contracts to sponsor are your ERC721, 0x exchange and either the wrapped native token contract or your ERC20
   areContractsSponsored: true,
 
-  // Set to "eur" or "usd" to display the price in the asset page (leave empty to hide it)
-  // fiatCurrency: "usd",
-  // Set to true if you want to display the price of the assets
-  //displayFiatPrice: true,
-  // Set to true if you want to display the price of the assets in the list
   fiatCurrency: {
-    symbol: "usd",
-    format: "$",
+    symbol: "usd", // all currencies can be found in the currencies.ts file
+    format: "$", // symbol to display after the amount
   },
 }
 
