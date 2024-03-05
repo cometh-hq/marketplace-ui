@@ -35,7 +35,7 @@ import { AllowanceStep } from "../transaction-steps/allowance"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/confirm-make-buy-offer"
 import { FundsStep } from "../transaction-steps/funds"
 import { WrapStep } from "../transaction-steps/wrap"
-import PriceInput from "@/components/ui/price-input"
+import { PriceInput } from "@/components/ui/price-input"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData

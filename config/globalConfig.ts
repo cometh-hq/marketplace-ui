@@ -32,6 +32,7 @@ type GlobalConfig = {
     inputMaxDecimals: number
     nativeTokenDecimals: number
   }
+  coinId?: string
 }
 
 export const NATIVE_TOKEN_ADDRESS_AS_ERC20 =
@@ -59,6 +60,13 @@ const ordersErc20 = {
   ...rawOrdersErc20,
   address: rawOrdersErc20.address as Address,
 }
+
+const coinId =
+  !useNativeTokenForOrders &&
+  manifest.erc20 !== null &&
+  manifest.fiatCurrency?.enable
+    ? manifest.erc20.id
+    : network.nativeToken.id
 
 const ordersDisplayCurrency = {
   name: ordersErc20.name,
@@ -93,8 +101,9 @@ const globalConfig: GlobalConfig = {
   decimals: {
     displayMaxSmallDecimals: 4,
     inputMaxDecimals: 18,
-    nativeTokenDecimals: 18
+    nativeTokenDecimals: 18,
   },
+  coinId,
 }
 
 export default globalConfig

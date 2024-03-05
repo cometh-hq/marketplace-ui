@@ -1,20 +1,23 @@
-import { useEffect, useState } from "react"
 import { manifest } from "@/manifests"
 import axios from "axios"
 
 import globalConfig from "@/config/globalConfig"
 
-const coinId = globalConfig.ordersDisplayCurrency.symbol.toLowerCase()
-const fiatCurrency = manifest.fiatCurrency?.symbol
+const coinId = globalConfig.coinId?.toLowerCase()
+const fiatCurrencyId = manifest.fiatCurrency?.currencyId
 
 export const getFiatCurrencyPrice = async (amount: number) => {
-  if (!fiatCurrency) {
-    throw new Error("Fiat currency not found in manifest")
+  if (!coinId) {
+    throw new Error("erc20.id is not defined in the manifest")
+  }
+
+  if (!fiatCurrencyId) {
+    throw new Error("currencySymbol is not defined in the manifest")
   }
 
   const res = await axios.get(
-    `/api/fiat-currency-price?id=${coinId}&currency=${fiatCurrency}`
+    `/api/fiat-currency-price?id=${coinId}&currency=${fiatCurrencyId}`
   )
-  const price = res.data.currentFiatPrice[coinId][fiatCurrency]
+  const price = res.data.currentFiatPrice[coinId][fiatCurrencyId]
   return Math.round(amount / price)
 }

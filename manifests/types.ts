@@ -21,6 +21,7 @@ export type Manifest = {
   chainId: number
   useNativeTokenForOrders: boolean
   erc20: {
+    id?: string
     name: string
     symbol: string
     address: string
@@ -29,9 +30,10 @@ export type Manifest = {
   } | null,
   rpcUrl?: string
   areContractsSponsored: boolean
-
-  fiatCurrency?: {
-    symbol: SupportedCurrencies
-    format: string
+  
+  fiatCurrency: {
+    enable: boolean
+    currencyId: SupportedCurrencies
+    currencySymbol: string
   }
 }

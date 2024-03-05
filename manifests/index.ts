@@ -23,12 +23,13 @@ const manifest: Manifest = {
   useNativeTokenForOrders: true,
   // The ERC20 token used if useNativeTokenForOrders is false
   erc20: {
+    id: "dolz-io", // Used to display the fiat price of the token. You can find the id on CoinGecko
     name: "My Token",
     symbol: "MTK",
     address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
     decimals: 18,
     // put your logo in the '/public/tokens' folder and update the following line (example: "mytoken.png")
-    thumb: "", 
+    thumb: "",
   },
   // Optional for development but strongly recommended for production use
   rpcUrl: env.NEXT_PUBLIC_RPC_URL,
@@ -37,8 +38,9 @@ const manifest: Manifest = {
   areContractsSponsored: true,
 
   fiatCurrency: {
-    symbol: "usd", // all currencies can be found in the currencies.ts file
-    format: "$", // symbol to display after the amount
+    enable: true, // set to false to disable fiat currency
+    currencyId: "usd", // all currencies can be found in the currencies.ts file
+    currencySymbol: "$", // symbol to display after the amount
   },
 }
 
