@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { manifest } from "@/manifests"
-import { getFiatCurrencyPrice } from "@/services/coingecko/fiat-currency-price"
+import { getFiatCurrencyPrice } from "@/services/coingecko/priceService"
 import { useDebounceValue } from "usehooks-ts"
 
 import { Input } from "@/components/ui/input"
@@ -28,14 +28,14 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
     }
 
     return (
-      <div>
+      <div className="space-y-1">
         <Input
           id="make-buy-offer-price"
           type="number"
           onInputUpdate={handleChange}
           min={0}
         />
-        <FiatPrice amount={parseFloat(debouncedValue)} />
+        <FiatPrice amount={debouncedValue} />
       </div>
     )
   }

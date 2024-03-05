@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { manifest } from "@/manifests"
-import { getFiatCurrencyPrice } from "@/services/coingecko/fiat-currency-price"
+import { getFiatCurrencyPrice } from "@/services/coingecko/priceService"
 
 import { cn } from "@/lib/utils/utils"
 
 type FiatPriceProps = {
-  amount: number
+  amount: string
   className?: string
 }
 
@@ -14,9 +14,11 @@ export const FiatPrice = ({ amount, className }: FiatPriceProps) => {
 
   useEffect(() => {
     const fetchFiatPrice = async () => {
-      if (!isNaN(amount) && amount > 0) {
+      const amountNumber = parseFloat(amount)
+
+      if (!isNaN(amountNumber) && amountNumber > 0) {
         try {
-          const price = await getFiatCurrencyPrice(amount)
+          const price = await getFiatCurrencyPrice(amountNumber)
           setFiatPrice(price)
         } catch (error) {
           console.error("Failed to fetch fiat price", error)

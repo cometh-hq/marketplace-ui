@@ -101,7 +101,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
         {shouldDisplayFiatPrice && (
-          <FiatPrice amount={parseFloat(roundedAmount)} />
+          <FiatPrice amount={roundedAmount} />
         )}
       </span>
     )
