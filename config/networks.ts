@@ -324,10 +324,10 @@ const NETWORKS: Record<number, NetworkConfig> = {
     chain: "Muster",
     network: "mainnet",
     explorer: {
-      name: "muster blockscout",
-      url: "https://muster-explorer.alt.technology/",
+      name: "Muster",
+      url: "https://muster.alt.technology/",
       standard: "EIP3091",
-      blockUrl: "https://muster-explorer.alt.technology/tx",
+      blockUrl: "https://muster.alt.technology/tx",
     },
     nativeToken: { name: "Ether", symbol: "ETH", decimals: 18 },
     wrappedNativeToken: {
