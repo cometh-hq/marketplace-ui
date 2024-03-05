@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useFilters } from "@/services/cometh-marketplace/filters"
 import { Address } from "viem"
@@ -12,7 +13,9 @@ export default function MarketplaceCollectionPage({
   params: { contractAddress: Address }
 }) {
   const { switchCollection } = useCurrentCollectionContext()
-  switchCollection(params.contractAddress)
+  useEffect(() => {
+    switchCollection(params.contractAddress)
+  }, [params.contractAddress, switchCollection])
   const { filtersRaw } = useFilters()
 
   if (!filtersRaw) {

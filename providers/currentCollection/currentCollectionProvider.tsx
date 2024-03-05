@@ -1,10 +1,11 @@
-import React, { ReactNode, useState } from "react"
+import React, { ReactNode, useCallback, useState } from "react"
 import { Address } from "viem"
+import { useCall } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
+import { useNFTFilters } from "@/lib/utils/nft-filters"
 
 import { CurrentCollectionContext } from "./currentCollectionContext" // Adjust the import path as necessary
-import { useNFTFilters } from "@/lib/utils/nft-filters"
 
 interface CollectionProviderProps {
   children: ReactNode
@@ -18,10 +19,13 @@ export const CurrentCollectionProvider: React.FC<CollectionProviderProps> = ({
   )
   const { reset } = useNFTFilters()
 
-  const switchCollection = (collectionAddress: Address) => {
-    setCurrentCollection(collectionAddress)
-    reset()
-  }
+  const switchCollection = useCallback(
+    (collectionAddress: Address) => {
+      setCurrentCollection(collectionAddress)
+      reset()
+    },
+    [setCurrentCollection, reset]
+  )
 
   return (
     <CurrentCollectionContext.Provider

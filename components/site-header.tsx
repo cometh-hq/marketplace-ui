@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { useGetCollection } from "@/services/cometh-marketplace/collection"
 import { cx } from "class-variance-authority"
 import { X } from "lucide-react"
 
