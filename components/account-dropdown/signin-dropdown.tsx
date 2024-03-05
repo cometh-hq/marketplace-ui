@@ -49,7 +49,6 @@ export function SigninDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-       
         <Button
           className={cx({
             "h-12 w-full": fullVariant,

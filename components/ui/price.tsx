@@ -1,6 +1,6 @@
 import { forwardRef } from "react"
 import Image from "next/image"
-import { cva, cx, VariantProps } from "class-variance-authority"
+import { cva, VariantProps } from "class-variance-authority"
 import { BigNumberish } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
 
