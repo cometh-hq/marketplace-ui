@@ -6,10 +6,11 @@ import { Input } from "@/components/ui/input"
 import { FiatPrice } from "./fiat-price"
 
 export interface PriceInputProps {
+  id?: string
   onInputUpdate?: (value: string) => void
 }
 
-export const PriceInput = ({ onInputUpdate }: PriceInputProps) => {
+export const PriceInput = ({ id, onInputUpdate }: PriceInputProps) => {
   const [inputValue, setInputValue] = useState<string>("")
 
   const [debouncedValue] = useDebounceValue(inputValue, 500)
@@ -27,7 +28,7 @@ export const PriceInput = ({ onInputUpdate }: PriceInputProps) => {
   return (
     <div className="space-y-1">
       <Input
-        id="make-buy-offer-price"
+        id={id}
         type="number"
         onInputUpdate={handleChange}
         min={0}

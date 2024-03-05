@@ -95,9 +95,7 @@ export function MakeBuyOfferPriceDialog({
             </Label>
             <PriceInput
               id="make-buy-offer-price"
-              type="number"
               onInputUpdate={(inputValue) => setPrice(inputValue)}
-              min={0}
             />
           </div>
           <div className="flex flex-col gap-3 md:w-1/3">
