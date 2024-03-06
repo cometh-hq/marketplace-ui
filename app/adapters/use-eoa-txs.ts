@@ -44,21 +44,26 @@ export function useEOATxs(): WalletAdapter {
     return await comethMarketplaceClient.order.createOrder(buyOffer)
   }
 
-  async function cancelOrder({ nonce, signer }: CancelOrderParams) {
-    const signedPrefix = await signer!.signMessage(`Nonce: ${nonce}`)
-    const signature = splitSignature(signedPrefix)
-    const { r, s, v } = signature
+  // async function cancelOrder({ nonce, signer }: CancelOrderParams) {
+  //   const signedPrefix = await signer!.signMessage(`Nonce: ${nonce}`)
+  //   const signature = splitSignature(signedPrefix)
+  //   const { r, s, v } = signature
 
-    const body: CancelOrderRequest = {
-      signature: {
-        signatureType: 2,
-        r,
-        s,
-        v,
-      },
-    }
+  //   const body: CancelOrderRequest = {
+  //     signature: {
+  //       signatureType: 2,
+  //       r,
+  //       s,
+  //       v,
+  //     },
+  //   }
 
-    return await comethMarketplaceClient.order.cancelOrder(nonce, body)
+  //   return await comethMarketplaceClient.order.cancelOrder(nonce, body)
+  // }
+
+  async function cancelOrder({ nonce, nftSwapSdk }: CancelOrderParams) {
+    const tx = await nftSwapSdk?.cancelOrder(nonce, "ERC721")
+    return await tx?.wait()
   }
 
   return { makeBuyOffer, cancelOrder }

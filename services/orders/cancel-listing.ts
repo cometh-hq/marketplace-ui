@@ -11,7 +11,7 @@ import { getFirstListing } from "../cometh-marketplace/offers"
 export const useCancelListing = () => {
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
-  const signer = useSigner()
+  // const signer = useSigner()
 
   const { getWalletTxs } = useWalletAdapter()
 
@@ -21,7 +21,8 @@ export const useCancelListing = () => {
       const nonce = (await getFirstListing(asset.tokenId)).nonce
       if (!nonce) throw new Error("No nonce found on asset")
 
-      return await getWalletTxs()?.cancelOrder({ nonce, signer, nftSwapSdk })
+      // return await getWalletTxs()?.cancelOrder({ nonce, signer, nftSwapSdk })
+      return await getWalletTxs()?.cancelOrder({ nonce, nftSwapSdk })
     },
 
     onSuccess: (_, asset) => {

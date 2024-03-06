@@ -25,7 +25,7 @@ export type CancelBuyOfferParams = {
 }
 
 export const useCancelBuyOffer = () => {
-  const signer = useSigner()
+  // const signer = useSigner()
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
 
@@ -38,7 +38,7 @@ export const useCancelBuyOffer = () => {
 
       return await getWalletTxs()?.cancelOrder({
         nonce,
-        signer,
+        // signer,
         nftSwapSdk,
       })
     },
