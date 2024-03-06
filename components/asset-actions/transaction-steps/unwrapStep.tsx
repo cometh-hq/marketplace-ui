@@ -4,7 +4,7 @@ import { useUnwrapToken } from "@/services/exchange/unwrap-token"
 import { BigNumber } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
+import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 import { ButtonLoading } from "@/components/button-loading"
@@ -17,6 +17,7 @@ export type UnwrapStepProps = {
 export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
   const { mutateAsync: unwrapToken, isPending } = useUnwrapToken()
   const viewerAddress = useCurrentViewerAddress()
+  const isComethWallet = useIsComethWallet()
 
   const { data: needsToUnwrapData } = useNeedsToUnwrap({
     price,
@@ -44,16 +45,23 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
         <strong>
           <Price amount={needsToUnwrapData?.balanceToUnwrap} />
         </strong>{" "}
-        in your wallet. The minimum amount of native token includes <Price amount={globalConfig.minimumBalanceForGas}/> which are necessary to pay for gas.
-        It seems that you have wrapped some native token, you need to unwrap some{" "}
-        {globalConfig.network.wrappedNativeToken.symbol} first as a sales
-        listing cannot be filled with wrapped tokens.
+        in your wallet.
+        {globalConfig.areContractsSponsored && isComethWallet && (
+          <>
+            The minimum amount of native token includes{" "}
+            <Price amount={globalConfig.minimumBalanceForGas} /> which are
+            necessary to pay for gas. It seems that you have wrapped some native
+            token, you need to unwrap some{" "}
+            {globalConfig.network.wrappedNativeToken.symbol} first as a sales
+            listing cannot be filled with wrapped tokens.
+          </>
+        )}
       </p>
 
       {isPending ? (
-        <ButtonLoading />
+        <ButtonLoading size="lg" />
       ) : (
-        <Button className="flex gap-1" onClick={onConfirm}>
+        <Button className="flex gap-1" size="lg" onClick={onConfirm}>
           Unwrap <Price amount={needsToUnwrapData?.balanceToUnwrap} />{" "}
           {globalConfig.network.nativeToken.symbol}
         </Button>
