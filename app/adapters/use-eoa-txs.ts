@@ -1,13 +1,11 @@
 import { comethMarketplaceClient } from "@/services/cometh-marketplace/client"
 import { useSignOrder } from "@/services/orders/sign-order"
 import {
-  CancelOrderRequest,
   NewOrder,
   TokenType,
   TradeDirection,
 } from "@cometh/marketplace-sdk"
 import { BigNumber } from "@ethersproject/bignumber"
-import { splitSignature } from "ethers/lib/utils"
 import { DateTime } from "luxon"
 
 import { CancelOrderParams, MakeOfferParams } from "./types"
@@ -43,23 +41,6 @@ export function useEOATxs(): WalletAdapter {
 
     return await comethMarketplaceClient.order.createOrder(buyOffer)
   }
-
-  // async function cancelOrder({ nonce, signer }: CancelOrderParams) {
-  //   const signedPrefix = await signer!.signMessage(`Nonce: ${nonce}`)
-  //   const signature = splitSignature(signedPrefix)
-  //   const { r, s, v } = signature
-
-  //   const body: CancelOrderRequest = {
-  //     signature: {
-  //       signatureType: 2,
-  //       r,
-  //       s,
-  //       v,
-  //     },
-  //   }
-
-  //   return await comethMarketplaceClient.order.cancelOrder(nonce, body)
-  // }
 
   async function cancelOrder({ nonce, nftSwapSdk }: CancelOrderParams) {
     const tx = await nftSwapSdk?.cancelOrder(nonce, "ERC721")

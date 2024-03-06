@@ -20,6 +20,5 @@ export type MakeOfferParams = {
 
 export type CancelOrderParams = {
   nonce: string
-  // signer: Signer
   nftSwapSdk: NftSwapV4 | null
 }
