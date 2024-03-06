@@ -145,7 +145,7 @@ function renderAssetActions(
     return (
       <ConnectButton isLinkVariant customText="Login to buy">
         <SwitchNetwork variant="link">
-          <BuyAssetButton isSmall asset={asset} />
+          <BuyAssetButton asset={asset} isSmall isLinkVariant />
         </SwitchNetwork>
       </ConnectButton>
     )

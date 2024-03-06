@@ -32,9 +32,9 @@ export const fetchNeedsToUnwrap = async ({
     }
   }
 
-  const targetedNativeBalance = price.add(
-    BigNumber.from(globalConfig.minimumBalanceForGas)
-  )
+  const targetedNativeBalance = !globalConfig.areContractsSponsored
+    ? price.add(BigNumber.from(globalConfig.minimumBalanceForGas))
+    : price
 
   const missingNativeTokenData = await fetchHasSufficientFunds({
     address,

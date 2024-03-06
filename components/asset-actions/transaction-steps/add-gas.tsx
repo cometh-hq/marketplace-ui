@@ -50,14 +50,19 @@ export function AddGasStep({ onValid }: AddGasStepProps) {
         <Price
           amount={globalConfig.minimumBalanceForGas}
           isNativeToken={true}
-        />{" "} to your wallet,
-        and then refresh your balance. Your transactions will not cost as much
-        but we need an minimum amount to be sure you can pay for gas.
+        />{" "}
+        to your wallet, and then refresh your balance. Your transactions will
+        not cost as much but we need an minimum amount to be sure you can pay
+        for gas.
       </p>
       <p>
         Wallet address: <strong>{viewer}</strong>
       </p>
-      <Button isLoading={isRefreshingBalance} onClick={checkBalance}>
+      <Button
+        size="lg"
+        onClick={checkBalance}
+        isLoading={isRefreshingBalance}
+      >
         Refresh balance
       </Button>
     </div>

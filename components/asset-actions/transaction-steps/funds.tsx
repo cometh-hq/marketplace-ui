@@ -53,15 +53,15 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
       <p className="text-center">
         Looks like you don&rsquo;t have enough funds to complete this
         transaction. <br />
-        You are missing <Price amount={missingBalance} hideSymbol={false} />. Once you
-        have funded your wallet with some{" "}
+        You are missing <Price amount={missingBalance} hideSymbol={false} />.
+        Once you have funded your wallet with some{" "}
         <strong>{globalConfig.ordersDisplayCurrency.name}</strong>, please
         refresh your balance.
       </p>
       <p>
         Wallet address: <strong>{viewer}</strong>
       </p>
-      <Button isLoading={isRefreshingBalance} onClick={checkBalance}>
+      <Button size="lg" onClick={checkBalance} isLoading={isRefreshingBalance}>
         Refresh balance
       </Button>
     </div>

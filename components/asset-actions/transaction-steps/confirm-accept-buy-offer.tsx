@@ -48,9 +48,9 @@ export function ConfirmAcceptBuyOfferStep({ offer, onValid }: ConfirmBuyOfferSte
       <PriceDetails fullPrice={amountWithFees} isEthersFormat={false} />
 
       {isPending ? (
-        <ButtonLoading />
+        <ButtonLoading size="lg" />
       ) : (
-        <Button onClick={onConfirm}>Confirm</Button>
+        <Button onClick={onConfirm} size="lg">Confirm</Button>
       )}
     </div>
   )
