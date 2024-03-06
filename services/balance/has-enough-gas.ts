@@ -27,3 +27,4 @@ export const useHasEnoughGas = (walletAddress: Address | undefined) => {
     enabled: !!walletAddress,
   })
 }
+

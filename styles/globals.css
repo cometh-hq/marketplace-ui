@@ -246,7 +246,7 @@
 .dialog {
   background-size: auto;
   border-radius: 0 !important;
-  width: auto;
+  /* width: auto; */
   position: relative;
 
   background:
@@ -255,21 +255,17 @@
     url("/cards/dialog-bottom-left.png") bottom left no-repeat,
     url("/cards/dialog-bottom-right.png") bottom right no-repeat;
   clip-path: polygon(
-    4px 0px,
-    calc(100% - 4px) 0,
-    100% 4px,
-    100% calc(100% - 4px),
-    calc(100% - 4px) 100%,
-    4px 100%,
-    0 calc(100% - 4px),
-    0 4px
+    7px 0px,
+    calc(100% - 7px) 0,
+    100% 7px,
+    100% calc(100% - 7px),
+    calc(100% - 7px) 100%,
+    7px 100%,
+    0 calc(100% - 7px),
+    0 7px
   );
   @apply bg-card;
 }
-
-/* .dialog-background {
-  position: absolute;
-} */
 
 /* Table */
 table tbody > tr {
@@ -279,8 +275,6 @@ table tbody > tr {
 table tbody > tr td {
   @apply relative border-y border-border;
 }
-
-
 
 table tbody tr > td:first-child {
   @apply border-l;
