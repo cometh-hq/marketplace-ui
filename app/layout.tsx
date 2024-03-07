@@ -1,6 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-import { AppProviders } from "@/providers"
+import { AppProviders } from "@/providers/appProviders"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/utils/fonts"

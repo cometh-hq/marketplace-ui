@@ -12,14 +12,14 @@ import {
 } from "@traderxyz/nft-swap-sdk"
 import { BigNumber, ethers } from "ethers"
 import { DateTime } from "luxon"
+import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import {
   calculateAmountWithoutFees,
   calculateFeesAmount,
-  totalFeesFromCollection
+  totalFeesFromCollection,
 } from "@/lib/utils/fees"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 export type BuildOfferOrderOptions = {
@@ -34,7 +34,8 @@ export const useBuildOfferOrder = ({
 }: {
   tradeDirection: TradeDirection
 }) => {
-  const viewer = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewer = account.address
   const nftSwapSdk = useNFTSwapv4()
 
   return useCallback(

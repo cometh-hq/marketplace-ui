@@ -1,13 +1,9 @@
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
-import {
-  LayoutGridIcon,
-  TagIcon,
-  UserIcon,
-} from "lucide-react"
+import { LayoutGridIcon, TagIcon, UserIcon } from "lucide-react"
+import { useAccount } from "wagmi"
 
 import { useNFTFilters } from "@/lib/utils/nft-filters"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 
 import { Button } from "../../ui/button"
 
@@ -45,10 +41,10 @@ type NFTStateFiltersProps = {
 export function NFTStateFilters({ results }: NFTStateFiltersProps) {
   const { get } = useSearchParams()
   const pathname = usePathname()
-  const viewerAddress = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewerAddress = account.address
 
   const isOnProfilePage = pathname.includes(`/profile`)
-
 
   return (
     <div className="flex gap-5 overflow-x-auto pb-1 max-md:-mx-5 max-md:px-5">

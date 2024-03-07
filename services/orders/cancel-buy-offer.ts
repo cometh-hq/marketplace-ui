@@ -3,16 +3,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { isAddressEqual } from "viem"
 
 import { BuyOffer } from "@/types/buy-offers"
-import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
+import { useEthersSigner } from "@/providers/authentication/viemToEthersHelper"
+import { useAccount } from "wagmi"
 
 export type UseCanCancelBuyOfferParams = {
   offer: BuyOffer
 }
 
 export const useCanCancelBuyOffer = ({ offer }: UseCanCancelBuyOfferParams) => {
-  const viewer = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewer = account.address
   return useMemo(() => {
     if (!viewer) return false
     if (isAddressEqual(offer.emitter.address, viewer)) return true
@@ -25,7 +27,7 @@ export type CancelBuyOfferParams = {
 }
 
 export const useCancelBuyOffer = () => {
-  const signer = useSigner()
+  const signer = useEthersSigner()
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
 
@@ -35,7 +37,7 @@ export const useCancelBuyOffer = () => {
     mutationKey: ["cancelBuyOffer"],
     mutationFn: async ({ offer }: CancelBuyOfferParams) => {
       const nonce = offer.trade.nonce
-
+      if(!signer) throw new Error("Could not get signer")
       return await getWalletTxs()?.cancelOrder({
         nonce,
         signer,
@@ -53,6 +55,6 @@ export const useCancelBuyOffer = () => {
       client.invalidateQueries({
         queryKey: ["cometh", "sent-buy-offers", offer.emitter.address],
       })
-    }
+    },
   })
 }

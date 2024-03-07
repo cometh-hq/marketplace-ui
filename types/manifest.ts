@@ -28,4 +28,5 @@ export type Manifest = {
   } | null
   rpcUrl?: string
   areContractsSponsored: boolean
+  walletConnectProjectId: string
 }

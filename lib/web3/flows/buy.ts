@@ -1,3 +1,4 @@
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { fetchNeedsMoreAllowance } from "@/services/allowance/needs-more-allowance"
 import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 import { fetchNeedsToUnwrap } from "@/services/exchange/needs-to-unwrap"
@@ -6,12 +7,12 @@ import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
+import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
-import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 
 export type UseRequiredBuyingStepsOptions = {
   asset: AssetWithTradeDataCore
@@ -91,8 +92,9 @@ export const fetchRequiredBuyingSteps = async ({
 export const useRequiredBuyingSteps = ({
   asset,
 }: UseRequiredBuyingStepsOptions) => {
-  const viewerAddress = useCurrentViewerAddress()
-  const isComethWallet = useIsComethWallet()
+  const account = useAccount()
+  const viewerAddress = account.address
+  const isComethWallet = useIsComethConnectWallet()
   return useQuery({
     queryKey: ["requiredBuyingSteps", asset, viewerAddress],
     queryFn: async () => {

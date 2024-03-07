@@ -7,7 +7,7 @@ type AccountWalletProps = {
   name: string
   icon: string
   isComethWallet: boolean
-  handleConnect?: (isComethWallet: boolean) => Promise<void>
+  handleConnect?: () => void
 }
 
 export function AccountWallet({
@@ -26,7 +26,7 @@ export function AccountWallet({
       <Button
         variant="secondary"
         className="h-12 w-full justify-start gap-2 text-[15px]"
-        onClick={() => handleConnect && handleConnect(isComethWallet)}
+        onClick={() => handleConnect && handleConnect()}
       >
         <Image
           src={icon}

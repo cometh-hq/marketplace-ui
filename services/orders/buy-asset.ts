@@ -1,9 +1,9 @@
 import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
+import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 import { getFirstListing } from "../cometh-marketplace/offers"
@@ -15,7 +15,8 @@ export type BuyAssetOptions = {
 export const useBuyAsset = () => {
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
-  const viewerAddress = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewerAddress = account.address
 
   return useMutation({
     mutationKey: ["buy-asset"],
@@ -25,12 +26,14 @@ export const useBuyAsset = () => {
 
       const order = await getFirstListing(asset.tokenId)
 
-      const signature = order.signature ? order.signature :  {
-        signatureType: 4,
-        v: 0,
-        r: "0x0000000000000000000000000000000000000000000000000000000000000000",
-        s: "0x0000000000000000000000000000000000000000000000000000000000000000",
-      }
+      const signature = order.signature
+        ? order.signature
+        : {
+            signatureType: 4,
+            v: 0,
+            r: "0x0000000000000000000000000000000000000000000000000000000000000000",
+            s: "0x0000000000000000000000000000000000000000000000000000000000000000",
+          }
 
       const formattedZeroXOrder = {
         direction: 0,
@@ -53,9 +56,8 @@ export const useBuyAsset = () => {
         signature: signature,
       }
 
-      const fillTx: ContractTransaction = await nftSwapSdk.fillSignedOrder(
-        formattedZeroXOrder
-      )
+      const fillTx: ContractTransaction =
+        await nftSwapSdk.fillSignedOrder(formattedZeroXOrder)
 
       const fillTxReceipt = await fillTx.wait()
       console.log(
@@ -67,6 +69,6 @@ export const useBuyAsset = () => {
       client.invalidateQueries({
         queryKey: ["cometh", "assets", asset.tokenId],
       })
-    }
+    },
   })
 }

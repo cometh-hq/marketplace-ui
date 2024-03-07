@@ -9,12 +9,12 @@ import {
 } from "@cometh/marketplace-sdk"
 import { animated, config, useSpring } from "react-spring"
 import { useBoolean } from "usehooks-ts"
+import { useAccount } from "wagmi"
 
 import { getRandomArrayElement } from "@/lib/utils/arrays"
 import { getAssetColor } from "@/lib/utils/colors-attributes"
 import { shortenTokenId } from "@/lib/utils/token"
 import { cn } from "@/lib/utils/utils"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { Appear } from "@/components/ui/appear"
 import { AssetImage } from "@/components/ui/asset-image"
 import { Card } from "@/components/ui/card"
@@ -111,7 +111,10 @@ export function AssetCardBase({
           "flex w-full flex-1 flex-row items-center gap-3 border-transparent bg-transparent p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2"
         )}
       >
-        <Link href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`} className="sm:w-full">
+        <Link
+          href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`}
+          className="sm:w-full"
+        >
           <AssetImageContainer
             color={getAssetColor(asset)}
             className={cn(owner && "bg-[#f4f2e8]")}
@@ -167,7 +170,8 @@ function renderAssetActions(
 }
 
 export function AssetCard({ asset, children }: AssetCardProps) {
-  const viewerAddress = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewerAddress = account.address
 
   const owner = useMemo(() => {
     return asset.owner === viewerAddress?.toLowerCase()

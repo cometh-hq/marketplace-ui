@@ -1,8 +1,9 @@
 "use client"
 
+import { useCallback } from "react"
 import { LogOut } from "lucide-react"
+import { useDisconnect } from "wagmi"
 
-import { useDisconnect, useWallet } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import {
   Tooltip,
@@ -11,27 +12,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-
-export function AccountLogAction() {
-  const wallet = useWallet()
-  const logout = useDisconnect()
-
-  async function handleLogout() {
-    await logout({
-      label: wallet!.label,
-    })
-  }
+export function AccountLogoutAction() {
+  const { disconnect } = useDisconnect()
+  const handleLogout = useCallback(async () => {
+    localStorage.removeItem("selectedWallet")
+    disconnect()
+  }, [disconnect])
 
   return (
     <div className="absolute right-4 top-4">
       <TooltipProvider delayDuration={200}>
         <Tooltip defaultOpen={false}>
           <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleLogout}
-            >
+            <Button variant="ghost" size="icon" onClick={handleLogout}>
               <LogOut size="14" />
             </Button>
           </TooltipTrigger>

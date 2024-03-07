@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { manifest } from "@/manifests"
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 import { fetchNeedsToWrap } from "@/services/exchange/needs-to-wrap"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
@@ -12,8 +12,8 @@ import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchNeedsMoreAllowance } from "../../../services/allowance/needs-more-allowance"
 import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
-import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
+import { useAccount } from "wagmi"
 
 export type UseRequiredMakeBuyOfferSteps = {
   asset: AssetWithTradeData
@@ -34,7 +34,7 @@ export type MakeBuyOfferStep = {
 }
 
 const suffixSteps: MakeBuyOfferStep[] = [
-  { label: "Confirm", value: "confirm-buy-offer" }
+  { label: "Confirm", value: "confirm-buy-offer" },
 ]
 
 export type FetchRequiredBuyingStepsOptions = {
@@ -96,8 +96,9 @@ export const useRequiredMakeBuyOfferSteps = ({
   asset,
   price,
 }: UseRequiredMakeBuyOfferSteps) => {
-  const viewerAddress = useCurrentViewerAddress()
-  const isComethWallet = useIsComethWallet()
+  const account = useAccount()
+  const viewerAddress = account.address
+  const isComethWallet = useIsComethConnectWallet()
   const nftSwapSdk = useNFTSwapv4()
 
   return useQuery({

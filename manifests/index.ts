@@ -35,6 +35,7 @@ const manifest: Manifest = {
   // Set to true if contracts transactions are sponsored for Cometh Connect users.
   // Contracts to sponsor are your ERC721, 0x exchange and either the wrapped native token contract or your ERC20
   areContractsSponsored: false,
+  walletConnectProjectId: env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
 }
 
 export { manifest }

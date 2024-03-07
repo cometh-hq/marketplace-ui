@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { animated, config, useSpring } from "react-spring"
-import { useIntersectionObserver } from "usehooks-ts"
-import { useSigner } from '../../lib/web3/auth';
 
 export function useVisibility(when: boolean) {
   const [visible, setVisible] = useState(false)

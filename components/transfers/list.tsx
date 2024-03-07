@@ -19,9 +19,9 @@ import {
   ShoppingCartIcon,
 } from "lucide-react"
 import { Address, isAddressEqual } from "viem"
+import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import {
   Table,
   TableBody,
@@ -277,7 +277,7 @@ const renderActivitiesRows = (
               amount={BigNumber.from(activity.order.erc20TokenAmount)
                 .add(activity.order.totalFees)
                 .toString()}
-                className="font-medium"
+              className="font-medium"
             />
           )}
         </TableCell>
@@ -305,7 +305,8 @@ export function TransfersList({
   maxTransfersToShow,
   assetOrders,
 }: TransfersListProps) {
-  const viewerAddress = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewerAddress = account.address
   const assetActivities = useMemo(() => {
     return getAssetActivities(assetTransfers, assetOrders, maxTransfersToShow)
   }, [assetTransfers, assetOrders, maxTransfersToShow])

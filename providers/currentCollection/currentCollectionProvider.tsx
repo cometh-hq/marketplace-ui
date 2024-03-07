@@ -1,6 +1,5 @@
 import React, { ReactNode, useCallback, useState } from "react"
 import { Address } from "viem"
-import { useCall } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { useNFTFilters } from "@/lib/utils/nft-filters"

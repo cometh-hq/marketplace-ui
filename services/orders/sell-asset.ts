@@ -1,14 +1,14 @@
+import { useEthersSigner } from "@/providers/authentication/viemToEthersHelper"
 import { AssetWithTradeData, TradeDirection } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
+import { Address } from "viem"
 
-import { useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
 import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { useBuildOfferOrder } from "./build-offer-order"
-import { Address } from "viem"
 
 export type SellAssetOptions = {
   asset: AssetWithTradeData
@@ -16,15 +16,15 @@ export type SellAssetOptions = {
   validity: string
 }
 
-export const useSellAsset = (
-  asset: AssetWithTradeData
-) => {
+export const useSellAsset = (asset: AssetWithTradeData) => {
   const buildSignSellOrder = useBuildOfferOrder({
     tradeDirection: TradeDirection.SELL,
   })
   const client = useQueryClient()
-  const signer = useSigner()
-  const { data: collection } = useGetCollection(asset.contractAddress as Address)
+  const signer = useEthersSigner()
+  const { data: collection } = useGetCollection(
+    asset.contractAddress as Address
+  )
 
   const { getWalletTxs } = useWalletAdapter()
 
@@ -35,7 +35,7 @@ export const useSellAsset = (
 
       const order = buildSignSellOrder({ asset, price, validity, collection })
       if (!order) throw new Error("Could not build order")
-
+      if(!signer) throw new Error("Could not get signer")
       return await getWalletTxs()?.makeBuyOffer({
         asset,
         signer,

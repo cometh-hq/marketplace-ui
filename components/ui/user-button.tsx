@@ -3,12 +3,12 @@
 import { ComponentProps, memo, useMemo } from "react"
 import { User } from "lucide-react"
 import { isAddressEqual } from "viem"
+import { useAccount } from "wagmi"
 
 import { AnyUser } from "@/types/user"
 import { shortenAddress } from "@/lib/utils/addresses"
 import { isKnownUser } from "@/lib/utils/user"
 import { cn } from "@/lib/utils/utils"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 
 import { Button } from "./button"
 import { Link } from "./link"
@@ -23,7 +23,8 @@ export const useContent = (
   user: AnyUser,
   forceDisplayAddress: Boolean | undefined
 ) => {
-  const viewerAddress = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewerAddress = account.address
 
   return useMemo(() => {
     if (!forceDisplayAddress) {

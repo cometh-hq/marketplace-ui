@@ -2,9 +2,9 @@ import { useMemo } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
 import { Address, isAddressEqual } from "viem"
+import { useAccount } from "wagmi"
 
 import { BuyOffer } from "@/types/buy-offers"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
 
@@ -17,7 +17,8 @@ export type UseCanAcceptBuyOfferParams = {
 }
 
 export const useCanAcceptBuyOffer = ({ offer }: UseCanAcceptBuyOfferParams) => {
-  const viewer = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewer = account.address
   return useMemo(() => {
     if (!viewer) return false
     if (
@@ -86,6 +87,6 @@ export const useAcceptBuyOffer = () => {
       toast({
         title: "Purchased order filled!",
       })
-    }
+    },
   })
 }

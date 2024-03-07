@@ -1,10 +1,10 @@
+import wethAbi from "@/abis/wethAbi"
 import { useMutation } from "@tanstack/react-query"
 import { BigNumber, Signer } from "ethers"
 import { Address } from "viem"
+import { usePublicClient, useWalletClient } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { IWETH__factory } from "@/lib/generated/contracts/weth/IWETH__factory"
-import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
 
 export type WrapTokenOptions = {
@@ -14,45 +14,37 @@ export type WrapTokenOptions = {
   wrapContractAddress: Address
 }
 
-export async function wrapToken({
-  amount,
-  account,
-  signer,
-  wrapContractAddress,
-}: WrapTokenOptions) {
-  const contract = IWETH__factory.connect(wrapContractAddress, signer)
-  const tx = await contract?.deposit({
-    from: account,
-    value: amount,
-  })
-  await tx.wait()
-}
-
 export type WrapTokenMutationOptions = {
   amount: BigNumber
 }
 
 export const useWrapToken = () => {
-  const viewerAddress = useCurrentViewerAddress()
-  const signer = useSigner()
+  const viemPublicClient = usePublicClient()
+  const { data: viemWalletClient } = useWalletClient()
 
   return useMutation({
     mutationKey: ["wrap"],
     mutationFn: async ({ amount }: WrapTokenMutationOptions) => {
       if (
-        !viewerAddress ||
-        !signer ||
+        !viemWalletClient ||
         !globalConfig.network.wrappedNativeToken.address
       ) {
         throw new Error("Could not wrap token")
       }
 
-      return wrapToken({
-        amount,
-        account: viewerAddress!,
-        signer,
-        wrapContractAddress: globalConfig.network.wrappedNativeToken.address,
+      const { request } = await viemPublicClient.simulateContract({
+        address: globalConfig.ordersErc20.address,
+        abi: wethAbi,
+        functionName: "deposit",
+        args: [],
+        value: amount.toBigInt(),
+        account: viemWalletClient.account,
       })
+      const txHash = await viemWalletClient.writeContract(request)
+      const transaction = await viemPublicClient.waitForTransactionReceipt({
+        hash: txHash,
+      })
+      return transaction
     },
 
     onSuccess: () => {
@@ -60,6 +52,6 @@ export const useWrapToken = () => {
         title: "Token wrapped!",
         description: "Your token has been wrapped.",
       })
-    }
+    },
   })
 }

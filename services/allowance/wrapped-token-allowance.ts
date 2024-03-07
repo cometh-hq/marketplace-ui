@@ -1,4 +1,5 @@
-import { wagmiConfig } from "@/providers/wagmi"
+import { wagmiConfig } from "@/providers/authentication/marketplaceWagmiProvider"
+import { useWalletClient, usePublicClient } from 'wagmi'
 import { useMutation } from "@tanstack/react-query"
 import { readContract } from "@wagmi/core"
 import { BigNumberish } from "ethers"
@@ -6,9 +7,8 @@ import { Address, erc20Abi } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 import { ERC20__factory } from "@/lib/generated/contracts"
-import { useSigner } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { toast } from "@/components/ui/toast/use-toast"
+
 
 export const fetchWrappedAllowance = async ({
   address,
@@ -49,23 +49,31 @@ export const useERC20Allow = (
   }
 ) => {
   const nftSwapSdk = useNFTSwapv4()
-  const signer = useSigner()
+  const viemPublicClient = usePublicClient()
+  const { data: viemWalletClient }  = useWalletClient()
 
   return useMutation({
     mutationKey: ["wrappedTokenAllow"],
     mutationFn: async () => {
-      if (!signer || !nftSwapSdk) return
+      if (!nftSwapSdk || !viemWalletClient) return
       const spender = nftSwapSdk?.exchangeProxyContractAddress!
-      const erc20 = ERC20__factory.connect(
-        globalConfig.ordersErc20.address,
-        signer
+      const { request } = await viemPublicClient.simulateContract({
+        address: globalConfig.ordersErc20.address,
+        abi: erc20Abi,
+        functionName: 'approve',
+        args: [spender as Address, BigInt(price.toString())],
+        account: viemWalletClient.account
+      })
+      const txHash = await viemWalletClient.writeContract(request)
+      const transaction = await viemPublicClient.waitForTransactionReceipt( 
+        { hash: txHash }
       )
-      const tx = await erc20.approve(spender, price)
-      return tx.wait()
+      
+      return transaction
     },
     ...options,
     onSuccess: () => {
       options?.onSuccess?.()
-    }
+    },
   })
 }

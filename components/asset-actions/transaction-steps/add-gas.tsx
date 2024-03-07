@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import {
   fetchHasEnoughGas,
   useHasEnoughGas,
 } from "@/services/balance/has-enough-gas"
+import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 
@@ -14,9 +15,10 @@ export type AddGasStepProps = {
 }
 
 export function AddGasStep({ onValid }: AddGasStepProps) {
-  const viewer = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewer = account.address
   const [isRefreshingBalance, setIsRefreshingBalance] = useState(false)
-  const isComethWallet = useIsComethWallet()
+  const isComethWallet = useIsComethConnectWallet()
 
   const { data } = useHasEnoughGas(viewer)
 
@@ -50,9 +52,10 @@ export function AddGasStep({ onValid }: AddGasStepProps) {
         <Price
           amount={globalConfig.minimumBalanceForGas}
           isNativeToken={true}
-        />{" "} to your wallet,
-        and then refresh your balance. Your transactions will not cost as much
-        but we need an minimum amount to be sure you can pay for gas.
+        />{" "}
+        to your wallet, and then refresh your balance. Your transactions will
+        not cost as much but we need an minimum amount to be sure you can pay
+        for gas.
       </p>
       <p>
         Wallet address: <strong>{viewer}</strong>
