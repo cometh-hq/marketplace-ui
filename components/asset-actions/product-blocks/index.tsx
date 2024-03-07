@@ -22,7 +22,7 @@ export function ProductBlock({ asset }: ProductBlockProps) {
   const sellBlock = viewerIsOwner && !isOnSale
   const buyBlock = !viewerIsOwner && isOnSale
   const viewerListingBlock = viewerIsOwner && isOnSale
-  
+
   if (sellBlock) return <SellProductBlock asset={asset} />
   if (buyBlock) return <BuyProductBlock asset={asset} />
   if (viewerListingBlock) return <ViewerListingProductBlock asset={asset} />

@@ -37,10 +37,7 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
   return (
     <div className="flex flex-col items-center justify-center">
       <p className="text-md my-[32px] text-center">
-        You are about to buy this NFT for{" "}
-        <span className="inline-flex translate-y-1.5 items-center">
-          <Price amount={price} />
-        </span>{" "}
+        You are about to buy this NFT for <Price amount={price} />
         but you are missing{" "}
         <strong>
           <Price amount={needsToUnwrapData?.balanceToUnwrap} />
@@ -61,9 +58,12 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
       {isPending ? (
         <ButtonLoading size="lg" />
       ) : (
-        <Button className="flex gap-1" size="lg" onClick={onConfirm}>
-          Unwrap <Price amount={needsToUnwrapData?.balanceToUnwrap} />{" "}
-          {globalConfig.network.nativeToken.symbol}
+        <Button className="flex gap-1" onClick={onConfirm}>
+          Unwrap{" "}
+          <Price
+            amount={needsToUnwrapData?.balanceToUnwrap}
+            isNativeToken={true}
+          />
         </Button>
       )}
     </div>

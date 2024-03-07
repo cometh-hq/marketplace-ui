@@ -15,11 +15,12 @@ export const BestOfferColumn = ({ asset }: BestOfferColumnProps) => {
   return (
     <ProductBlockDividedColumn>
       <ProductBlockLabel>
-        <span className="inline-flex items-center">
-          Best Offer
-        </span>
+        <span className="inline-flex items-center">Best Offer</span>
       </ProductBlockLabel>
-      <Price amount={asset.orderbookStats.highestOfferPrice} />
+      <Price
+        amount={asset.orderbookStats.highestOfferPrice}
+        shouldDisplayFiatPrice={true}
+      />
     </ProductBlockDividedColumn>
   )
 }

@@ -18,6 +18,7 @@ import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { Appear } from "@/components/ui/appear"
 import { AssetImage } from "@/components/ui/asset-image"
 import { Card } from "@/components/ui/card"
+import { FiatPrice } from "@/components/ui/fiat-price"
 import { BuyAssetButton } from "@/components/asset-actions/buttons/buy"
 import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/make-buy-offer"
 import { SellAssetButton } from "@/components/asset-actions/buttons/sell"
@@ -81,7 +82,7 @@ export function AssetImageContainer({
     >
       <div
         className={cn(
-          "relative h-auto w-[84px] overflow-hidden rounded-md px-2 py-5 max-sm:rounded-md sm:h-[380px] sm:w-full sm:px-4 sm:py-10",
+          "relative size-auto overflow-hidden rounded-md px-2 py-5 max-sm:rounded-md sm:h-[380px] sm:w-full sm:px-4 sm:py-10",
           !color && "bg-muted",
           className
         )}
@@ -149,7 +150,14 @@ function renderAssetActions(
       </ConnectButton>
     )
   } else if (asset.orderbookStats.highestOfferPrice) {
-    return <Price amount={asset.orderbookStats.highestOfferPrice} />
+    return (
+      <div className="flex flex-col gap-1">
+        <Price
+          amount={asset.orderbookStats.highestOfferPrice}
+          shouldDisplayFiatPrice={true}
+        />
+      </div>
+    )
   } else if (!owner) {
     return (
       <ConnectButton isLinkVariant customText="Login to buy">
@@ -184,7 +192,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
         <Link
           href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`}
           className={cn(
-            "mb-4 flex flex-nowrap items-center text-base font-semibold leading-tight text-primary sm:mb-2"
+            "mb-2 flex flex-nowrap items-center text-base font-semibold leading-tight text-primary"
           )}
         >
           <span className="inline-block max-w-[100%_-_80px] truncate">
@@ -193,11 +201,14 @@ export function AssetCard({ asset, children }: AssetCardProps) {
           <span>&nbsp;#{shortenTokenId(asset.tokenId, 5)}</span>
         </Link>
         <div className="w-full rounded-lg bg-muted/80 p-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start justify-between gap-1 sm:flex-row sm:items-center">
             <div>
               <div className="text-sm font-medium">Price</div>
               {asset.orderbookStats.lowestListingPrice ? (
-                <Price amount={asset.orderbookStats.lowestListingPrice} />
+                <Price
+                  amount={asset.orderbookStats.lowestListingPrice}
+                  shouldDisplayFiatPrice={true}
+                />
               ) : owner ? (
                 <SellAssetButton
                   asset={asset as unknown as AssetWithTradeData}

@@ -13,6 +13,7 @@ export type NetworkConfig = {
     blockUrl?: string
   } | null
   nativeToken: {
+    id: string
     name: string
     symbol: string
     decimals: number
@@ -43,7 +44,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       standard: "EIP3091",
       blockUrl: "https://etherscan.io/block",
     },
-    nativeToken: { name: "Ether", symbol: "ETH", decimals: 18 },
+    nativeToken: { id: "ethereum", name: "Ether", symbol: "ETH", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Ether",
       symbol: "WETH",
@@ -60,7 +61,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
     chain: "ETH",
     network: "ropsten",
     explorer: null,
-    nativeToken: { name: "Ropsten Ether", symbol: "ROP", decimals: 18 },
+    nativeToken: { id: "ethereum", name: "Ropsten Ether", symbol: "ROP", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Ropsten Ether",
       symbol: "WROP",
@@ -81,7 +82,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       url: "https://rinkeby.etherscan.io",
       standard: "EIP3091",
     },
-    nativeToken: { name: "Rinkeby Ether", symbol: "RIN", decimals: 18 },
+    nativeToken: { id: "ethereum", name: "Rinkeby Ether", symbol: "RIN", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Rinkeby Ether",
       symbol: "WRIN",
@@ -98,7 +99,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
     chain: "ETH",
     network: "goerli",
     explorer: null,
-    nativeToken: { name: "Görli Ether", symbol: "GOR", decimals: 18 },
+    nativeToken: { id: "ethereum", name: "Görli Ether", symbol: "GOR", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Görli Ether",
       symbol: "WGOR",
@@ -119,7 +120,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       url: "https://ubiqscan.io",
       standard: "EIP3091",
     },
-    nativeToken: { name: "Ubiq Ether", symbol: "UBQ", decimals: 18 },
+    nativeToken: { id: "ubiq", name: "Ubiq Ether", symbol: "UBQ", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Ubiq Ether",
       symbol: "WUBQ",
@@ -136,7 +137,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
     chain: "ETH",
     network: "mainnet",
     explorer: null,
-    nativeToken: { name: "Ether", symbol: "OETH", decimals: 18 },
+    nativeToken: { id: "origin-ether", name: "Ether", symbol: "OETH", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Ether",
       symbol: "WOETH",
@@ -153,7 +154,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
     chain: "ETH",
     network: "kovan",
     explorer: null,
-    nativeToken: { name: "Kovan Ether", symbol: "KOV", decimals: 18 },
+    nativeToken: { id: "ethereum", name: "Kovan Ether", symbol: "KOV", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Kovan Ether",
       symbol: "WKOV",
@@ -176,6 +177,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       blockUrl: "https://bscscan.com/block",
     },
     nativeToken: {
+      id: "binancecoin",
       name: "Binance Chain Native Token",
       symbol: "BNB",
       decimals: 18,
@@ -201,7 +203,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       standard: "EIP3091",
       blockUrl: "https://polygonscan.com/tx",
     },
-    nativeToken: { name: "Matic", symbol: "MATIC", decimals: 18 },
+    nativeToken: { id: "matic-network", name: "Matic", symbol: "MATIC", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Matic",
       symbol: "WMATIC",
@@ -223,7 +225,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       standard: "EIP3091",
       blockUrl: "https://ftmscan.com/block",
     },
-    nativeToken: { name: "Fantom", symbol: "FTM", decimals: 18 },
+    nativeToken: { id: "fantom", name: "Fantom", symbol: "FTM", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Fantom",
       symbol: "WFTM",
@@ -245,7 +247,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       standard: "EIP3091",
       blockUrl: "https://arbiscan.io/block",
     },
-    nativeToken: { name: "Ether", symbol: "AETH", decimals: 18 },
+    nativeToken: { id: "aave-eth-v1", name: "Ether", symbol: "AETH", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Ether",
       symbol: "WAETH",
@@ -262,7 +264,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
     chain: "CELO",
     network: "Mainnet",
     explorer: null,
-    nativeToken: { name: "CELO", symbol: "CELO", decimals: 18 },
+    nativeToken: { id: "celo", name: "CELO", symbol: "CELO", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped CELO",
       symbol: "WCELO",
@@ -279,7 +281,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
     chain: "AVAX",
     network: "mainnet",
     explorer: null,
-    nativeToken: { name: "Avalanche", symbol: "AVAX", decimals: 18 },
+    nativeToken: { id: "avalanche-2", name: "Avalanche", symbol: "AVAX", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Avalanche",
       symbol: "WAVAX",
@@ -302,6 +304,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       blockUrl: "https://mumbai.polygonscan.com/tx",
     },
     nativeToken: {
+      id: "matic-network",
       name: "Matic",
       symbol: "tMATIC",
       decimals: 18,
@@ -329,7 +332,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       standard: "EIP3091",
       blockUrl: "https://muster-anytrust-explorer.alt.technology/tx",
     },
-    nativeToken: { name: "Muster", symbol: "MUST", decimals: 18 },
+    nativeToken: { id: "must", name: "Muster", symbol: "MUST", decimals: 18 },
     wrappedNativeToken: {
       name: "Wrapped Muster",
       symbol: "WMUST",

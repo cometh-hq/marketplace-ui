@@ -39,6 +39,8 @@ const client = z.object({
   NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL: z.string().url(),
   NEXT_PUBLIC_MARKETPLACE_API_KEY: z.string().min(1),
   NEXT_PUBLIC_COMETH_CONNECT_API_KEY: z.string().min(1).optional(),
+
+  NEXT_PUBLIC_COINGECKO_API_KEY: z.string().optional(),
 })
 
 /**
@@ -61,6 +63,8 @@ const processEnv: Record<
   NEXT_PUBLIC_MARKETPLACE_API_KEY: process.env.NEXT_PUBLIC_MARKETPLACE_API_KEY,
   NEXT_PUBLIC_COMETH_CONNECT_API_KEY:
     process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY,
+
+  NEXT_PUBLIC_COINGECKO_API_KEY: process.env.NEXT_PUBLIC_COINGECKO_API_KEY,
 }
 
 // Don't touch the part below
