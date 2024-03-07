@@ -1,12 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
-import { Binary } from "lucide-react"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 
-import { getOrdersERC20Balance } from "../balance/balanceService"
-import { balanceToBigNumber } from "../balance/format"
 import { fetchHasSufficientFunds } from "../balance/has-sufficient-funds"
 
 export type FetchNeedsToUnwrapOptions = {

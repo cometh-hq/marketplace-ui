@@ -8,7 +8,6 @@ import globalConfig from "@/config/globalConfig"
 import { ERC20__factory } from "@/lib/generated/contracts"
 import { useSigner } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { toast } from "@/components/ui/toast/use-toast"
 
 export const fetchWrappedAllowance = async ({
   address,

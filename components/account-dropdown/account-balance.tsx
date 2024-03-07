@@ -7,10 +7,12 @@ import globalConfig from "@/config/globalConfig"
 import { Separator } from "@/components/ui/separator"
 
 import { WrapButton } from "../asset-actions/buttons/wrap"
+import { FiatPrice } from "../ui/fiat-price"
 
 export function AccountBalance() {
   const balance = useBalance()
   const [isUnwrap, setIsUnwrap] = useState(false)
+
   return (
     <>
       <div className="mb-3 space-y-3 rounded-md border border-border p-3">
@@ -71,6 +73,7 @@ export function AccountBalanceLine({
       <span className="text-[15px] font-semibold">
         {balance} {currency}
       </span>
+      <FiatPrice amount={balance} />
     </div>
   )
 }
