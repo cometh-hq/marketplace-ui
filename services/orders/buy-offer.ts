@@ -27,7 +27,7 @@ export type OrderParams = {
   tradeDirection?: TradeDirection.BUY | TradeDirection.SELL
 }
 
-export type MakeOfferParams = {
+export type BuyOfferParams = {
   asset: AssetWithTradeData
 } & OrderParams
 
@@ -35,7 +35,7 @@ export const useBuyOffer = () => {
   const isComethWallet = useIsComethWallet()
   const signBuyOfferOrder = useSignOrder()
 
-  async function buyOfferEOA({ signer, order }: MakeOfferParams) {
+  async function buyOfferEOA({ signer, order }: BuyOfferParams) {
     const contract = IZeroEx__factory.connect(
       globalConfig.network.zeroExExchange,
       signer
@@ -50,7 +50,7 @@ export const useBuyOffer = () => {
     asset,
     order,
     tradeDirection = TradeDirection.BUY,
-  }: MakeOfferParams) {
+  }: BuyOfferParams) {
     const signedOrder = await signBuyOfferOrder({ order })
 
     const buyOffer: NewOrder = {
