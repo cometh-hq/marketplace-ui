@@ -23,7 +23,7 @@ const manifest: Manifest = {
   useNativeTokenForOrders: true,
   // The ERC20 token used if useNativeTokenForOrders is false
   erc20: {
-    id: "dolz-io", // Used to display the fiat price of the token. You can find the id on CoinGecko
+    id: "token_id", // Used to display the fiat price of the token. You can find the id on CoinGecko
     name: "My Token",
     symbol: "MTK",
     address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
