@@ -26,6 +26,7 @@ export const useWrapToken = () => {
     mutationKey: ["wrap"],
     mutationFn: async ({ amount }: WrapTokenMutationOptions) => {
       if (
+        !viemPublicClient ||
         !viemWalletClient ||
         !globalConfig.network.wrappedNativeToken.address
       ) {
