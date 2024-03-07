@@ -24,6 +24,7 @@ steps:
         - NEXT_PUBLIC_NETWORK_ID
         - NEXT_PUBLIC_RPC_URL
         - NEXT_PUBLIC_COINGECKO_API_KEY
+        - NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
@@ -39,8 +40,8 @@ steps:
       NEXT_PUBLIC_NETWORK_ID: 137
       NEXT_PUBLIC_RPC_URL:
         from_secret: polygon_rpc_url
-      NEXT_PUBLIC_COINGECKO_API_KEY:
-        from_secret: dev_coingecko_api_key
+      NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID:
+        from_secret: dev_wallet_connect_project_id
       
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
@@ -105,6 +106,7 @@ steps:
         - NEXT_PUBLIC_NETWORK_ID
         - NEXT_PUBLIC_RPC_URL
         - NEXT_PUBLIC_COINGECKO_API_KEY
+        - NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
@@ -120,8 +122,8 @@ steps:
         from_secret: debug_contract_address
       NEXT_PUBLIC_RPC_URL:
         from_secret: debug_rpc_url
-      NEXT_PUBLIC_COINGECKO_API_KEY:
-        from_secret: debug_coingecko_api_key
+      NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID:
+        from_secret: debug_wallet_connect_project_id
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
     environment:
@@ -185,6 +187,7 @@ steps:
         - NEXT_PUBLIC_NETWORK_ID
         - NEXT_PUBLIC_RPC_URL
         - NEXT_PUBLIC_COINGECKO_API_KEY
+        - NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_NODE_ENV: development
@@ -200,8 +203,8 @@ steps:
       NEXT_PUBLIC_NETWORK_ID: 137
       NEXT_PUBLIC_RPC_URL:
         from_secret: polygon_rpc_url
-      NEXT_PUBLIC_COINGECKO_API_KEY:
-        from_secret: staging_coingecko_api_key
+      NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID:
+        from_secret: staging_wallet_connect_project_id
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
     environment:
@@ -265,6 +268,7 @@ steps:
         - NEXT_PUBLIC_NETWORK_ID
         - NEXT_PUBLIC_RPC_URL
         - NEXT_PUBLIC_COINGECKO_API_KEY
+        - NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_NODE_ENV: production
@@ -280,8 +284,8 @@ steps:
       NEXT_PUBLIC_NETWORK_ID: 137
       NEXT_PUBLIC_RPC_URL:
         from_secret: polygon_rpc_url
-      NEXT_PUBLIC_COINGECKO_API_KEY:
-        from_secret: prod_coingecko_api_key
+      NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID:
+        from_secret: prod_wallet_connect_project_id
   - name: rolling update
     image: gcr.io/cometh-core/app-rolling-update:latest
     environment:

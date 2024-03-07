@@ -35,6 +35,7 @@ NEXT_PUBLIC_BASE_PATH=""
 NEXT_PUBLIC_RPC_URL="<YOUR_RPC_URL>"
 NEXT_PUBLIC_CONTRACT_ADDRESS=<YOUR_ERC_721_CONTRACT_ADDRESS>
 NEXT_PUBLIC_NETWORK_ID=<YOUR_NETWORK_ID>
+NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=<YOUR_WALLET_CONNECT_PROJECT_ID>
 
 # Cometh
 NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL="https://api.marketplace.cometh.io/v1"
@@ -49,6 +50,10 @@ NEXT_PUBLIC_COINGECKO_API_KEY=<API_KEY>
 The **NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL** is set by default for the polygon network. If you are on another network, you can find this url in your dashboard.
 
 👉 To add *Cometh Connect* in your marketplace, you need to activate the product on your project: [Cometh Connect](https://docs.cometh.io/connect/quickstart/getting-started).
+
+The boilerplate uses RainbowKit which requires a project ID to work. You can get your own project id for the `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID`
+
+Setting up `NEXT_PUBLIC_RPC_URL` is not mandatory but we strongly advise so get a private RPC endpoint you can use for your marketplace (Alchemy, Infura...).
 
 ### 3. Customizing Your Marketplace
 
