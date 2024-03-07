@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
 import { useAccount } from "wagmi"
 
-import globalConfig from "@/config/globalConfig"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 import { getFirstListing } from "../cometh-marketplace/offers"

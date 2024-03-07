@@ -18,7 +18,7 @@ export const useUnwrapToken = () => {
   return useMutation({
     mutationKey: ["unwrap"],
     mutationFn: async ({ amount }: UnwrapTokenMutationOptions) => {
-      if (!viemWalletClient) {
+      if (!viemWalletClient || !viemPublicClient) {
         throw new Error("Could not unwrap token")
       }
 

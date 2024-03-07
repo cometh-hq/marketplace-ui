@@ -1,12 +1,12 @@
 import { useMemo } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { isAddressEqual } from "viem"
+import { useAccount } from "wagmi"
 
 import { BuyOffer } from "@/types/buy-offers"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
-import { useEthersSigner } from "@/providers/authentication/viemToEthersHelper"
-import { useAccount } from "wagmi"
+
+import { cancelOrder } from "./cancel-order"
 
 export type UseCanCancelBuyOfferParams = {
   offer: BuyOffer
@@ -27,20 +27,16 @@ export type CancelBuyOfferParams = {
 }
 
 export const useCancelBuyOffer = () => {
-  const signer = useEthersSigner()
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
-
-  const { getWalletTxs } = useWalletAdapter()
 
   return useMutation({
     mutationKey: ["cancelBuyOffer"],
     mutationFn: async ({ offer }: CancelBuyOfferParams) => {
       const nonce = offer.trade.nonce
-      if(!signer) throw new Error("Could not get signer")
-      return await getWalletTxs()?.cancelOrder({
+
+      return await cancelOrder({
         nonce,
-        signer,
         nftSwapSdk,
       })
     },

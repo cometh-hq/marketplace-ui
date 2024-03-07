@@ -4,15 +4,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
-import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { getFirstListing } from "../cometh-marketplace/offers"
+import { cancelOrder } from "./cancel-order"
 
 export const useCancelListing = () => {
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
   const signer = useEthersSigner()
-  const { getWalletTxs } = useWalletAdapter()
 
   return useMutation({
     mutationKey: ["cancelListing"],
@@ -21,7 +20,7 @@ export const useCancelListing = () => {
       if (!nonce) throw new Error("No nonce found on asset")
       if (!signer) throw new Error("Could not get signer")
 
-      return await getWalletTxs()?.cancelOrder({ nonce, signer, nftSwapSdk })
+      return await cancelOrder({ nonce, nftSwapSdk })
     },
 
     onSuccess: (_, asset) => {

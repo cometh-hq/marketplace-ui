@@ -6,7 +6,6 @@ import { BigNumberish } from "ethers"
 import { Address, erc20Abi } from "viem"
 
 import globalConfig from "@/config/globalConfig"
-import { ERC20__factory } from "@/lib/generated/contracts"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 
@@ -55,7 +54,7 @@ export const useERC20Allow = (
   return useMutation({
     mutationKey: ["wrappedTokenAllow"],
     mutationFn: async () => {
-      if (!nftSwapSdk || !viemWalletClient) return
+      if (!nftSwapSdk || !viemWalletClient || !viemPublicClient) return
       const spender = nftSwapSdk?.exchangeProxyContractAddress!
       const { request } = await viemPublicClient.simulateContract({
         address: globalConfig.ordersErc20.address,

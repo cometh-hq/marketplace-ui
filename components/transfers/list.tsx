@@ -277,7 +277,7 @@ const renderActivitiesRows = (
               amount={BigNumber.from(activity.order.erc20TokenAmount)
                 .add(activity.order.totalFees)
                 .toString()}
-              className="font-medium"
+                className="font-semibold"
             />
           )}
         </TableCell>
