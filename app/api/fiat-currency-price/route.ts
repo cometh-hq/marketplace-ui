@@ -1,10 +1,12 @@
 import { coingeckoClient } from "@/services/coingecko/client"
+import { NextRequest } from "next/server"
 
 export const revalidate = 60 * 10
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const { id, currency } = Object.fromEntries(searchParams)
+export async function GET(request: NextRequest) {
+  const { searchParams } = request.nextUrl
+  const id = searchParams.get("id")
+  const currency = searchParams.get("currency")
 
   try {
     if (!id || !currency) {
