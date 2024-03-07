@@ -46,7 +46,7 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
           <Price amount={needsToUnwrapData?.balanceToUnwrap} />
         </strong>{" "}
         in your wallet.
-        {globalConfig.areContractsSponsored && isComethWallet && (
+        {!globalConfig.areContractsSponsored || !isComethWallet && (
           <>
             The minimum amount of native token includes{" "}
             <Price amount={globalConfig.minimumBalanceForGas} /> which are
