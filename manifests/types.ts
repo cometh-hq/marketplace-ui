@@ -3,8 +3,8 @@ import { Address } from "viem"
 import { SupportedCurrencies } from "../types/currencies"
 
 export type Manifest = {
-  collectionName: string
-  contractAddress: Address
+  marketplaceName: string
+  contractAddress: Address | Address[]
   themeClass: string
 
   pages: {
@@ -27,7 +27,7 @@ export type Manifest = {
     address: string
     decimals: number
     thumb?: string
-  } | null,
+  } | null
   rpcUrl?: string
   areContractsSponsored: boolean
   

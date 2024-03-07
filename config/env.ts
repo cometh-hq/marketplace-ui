@@ -32,7 +32,7 @@ const client = z.object({
   NEXT_PUBLIC_NODE_ENV: z.enum(["development", "test", "production"]),
   NEXT_PUBLIC_BASE_PATH: z.string().optional(),
   NEXT_PUBLIC_NETWORK_ID: networkIdSchema,
-  NEXT_PUBLIC_CONTRACT_ADDRESS: z.string().length(42),
+  NEXT_PUBLIC_CONTRACT_ADDRESS: z.string(),
   NEXT_PUBLIC_RPC_URL: z.string().url().optional(),
 
   // Cometh

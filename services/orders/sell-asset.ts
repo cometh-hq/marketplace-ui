@@ -8,6 +8,7 @@ import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { useBuildOfferOrder } from "./build-offer-order"
+import { Address } from "viem"
 
 export type SellAssetOptions = {
   asset: AssetWithTradeData
@@ -15,13 +16,15 @@ export type SellAssetOptions = {
   validity: string
 }
 
-export const useSellAsset = () => {
+export const useSellAsset = (
+  asset: AssetWithTradeData
+) => {
   const buildSignSellOrder = useBuildOfferOrder({
     tradeDirection: TradeDirection.SELL,
   })
   const client = useQueryClient()
   const signer = useSigner()
-  const { data: collection } = useGetCollection()
+  const { data: collection } = useGetCollection(asset.contractAddress as Address)
 
   const { getWalletTxs } = useWalletAdapter()
 
@@ -49,6 +52,6 @@ export const useSellAsset = () => {
       toast({
         title: "Your asset is now listed for sale.",
       })
-    }
+    },
   })
 }

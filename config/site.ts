@@ -1,16 +1,13 @@
 import { manifest } from "@/manifests"
 
+import globalConfig from "./globalConfig"
+
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: `${manifest.collectionName}`,
-  description: `Discover ${manifest.collectionName}, the ultimate Web3 marketplace platform.`,
-  mainNav: [
-    {
-      title: "Marketplace",
-      href: "/marketplace",
-    },
-  ],
+  name: `${manifest.marketplaceName}`,
+  description: `Discover ${manifest.marketplaceName}, the ultimate Web3 marketplace platform.`,
+  mainNav: [],
 }
 
 export const COMETH_CONNECT_STORAGE_LABEL = "Connect SDK"

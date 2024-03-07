@@ -1,8 +1,10 @@
 import { useMemo } from "react"
 import Link from "next/link"
 import { manifest } from "@/manifests"
+import { useGetCollection } from "@/services/cometh-marketplace/collection"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import qs from "qs"
+import { Address } from "viem"
 
 import { shortenTokenId } from "@/lib/utils/token"
 import { Badge } from "@/components/ui/badge"
@@ -18,14 +20,20 @@ export type AssetDetailsProps = {
 }
 
 export default function AssetDetails({ asset }: AssetDetailsProps) {
+  const { data: collection } = useGetCollection(
+    asset.contractAddress as Address
+  )
   const attributes = useMemo(() => {
     const mainAttributes = manifest.pages?.asset?.mainAttributes ?? []
-    return asset.metadata.attributes?.reduce((p, c) => {
-      if (mainAttributes.includes(c.trait_type)) {
-        p.push({ trait_type: c.trait_type, value: c.value || 'null' })
-      }
-      return p
-    }, [] as { trait_type: string; value: string | number | boolean }[])
+    return asset.metadata.attributes?.reduce(
+      (p, c) => {
+        if (mainAttributes.includes(c.trait_type)) {
+          p.push({ trait_type: c.trait_type, value: c.value || "null" })
+        }
+        return p
+      },
+      [] as { trait_type: string; value: string | number | boolean }[]
+    )
   }, [asset])
 
   const links = useMemo(() => {
@@ -50,25 +58,29 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
     <div className="flex-1 lg:sticky lg:left-0 lg:top-[5%] lg:w-[35%] lg:pt-[100px]">
       <div className="mb-2 flex items-center justify-between">
         <BreadcrumbContainer>
-          <BreadcrumbElement href="/marketplace">
-            Marketplace
+          <BreadcrumbElement href={"/marketplace/" + collection?.address}>
+            {collection ? collection.name : "Marketplace"}
           </BreadcrumbElement>
           /
-          <BreadcrumbElement href={`/marketplace/${asset.tokenId}`}>
+          <BreadcrumbElement
+            href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`}
+          >
             {asset.metadata.name}
           </BreadcrumbElement>
         </BreadcrumbContainer>
         <ShareButton />
       </div>
-      <div className="text-2xl font-bold opacity-90">#{shortenTokenId(asset.tokenId, 7)}</div>
+      <div className="text-2xl font-bold opacity-90">
+        #{shortenTokenId(asset.tokenId, 7)}
+      </div>
       <h1 className="text-3xl font-bold leading-[1.15] md:text-[48px]">
         {asset.metadata.name}
       </h1>
-      <div className="mb-8 mt-2 flex flex-wrap items-center gap-2">
-        {links}
-      </div>
+      <div className="mb-8 mt-2 flex flex-wrap items-center gap-2">{links}</div>
       <ProductBlock asset={asset} />
-      <p className="py-6 text-base font-medium text-muted-foreground max-md:pb-0">{asset.metadata.description}</p>
+      <p className="py-6 text-base font-medium text-muted-foreground max-md:pb-0">
+        {asset.metadata.description}
+      </p>
     </div>
   )
 }

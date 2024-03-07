@@ -4,8 +4,8 @@ import { Manifest } from "@/manifests/types"
 import { env } from "@/config/env"
 
 const manifest: Manifest = {
-  collectionName: "My NFT collection",
-  contractAddress: env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
+  marketplaceName: "Marketplace",
+  contractAddress: env.NEXT_PUBLIC_CONTRACT_ADDRESS.split(",") as Address[],
   themeClass: "theme-base",
 
   pages: {

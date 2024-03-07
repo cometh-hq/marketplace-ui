@@ -1,4 +1,5 @@
 import { comethMarketplaceClient } from "@/services/cometh-marketplace/client"
+import { useSignOrder } from "@/services/orders/sign-order"
 import {
   CancelOrderRequest,
   NewOrder,
@@ -9,13 +10,8 @@ import { BigNumber } from "@ethersproject/bignumber"
 import { splitSignature } from "ethers/lib/utils"
 import { DateTime } from "luxon"
 
-import {
-  CancelOrderParams,
-  MakeOfferParams,
-} from "./types"
+import { CancelOrderParams, MakeOfferParams } from "./types"
 import { WalletAdapter } from "./wallet-adapter"
-import { useSignOrder } from "@/services/orders/sign-order"
-import globalConfig from "@/config/globalConfig"
 
 export function useEOATxs(): WalletAdapter {
   const signBuyOfferOrder = useSignOrder()
@@ -28,7 +24,7 @@ export function useEOATxs(): WalletAdapter {
     const signedOrder = await signBuyOfferOrder({ order })
 
     const buyOffer: NewOrder = {
-      tokenAddress: globalConfig.contractAddress,
+      tokenAddress: asset.contractAddress,
       tokenId: asset.tokenId,
       tokenProperties: [],
       tokenQuantity: BigNumber.from(1).toString(),

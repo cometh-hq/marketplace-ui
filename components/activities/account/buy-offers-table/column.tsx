@@ -3,14 +3,20 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { BuyOffer } from "@/types/buy-offers"
-
 import { AmountCell } from "@/components/activities/cells/amount"
+import { AssetCell } from "@/components/activities/cells/asset"
 import { CTACell } from "@/components/activities/cells/cta"
 import { DateCell } from "@/components/activities/cells/date"
 import { EmitterCell } from "@/components/activities/cells/emitter"
-import { AssetCell } from "@/components/activities/cells/asset"
+
+import { CollectionCell } from "../../cells/collection-cell"
 
 export const columns: ColumnDef<BuyOffer>[] = [
+  {
+    accessorKey: "link",
+    header: "Collection",
+    cell: CollectionCell,
+  },
   {
     accessorKey: "link",
     header: "Asset",

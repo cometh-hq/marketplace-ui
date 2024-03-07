@@ -103,7 +103,7 @@ export function Web3OnboardProvider({
       wallets,
       chains: web3OnboardNetworks,
       appMetadata: {
-        name: manifest.collectionName,
+        name: manifest.marketplaceName,
         description: "Description",
         logo: `${env.NEXT_PUBLIC_BASE_PATH}/metamask.svg`,
         recommendedInjectedWallets: [
@@ -121,7 +121,7 @@ export function Web3OnboardProvider({
       },
       connect: {
         autoConnectLastWallet: true,
-      }
+      },
     })
 
     setOnboard(web3OnboardInstance)

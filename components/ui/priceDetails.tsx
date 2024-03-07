@@ -1,4 +1,5 @@
 import { useMemo } from "react"
+import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useGetCollection } from "@/services/cometh-marketplace/collection"
 import { parseUnits } from "viem"
 
@@ -19,7 +20,8 @@ export function PriceDetails({
   fullPrice,
   isEthersFormat = true,
 }: PriceDetailsProps) {
-  const { data: collection } = useGetCollection()
+  const { currentCollectionAddress } = useCurrentCollectionContext()
+  const { data: collection } = useGetCollection(currentCollectionAddress)
   const sumOfFeesPercentages = collection
     ? collection.collectionFees.reduce((sum, fee) => sum + fee.feePercentage, 0)
     : 0

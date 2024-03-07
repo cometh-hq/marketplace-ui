@@ -14,6 +14,7 @@ import { MainNav } from "./main-nav"
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
+
   const toggleMenu = () => setIsOpen(!isOpen)
 
   return (
