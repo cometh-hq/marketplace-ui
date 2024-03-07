@@ -19,9 +19,9 @@ import {
   ShoppingCartIcon,
 } from "lucide-react"
 import { Address, isAddressEqual } from "viem"
+import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import {
   Table,
   TableBody,
@@ -235,7 +235,7 @@ const renderTimestampCell = (activity: AssetActivity) => {
           href={`${globalConfig.network.explorer?.url}/tx/${activity.transfer.transactionHash}`}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-secondary-foreground"
+          className="text-muted-foreground hover:text-secondary-foreground flex items-center gap-2 text-sm font-medium"
         >
           {timeFromNow}
           <ExternalLink size="18" className="" />
@@ -245,7 +245,7 @@ const renderTimestampCell = (activity: AssetActivity) => {
   } else if (isOrderActivity(activity)) {
     return (
       <TimestampTooltip tooltipContent={readableDate}>
-        <div className="text-sm font-medium text-muted-foreground">
+        <div className="text-muted-foreground text-sm font-medium">
           {timeFromNow}
         </div>
       </TimestampTooltip>
@@ -305,7 +305,8 @@ export function TransfersList({
   maxTransfersToShow,
   assetOrders,
 }: TransfersListProps) {
-  const viewerAddress = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewerAddress = account.address
   const assetActivities = useMemo(() => {
     return getAssetActivities(assetTransfers, assetOrders, maxTransfersToShow)
   }, [assetTransfers, assetOrders, maxTransfersToShow])

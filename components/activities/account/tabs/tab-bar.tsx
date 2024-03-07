@@ -34,15 +34,9 @@ const CollectionTabsTrigger = ({
 export const TabBar = ({ receivedCounter, sentCounter }: TabBarProps) => {
   return (
     <TabsList className="mb-4 h-auto gap-x-6 overflow-x-auto text-xl sm:mb-8">
-      {globalConfig.contractAddresses.length > 1 ? (
-        globalConfig.contractAddresses.map((address) => (
-          <CollectionTabsTrigger key={address} collectionAddress={address} />
-        ))
-      ) : (
-        <TabsTrigger value="marketplace">
-          <WalletIcon size="18" className="mr-2" /> My NFTs
-        </TabsTrigger>
-      )}
+      {globalConfig.contractAddresses.map((address) => (
+        <CollectionTabsTrigger key={address} collectionAddress={address} />
+      ))}
       <TabsTrigger value="received-offers">
         <InboxIcon size="18" className="mr-2" /> Received Offers (
         {receivedCounter})

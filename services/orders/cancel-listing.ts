@@ -1,3 +1,4 @@
+import { useEthersSigner } from "@/providers/authentication/viemToEthersHelper"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
@@ -10,12 +11,14 @@ import { cancelOrder } from "./cancel-order"
 export const useCancelListing = () => {
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
+  const signer = useEthersSigner()
 
   return useMutation({
     mutationKey: ["cancelListing"],
     mutationFn: async (asset: AssetWithTradeData) => {
       const nonce = (await getFirstListing(asset.tokenId)).nonce
       if (!nonce) throw new Error("No nonce found on asset")
+      if (!signer) throw new Error("Could not get signer")
 
       return await cancelOrder({ nonce, nftSwapSdk })
     },

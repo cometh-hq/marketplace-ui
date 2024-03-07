@@ -1,4 +1,4 @@
-import { wagmiConfig } from "@/providers/wagmi"
+import { wagmiConfig } from "@/providers/authentication/marketplaceWagmiProvider"
 import { getBalance, readContract } from "@wagmi/core"
 import { Address, erc20Abi } from "viem"
 

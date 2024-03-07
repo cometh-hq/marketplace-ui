@@ -15,7 +15,7 @@ export function AccountBalance() {
 
   return (
     <>
-      <div className="mb-3 space-y-3 rounded-md border border-border p-3">
+      <div className="border-border mb-3 space-y-3 rounded-md border p-3">
         <div className="flex flex-col gap-2">
           <AccountBalanceLine
             balance={balance.native}
@@ -61,7 +61,7 @@ export function AccountBalanceLine({
   return (
     <div className="inline-flex items-center gap-1.5">
       {logo && (
-        <div className="rounded-full bg-secondary">
+        <div className="bg-secondary rounded-full">
           <Image
             src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${logoSrc}`}
             alt=""

@@ -4,9 +4,9 @@ import { useMemo } from "react"
 import { Row } from "@tanstack/react-table"
 import { BigNumber } from "ethers"
 import { Address, isAddressEqual } from "viem"
+import { useAccount } from "wagmi"
 
 import { BuyOffer } from "@/types/buy-offers"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { DataTable } from "@/components/data-table"
 
 import { columns } from "./column"
@@ -16,7 +16,8 @@ export type BuyOffersTableProps = {
 }
 
 export function BuyOffersTable({ offers }: BuyOffersTableProps) {
-  const viewer = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewer = account.address
 
   const data = useMemo(() => {
     return offers

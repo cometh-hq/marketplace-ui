@@ -2,12 +2,13 @@ import { useCallback, useEffect } from "react"
 import { useNeedsToUnwrap } from "@/services/exchange/needs-to-unwrap"
 import { useUnwrapToken } from "@/services/exchange/unwrap-token"
 import { BigNumber } from "ethers"
+import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 import { ButtonLoading } from "@/components/button-loading"
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 
 export type UnwrapStepProps = {
   price: BigNumber | null
@@ -16,8 +17,9 @@ export type UnwrapStepProps = {
 
 export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
   const { mutateAsync: unwrapToken, isPending } = useUnwrapToken()
-  const viewerAddress = useCurrentViewerAddress()
-  const isComethWallet = useIsComethWallet()
+    const account = useAccount()
+  const viewerAddress = account.address
+  const isComethWallet = useIsComethConnectWallet()
 
   const { data: needsToUnwrapData } = useNeedsToUnwrap({
     price,
@@ -43,7 +45,7 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
           <Price amount={needsToUnwrapData?.balanceToUnwrap} />
         </strong>{" "}
         in your wallet.
-        {!globalConfig.areContractsSponsored || !isComethWallet && (
+        {(!globalConfig.areContractsSponsored || !isComethWallet) && (
           <>
             The minimum amount of native token includes{" "}
             <Price amount={globalConfig.minimumBalanceForGas} /> which are

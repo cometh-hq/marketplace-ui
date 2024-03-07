@@ -1,6 +1,7 @@
-import globalConfig from "@/config/globalConfig"
-import  { createContext, useContext } from "react"
+import { createContext, useContext } from "react"
 import { Address } from "viem"
+
+import globalConfig from "@/config/globalConfig"
 
 interface CurrentCollectionContextType {
   currentCollectionAddress: Address
@@ -15,4 +16,5 @@ const defaultContextValue: CurrentCollectionContextType = {
 export const CurrentCollectionContext =
   createContext<CurrentCollectionContextType>(defaultContextValue)
 
-export const useCurrentCollectionContext = () => useContext(CurrentCollectionContext)
+export const useCurrentCollectionContext = () =>
+  useContext(CurrentCollectionContext)

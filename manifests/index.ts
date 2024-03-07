@@ -1,6 +1,6 @@
+import { Manifest } from "@/manifests/types"
 import { Address } from "viem"
 
-import { Manifest } from "@/manifests/types"
 import { env } from "@/config/env"
 
 const manifest: Manifest = {
@@ -21,7 +21,6 @@ const manifest: Manifest = {
 
   // Set to true if you want to use the native token for orders
   useNativeTokenForOrders: true,
-  useNativeTokenForOrders: true,
   // The ERC20 token used if useNativeTokenForOrders is false
   erc20: {
     id: "dolz-io", // Used to display the fiat price of the token. You can find the id on CoinGecko
@@ -36,7 +35,8 @@ const manifest: Manifest = {
   rpcUrl: env.NEXT_PUBLIC_RPC_URL,
   // Set to true if contracts transactions are sponsored for Cometh Connect users.
   // Contracts to sponsor are your ERC721, 0x exchange and either the wrapped native token contract or your ERC20
-  areContractsSponsored: true,
+  areContractsSponsored: false,
+  walletConnectProjectId: env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
 
   fiatCurrency: {
     enable: true, // set to false to disable fiat currency

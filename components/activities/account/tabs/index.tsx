@@ -29,7 +29,8 @@ export const AccountAssetActivities = ({
 }: AccountAssetActivitiesProps) => {
   const receivedOffers = useAssetReceivedOffers({ owner: walletAddress })
   const sentOffers = useAssetSentOffers({ owner: walletAddress })
-  const { switchCollection, currentCollectionAddress } = useCurrentCollectionContext()
+  const { switchCollection, currentCollectionAddress } =
+    useCurrentCollectionContext()
 
   const defaultValue =
     globalConfig.contractAddresses.length > 1
@@ -52,18 +53,14 @@ export const AccountAssetActivities = ({
         receivedCounter={receivedOffers.length}
         sentCounter={sentOffers.length}
       />
-      {globalConfig.contractAddresses.length > 1 ? (
-        globalConfig.contractAddresses.map((address) => (
-          <CollectionAssetsSearchTabContent
-            key={address}
-            contractAddress={address}
-          >
-            {children}
-          </CollectionAssetsSearchTabContent>
-        ))
-      ) : (
-        <AssetsSearchTabContent>{children}</AssetsSearchTabContent>
-      )}
+      {globalConfig.contractAddresses.map((address) => (
+        <CollectionAssetsSearchTabContent
+          key={address}
+          contractAddress={address}
+        >
+          {children}
+        </CollectionAssetsSearchTabContent>
+      ))}
       <BuyOffersTabContent offers={receivedOffers} />
       <SendBuyOffersTabContent offers={sentOffers} />
     </Tabs>

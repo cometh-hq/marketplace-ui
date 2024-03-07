@@ -35,7 +35,7 @@ export const FiatPrice = ({ amount, className }: FiatPriceProps) => {
   return (
     fiatPrice !== null && (
       <span
-        className={cn("text-sm font-semibold text-foreground/60", className)}
+        className={cn("text-foreground/60 text-sm font-semibold", className)}
       >
         (≈ {fiatPrice}
         {manifest.fiatCurrency?.currencySymbol})

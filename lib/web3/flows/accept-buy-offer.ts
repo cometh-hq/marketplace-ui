@@ -1,3 +1,5 @@
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
+import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 
@@ -5,9 +7,8 @@ import { BuyOffer } from "@/types/buy-offers"
 import { useStepper } from "@/lib/utils/stepper"
 
 import { fetchHasApprovedCollection } from "../../../services/token-approval/has-approved-collection"
-import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
-import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
+import { useAccount } from "wagmi"
 
 export type UseRequiredSellingStepsOptions = {
   offer: BuyOffer
@@ -24,7 +25,7 @@ export type AcceptBuyOfferStep = {
 }
 
 const defaultSteps = [
-  { label: "Pricing", value: "confirm-accept-buy-offer" }
+  { label: "Pricing", value: "confirm-accept-buy-offer" },
 ] as AcceptBuyOfferStep[]
 
 export type FetchRequiredSellingStepsOptions = {
@@ -38,7 +39,7 @@ export const fetchRequiredAcceptBuyOfferSteps = async ({
   offer,
   address,
   nftSwapSdk,
-  isComethWallet
+  isComethWallet,
 }: FetchRequiredSellingStepsOptions) => {
   const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
 
@@ -46,7 +47,7 @@ export const fetchRequiredAcceptBuyOfferSteps = async ({
     address,
     tokenId: offer.asset?.tokenId ?? offer.trade.tokenId,
     nftSwapSdk,
-    contractAddress: offer.trade.tokenAddress as Address
+    contractAddress: offer.trade.tokenAddress as Address,
   })
 
   const sellingSteps = [
@@ -61,9 +62,10 @@ export const fetchRequiredAcceptBuyOfferSteps = async ({
 export const useRequiredAcceptBuyOfferSteps = ({
   offer,
 }: UseRequiredSellingStepsOptions) => {
-  const viewerAddress = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewerAddress = account.address
   const nftSwapSdk = useNFTSwapv4()
-  const isComethWallet = useIsComethWallet()
+  const isComethWallet = useIsComethConnectWallet()
   return useQuery({
     queryKey: ["requiredAcceptBuyOfferSteps", offer],
     queryFn: async () => {
@@ -72,7 +74,7 @@ export const useRequiredAcceptBuyOfferSteps = ({
         offer,
         address: viewerAddress,
         nftSwapSdk,
-        isComethWallet
+        isComethWallet,
       })
     },
 

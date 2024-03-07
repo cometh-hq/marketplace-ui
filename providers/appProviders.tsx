@@ -1,21 +1,21 @@
 "use client"
 
 import { CurrentCollectionProvider } from "./currentCollection/currentCollectionProvider"
+import { MarketplaceWagmiProvider } from "./authentication/marketplaceWagmiProvider"
 import { ReactQueryProvider } from "./react-query"
 import { AppThemeProvider } from "./theme"
-import { MarketplaceWagmiProvider } from "./wagmi"
-import { Web3OnboardProvider } from "./web3-onboard"
+import { MarketplaceRainbowKitProvider } from "./authentication/marketplaceRainbowKitProvider"
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <ReactQueryProvider>
-      <Web3OnboardProvider>
-        <AppThemeProvider>
-          <MarketplaceWagmiProvider>
+      <AppThemeProvider>
+        <MarketplaceWagmiProvider>
+          <MarketplaceRainbowKitProvider>
             <CurrentCollectionProvider>{children}</CurrentCollectionProvider>
-          </MarketplaceWagmiProvider>
-        </AppThemeProvider>
-      </Web3OnboardProvider>
+          </MarketplaceRainbowKitProvider>
+        </MarketplaceWagmiProvider>
+      </AppThemeProvider>
     </ReactQueryProvider>
   )
 }

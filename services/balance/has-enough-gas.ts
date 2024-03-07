@@ -1,8 +1,8 @@
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
-import { useIsComethWallet } from "@/lib/web3/auth"
 
 import { getNativeBalance } from "./balanceService"
 
@@ -15,11 +15,13 @@ export const fetchHasEnoughGas = async (
     return { hasEnoughGas: true }
   const nativeTokenBalance = await getNativeBalance(walletAddress)
 
-  return { hasEnoughGas: nativeTokenBalance > globalConfig.minimumBalanceForGas }
+  return {
+    hasEnoughGas: nativeTokenBalance > globalConfig.minimumBalanceForGas,
+  }
 }
 
 export const useHasEnoughGas = (walletAddress: Address | undefined) => {
-  const isComethWallet = useIsComethWallet()
+  const isComethWallet = useIsComethConnectWallet()
   return useQuery({
     queryKey: ["useHasEnoughGas", walletAddress],
     queryFn: async () => fetchHasEnoughGas(walletAddress, isComethWallet),

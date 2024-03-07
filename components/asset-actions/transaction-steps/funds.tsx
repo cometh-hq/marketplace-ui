@@ -6,9 +6,9 @@ import {
 import { BigNumber } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
+import { useAccount } from "wagmi"
 
 export type FundsStepProps = {
   price: BigNumber
@@ -16,7 +16,8 @@ export type FundsStepProps = {
 }
 
 export function FundsStep({ price, onValid }: FundsStepProps) {
-  const viewer = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewer = account.address
   const [isRefreshingBalance, setIsRefreshingBalance] = useState(false)
 
   const { data } = useHasSufficientFunds({
@@ -53,8 +54,8 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
       <p className="text-center">
         Looks like you don&rsquo;t have enough funds to complete this
         transaction. <br />
-        You are missing <Price amount={missingBalance} hideSymbol={false} />. Once you
-        have funded your wallet with some{" "}
+        You are missing <Price amount={missingBalance} hideSymbol={false} />.
+        Once you have funded your wallet with some{" "}
         <strong>{globalConfig.ordersDisplayCurrency.name}</strong>, please
         refresh your balance.
       </p>

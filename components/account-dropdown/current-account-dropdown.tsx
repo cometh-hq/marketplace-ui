@@ -3,8 +3,9 @@
 import Image from "next/image"
 import { User } from "lucide-react"
 import { useWindowSize } from "usehooks-ts"
+import { useAccount } from "wagmi"
 
-import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
+import { env } from "@/config/env"
 import { Button, ButtonProps } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -13,12 +14,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { UserLink } from "@/components/ui/user-button"
-import { ButtonLoading } from "@/components/button-loading"
 
 import { CopyButton } from "../ui/copy-button"
 import { AccountBalance } from "./account-balance"
-import { AccountLogAction } from "./log-actions"
-import { env } from "@/config/env"
+import { AccountLogoutAction } from "./logout-action"
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 
 export type AccountDropdownProps = {
   buttonVariant?: ButtonProps["variant"]
@@ -28,8 +28,9 @@ export type AccountDropdownProps = {
 export function CurrentAccountDropdown({
   buttonVariant,
 }: AccountDropdownProps) {
-  const isComethWallet = useIsComethWallet()
-  const viewerAddress = useCurrentViewerAddress()
+  const isComethWallet = useIsComethConnectWallet()
+  const account = useAccount()
+  const viewerAddress = account.address
   const { width } = useWindowSize()
 
   const isMobile = width < 640
@@ -49,7 +50,7 @@ export function CurrentAccountDropdown({
       <DropdownMenuContent align="end" asChild>
         <Card className="p-4" style={{ width: "324px" }}>
           <CardHeader className="mb-2 space-y-0 p-0">
-            <AccountLogAction />
+            <AccountLogoutAction />
             <div className="flex items-center gap-2">
               <Image src={walletIcon} alt="" width={40} height={40} />
               <div>

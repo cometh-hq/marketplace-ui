@@ -1,9 +1,9 @@
+import { useEthersSigner } from "@/providers/authentication/viemToEthersHelper"
 import { AssetWithTradeData, TradeDirection } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 
-import { useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
@@ -24,7 +24,7 @@ export const useMakeBuyOfferAsset = (asset: AssetWithTradeData) => {
   const { data: collection } = useGetCollection(
     asset.contractAddress as Address
   )
-  const signer = useSigner()
+  const signer = useEthersSigner()
 
   const { buyOffer } = useBuyOffer()
 
@@ -41,6 +41,8 @@ export const useMakeBuyOfferAsset = (asset: AssetWithTradeData) => {
       })
 
       if (!order) throw new Error("Could not build order")
+      if(!signer) throw new Error("Could not get signer")
+
       return await buyOffer({
         asset,
         signer,

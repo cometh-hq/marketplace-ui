@@ -1,6 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-import { AppProviders } from "@/providers"
+import { AppProviders } from "@/providers/appProviders"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/utils/fonts"
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head />
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "bg-background min-h-screen font-sans antialiased",
           fontSans.variable
         )}
       >

@@ -1,9 +1,9 @@
 import { useMemo } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { isAddressEqual } from "viem"
+import { useAccount } from "wagmi"
 
 import { BuyOffer } from "@/types/buy-offers"
-import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 import { cancelOrder } from "./cancel-order"
@@ -13,7 +13,8 @@ export type UseCanCancelBuyOfferParams = {
 }
 
 export const useCanCancelBuyOffer = ({ offer }: UseCanCancelBuyOfferParams) => {
-  const viewer = useCurrentViewerAddress()
+  const account = useAccount()
+  const viewer = account.address
   return useMemo(() => {
     if (!viewer) return false
     if (isAddressEqual(offer.emitter.address, viewer)) return true

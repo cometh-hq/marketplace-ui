@@ -32,7 +32,7 @@ export function ProductBlockDividedColumn({
   return (
     <div
       className={cn(
-        "flex-col items-start justify-between gap-2 flex",
+        "flex flex-col items-start justify-between gap-2",
         hideOnMobile ? "hidden md:flex" : "flex"
       )}
     >
