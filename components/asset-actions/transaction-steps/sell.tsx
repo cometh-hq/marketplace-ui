@@ -29,10 +29,9 @@ export type SellStepProps = {
  * Arriving at this stage means that the user has approved the collection
  * so we don't have to do any check here
  *
- * TODO: wrap in a form
  */
 export function SellStep({ asset, onClose }: SellStepProps) {
-  const { mutateAsync: sell, isPending } = useSellAsset()
+  const { mutateAsync: sell, isPending } = useSellAsset(asset)
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
 

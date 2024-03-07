@@ -1,27 +1,32 @@
 import { useMemo } from "react"
+import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useGetCollection } from "@/services/cometh-marketplace/collection"
 import { parseUnits } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import {
   calculateAmountWithoutFees,
   calculateFeesAmount,
 } from "@/lib/utils/fees"
 
 import { Price } from "./price"
-import globalConfig from "@/config/globalConfig"
 
 type PriceDetailsProps = {
   fullPrice: string
   isEthersFormat?: boolean
 }
 
-export function PriceDetails({ fullPrice, isEthersFormat = true }: PriceDetailsProps) {
-  const { data: collection } = useGetCollection()
+export function PriceDetails({
+  fullPrice,
+  isEthersFormat = true,
+}: PriceDetailsProps) {
+  const { currentCollectionAddress } = useCurrentCollectionContext()
+  const { data: collection } = useGetCollection(currentCollectionAddress)
   const sumOfFeesPercentages = collection
     ? collection.collectionFees.reduce((sum, fee) => sum + fee.feePercentage, 0)
     : 0
   let price = fullPrice ? fullPrice : "0"
-  if(isEthersFormat) {
+  if (isEthersFormat) {
     price = parseUnits(price, globalConfig.ordersErc20.decimals).toString()
   }
 

@@ -112,7 +112,7 @@ export function AssetCardBase({
           "flex w-full flex-1 flex-row items-center gap-3 border-transparent bg-transparent p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2"
         )}
       >
-        <Link href={`/marketplace/${asset.tokenId}`} className="sm:w-full">
+        <Link href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`} className="sm:w-full">
           <AssetImageContainer
             color={getAssetColor(asset)}
             className={cn(owner && "bg-[#f4f2e8]")}
@@ -190,7 +190,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
     >
       <div>
         <Link
-          href={`/marketplace/${asset.tokenId}`}
+          href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`}
           className={cn(
             "mb-2 flex flex-nowrap items-center text-base font-semibold leading-tight text-primary"
           )}

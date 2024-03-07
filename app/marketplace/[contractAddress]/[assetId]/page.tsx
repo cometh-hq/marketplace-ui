@@ -1,5 +1,6 @@
 "use client"
 
+import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useAssetDetails } from "@/services/cometh-marketplace/search-assets"
 import { useSearchOrders } from "@/services/cometh-marketplace/search-orders"
 import { useAssetTransfers } from "@/services/cometh-marketplace/transfers"
@@ -8,8 +9,8 @@ import {
   SearchOrdersSortOption,
   TradeStatus,
 } from "@cometh/marketplace-sdk"
+import { Address } from "viem"
 
-import globalConfig from "@/config/globalConfig"
 import { Loading } from "@/components/ui/loading"
 import { AssetActivities } from "@/components/activities/asset-details/tabs"
 import AssetDetails from "@/components/marketplace/asset/header"
@@ -18,16 +19,13 @@ import { AssetHeaderImage } from "@/components/marketplace/asset/image"
 export default function DetailsPage({
   params,
 }: {
-  params: { assetId: string }
+  params: { contractAddress: Address; assetId: string }
 }) {
-  const { assetId } = params
-  const { data: asset } = useAssetDetails(globalConfig.contractAddress, assetId)
-  const { data: assetTransfers } = useAssetTransfers(
-    globalConfig.contractAddress,
-    assetId
-  )
+  const { assetId, contractAddress } = params
+  const { data: asset } = useAssetDetails(contractAddress, assetId)
+  const { data: assetTransfers } = useAssetTransfers(contractAddress, assetId)
   const { data: assetOrders } = useSearchOrders({
-    tokenAddress: globalConfig.contractAddress,
+    tokenAddress: contractAddress,
     tokenIds: [assetId],
     statuses: [TradeStatus.FILLED, TradeStatus.OPEN],
     orderBy: SearchOrdersSortOption.UPDATED_AT,

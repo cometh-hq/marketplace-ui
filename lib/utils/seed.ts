@@ -26,14 +26,14 @@ export const marketplaceFiltersDescription = new Map<
   { values: Set<string> }
 >()
 
-export const seedFilters = async (): Promise<
+export const seedFilters = async (collectionAddress: string): Promise<
   typeof marketplaceFiltersDescription
 > => {
   const filters = new Map<MarketplaceFilterKey, { values: Set<string> }>()
   let attributes: CollectionAttributes = {}
 
   try {
-    attributes = await fetchCollectionAttributes()
+    attributes = await fetchCollectionAttributes(collectionAddress)
   } catch (e) {
     console.error("Cannot fetch collection attributes")
   }

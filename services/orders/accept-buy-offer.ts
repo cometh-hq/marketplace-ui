@@ -4,7 +4,6 @@ import { ContractTransaction } from "ethers"
 import { Address, isAddressEqual } from "viem"
 
 import { BuyOffer } from "@/types/buy-offers"
-import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/use-toast"
@@ -64,7 +63,7 @@ export const useAcceptBuyOffer = () => {
             feeData: fee.feeData || "0x",
           }
         }),
-        erc721Token: globalConfig.contractAddress,
+        erc721Token: offer.trade.tokenAddress,
         erc721TokenId: offer.trade.tokenId,
         erc721TokenProperties: [],
         signature: signature,
