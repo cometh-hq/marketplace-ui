@@ -5,10 +5,10 @@ import { Address } from "viem"
 
 import { useSigner } from "@/lib/web3/auth"
 import { toast } from "@/components/ui/toast/use-toast"
-import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
 
 import { useGetCollection } from "../cometh-marketplace/collection"
 import { useBuildOfferOrder } from "./build-offer-order"
+import { useBuyOffer } from "./buy-offer"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData
@@ -26,7 +26,7 @@ export const useMakeBuyOfferAsset = (asset: AssetWithTradeData) => {
   )
   const signer = useSigner()
 
-  const { getWalletTxs } = useWalletAdapter()
+  const { buyOffer } = useBuyOffer()
 
   return useMutation({
     mutationKey: ["make-buy-offer-asset"],
@@ -41,8 +41,7 @@ export const useMakeBuyOfferAsset = (asset: AssetWithTradeData) => {
       })
 
       if (!order) throw new Error("Could not build order")
-
-      return await getWalletTxs()?.makeBuyOffer({
+      return await buyOffer({
         asset,
         signer,
         order,

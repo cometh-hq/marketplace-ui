@@ -2,7 +2,6 @@ import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
 
-import globalConfig from "@/config/globalConfig"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 

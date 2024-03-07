@@ -3,9 +3,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { isAddressEqual } from "viem"
 
 import { BuyOffer } from "@/types/buy-offers"
-import { useCurrentViewerAddress, useSigner } from "@/lib/web3/auth"
+import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-import { useWalletAdapter } from "@/app/adapters/use-wallet-adapter"
+
+import { cancelOrder } from "./cancel-order"
 
 export type UseCanCancelBuyOfferParams = {
   offer: BuyOffer
@@ -25,18 +26,15 @@ export type CancelBuyOfferParams = {
 }
 
 export const useCancelBuyOffer = () => {
-  // const signer = useSigner()
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
-
-  const { getWalletTxs } = useWalletAdapter()
 
   return useMutation({
     mutationKey: ["cancelBuyOffer"],
     mutationFn: async ({ offer }: CancelBuyOfferParams) => {
       const nonce = offer.trade.nonce
 
-      return await getWalletTxs()?.cancelOrder({
+      return await cancelOrder({
         nonce,
         nftSwapSdk,
       })
@@ -52,6 +50,6 @@ export const useCancelBuyOffer = () => {
       client.invalidateQueries({
         queryKey: ["cometh", "sent-buy-offers", offer.emitter.address],
       })
-    }
+    },
   })
 }

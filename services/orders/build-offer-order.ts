@@ -17,7 +17,7 @@ import globalConfig from "@/config/globalConfig"
 import {
   calculateAmountWithoutFees,
   calculateFeesAmount,
-  totalFeesFromCollection
+  totalFeesFromCollection,
 } from "@/lib/utils/fees"
 import { useCurrentViewerAddress } from "@/lib/web3/auth"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
