@@ -34,14 +34,14 @@ export function AssetImage({
   if (imageData && imageData.startsWith("<svg")) {
     return (
       <div
-        className="z-10 h-full w-full bg-background"
+        className="bg-background z-10 size-full"
         dangerouslySetInnerHTML={{ __html: imageData }}
       />
     )
   }
 
   if (!_src) {
-    return <div className="z-10 h-full w-full bg-background" />
+    return <div className="bg-background z-10 size-full" />
   }
 
   return (

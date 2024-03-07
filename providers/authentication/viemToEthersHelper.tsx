@@ -21,7 +21,7 @@ function clientToProvider(client: Client<Transport, Chain>) {
 
 export function useEthersProvider() {
   const client = useClient()
-  return useMemo(() => clientToProvider(client), [client])
+  return useMemo(() => client && clientToProvider(client), [client])
 }
 
 function clientToSigner(client: Client<Transport, Chain, Account>) {

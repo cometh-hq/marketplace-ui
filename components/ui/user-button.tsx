@@ -63,7 +63,7 @@ export const UserLink = memo(function UserLink({
       href={userProfileHref}
       className={cn("flex items-center font-semibold", className)}
     >
-      {!hideIcon && <User className="mr-2 h-4 w-4" />} {content}
+      {!hideIcon && <User className="mr-2 size-4" />} {content}
     </Link>
   )
 })
@@ -71,7 +71,7 @@ export const UserLink = memo(function UserLink({
 export const UserButton = function UserButton({
   user,
   variant,
-  icon = () => <User className="mr-2 h-4 w-4" />,
+  icon = () => <User className="mr-2 size-4" />,
   forceDisplayAddress = false,
   ...props
 }: UserButtonProps) {

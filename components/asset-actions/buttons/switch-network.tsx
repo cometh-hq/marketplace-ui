@@ -28,7 +28,7 @@ export const SwitchNetwork = ({
       ) : (
         <>
           {callbackChildren ?? children}
-          <div className="flex items-center justify-center gap-2 text-destructive">
+          <div className="text-destructive flex items-center justify-center gap-2">
             <AlertCircle size="16" />
             {variant !== "link" && (
               <span className="text-sm font-medium max-sm:hidden">

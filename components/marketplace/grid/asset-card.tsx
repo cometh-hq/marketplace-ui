@@ -196,7 +196,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
         <Link
           href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`}
           className={cn(
-            "mb-2 flex flex-nowrap items-center text-base font-semibold leading-tight text-primary"
+            "text-primary mb-2 flex flex-nowrap items-center text-base font-semibold leading-tight"
           )}
         >
           <span className="inline-block max-w-[100%_-_80px] truncate">
@@ -204,7 +204,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
           </span>
           <span>&nbsp;#{shortenTokenId(asset.tokenId, 5)}</span>
         </Link>
-        <div className="w-full rounded-lg bg-muted/80 p-3">
+        <div className="bg-muted/80 w-full rounded-lg p-3">
           <div className="flex flex-col items-start justify-between gap-1 sm:flex-row sm:items-center">
             <div>
               <div className="text-sm font-medium">Price</div>

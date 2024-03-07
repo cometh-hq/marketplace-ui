@@ -41,7 +41,7 @@ export const FilterContainer = ({
   children: React.ReactNode
 }) => {
   return (
-    <div className="flex h-[50px] w-[300px] items-center justify-between rounded-md px-4 hover:bg-muted">
+    <div className="hover:bg-muted flex h-[50px] w-[300px] items-center justify-between rounded-md px-4">
       {children}
     </div>
   )
@@ -49,7 +49,7 @@ export const FilterContainer = ({
 
 const FilterLabel = ({ children }: { children: string }) => {
   return (
-    <span className="text-uppercase px-4 text-sm font-semibold text-primary/80">
+    <span className="text-uppercase text-primary/80 px-4 text-sm font-semibold">
       {children}
     </span>
   )
@@ -76,7 +76,7 @@ const FilterMultiCombobox = ({
             <span className="text-sm font-medium capitalize">
               {label}
               {checkedCount && (
-                <span className="ml-2 text-xs font-bold text-primary/80">
+                <span className="text-primary/80 ml-2 text-xs font-bold">
                   ({checkedCount})
                 </span>
               )}
@@ -148,7 +148,7 @@ export const CheckboxFilter = ({
   return (
     <CommandItem onSelect={handleCheck}>
       <span>{label}</span>
-      {!!checked && <CheckIcon className={cn("ml-auto h-4 w-4")} />}
+      {!!checked && <CheckIcon className={cn("ml-auto size-4")} />}
     </CommandItem>
   )
 }

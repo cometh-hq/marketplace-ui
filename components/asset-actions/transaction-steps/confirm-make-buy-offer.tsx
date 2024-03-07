@@ -4,10 +4,10 @@ import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
-import { useIsComethWallet } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 import { ButtonLoading } from "@/components/button-loading"
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 
 export type ConfirmBuyOfferStepProps = {
   asset: AssetWithTradeData
@@ -23,7 +23,7 @@ export function ConfirmMakeBuyOfferStep({
   onValid,
 }: ConfirmBuyOfferStepProps) {
   const { mutateAsync: makeBuyOffer, isPending } = useMakeBuyOfferAsset(asset)
-  const isComethWallet = useIsComethWallet()
+  const isComethWallet = useIsComethConnectWallet()
 
   const onConfirm = useCallback(async () => {
     await makeBuyOffer({ asset, price, validity })

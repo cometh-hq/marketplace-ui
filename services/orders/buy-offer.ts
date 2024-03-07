@@ -1,3 +1,4 @@
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { useSignOrder } from "@/services/orders/sign-order"
 import {
   AssetWithTradeData,
@@ -16,7 +17,6 @@ import { DateTime } from "luxon"
 
 import globalConfig from "@/config/globalConfig"
 import { IZeroEx__factory } from "@/lib/generated/contracts/factories/IZeroEx__factory"
-import { useIsComethWallet } from "@/lib/web3/auth"
 
 import { comethMarketplaceClient } from "../cometh-marketplace/client"
 
@@ -32,7 +32,7 @@ export type BuyOfferParams = {
 } & OrderParams
 
 export const useBuyOffer = () => {
-  const isComethWallet = useIsComethWallet()
+  const isComethWallet = useIsComethConnectWallet()
   const signBuyOfferOrder = useSignOrder()
 
   async function buyOfferEOA({ signer, order }: BuyOfferParams) {

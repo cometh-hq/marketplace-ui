@@ -1,5 +1,6 @@
 import { useMemo } from "react"
 import { manifest } from "@/manifests"
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useGetCollection } from "@/services/cometh-marketplace/collection"
 import { parseUnits } from "viem"
@@ -9,7 +10,6 @@ import {
   calculateAmountWithoutFees,
   calculateFeesAmount,
 } from "@/lib/utils/fees"
-import { useIsComethWallet } from "@/lib/web3/auth"
 
 import { Price } from "./price"
 
@@ -22,7 +22,7 @@ export function PriceDetails({
   fullPrice,
   isEthersFormat = true,
 }: PriceDetailsProps) {
-  const isComethWallet = useIsComethWallet()
+  const isComethWallet = useIsComethConnectWallet()
   const { currentCollectionAddress } = useCurrentCollectionContext()
   const { data: collection } = useGetCollection(currentCollectionAddress)
   const sumOfFeesPercentages = collection
