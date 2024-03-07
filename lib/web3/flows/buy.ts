@@ -1,7 +1,7 @@
 import { fetchNeedsMoreAllowance } from "@/services/allowance/needs-more-allowance"
 import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
+import { fetchHasSufficientFunds } from "@/services/balance/has-sufficient-funds"
 import { fetchNeedsToUnwrap } from "@/services/exchange/needs-to-unwrap"
-// import { useLoader } from "@/services/loaders"
 import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
@@ -9,9 +9,7 @@ import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 import { useStepper } from "@/lib/utils/stepper"
-
-import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
-import { useCurrentViewerAddress, useIsComethWallet } from "../auth"
+import { useCurrentViewerAddress, useIsComethWallet } from "@/lib/web3/auth"
 
 export type UseRequiredBuyingStepsOptions = {
   asset: AssetWithTradeDataCore
@@ -65,6 +63,7 @@ export const fetchRequiredBuyingSteps = async ({
   const needsToUnwrapData = await fetchNeedsToUnwrap({
     address,
     price,
+    isComethWallet,
   })
   const displayAddUnwrappedNativeTokenStep =
     needsToUnwrapData.needsToUnwrap &&

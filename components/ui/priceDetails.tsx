@@ -49,25 +49,19 @@ export function PriceDetails({
   }, [price, sumOfFeesPercentages])
 
   return (
-    <div className="rounded border p-4 shadow">
-      <div className="flex  flex-col justify-between sm:flex-row">
+    <div className="flex flex-col gap-2 rounded border p-4 shadow-sm">
+      <div className="flex items-center justify-between">
         <span>You will receive:</span>
-        <span>
-          <Price fontWeight="normal" amount={amountWithoutFees} />
-        </span>
+        <Price amount={amountWithoutFees} className="font-normal" />
       </div>
-      <div className="flex flex-col justify-between sm:flex-row">
+      <div className="flex items-center justify-between">
         <span>Fees ({sumOfFeesPercentages}%):</span>
-        <span>
-          <Price fontWeight="normal" amount={feesAmount} />
-        </span>
+        <Price amount={feesAmount} className="font-normal" />
       </div>
-      <hr className="my-2" />
-      <div className="flex flex-col justify-between sm:flex-row">
-        <span>Total price:</span>
-        <span>
-          <Price fontWeight="normal" amount={price || 0} />
-        </span>
+      <hr className="my-0.5" />
+      <div className="flex items-center justify-between">
+        <span className="font-medium">Total price:</span>
+        <Price amount={price || 0} className="font-semibold" />
       </div>
     </div>
   )

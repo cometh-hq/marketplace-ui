@@ -36,12 +36,11 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
   return (
     <div className="flex flex-col items-center justify-center">
       <p className="text-md my-[32px] text-center">
-        You are about to buy this NFT for <Price amount={price} />
-        but you are missing{" "}
+        You are about to buy this NFT for <Price amount={price} /> but you are
+        missing{" "}
         <Price
           amount={needsToUnwrapData?.balanceToUnwrap}
-          className="!font-bold"
-        />
+        />{" "}
         in your wallet. The minimum amount of native token includes{" "}
         <Price amount={globalConfig.minimumBalanceForGas} /> which are necessary
         to pay for gas. <br />
@@ -51,9 +50,9 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
       </p>
 
       {isPending ? (
-        <ButtonLoading />
+        <ButtonLoading size="lg" />
       ) : (
-        <Button className="flex gap-1" onClick={onConfirm}>
+        <Button className="flex gap-1" size="lg" onClick={onConfirm}>
           Unwrap{" "}
           <Price
             amount={needsToUnwrapData?.balanceToUnwrap}
