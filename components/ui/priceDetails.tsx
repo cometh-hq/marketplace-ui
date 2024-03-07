@@ -1,4 +1,5 @@
 import { useMemo } from "react"
+import { manifest } from "@/manifests"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useGetCollection } from "@/services/cometh-marketplace/collection"
 import { parseUnits } from "viem"
@@ -8,6 +9,7 @@ import {
   calculateAmountWithoutFees,
   calculateFeesAmount,
 } from "@/lib/utils/fees"
+import { useIsComethWallet } from "@/lib/web3/auth"
 
 import { Price } from "./price"
 
@@ -20,6 +22,7 @@ export function PriceDetails({
   fullPrice,
   isEthersFormat = true,
 }: PriceDetailsProps) {
+  const isComethWallet = useIsComethWallet()
   const { currentCollectionAddress } = useCurrentCollectionContext()
   const { data: collection } = useGetCollection(currentCollectionAddress)
   const sumOfFeesPercentages = collection
@@ -29,6 +32,7 @@ export function PriceDetails({
   if (isEthersFormat) {
     price = parseUnits(price, globalConfig.ordersErc20.decimals).toString()
   }
+  const contractIsSponsored = manifest.areContractsSponsored && isComethWallet
 
   const { amountWithoutFees, feesAmount } = useMemo(() => {
     let amountWithoutFees = BigInt(0)
@@ -62,6 +66,12 @@ export function PriceDetails({
           <Price fontWeight="normal" amount={feesAmount} />
         </span>
       </div>
+      {contractIsSponsored && (
+        <div className="flex flex-col justify-between sm:flex-row">
+          <span>Gaz transaction:</span>
+          <span className="font-medium">Sponsored</span>
+        </div>
+      )}
       <hr className="my-2" />
       <div className="flex flex-col justify-between sm:flex-row">
         <span>Total price:</span>
