@@ -1,6 +1,4 @@
-import { manifest } from "@/manifests"
-
-import globalConfig from "./globalConfig"
+import { manifest } from "@/manifests/manifests"
 
 export type SiteConfig = typeof siteConfig
 

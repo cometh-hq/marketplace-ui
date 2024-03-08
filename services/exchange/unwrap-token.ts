@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
-import { toast } from "@/components/ui/toast/use-toast"
+import { toast } from "@/components/ui/toast/hooks/useToast"
 import {  usePublicClient, useWalletClient } from "wagmi"
 import wethAbi from "@/abis/wethAbi" 
 

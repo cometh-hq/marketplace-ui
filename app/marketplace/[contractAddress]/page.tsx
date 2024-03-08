@@ -2,10 +2,10 @@
 
 import { useEffect } from "react"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
-import { useFilters } from "@/services/cometh-marketplace/filters"
+import { useFilters } from "@/services/cometh-marketplace/filtersService"
 import { Address } from "viem"
 
-import { AssetsSearchGrid } from "@/components/marketplace/grid/asset-search-grid"
+import { AssetsSearchGrid } from "@/components/marketplace/grid/AssetSearchGrid"
 
 export default function MarketplaceCollectionPage({
   params,

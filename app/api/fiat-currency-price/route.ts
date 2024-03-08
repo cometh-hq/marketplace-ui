@@ -1,5 +1,6 @@
-import { coingeckoClient } from "@/services/coingecko/client"
 import { NextRequest } from "next/server"
+
+import { coingeckoClient } from "@/lib/clients"
 
 export const revalidate = 60 * 10
 

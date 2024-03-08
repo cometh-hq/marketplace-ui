@@ -1,8 +1,8 @@
 import { useMemo } from "react"
-import { manifest } from "@/manifests"
+import { manifest } from "@/manifests/manifests"
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
-import { useGetCollection } from "@/services/cometh-marketplace/collection"
+import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
 import { parseUnits } from "viem"
 
 import globalConfig from "@/config/globalConfig"

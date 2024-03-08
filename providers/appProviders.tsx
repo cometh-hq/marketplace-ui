@@ -1,10 +1,10 @@
 "use client"
 
-import { CurrentCollectionProvider } from "./currentCollection/currentCollectionProvider"
+import { MarketplaceRainbowKitProvider } from "./authentication/marketplaceRainbowKitProvider"
 import { MarketplaceWagmiProvider } from "./authentication/marketplaceWagmiProvider"
+import { CurrentCollectionProvider } from "./currentCollection/currentCollectionProvider"
 import { ReactQueryProvider } from "./react-query"
 import { AppThemeProvider } from "./theme"
-import { MarketplaceRainbowKitProvider } from "./authentication/marketplaceRainbowKitProvider"
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (

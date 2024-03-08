@@ -1,9 +1,8 @@
 "use client"
 
-import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
-import { useAssetDetails } from "@/services/cometh-marketplace/search-assets"
-import { useSearchOrders } from "@/services/cometh-marketplace/search-orders"
-import { useAssetTransfers } from "@/services/cometh-marketplace/transfers"
+import { useAssetDetails } from "@/services/cometh-marketplace/searchAssetsService"
+import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
+import { useAssetTransfers } from "@/services/cometh-marketplace/assetTransfersService"
 import {
   FilterDirection,
   SearchOrdersSortOption,
@@ -11,10 +10,10 @@ import {
 } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
-import { Loading } from "@/components/ui/loading"
-import { AssetActivities } from "@/components/activities/asset-details/tabs"
-import AssetDetails from "@/components/marketplace/asset/header"
-import { AssetHeaderImage } from "@/components/marketplace/asset/image"
+import { Loading } from "@/components/ui/Loading"
+import { AssetActivities } from "@/components/activities/asset-details/tabs/AssetActivities"
+import AssetDetails from "@/components/marketplace/asset/AssetDetails"
+import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
 
 export default function DetailsPage({
   params,

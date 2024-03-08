@@ -4,13 +4,13 @@ import { Address } from "viem"
 
 import { shortenAddress } from "@/lib/utils/addresses"
 
-import { Button } from "@/components/ui/button"
-import { CopyButton } from "@/components/ui/copy-button"
-import { Link } from "@/components/ui/link"
-import { ShareButton } from "@/components/ui/share-button"
-import { AccountAssetActivities } from "@/components/activities/account/tabs"
-import { AssetsSearchGrid } from "@/components/marketplace/grid/asset-search-grid"
-import { useFilters } from "@/services/cometh-marketplace/filters"
+import { Button } from "@/components/ui/Button"
+import { CopyButton } from "@/components/ui/CopyButton"
+import { Link } from "@/components/ui/Link"
+import { ShareButton } from "@/components/ui/ShareButton"
+import { AccountAssetActivities } from "@/components/activities/account/tabs/AccountAssetActivities"
+import { AssetsSearchGrid } from "@/components/marketplace/grid/AssetSearchGrid"
+import { useFilters } from "@/services/cometh-marketplace/filtersService"
 
 export default function ProfilePage({
   params,

@@ -58,13 +58,13 @@ Setting up `NEXT_PUBLIC_RPC_URL` is not mandatory but we strongly advise so get 
 ### 3. Customizing Your Marketplace
 
 #### **Manifest:** 
-Use the `manifests/index.ts` file to configure essential aspects of your marketplace. It lets you set:
+Use the `manifests.ts` file to configure essential aspects of your marketplace. It lets you set:
 - The name of your collection.
 - Asset attribute configurations.
 - Network details (update if not on polygon).
 - Currency settings. It's possible to use your own ERC20 instead of the native currency. 
 
-🔧 **Important:** It's crucial to customize this `index.ts` file to align with the specifics of your marketplace.
+🔧 **Important:** It's crucial to customize this `manifests.ts` file to align with the specifics of your marketplace.
 
 #### **Global configuration:**
 You can manage the configuration of your site directly from the `site.ts` file. This allows you to update site name, metadatas and links.

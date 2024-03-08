@@ -1,10 +1,10 @@
 "use client"
 
 import { redirect } from "next/navigation"
-import { useFilters } from "@/services/cometh-marketplace/filters"
+import { useFilters } from "@/services/cometh-marketplace/filtersService"
 
 import globalConfig from "@/config/globalConfig"
-import { AssetsSearchGrid } from "@/components/marketplace/grid/asset-search-grid"
+import { AssetsSearchGrid } from "@/components/marketplace/grid/AssetSearchGrid"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 
 export default function MarketplacePage() {

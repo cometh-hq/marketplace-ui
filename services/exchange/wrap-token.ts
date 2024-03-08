@@ -5,7 +5,7 @@ import { Address } from "viem"
 import { usePublicClient, useWalletClient } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { toast } from "@/components/ui/toast/use-toast"
+import { toast } from "@/components/ui/toast/hooks/useToast"
 
 export type WrapTokenOptions = {
   amount: BigNumber

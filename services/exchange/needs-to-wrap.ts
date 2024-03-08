@@ -3,10 +3,10 @@ import { BigNumber } from "ethers"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
+import { balanceToBigNumber } from "@/lib/utils/formatBalance"
 
-import { fetchHasSufficientFunds } from "../balance/has-sufficient-funds"
 import { getOrdersERC20Balance } from "../balance/balanceService"
-import { balanceToBigNumber } from "../balance/format"
+import { fetchHasSufficientFunds } from "../balance/fundsService"
 
 export type FetchNeedsToWrapOptions = {
   price: BigNumber
@@ -26,13 +26,11 @@ export const fetchNeedsToWrap = async ({
 }: FetchNeedsToWrapOptions): Promise<boolean> => {
   const hasSufficientFunds = await fetchHasSufficientFunds({
     address,
-    price
+    price,
   })
   if (!hasSufficientFunds) return false
 
-  const wrappedBalance = await getOrdersERC20Balance(
-    address
-  )
+  const wrappedBalance = await getOrdersERC20Balance(address)
   return !balanceToBigNumber(wrappedBalance).gte(price)
 }
 

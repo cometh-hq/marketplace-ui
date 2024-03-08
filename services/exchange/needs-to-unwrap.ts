@@ -4,7 +4,7 @@ import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 
-import { fetchHasSufficientFunds } from "../balance/has-sufficient-funds"
+import { fetchHasSufficientFunds } from "../balance/fundsService"
 
 export type FetchNeedsToUnwrapOptions = {
   price: BigNumber

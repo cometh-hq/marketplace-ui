@@ -13,7 +13,6 @@ export const intercalate = <T>(
     .reduce((acc, item, index) => [...acc, item, separator(index)], [] as T[])
     .slice(0, -1)
 
-  
 export const getFilterArray = (filters: any, key: string) =>
   Array.isArray(filters[key])
     ? filters[key]
