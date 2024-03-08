@@ -121,12 +121,12 @@ export type PriceProps = {
 
 export const Price = ({ amount, isNativeToken, ...rest }: PriceProps) => {
   if (!amount) return "-"
-  const formattedAmount = (+formatUnits(
+  const formattedAmount = formatUnits(
     amount.toString(),
     isNativeToken
       ? globalConfig.decimals.nativeTokenDecimals
       : globalConfig.ordersErc20.decimals
-  )).toString()
+  )
 
   return (
     <PriceTrigger

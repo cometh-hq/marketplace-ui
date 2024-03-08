@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 import { manifest } from "@/manifests"
-import { getFiatCurrencyPrice } from "@/services/coingecko/priceService"
+import { balanceToEtherString } from "@/services/balance/format"
+import { useConvertPriceToFiat } from "@/services/coingecko/priceService"
+import { BigNumber } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
 import { cn } from "@/lib/utils/utils"
 
 type FiatPriceProps = {
@@ -9,28 +12,14 @@ type FiatPriceProps = {
   className?: string
 }
 
+type BigIntFiatPriceProps = {
+  amount: BigInt | BigNumber | string
+  className?: string
+  isNativeToken?: boolean
+}
+
 export const FiatPrice = ({ amount, className }: FiatPriceProps) => {
-  const [fiatPrice, setFiatPrice] = useState<number | null>(null)
-
-  useEffect(() => {
-    const fetchFiatPrice = async () => {
-      const amountNumber = parseFloat(amount)
-
-      if (!isNaN(amountNumber) && amountNumber > 0) {
-        try {
-          const price = await getFiatCurrencyPrice(amountNumber)
-          setFiatPrice(price)
-        } catch (error) {
-          console.error("Failed to fetch fiat price", error)
-          setFiatPrice(null)
-        }
-      } else {
-        setFiatPrice(null)
-      }
-    }
-
-    fetchFiatPrice()
-  }, [amount])
+  const fiatPrice = useConvertPriceToFiat(parseFloat(amount))
 
   return (
     fiatPrice !== null && (
@@ -42,4 +31,23 @@ export const FiatPrice = ({ amount, className }: FiatPriceProps) => {
       </span>
     )
   )
+}
+
+const useConvertBigIntToString = (
+  amount: BigInt | BigNumber | string,
+  isNativeToken = globalConfig.useNativeForOrders
+) => {
+  return useMemo(() => {
+    return balanceToEtherString(amount, isNativeToken)
+  }, [amount, isNativeToken])
+}
+
+export const BigIntFiatPrice = ({
+  amount,
+  className,
+  isNativeToken,
+}: BigIntFiatPriceProps) => {
+  const stringAmount = useConvertBigIntToString(amount, isNativeToken)
+
+  return <FiatPrice amount={stringAmount} className={className} />
 }

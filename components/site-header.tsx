@@ -60,7 +60,7 @@ export function SiteHeader() {
         </div>
 
         <Link
-          href="/marketplace"
+          href="/nfts"
           className={cx(
             "flex items-center space-x-2 text-2xl",
             isOpen && "text-primary-foreground"

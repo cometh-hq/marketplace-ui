@@ -8,8 +8,9 @@ import {
 } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
+import { smartRounding } from "@/lib/utils/priceUtil"
 
-import { balanceToBigNumber, balanceToString } from "./format"
+import { balanceToBigNumber, balanceToEtherString } from "./format"
 
 export const useNativeBalance = (address?: Address) => {
   const queryClient = useQueryClient()
@@ -67,9 +68,18 @@ export const useBalance = () => {
 
   return useMemo(() => {
     return {
-      native: balanceToString(native, true),
-      ERC20: balanceToString(ERC20),
-      wrapped: balanceToString(wrapped),
+      native: smartRounding(
+        balanceToEtherString(native, true),
+        globalConfig.decimals.displayMaxSmallDecimals
+      ),
+      ERC20: smartRounding(
+        balanceToEtherString(ERC20),
+        globalConfig.decimals.displayMaxSmallDecimals
+      ),
+      wrapped: smartRounding(
+        balanceToEtherString(wrapped),
+        globalConfig.decimals.displayMaxSmallDecimals
+      ),
     }
   }, [native, ERC20, wrapped])
 }

@@ -80,7 +80,7 @@ export const siteConfig = {
   mainNav: [
     {
       title: "Marketplace",
-      href: "/marketplace",
+      href: "/nfts",
     },
   ],
 }

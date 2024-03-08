@@ -13,7 +13,7 @@ export interface PriceInputProps {
 export const PriceInput = ({ id, onInputUpdate }: PriceInputProps) => {
   const [inputValue, setInputValue] = useState<string>("")
 
-  const [debouncedValue] = useDebounceValue(inputValue, 500)
+  const [debouncedValue] = useDebounceValue(inputValue, 250)
 
   const handleChange = useCallback(
     (value: string) => {
