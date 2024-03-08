@@ -325,9 +325,9 @@ const NETWORKS: Record<number, NetworkConfig> = {
     network: "mainnet",
     explorer: {
       name: "Muster",
-      url: "https://muster.alt.technology/",
+      url: " https://muster-explorer.alt.technology/",
       standard: "EIP3091",
-      blockUrl: "https://muster.alt.technology/tx",
+      blockUrl: "https://muster-explorer.alt.technology/tx",
     },
     nativeToken: { name: "Ether", symbol: "ETH", decimals: 18 },
     wrappedNativeToken: {
