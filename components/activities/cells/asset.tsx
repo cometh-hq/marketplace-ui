@@ -17,7 +17,7 @@ export const AssetCell = ({ row }: AssetCellProps) => {
   return (
     <Link
       href={`${env.NEXT_PUBLIC_BASE_PATH}/marketplace/${tokenId}`}
-      className="inline-flex items-center gap-x-2 font-medium transition-colors hover:text-white"
+      className="relative z-[1] inline-flex items-center gap-x-2 font-medium transition-colors hover:text-white"
     >
       {`${assetName} #${shortenTokenId(tokenId, 7)}`} <ExternalLink size="16" />
     </Link>
