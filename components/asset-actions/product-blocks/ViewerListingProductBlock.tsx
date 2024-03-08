@@ -40,7 +40,6 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Listed by</ProductBlockLabel>
         <UserLink
-          variant="link"
           className="mt-1"
           user={{ address: asset.owner as Address }}
         />

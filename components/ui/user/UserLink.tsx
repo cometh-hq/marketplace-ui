@@ -1,6 +1,6 @@
 "use client"
 
-import { ComponentProps, useMemo } from "react"
+import { useMemo } from "react"
 import { User } from "lucide-react"
 
 import { AnyUser } from "@/types/user"

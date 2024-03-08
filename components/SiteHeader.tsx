@@ -1,19 +1,19 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { cx } from "class-variance-authority"
 import { X } from "lucide-react"
 
+import { env } from "@/config/env"
 import { siteConfig } from "@/config/site"
-import { Icons } from "@/components/Icons"
 
 import { ConnectButton } from "./ConnectButton"
 import { MainNav } from "./MainNav"
 
 export function SiteHeader() {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-
 
   const toggleMenu = () => setIsOpen(!isOpen)
 
@@ -66,7 +66,12 @@ export function SiteHeader() {
             isOpen && "text-primary-foreground"
           )}
         >
-          <Icons.logo className="size-6 text-current" />
+          <Image
+            src={`${env.NEXT_PUBLIC_BASE_PATH}/marketplace-logo.svg`}
+            alt=""
+            width={24}
+            height={24}
+          />
           <span className="mr-10 text-base font-bold opacity-90 md:inline md:text-lg">
             {siteConfig.name}
           </span>

@@ -4,7 +4,7 @@ import { ExternalLink } from "lucide-react"
 
 import { BuyOffer } from "@/types/buy-offers"
 import { env } from "@/config/env"
-import { shortenTokenId } from "@/lib/utils/token"
+import { shortenTokenId } from "@/lib/utils/formatToken"
 import { Button } from "@/components/ui/Button"
 
 export type AssetCellProps = {

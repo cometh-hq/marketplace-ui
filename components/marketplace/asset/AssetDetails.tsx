@@ -6,7 +6,7 @@ import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import qs from "qs"
 import { Address } from "viem"
 
-import { shortenTokenId } from "@/lib/utils/token"
+import { shortenTokenId } from "@/lib/utils/formatToken"
 import { Badge } from "@/components/ui/Badge"
 import { ShareButton } from "@/components/ui/ShareButton"
 import { ProductBlock } from "@/components/asset-actions/product-blocks/ProductBlock"

@@ -1,16 +1,16 @@
 "use client"
+
+import { useFilters } from "@/services/cometh-marketplace/filtersService"
 import { ArrowLeftIcon, UserIcon } from "lucide-react"
 import { Address } from "viem"
 
 import { shortenAddress } from "@/lib/utils/addresses"
-
 import { Button } from "@/components/ui/Button"
 import { CopyButton } from "@/components/ui/CopyButton"
 import { Link } from "@/components/ui/Link"
 import { ShareButton } from "@/components/ui/ShareButton"
 import { AccountAssetActivities } from "@/components/activities/account/tabs/AccountAssetActivities"
 import { AssetsSearchGrid } from "@/components/marketplace/grid/AssetSearchGrid"
-import { useFilters } from "@/services/cometh-marketplace/filtersService"
 
 export default function ProfilePage({
   params,
@@ -35,7 +35,8 @@ export default function ProfilePage({
         <div className="flex items-center gap-2">
           <h1 className="inline-flex items-center text-2xl font-bold tracking-tight sm:text-3xl">
             <UserIcon size="28" className="mr-2 max-sm:hidden" />
-            User <span className="max-sm:hidden">profile</span> ({shortenAddress(params.address)})
+            User <span className="max-sm:hidden">profile</span> (
+            {shortenAddress(params.address)})
           </h1>
           <CopyButton size="lg" textToCopy={params.address} />
         </div>

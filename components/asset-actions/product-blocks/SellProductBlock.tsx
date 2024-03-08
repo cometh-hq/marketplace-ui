@@ -32,7 +32,6 @@ export function SellProductBlock({ asset }: SellProductBlockProps) {
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Owned by</ProductBlockLabel>
         <UserLink
-          variant="link"
           className="mt-0.5"
           user={{ address: asset.owner as Address }}
         />

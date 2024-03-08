@@ -13,7 +13,7 @@ import { useAccount } from "wagmi"
 
 import { getRandomArrayElement } from "@/lib/utils/arrays"
 import { getAssetColor } from "@/lib/utils/colorsAttributes"
-import { shortenTokenId } from "@/lib/utils/token"
+import { shortenTokenId } from "@/lib/utils/formatToken"
 import { cn } from "@/lib/utils/utils"
 import { Appear } from "@/components/ui/Appear"
 import { AssetImage } from "@/components/ui/AssetImage"

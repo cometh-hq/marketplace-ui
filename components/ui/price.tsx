@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils/utils"
 
 import { FiatPrice } from "./FiatPrice"
 
-const priceTriggerVariants = cva({
+const priceTriggerVariants = cva("", {
   variants: {
     variant: {
       default: "",
@@ -100,7 +100,9 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {`${roundedAmount}${
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
-        {shouldDisplayFiatPrice && <FiatPrice amount={roundedAmount} />}
+        {shouldDisplayFiatPrice && (
+          <FiatPrice amount={roundedAmount} />
+        )}
       </span>
     )
   }
