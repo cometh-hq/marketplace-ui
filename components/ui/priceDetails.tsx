@@ -59,6 +59,12 @@ export function PriceDetails({
           <Price fontWeight="normal" amount={amountWithoutFees} isNativeToken={true} />
         </span>
       </div>
+      <div className="flex flex-col justify-between sm:flex-row">
+        <span>Fees ({sumOfFeesPercentages}%):</span>
+        <span>
+          <Price fontWeight="normal" amount={feesAmount} />
+        </span>
+      </div>
       {contractIsSponsored && (
         <div className="flex flex-col justify-between sm:flex-row">
           <span>Gas transaction:</span>
