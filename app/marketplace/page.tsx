@@ -8,10 +8,10 @@ import { AssetsSearchGrid } from "@/components/marketplace/grid/asset-search-gri
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 
 export default function MarketplacePage() {
-  const { currentCollectionAddress } = useCurrentCollectionContext()
-  if (globalConfig.contractAddresses.length > 1) {
-    redirect("/marketplace/" + currentCollectionAddress)
-  }
+  // const { currentCollectionAddress } = useCurrentCollectionContext()
+  // if (globalConfig.contractAddresses.length > 1) {
+  //   redirect("/marketplace/" + currentCollectionAddress)
+  // }
 
   const { filtersRaw } = useFilters()
 
