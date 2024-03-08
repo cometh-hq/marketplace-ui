@@ -68,7 +68,7 @@ export function PriceDetails({
       </div>
       {contractIsSponsored && (
         <div className="flex flex-col justify-between sm:flex-row">
-          <span>Gaz transaction:</span>
+          <span>Gas transaction:</span>
           <span className="font-medium">Sponsored</span>
         </div>
       )}
