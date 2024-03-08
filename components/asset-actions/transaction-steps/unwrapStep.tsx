@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from "react"
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { useNeedsToUnwrap } from "@/services/exchange/needs-to-unwrap"
 import { useUnwrapToken } from "@/services/exchange/unwrap-token"
 import { BigNumber } from "ethers"
@@ -8,7 +9,6 @@ import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 import { ButtonLoading } from "@/components/button-loading"
-import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 
 export type UnwrapStepProps = {
   price: BigNumber | null
@@ -17,7 +17,7 @@ export type UnwrapStepProps = {
 
 export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
   const { mutateAsync: unwrapToken, isPending } = useUnwrapToken()
-    const account = useAccount()
+  const account = useAccount()
   const viewerAddress = account.address
   const isComethWallet = useIsComethConnectWallet()
 
@@ -41,9 +41,7 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
       <p className="text-md my-[32px] text-center">
         You are about to buy this NFT for <Price amount={price} />
         but you are missing{" "}
-        <strong>
-          <Price amount={needsToUnwrapData?.balanceToUnwrap} />
-        </strong>{" "}
+        <Price amount={needsToUnwrapData?.balanceToUnwrap} />
         in your wallet.
         {(!globalConfig.areContractsSponsored || !isComethWallet) && (
           <>

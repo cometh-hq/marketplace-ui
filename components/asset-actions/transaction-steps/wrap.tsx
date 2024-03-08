@@ -37,11 +37,8 @@ export function WrapStep({ price, onValid }: WrapStepProps) {
   return (
     <div className="flex flex-col items-center justify-center">
       <p className="text-md my-[32px] text-center">
-        You are about to buy this NFT for{" "}
-        <span className="inline-flex translate-y-1.5 items-center">
-          <Price amount={price} />
-        </span>{" "}
-        but you do not have enough{" "}
+        You are about to buy this NFT for <Price amount={price} /> but you do
+        not have enough{" "}
         <strong>{globalConfig.network.wrappedNativeToken.symbol}</strong> in
         your wallet. You need to wrap some{" "}
         {globalConfig.network.nativeToken.symbol} first as a purchase offer
@@ -52,8 +49,7 @@ export function WrapStep({ price, onValid }: WrapStepProps) {
         <ButtonLoading />
       ) : (
         <Button className="flex gap-1" onClick={onConfirm}>
-          Wrap <Price amount={price} />{" "}
-          {globalConfig.network.nativeToken.symbol}
+          Wrap <Price amount={price} isNativeToken={true} />
         </Button>
       )}
     </div>
