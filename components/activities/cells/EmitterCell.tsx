@@ -1,7 +1,7 @@
 import { Row } from "@tanstack/react-table"
 
 import { BuyOffer } from "@/types/buy-offers"
-import { UserButton } from "@/components/ui/UserButton"
+import { UserButton } from "@/components/ui/user/UserButton"
 
 export type EmitterCellProps = { row: Row<BuyOffer> }
 

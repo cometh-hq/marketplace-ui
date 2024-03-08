@@ -8,7 +8,7 @@ import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
-import { Price } from "@/components/ui/price"
+import { Price } from "@/components/ui/Price"
 
 export type FundsStepProps = {
   price: BigNumber

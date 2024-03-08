@@ -1,12 +1,12 @@
 import { useCallback, useEffect } from "react"
-import { useNeedsToWrap } from "@/services/exchange/needs-to-wrap"
-import { useWrapToken } from "@/services/exchange/wrap-token"
+import { useNeedsToWrap } from "@/services/exchange/wrapService"
+import { useWrapToken } from "@/services/exchange/wrapTokenService"
 import { BigNumber } from "ethers"
 import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
-import { Price } from "@/components/ui/price"
+import { Price } from "@/components/ui/Price"
 import { ButtonLoading } from "@/components/ButtonLoading"
 
 export type WrapStepProps = {

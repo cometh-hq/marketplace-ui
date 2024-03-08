@@ -6,7 +6,7 @@ import { BigNumber } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
-import { Price } from "@/components/ui/price"
+import { Price } from "@/components/ui/Price"
 import { ButtonLoading } from "@/components/ButtonLoading"
 
 export type ConfirmBuyOfferStepProps = {

@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/Dialog"
 import { Label } from "@/components/ui/Label"
-import { Price } from "@/components/ui/price"
+import { Price } from "@/components/ui/Price"
 import { PriceInput } from "@/components/ui/PriceInput"
 import {
   Select,

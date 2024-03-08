@@ -1,7 +1,7 @@
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
-import { UserLink } from "@/components/ui/UserButton"
+import { UserLink } from "@/components/ui/user/UserLink"
 import { ConnectButton } from "@/components/ConnectButton"
 import { AssetStatusBadge } from "@/components/marketplace/asset/AssetStatusBadge"
 import {

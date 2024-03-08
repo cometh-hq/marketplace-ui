@@ -6,7 +6,7 @@ import {
 import { BigNumber } from "ethers"
 
 import { useBuyAssetButton } from "@/lib/web3/flows/buy"
-import { Price } from "@/components/ui/price"
+import { Price } from "@/components/ui/Price"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
 import { Case, Switch } from "@/components/utils/Switch"
 

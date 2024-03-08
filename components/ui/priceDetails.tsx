@@ -11,7 +11,7 @@ import {
   calculateFeesAmount,
 } from "@/lib/utils/fees"
 
-import { Price } from "./price"
+import { Price } from "./Price"
 
 type PriceDetailsProps = {
   fullPrice: string

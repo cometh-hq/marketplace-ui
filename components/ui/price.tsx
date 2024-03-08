@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils/utils"
 
 import { FiatPrice } from "./FiatPrice"
 
-const priceTriggerVariants = cva("", {
+const priceTriggerVariants = cva({
   variants: {
     variant: {
       default: "",

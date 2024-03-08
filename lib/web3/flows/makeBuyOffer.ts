@@ -3,7 +3,7 @@ import { useIsComethConnectWallet } from "@/providers/authentication/comethConne
 import { fetchNeedsMoreAllowance } from "@/services/allowance/allowanceService"
 import { fetchHasSufficientFunds } from "@/services/balance/fundsService"
 import { fetchHasEnoughGas } from "@/services/balance/gasService"
-import { fetchNeedsToWrap } from "@/services/exchange/needs-to-wrap"
+import { fetchNeedsToWrap } from "@/services/exchange/wrapService"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"

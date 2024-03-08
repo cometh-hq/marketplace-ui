@@ -1,7 +1,7 @@
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { ExternalLink } from "lucide-react"
 
-import { Price } from "@/components/ui/price"
+import { Price } from "@/components/ui/Price"
 import {
   ProductBlockDividedColumn,
   ProductBlockLabel,

@@ -7,8 +7,8 @@ import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Label } from "@/components/ui/Label"
-import { Price } from "@/components/ui/price"
-import { PriceDetails } from "@/components/ui/priceDetails"
+import { Price } from "@/components/ui/Price"
+import { PriceDetails } from "@/components/ui/PriceDetails"
 import {
   Select,
   SelectContent,

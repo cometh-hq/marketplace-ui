@@ -2,7 +2,7 @@ import { useIsComethConnectWallet } from "@/providers/authentication/comethConne
 import { fetchNeedsMoreAllowance } from "@/services/allowance/allowanceService"
 import { fetchHasSufficientFunds } from "@/services/balance/fundsService"
 import { fetchHasEnoughGas } from "@/services/balance/gasService"
-import { fetchNeedsToUnwrap } from "@/services/exchange/needs-to-unwrap"
+import { fetchNeedsToUnwrap } from "@/services/exchange/unwrapService"
 import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"

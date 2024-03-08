@@ -32,14 +32,14 @@ import {
 } from "@/components/ui/Table"
 
 import { CopyButton } from "../ui/CopyButton"
-import { Price } from "../ui/price"
+import { Price } from "../ui/Price"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/Tooltip"
-import { UserButton } from "../ui/UserButton"
+import { UserButton } from "../ui/user/UserButton"
 
 dayjs.extend(relativeTime)
 

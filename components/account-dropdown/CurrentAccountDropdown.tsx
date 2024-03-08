@@ -14,7 +14,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/DropdownMenu"
-import { UserLink } from "@/components/ui/UserButton"
+import { UserLink } from "@/components/ui/user/UserLink"
 
 import { CopyButton } from "../ui/CopyButton"
 import { AccountBalance } from "./AccountBalance"

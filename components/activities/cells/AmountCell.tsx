@@ -2,7 +2,7 @@ import { Row } from "@tanstack/react-table"
 import { BigNumber } from "ethers"
 
 import { BuyOffer } from "@/types/buy-offers"
-import { Price } from "@/components/ui/price"
+import { Price } from "@/components/ui/Price"
 
 export type AmountCellProps = {
   row: Row<BuyOffer>

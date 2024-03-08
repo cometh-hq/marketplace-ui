@@ -10,7 +10,7 @@ import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
 import { CopyButton } from "@/components/ui/CopyButton"
 import { InfoBox } from "@/components/ui/InfoBox"
-import { Price } from "@/components/ui/price"
+import { Price } from "@/components/ui/Price"
 import { toast } from "@/components/ui/toast/hooks/useToast"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
 

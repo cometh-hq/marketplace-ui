@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect } from "react"
 import { useBalance } from "@/services/balance/balanceService"
-import { useUnwrapToken } from "@/services/exchange/unwrap-token"
-import { useWrapToken } from "@/services/exchange/wrap-token"
+import { useUnwrapToken } from "@/services/exchange/unwrapTokenService"
+import { useWrapToken } from "@/services/exchange/wrapTokenService"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { parseUnits } from "ethers/lib/utils"
 import { ArrowDownUp } from "lucide-react"
