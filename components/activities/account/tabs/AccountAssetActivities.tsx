@@ -4,7 +4,7 @@ import { useCurrentCollectionContext } from "@/providers/currentCollection/curre
 import {
   useAssetReceivedOffers,
   useAssetSentOffers,
-} from "@/services/orders/assetBuyOffersService"
+} from "@/services/orders/assetOffersService"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"

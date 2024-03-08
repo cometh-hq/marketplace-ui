@@ -1,6 +1,6 @@
 "use client"
 
-import { useAssetReceivedOffers } from "@/services/orders/assetBuyOffersService"
+import { useAssetReceivedOffers } from "@/services/orders/assetOffersService"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
