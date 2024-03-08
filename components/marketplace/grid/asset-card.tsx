@@ -149,7 +149,7 @@ function renderAssetActions(
     )
   } else if (asset.orderbookStats.highestOfferPrice) {
     return (
-      <Price variant="accent" amount={asset.orderbookStats.highestOfferPrice} />
+      <Price variant="accent" amount={asset.orderbookStats.highestOfferPrice} isNativeToken={true} />
     )
   } else if (!owner) {
     return (
@@ -200,6 +200,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
               <Price
                 variant="accent"
                 amount={asset.orderbookStats.lowestListingPrice}
+                isNativeToken={true}
               />
             ) : owner ? (
               <SellAssetButton

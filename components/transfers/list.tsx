@@ -285,6 +285,7 @@ const renderActivitiesRows = (
                 .add(activity.order.totalFees)
                 .toString()}
               fontWeight="normal"
+              isNativeToken={true}
             />
           ) : (
             <span>-</span>

@@ -41,7 +41,7 @@ export function AllowanceStep({
         <ButtonLoading />
       ) : (
         <Button className="flex gap-1" onClick={approve} disabled={isPending}>
-          Allow <Price amount={price} />
+          Allow <Price amount={price} isNativeToken={true} />
         </Button>
       )}
     </div>

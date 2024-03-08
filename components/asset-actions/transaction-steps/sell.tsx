@@ -100,7 +100,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
           disabled={isPending || !orderParams?.price}
           isLoading={isPending}
         >
-          Sell for <Price amount={orderParams?.price} />
+          Sell for <Price amount={orderParams?.price} isNativeToken={true} />
         </Button>
       </SwitchNetwork>
     </>

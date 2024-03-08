@@ -48,7 +48,7 @@ export function BuyAssetButton({
           ) : (
             <span>
               Buy now for&nbsp;
-              <Price amount={asset.orderbookStats.lowestListingPrice} />
+              <Price amount={asset.orderbookStats.lowestListingPrice} isNativeToken={true} />
             </span>
           )}
         </>

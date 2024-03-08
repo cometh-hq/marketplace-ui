@@ -13,5 +13,5 @@ export const AmountCell = ({ row }: AmountCellProps) => {
   const fees = row.original.trade.totalFees
   const amountWithFees = BigNumber.from(amount).add(fees).toString()
   
-  return <Price amount={amountWithFees} className="font-medium" />
+  return <Price amount={amountWithFees} className="font-medium" isNativeToken={true} />
 }

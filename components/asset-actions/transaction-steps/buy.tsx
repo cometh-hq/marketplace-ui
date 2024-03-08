@@ -40,7 +40,7 @@ export function BuyStep({ asset, onValid }: BuyStepProps) {
           className="flex items-center gap-2"
         >
           <ExternalLinkIcon size={16} />
-          View on {globalConfig.network.explorer?.name}
+          View transaction on {globalConfig.network.explorer?.name}
         </a>
       ) : (
         <div className="flex items-center gap-2">
@@ -69,7 +69,7 @@ export function BuyStep({ asset, onValid }: BuyStepProps) {
           disabled={isPending}
           isLoading={isPending}
         >
-          Buy now for <Price amount={asset.orderbookStats.lowestListingPrice} />
+          Buy now for <Price amount={asset.orderbookStats.lowestListingPrice} isNativeToken={true} />
         </Button>
       </SwitchNetwork>
     </div>

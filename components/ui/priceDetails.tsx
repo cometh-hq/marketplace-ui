@@ -56,20 +56,20 @@ export function PriceDetails({
       <div className="flex  flex-col justify-between sm:flex-row">
         <span>You will receive:</span>
         <span>
-          <Price fontWeight="normal" amount={amountWithoutFees} />
+          <Price fontWeight="normal" amount={amountWithoutFees} isNativeToken={true} />
         </span>
       </div>
       {contractIsSponsored && (
         <div className="flex flex-col justify-between sm:flex-row">
-          <span>Gaz transaction:</span>
-          <span className="font-medium">Sponsored</span>
+          <span>Gas transaction:</span>
+          <span className="font-medium">Offered</span>
         </div>
       )}
       <hr className="my-2 border-input" />
       <div className="flex flex-col justify-between sm:flex-row">
         <span>Total price:</span>
         <span>
-          <Price fontWeight="normal" amount={price || 0} />
+          <Price fontWeight="normal" amount={price || 0} isNativeToken={true} />
         </span>
       </div>
     </div>

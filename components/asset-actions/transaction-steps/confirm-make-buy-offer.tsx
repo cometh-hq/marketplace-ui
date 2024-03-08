@@ -36,7 +36,7 @@ export function ConfirmMakeBuyOfferStep({
       <p className="text-center">
         You are about to make an offer to buy <br />
         this asset for{" "}
-        <Price size="default" amount={price} hideSymbol={false} /> (fees
+        <Price size="default" amount={price} hideSymbol={false} isNativeToken={true} /> (fees
         included). <br />
         {globalConfig.areContractsSponsored && isComethWallet && (
           <>This contract is sponsored, so you won&apos;t pay any gas fees.</>

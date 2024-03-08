@@ -119,7 +119,7 @@ export function MakeBuyOfferPriceDialog({
           onClick={() => onSubmit(orderParams!.price, orderParams!.validity)}
         >
           Make offer for&nbsp;
-          <Price amount={orderParams?.price} />
+          <Price amount={orderParams?.price} isNativeToken={true} />
         </Button>
       </DialogContent>
     </Dialog>
