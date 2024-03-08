@@ -1,7 +1,5 @@
-import { coingeckoClient } from "@/services/coingecko/client"
 import { NextRequest } from "next/server"
-
-export const revalidate = 60 * 10
+import { coingeckoClient } from "@/services/coingecko/client"
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
@@ -14,13 +12,20 @@ export async function GET(request: NextRequest) {
     }
 
     const res = await coingeckoClient.get(
-      `/simple/price?ids=${id}&vs_currencies=${currency}`
+      `/simple/price?ids=${id}&vs_currencies=${currency}`,
+      {
+        id: `fiat-currency-price-${id}-${currency}`,
+        cache: {
+          ttl: 15 * 60 * 1000,
+        },
+      }
     )
 
     const currentFiatPrice = res.data
 
     return Response.json({ currentFiatPrice }, { status: 200 })
   } catch (error: any) {
+    console.error(error)
     return Response.json({ error: error.message }, { status: 500 })
   }
 }

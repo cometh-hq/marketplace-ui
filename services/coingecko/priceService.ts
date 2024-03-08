@@ -19,5 +19,9 @@ export const getFiatCurrencyPrice = async (amount: number) => {
     `/api/fiat-currency-price?id=${coinId}&currency=${fiatCurrencyId}`
   )
   const price = res.data.currentFiatPrice[coinId][fiatCurrencyId]
-  return Math.round(amount / price)
+  if (price === 0) {
+    return 0
+  }
+  const fiatPrice = amount / price
+  return Math.round(fiatPrice * 100) / 100
 }

@@ -33,7 +33,7 @@ export function MainNav({ items, onLinkClick }: MainNavProps) {
     collectionAddress: Address
   }) {
     const { data: collection } = useGetCollection(collectionAddress)
-    const href = `/marketplace/${collectionAddress}`
+    const href = `/nfts/${collectionAddress.toLowerCase()}`
     if (!collection) {
       return <></>
     }

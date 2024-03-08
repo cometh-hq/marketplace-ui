@@ -16,7 +16,7 @@ export const CollectionCell = ({ row }: CollectionCellProps) => {
   const { data: collection } = useGetCollection(tokenAddress as Address)
 
   return (
-    <Link href={`${env.NEXT_PUBLIC_BASE_PATH}/marketplace/${tokenAddress}`}>
+    <Link href={`/nfts/${tokenAddress}`}>
       <Button variant="ghost" className="gap-x-2 font-medium">
         {collection?.name || "Collection"}
       </Button>

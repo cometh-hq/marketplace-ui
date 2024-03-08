@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils/utils"
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode
-  onInputUpdate?: (value: string) => void
+  inputUpdateCallback?: (value: string) => void
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -25,8 +25,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
 
       setValue(value)
-      if (props.onInputUpdate) {
-        props.onInputUpdate(value)
+      if (props.inputUpdateCallback) {
+        props.inputUpdateCallback(value)
       }
     }
 
@@ -42,8 +42,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         // Dispatch the event from the input element
         ref.current.dispatchEvent(event)
       }
-      if (props.onInputUpdate) {
-        props.onInputUpdate("")
+      if (props.inputUpdateCallback) {
+        props.inputUpdateCallback("")
       }
     }
 

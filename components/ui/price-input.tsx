@@ -27,12 +27,7 @@ export const PriceInput = ({ id, onInputUpdate }: PriceInputProps) => {
 
   return (
     <div className="space-y-1">
-      <Input
-        id={id}
-        type="number"
-        onInputUpdate={handleChange}
-        min={0}
-      />
+      <Input id={id} type="number" inputUpdateCallback={handleChange} min={0} />
       <FiatPrice amount={debouncedValue} />
     </div>
   )
