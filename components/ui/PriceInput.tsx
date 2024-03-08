@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { useDebounceValue } from "usehooks-ts"
 
 import { Input } from "@/components/ui/Input"
@@ -13,7 +13,7 @@ export interface PriceInputProps {
 export const PriceInput = ({ id, onInputUpdate }: PriceInputProps) => {
   const [inputValue, setInputValue] = useState<string>("")
 
-  const [debouncedValue] = useDebounceValue(inputValue, 500)
+  const [debouncedValue] = useDebounceValue(inputValue, 250)
 
   const handleChange = useCallback(
     (value: string) => {
@@ -27,7 +27,7 @@ export const PriceInput = ({ id, onInputUpdate }: PriceInputProps) => {
 
   return (
     <div className="space-y-1">
-      <Input id={id} type="number" onInputUpdate={handleChange} min={0} />
+      <Input id={id} type="number" inputUpdateCallback={handleChange} min={0} />
       <FiatPrice amount={debouncedValue} />
     </div>
   )

@@ -37,7 +37,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
     return attributes?.map((attribute, index) => {
       const property = attribute.trait_type
       const value = `${attribute.value}`
-      const href = `/marketplace?${qs.stringify({
+      const href = `/nfts/${asset.contractAddress}?${qs.stringify({
         [property as string]: `${value}`,
       })}`
 
@@ -49,18 +49,18 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
         </Link>
       )
     })
-  }, [attributes])
+  }, [attributes, asset.contractAddress])
 
   return (
     <div className="flex-1 lg:sticky lg:left-0 lg:top-[5%] lg:w-[35%] lg:pt-[100px]">
       <div className="mb-2 flex items-center justify-between">
         <BreadcrumbContainer>
-          <BreadcrumbElement href={"/marketplace/" + collection?.address}>
+          <BreadcrumbElement href={"/nfts/" + collection?.address}>
             {collection ? collection.name : "Marketplace"}
           </BreadcrumbElement>
           /
           <BreadcrumbElement
-            href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`}
+            href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
           >
             {asset.metadata.name}
           </BreadcrumbElement>

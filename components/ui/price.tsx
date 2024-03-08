@@ -84,7 +84,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       <span
         ref={ref}
         className={cn(
-          "inline-flex items-center gap-x-1.5 align-middle",
+          "inline-flex items-center gap-x-1.5",
           priceTriggerVariants({ size, variant, className, fontWeight })
         )}
       >
@@ -100,9 +100,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {`${roundedAmount}${
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
-        {shouldDisplayFiatPrice && (
-          <FiatPrice amount={roundedAmount} />
-        )}
+        {shouldDisplayFiatPrice && <FiatPrice amount={roundedAmount} />}
       </span>
     )
   }
@@ -121,12 +119,12 @@ export type PriceProps = {
 
 export const Price = ({ amount, isNativeToken, ...rest }: PriceProps) => {
   if (!amount) return "-"
-  const formattedAmount = (+formatUnits(
+  const formattedAmount = formatUnits(
     amount.toString(),
     isNativeToken
       ? globalConfig.decimals.nativeTokenDecimals
       : globalConfig.ordersErc20.decimals
-  )).toString()
+  )
 
   return (
     <PriceTrigger

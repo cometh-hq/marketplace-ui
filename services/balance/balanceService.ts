@@ -10,7 +10,11 @@ import {
 } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { balanceToBigNumber, balanceToString } from "@/lib/utils/formatBalance"
+import {
+  balanceToBigNumber,
+  balanceToEtherString,
+} from "@/lib/utils/formatBalance"
+import { smartRounding } from "@/lib/utils/priceUtils"
 
 export const getERC20Balance = async (
   erc20Address: Address,
@@ -96,8 +100,17 @@ export const useBalance = () => {
   const wrapped = useWrappedBalance(viewerAddress)
 
   return {
-    native: balanceToString(native, true),
-    ERC20: balanceToString(ERC20),
-    wrapped: balanceToString(wrapped),
+    native: smartRounding(
+      balanceToEtherString(native, true),
+      globalConfig.decimals.displayMaxSmallDecimals
+    ),
+    ERC20: smartRounding(
+      balanceToEtherString(ERC20),
+      globalConfig.decimals.displayMaxSmallDecimals
+    ),
+    wrapped: smartRounding(
+      balanceToEtherString(wrapped),
+      globalConfig.decimals.displayMaxSmallDecimals
+    ),
   }
 }

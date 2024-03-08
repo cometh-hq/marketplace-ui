@@ -3,7 +3,6 @@ import { Row } from "@tanstack/react-table"
 import { ExternalLink } from "lucide-react"
 
 import { BuyOffer } from "@/types/buy-offers"
-import { env } from "@/config/env"
 import { shortenTokenId } from "@/lib/utils/formatToken"
 import { Button } from "@/components/ui/Button"
 
@@ -17,9 +16,7 @@ export const AssetCell = ({ row }: AssetCellProps) => {
   const tokenAddress = row.original.trade.tokenAddress
 
   return (
-    <Link
-      href={`${env.NEXT_PUBLIC_BASE_PATH}/marketplace/${tokenAddress}/${tokenId}`}
-    >
+    <Link href={`/nfts/${tokenAddress}/${tokenId}`}>
       <Button variant="ghost" className="gap-x-2 font-medium">
         {`${assetName} #${shortenTokenId(tokenId, 7)}`}{" "}
         <ExternalLink size="16" />

@@ -41,9 +41,7 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
       <p className="text-md my-[32px] text-center">
         You are about to buy this NFT for <Price amount={price} />
         but you are missing{" "}
-        <strong>
-          <Price amount={needsToUnwrapData?.balanceToUnwrap} />
-        </strong>{" "}
+        <Price amount={needsToUnwrapData?.balanceToUnwrap} />
         in your wallet.
         {(!globalConfig.areContractsSponsored || !isComethWallet) && (
           <>

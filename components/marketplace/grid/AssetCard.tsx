@@ -111,7 +111,7 @@ export function AssetCardBase({
         )}
       >
         <Link
-          href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`}
+          href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
           className="sm:w-full"
         >
           <AssetImageContainer
@@ -192,7 +192,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
     >
       <div>
         <Link
-          href={`/marketplace/${asset.contractAddress}/${asset.tokenId}`}
+          href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
           className={cn(
             "text-primary mb-2 flex flex-nowrap items-center text-base font-semibold leading-tight"
           )}

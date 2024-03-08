@@ -8,15 +8,15 @@ export const balanceToBigNumber = (balance?: bigint | null) => {
   return BigNumber.from(balance)
 }
 
-export const balanceToString = (
-  balance = balanceToBigNumber(),
+export const balanceToEtherString = (
+  balance: BigNumber | BigInt | string = balanceToBigNumber(),
   isNativeToken = false
 ) => {
   if (!balance) return "0"
-  return (+formatUnits(
+  return formatUnits(
     balance.toString(),
     isNativeToken
       ? globalConfig.decimals.nativeTokenDecimals
       : globalConfig.ordersErc20.decimals
-  )).toFixed(2)
+  )
 }

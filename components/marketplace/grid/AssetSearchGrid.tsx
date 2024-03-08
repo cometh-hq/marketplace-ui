@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { useFilterableNFTsQuery } from "@/services/cometh-marketplace/searchAssetsService"
 import { AssetSearchFilters } from "@cometh/marketplace-sdk"
 import { useInView } from "react-intersection-observer"
@@ -72,13 +72,17 @@ export const AssetsSearchGrid = ({
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <div className="relative flex w-full flex-wrap items-center justify-between gap-4">
-        <NFTStateFilters assets={assets} results={totalNbAssets} />
+        <Suspense>
+          <NFTStateFilters assets={assets} results={totalNbAssets} />
+        </Suspense>
         <div className="flex items-center justify-between gap-3 max-md:w-full">
           <SearchAsset onChange={setSearch} />
           <div className="flex gap-3">
             <MarketplaceFiltersDropdown filters={filtersDefinition} />
             <FiltersResetBtn />
-            <MarketplaceSortDropdown />
+            <Suspense>
+              <MarketplaceSortDropdown />
+            </Suspense>
           </div>
         </div>
       </div>

@@ -109,7 +109,7 @@ const globalConfig: GlobalConfig = {
   areContractsSponsored: manifest.areContractsSponsored,
   minimumBalanceForGas,
   decimals: {
-    displayMaxSmallDecimals: 4,
+    displayMaxSmallDecimals: 2,
     inputMaxDecimals: 18,
     nativeTokenDecimals: 18,
   },

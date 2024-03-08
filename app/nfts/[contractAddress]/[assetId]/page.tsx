@@ -1,8 +1,8 @@
 "use client"
 
+import { useAssetTransfers } from "@/services/cometh-marketplace/assetTransfersService"
 import { useAssetDetails } from "@/services/cometh-marketplace/searchAssetsService"
 import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
-import { useAssetTransfers } from "@/services/cometh-marketplace/assetTransfersService"
 import {
   FilterDirection,
   SearchOrdersSortOption,

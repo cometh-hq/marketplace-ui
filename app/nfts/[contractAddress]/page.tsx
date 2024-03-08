@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { Suspense, useEffect } from "react"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useFilters } from "@/services/cometh-marketplace/filtersService"
 import { Address } from "viem"
@@ -24,7 +24,9 @@ export default function MarketplaceCollectionPage({
 
   return (
     <div className="container mx-auto flex items-center justify-center gap-4 py-5 sm:py-6">
-      <AssetsSearchGrid filters={filtersRaw} />
+      <Suspense>
+        <AssetsSearchGrid filters={filtersRaw} />
+      </Suspense>
     </div>
   )
 }

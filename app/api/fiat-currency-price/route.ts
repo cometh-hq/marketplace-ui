@@ -15,13 +15,20 @@ export async function GET(request: NextRequest) {
     }
 
     const res = await coingeckoClient.get(
-      `/simple/price?ids=${id}&vs_currencies=${currency}`
+      `/simple/price?ids=${id}&vs_currencies=${currency}`,
+      {
+        id: `fiat-currency-price-${id}-${currency}`,
+        cache: {
+          ttl: 15 * 60 * 1000,
+        },
+      }
     )
-
+    console.log("CACHED " + res.cached + " for " + id + " " + currency)
     const currentFiatPrice = res.data
 
     return Response.json({ currentFiatPrice }, { status: 200 })
   } catch (error: any) {
+    console.error(error)
     return Response.json({ error: error.message }, { status: 500 })
   }
 }

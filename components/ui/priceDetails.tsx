@@ -11,6 +11,7 @@ import {
   calculateFeesAmount,
 } from "@/lib/utils/fees"
 
+import { BigIntFiatPrice, FiatPrice } from "./FiatPrice"
 import { Price } from "./Price"
 
 type PriceDetailsProps = {
@@ -58,17 +59,19 @@ export function PriceDetails({
         <span>You will receive:</span>
         <span>
           <Price fontWeight="normal" amount={amountWithoutFees} />
+          <BigIntFiatPrice className="ml-1" amount={amountWithoutFees} />
         </span>
       </div>
       <div className="flex flex-col justify-between sm:flex-row">
         <span>Fees ({sumOfFeesPercentages}%):</span>
         <span>
           <Price fontWeight="normal" amount={feesAmount} />
+          <BigIntFiatPrice className="ml-1" amount={feesAmount} />
         </span>
       </div>
       {contractIsSponsored && (
         <div className="flex flex-col justify-between sm:flex-row">
-          <span>Gaz transaction:</span>
+          <span>Gas transaction:</span>
           <span className="font-medium">Sponsored</span>
         </div>
       )}
@@ -77,6 +80,7 @@ export function PriceDetails({
         <span>Total price:</span>
         <span>
           <Price fontWeight="normal" amount={price || 0} />
+          <BigIntFiatPrice className="ml-1" amount={price} />
         </span>
       </div>
     </div>

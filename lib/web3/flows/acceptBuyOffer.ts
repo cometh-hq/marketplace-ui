@@ -77,8 +77,6 @@ export const useRequiredAcceptBuyOfferSteps = ({
         isComethWallet,
       })
     },
-
-    staleTime: Infinity,
     refetchOnWindowFocus: false,
     enabled: !!nftSwapSdk && !!viewerAddress,
   })
