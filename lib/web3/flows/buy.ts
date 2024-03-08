@@ -66,6 +66,7 @@ export const fetchRequiredBuyingSteps = async ({
   const needsToUnwrapData = await fetchNeedsToUnwrap({
     address,
     price,
+    isComethWallet
   })
   const displayAddUnwrappedNativeTokenStep =
     needsToUnwrapData.needsToUnwrap &&

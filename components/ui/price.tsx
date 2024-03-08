@@ -84,7 +84,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       <span
         ref={ref}
         className={cn(
-          "inline-flex items-center gap-x-1.5 align-middle",
+          "inline-flex items-center gap-x-1.5",
           priceTriggerVariants({ size, variant, className, fontWeight })
         )}
       >
