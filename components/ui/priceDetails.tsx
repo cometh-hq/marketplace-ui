@@ -1,29 +1,37 @@
 import { useMemo } from "react"
+import { manifest } from "@/manifests"
 import { useGetCollection } from "@/services/cometh-marketplace/collection"
 import { parseUnits } from "viem"
 
+import globalConfig from "@/config/globalConfig"
 import {
   calculateAmountWithoutFees,
   calculateFeesAmount,
 } from "@/lib/utils/fees"
+import { useIsComethWallet } from "@/lib/web3/auth"
 
 import { Price } from "./price"
-import globalConfig from "@/config/globalConfig"
 
 type PriceDetailsProps = {
   fullPrice: string
   isEthersFormat?: boolean
 }
 
-export function PriceDetails({ fullPrice, isEthersFormat = true }: PriceDetailsProps) {
+export function PriceDetails({
+  fullPrice,
+  isEthersFormat = true,
+}: PriceDetailsProps) {
+  const isComethWallet = useIsComethWallet()
   const { data: collection } = useGetCollection()
   const sumOfFeesPercentages = collection
     ? collection.collectionFees.reduce((sum, fee) => sum + fee.feePercentage, 0)
     : 0
   let price = fullPrice ? fullPrice : "0"
-  if(isEthersFormat) {
+  if (isEthersFormat) {
     price = parseUnits(price, globalConfig.ordersErc20.decimals).toString()
   }
+
+  const contractIsSponsored = manifest.areContractsSponsored && isComethWallet
 
   const { amountWithoutFees, feesAmount } = useMemo(() => {
     let amountWithoutFees = BigInt(0)
@@ -51,12 +59,12 @@ export function PriceDetails({ fullPrice, isEthersFormat = true }: PriceDetailsP
           <Price fontWeight="normal" amount={amountWithoutFees} />
         </span>
       </div>
-      <div className="flex flex-col justify-between sm:flex-row">
-        <span>Fees ({sumOfFeesPercentages}%):</span>
-        <span>
-          <Price fontWeight="normal" amount={feesAmount} />
-        </span>
-      </div>
+      {contractIsSponsored && (
+        <div className="flex flex-col justify-between sm:flex-row">
+          <span>Gaz transaction:</span>
+          <span className="font-medium">Sponsored</span>
+        </div>
+      )}
       <hr className="my-2 border-input" />
       <div className="flex flex-col justify-between sm:flex-row">
         <span>Total price:</span>

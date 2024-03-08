@@ -14,7 +14,6 @@ type SwitchNetworkProps = {
 export const SwitchNetwork = ({
   callbackChildren,
   children,
-  
 }: SwitchNetworkProps) => {
   const { isChainSupported, switchNetwork, switchNetworkLoading } =
     useCorrectNetwork()

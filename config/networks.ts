@@ -337,7 +337,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0x869Bf8814d77106323745758135b999D34C79a87",
     },
     zeroExExchange: "0x156980A14810259B08D3B8e8412274c479c09832",
-    minimumBalanceForGas: parseEther("0.1"),
+    minimumBalanceForGas: parseEther("0.01"),
   },
   2121337: {
     chainId: 2121337,
@@ -359,7 +359,7 @@ const NETWORKS: Record<number, NetworkConfig> = {
       address: "0xd9eF5BE1AB8AC56325eDd51f995BBCa0eBE7D9e8",
     },
     zeroExExchange: "0x9a6204dE86443eB0914059b291f667D8953e8aE1",
-    minimumBalanceForGas: parseEther("0.1"),
+    minimumBalanceForGas: parseEther("0.01"),
   },
 }
 

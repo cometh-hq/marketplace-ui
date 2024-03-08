@@ -3,10 +3,11 @@ import { useMakeBuyOfferAsset } from "@/services/orders/make-buy-offer"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 
+import globalConfig from "@/config/globalConfig"
+import { useIsComethWallet } from "@/lib/web3/auth"
 import { Button } from "@/components/ui/button"
 import { Price } from "@/components/ui/price"
 import { ButtonLoading } from "@/components/button-loading"
-import globalConfig from "@/config/globalConfig"
 
 export type ConfirmBuyOfferStepProps = {
   asset: AssetWithTradeData
@@ -22,6 +23,7 @@ export function ConfirmMakeBuyOfferStep({
   onValid,
 }: ConfirmBuyOfferStepProps) {
   const { mutateAsync: makeBuyOffer, isPending } = useMakeBuyOfferAsset()
+  const isComethWallet = useIsComethWallet()
 
   const onConfirm = useCallback(async () => {
     await makeBuyOffer({ asset, price, validity })
@@ -33,7 +35,12 @@ export function ConfirmMakeBuyOfferStep({
       <h3 className="text-xl font-semibold">Summary</h3>
       <p className="text-center">
         You are about to make an offer to buy <br />
-        this asset for <Price size="default" amount={price} hideSymbol={false} /> (fees included)
+        this asset for{" "}
+        <Price size="default" amount={price} hideSymbol={false} /> (fees
+        included). <br />
+        {globalConfig.areContractsSponsored && isComethWallet && (
+          <>This contract is sponsored, so you won&apos;t pay any gas fees.</>
+        )}
       </p>
       {isPending ? (
         <ButtonLoading />

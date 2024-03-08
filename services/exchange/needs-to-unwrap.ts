@@ -12,6 +12,7 @@ import { fetchHasSufficientFunds } from "../balance/has-sufficient-funds"
 export type FetchNeedsToUnwrapOptions = {
   price: BigNumber
   address: Address
+  isComethWallet?: boolean
 }
 
 export type NeedsToUnwrapData = {
@@ -27,6 +28,7 @@ export type NeedsToUnwrapData = {
 export const fetchNeedsToUnwrap = async ({
   price,
   address,
+  isComethWallet,
 }: FetchNeedsToUnwrapOptions): Promise<NeedsToUnwrapData> => {
   if (!globalConfig.useNativeForOrders) {
     return {
@@ -35,9 +37,10 @@ export const fetchNeedsToUnwrap = async ({
     }
   }
 
-  const targetedNativeBalance = price.add(
-    BigNumber.from(globalConfig.minimumBalanceForGas)
-  )
+  const targetedNativeBalance =
+    !globalConfig.areContractsSponsored && !isComethWallet
+      ? price.add(BigNumber.from(globalConfig.minimumBalanceForGas))
+      : price
 
   const missingNativeTokenData = await fetchHasSufficientFunds({
     address,
