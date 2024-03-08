@@ -32,10 +32,7 @@ export const AccountAssetActivities = ({
   const { switchCollection, currentCollectionAddress } =
     useCurrentCollectionContext()
 
-  const defaultValue =
-    globalConfig.contractAddresses.length > 1
-      ? COLLECTION_TAB_PREFIX + currentCollectionAddress
-      : "search-assets"
+  const defaultValue = COLLECTION_TAB_PREFIX + currentCollectionAddress
 
   const onTabValueChange = (value: string) => {
     if (value.startsWith(COLLECTION_TAB_PREFIX)) {
