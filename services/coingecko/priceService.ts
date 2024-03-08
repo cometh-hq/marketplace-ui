@@ -3,6 +3,7 @@ import { manifest } from "@/manifests"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 
+import { env } from "@/config/env"
 import globalConfig from "@/config/globalConfig"
 
 const coinId = globalConfig.coinId?.toLowerCase()
@@ -21,7 +22,7 @@ const useTokenFiatPrice = () => {
       }
 
       const res = await axios.get(
-        `/api/fiat-currency-price?id=${coinId}&currency=${fiatCurrencyId}`
+        `${env.NEXT_PUBLIC_BASE_PATH}/api/fiat-currency-price?id=${coinId}&currency=${fiatCurrencyId}`
       )
       const price = res.data.currentFiatPrice[coinId][fiatCurrencyId]
       return price as number
