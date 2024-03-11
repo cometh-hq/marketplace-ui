@@ -221,9 +221,10 @@ export function AssetCard({ asset, children }: AssetCardProps) {
               )}
             </div>
             <div>
-              {asset.orderbookStats.highestOfferPrice && (
-                <div className="text-sm font-medium">Best offer</div>
-              )}
+              {asset.orderbookStats.highestOfferPrice &&
+                !asset.orderbookStats.highestOfferPrice && (
+                  <div className="text-sm font-medium">Best offer</div>
+                )}
               <div className="text-end">{renderAssetActions(asset, owner)}</div>
             </div>
           </div>
