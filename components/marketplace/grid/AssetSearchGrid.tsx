@@ -42,6 +42,7 @@ export const AssetsSearchGrid = ({
     () => deserializeFilters(filtersRaw),
     [filtersRaw]
   )
+
   const {
     data: nfts,
     refetch,

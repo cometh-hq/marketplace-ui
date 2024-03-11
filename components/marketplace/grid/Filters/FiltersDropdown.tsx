@@ -1,5 +1,3 @@
-import { useMemo } from "react"
-import { manifest } from "@/manifests/manifests"
 import { FilterIcon } from "lucide-react"
 
 import { useNFTFilters } from "@/lib/utils/nftFilters"
@@ -16,14 +14,7 @@ import { FiltersBadgeCounter } from "./FiltersBadgeCounter"
 import { FiltersDropdownProps } from "./types"
 
 export const FiltersDropdown = ({ filters }: FiltersDropdownProps) => {
-  const ref = manifest.pages.asset.excludedAttributesInFilters.map(
-    (attr: string) => attr.toLowerCase()
-  )
   const { filtersCounter } = useNFTFilters()
-
-  const filtersCategories = useMemo(() => {
-    return [...filters.entries()].filter(([key]) => !ref?.includes(key))
-  }, [ref, filters])
 
   return (
     <DropdownMenu>
@@ -41,8 +32,12 @@ export const FiltersDropdown = ({ filters }: FiltersDropdownProps) => {
       <DropdownMenuContent align="end" className="w-[250px]">
         <FilterLabel>Attributes</FilterLabel>
         <div className="mt-2 flex flex-col">
-          {filtersCategories.map(([k, v]) => (
-            <FilterMultiCombobox key={k} label={k} values={v.values} />
+          {[...filters.entries()].map(([label, values]) => (
+            <FilterMultiCombobox
+              key={label}
+              label={label}
+              values={values.values}
+            />
           ))}
         </div>
       </DropdownMenuContent>

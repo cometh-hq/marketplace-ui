@@ -83,7 +83,9 @@ export function serializeFilters(
 export function deserializeFilters(
   filters: SerializedMarketplacePanelFilters
 ): MarketplacePanelFilters {
+  const excludedAttributes = new Set(formattedAttributes);
   const entries = Object.entries(filters.values)
+    .filter(([key]) => !excludedAttributes.has(key.toLowerCase()))
     .sort(
       (a, b) =>
         filters.order.indexOf(a[0] as MarketplaceFilterKey) -
@@ -94,7 +96,7 @@ export function deserializeFilters(
       {
         values: new Set(value.values),
       },
-    ]) as [MarketplaceFilterKey, { values: Set<string> }][]
+    ]) as [MarketplaceFilterKey, { values: Set<string> }][];
 
-  return new Map(entries)
+  return new Map(entries);
 }

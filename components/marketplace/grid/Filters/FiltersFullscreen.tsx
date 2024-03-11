@@ -28,14 +28,7 @@ const FiltersFullscreen = ({
 }: {
   filters: MarketplacePanelFilters
 }) => {
-  const ref = manifest.pages.asset.excludedAttributesInFilters.map(
-    (attr: string) => attr.toLowerCase()
-  )
   const { filtersCounter } = useNFTFilters()
-
-  const filtersCategories = useMemo(() => {
-    return [...filters.entries()].filter(([key]) => !ref?.includes(key))
-  }, [ref, filters])
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleFilters = () => setIsOpen(!isOpen)
@@ -64,7 +57,7 @@ const FiltersFullscreen = ({
               </Button>
             </div>
             <div className="mt-2 flex flex-col">
-              {filtersCategories.map(([label, values]) => (
+              {[...filters.entries()].map(([label, values]) => (
                 <Collapsible className="border-b border-gray-200 py-2">
                   <CollapsibleTrigger asChild>
                     <button className="flex w-full items-center pb-2 pr-2 text-base font-semibold">
