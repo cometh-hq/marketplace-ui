@@ -1,9 +1,8 @@
 import { useAccount } from "wagmi"
 
-import { Button } from "@/components/ui/Button"
-
 import { CurrentAccountDropdown } from "./account-dropdown/CurrentAccountDropdown"
 import { SigninDropdown } from "./account-dropdown/SigninDropdown"
+import { ButtonLoading } from "./ButtonLoading"
 
 export function ConnectButton({
   children,
@@ -20,9 +19,7 @@ export function ConnectButton({
 
   if (account.isReconnecting) {
     return (
-      <Button size={fullVariant ? "lg" : "default"} isLoading disabled>
-        Reconnecting
-      </Button>
+      <ButtonLoading size={fullVariant ? "lg" : "default"} isLoading disabled />
     )
   }
 
