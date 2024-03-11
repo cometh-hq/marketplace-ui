@@ -42,7 +42,7 @@ export function CurrentAccountDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={isMobile ? "icon" : "sm"}>
+        <Button size={isMobile ? "icon" : "default"}>
           <User size="18" className="md:mr-1" />
           {!isMobile && "Account"}
         </Button>
