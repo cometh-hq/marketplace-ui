@@ -36,6 +36,7 @@ export function TransactionDialogButton<T extends Step>({
       <DialogTrigger asChild>
         <Button
           size={size}
+          className={cn(size === "sm" && "min-w-[64px]")}
           disabled={isDisabled}
           isLoading={isLoading}
         >
