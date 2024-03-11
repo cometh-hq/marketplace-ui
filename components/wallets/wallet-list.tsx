@@ -17,7 +17,7 @@ const WalletList = ({ wallets, mainAddress }: WalletListProps) => {
             <>
               Internal address ({shortenAddress(address as Address)}): <br />
               <div className="font-bold">
-                You have <span className="underline">{items}</span> attached to
+                You have <span className="underline">{items}</span> attached spaceship{items > 1 ? "s" : ""} to
                 your Cosmik Battle account
               </div>
             </>
