@@ -12,7 +12,6 @@ export type TransactionDialogProps<T extends Step> = {
   onClose: () => void
   children: React.ReactNode[] | React.ReactNode
   isLoading?: boolean
-  isDisabled?: boolean
 } & React.ComponentProps<typeof Button>
 
 export function TransactionDialogButton<T extends Step>({

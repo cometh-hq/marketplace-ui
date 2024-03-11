@@ -23,7 +23,7 @@ export type BuyAssetButtonProps = {
 
 export function BuyAssetButton({
   asset,
-  size,
+  size = "lg",
 }: BuyAssetButtonProps) {
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useBuyAssetButton({ asset })

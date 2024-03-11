@@ -40,14 +40,16 @@ export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
 } & React.ComponentProps<typeof Button>
 
+type MakeBuyOfferPriceDialogProps = {
+  onSubmit: (price: BigNumber, validity: string) => void
+  asset: AssetWithTradeData
+} & React.ComponentProps<typeof Button>
+
 export function MakeBuyOfferPriceDialog({
   onSubmit,
   asset,
   size = "lg",
-}: {
-  onSubmit: (price: BigNumber, validity: string) => void
-  asset: AssetWithTradeData
-} & React.ComponentProps<typeof Button>) {
+}: MakeBuyOfferPriceDialogProps) {
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
   const orderParams = useMemo(() => {
@@ -64,10 +66,7 @@ export function MakeBuyOfferPriceDialog({
   return (
     <Dialog modal>
       <DialogTrigger asChild>
-        <Button
-          size={size}
-          disabled={!isChainSupported}
-        >
+        <Button size={size} disabled={!isChainSupported}>
           Make an offer
         </Button>
       </DialogTrigger>
@@ -118,10 +117,7 @@ export function MakeBuyOfferPriceDialog({
   )
 }
 
-export function MakeBuyOfferButton({
-  asset,
-  size,
-}: MakeBuyOfferProps) {
+export function MakeBuyOfferButton({ asset, size }: MakeBuyOfferProps) {
   const [open, setOpen] = useState(false)
   const {
     isLoading,
@@ -154,11 +150,7 @@ export function MakeBuyOfferButton({
   }
 
   if (isLoading) {
-    return (
-      <ButtonLoading
-        size={size}
-      />
-    )
+    return <ButtonLoading size={size} />
   }
 
   if (!requiredSteps?.length || !currentStep) return null

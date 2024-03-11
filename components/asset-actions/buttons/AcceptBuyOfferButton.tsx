@@ -8,12 +8,13 @@ import { Case, Switch } from "@/components/utils/Switch"
 import { AddGasStep } from "../transaction-steps/AddGasStep"
 import { CollectionApprovalStep } from "../transaction-steps/CollectionApprovalStep"
 import { ConfirmAcceptBuyOfferStep } from "../transaction-steps/ConfirmAcceptBuyOfferStep"
+import { Button } from "@/components/ui/Button"
 
 export type AcceptBuyOfferButtonProps = {
   offer: BuyOffer
-}
+} & React.ComponentProps<typeof Button>
 
-export function AcceptBuyOfferButton({ offer }: AcceptBuyOfferButtonProps) {
+export function AcceptBuyOfferButton({ offer, size }: AcceptBuyOfferButtonProps) {
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useAcceptBuyOfferAssetButton({ offer })
   const [open, setOpen] = useState(false)
@@ -32,6 +33,7 @@ export function AcceptBuyOfferButton({ offer }: AcceptBuyOfferButtonProps) {
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
+      size={size}
       isLoading={isLoading}
     >
       <Switch value={currentStep.value}>
