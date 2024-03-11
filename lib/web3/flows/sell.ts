@@ -1,16 +1,14 @@
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
-import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
-import {
-  AssetWithTradeData
-} from "@cometh/marketplace-sdk"
+import { fetchHasEnoughGas } from "@/services/balance/gasService"
+import { fetchHasApprovedCollection } from "@/services/token-approval/approveCollectionService"
+import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
+import { useAccount } from "wagmi"
 
 import { useStepper } from "@/lib/utils/stepper"
 
-import { fetchHasApprovedCollection } from "../../../services/token-approval/has-approved-collection"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
-import { useAccount } from "wagmi"
 
 export type UseRequiredSellingStepsOptions = {
   asset: AssetWithTradeData

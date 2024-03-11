@@ -7,10 +7,10 @@ import { AppProviders } from "@/providers/appProviders"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/utils/fonts"
 import { cn } from "@/lib/utils/utils"
-import { Toaster } from "@/components/ui/toast/toaster"
-import { AppContent } from "@/components/content"
-import { SiteHeader } from "@/components/site-header"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
+import { Toaster } from "@/components/ui/toast/Toaster"
+import { AppContent } from "@/components/AppContent"
+import { SiteHeader } from "@/components/SiteHeader"
+import { TailwindIndicator } from "@/components/TailwindIndicator"
 
 export const metadata: Metadata = {
   title: {

@@ -35,10 +35,7 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn(
-      "text-[22px] font-bold leading-none",
-      className
-    )}
+    className={cn("text-[22px] font-bold leading-none", className)}
     {...props}
   />
 ))
@@ -48,7 +45,11 @@ const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <p ref={ref} className={cn("text-muted-foreground text-[15px] font-medium", className)} {...props} />
+  <p
+    ref={ref}
+    className={cn("text-muted-foreground text-[15px] font-medium", className)}
+    {...props}
+  />
 ))
 CardDescription.displayName = "CardDescription"
 

@@ -6,10 +6,10 @@ import { formatUnits } from "ethers/lib/utils"
 
 import { env } from "@/config/env"
 import globalConfig from "@/config/globalConfig"
-import { smartRounding } from "@/lib/utils/priceUtil"
+import { smartRounding } from "@/lib/utils/priceUtils"
 import { cn } from "@/lib/utils/utils"
 
-import { FiatPrice } from "./fiat-price"
+import { FiatPrice } from "./FiatPrice"
 
 const priceTriggerVariants = cva("", {
   variants: {
@@ -100,9 +100,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {`${roundedAmount}${
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
-        {shouldDisplayFiatPrice && (
-          <FiatPrice amount={roundedAmount} />
-        )}
+        {shouldDisplayFiatPrice && <FiatPrice amount={roundedAmount} />}
       </span>
     )
   }

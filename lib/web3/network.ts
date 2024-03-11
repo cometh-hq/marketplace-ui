@@ -3,7 +3,7 @@ import { ethers } from "ethers"
 import { useChainId, useSwitchChain } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { toast } from "@/components/ui/toast/use-toast"
+import { toast } from "@/components/ui/toast/hooks/useToast"
 
 export const useCorrectNetwork = () => {
   const { switchChain } = useSwitchChain()

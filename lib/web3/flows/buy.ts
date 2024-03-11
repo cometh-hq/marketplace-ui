@@ -1,8 +1,8 @@
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
-import { fetchNeedsMoreAllowance } from "@/services/allowance/needs-more-allowance"
-import { fetchHasEnoughGas } from "@/services/balance/has-enough-gas"
-import { fetchNeedsToUnwrap } from "@/services/exchange/needs-to-unwrap"
-// import { useLoader } from "@/services/loaders"
+import { fetchNeedsMoreAllowance } from "@/services/allowance/allowanceService"
+import { fetchHasSufficientFunds } from "@/services/balance/fundsService"
+import { fetchHasEnoughGas } from "@/services/balance/gasService"
+import { fetchNeedsToUnwrap } from "@/services/exchange/unwrapService"
 import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
@@ -11,8 +11,6 @@ import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { useStepper } from "@/lib/utils/stepper"
-
-import { fetchHasSufficientFunds } from "../../../services/balance/has-sufficient-funds"
 
 export type UseRequiredBuyingStepsOptions = {
   asset: AssetWithTradeDataCore

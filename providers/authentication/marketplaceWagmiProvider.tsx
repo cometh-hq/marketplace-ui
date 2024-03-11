@@ -1,6 +1,6 @@
 "use client"
 
-import { manifest } from "@/manifests"
+import { manifest } from "@/manifests/manifests"
 import {
   getDefaultConfig,
   getDefaultWallets

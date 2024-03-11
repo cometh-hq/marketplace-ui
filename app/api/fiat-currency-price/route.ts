@@ -1,5 +1,8 @@
 import { NextRequest } from "next/server"
-import { coingeckoClient } from "@/services/coingecko/client"
+
+import { coingeckoClient } from "@/lib/clients"
+
+export const revalidate = 60 * 10
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
@@ -20,7 +23,7 @@ export async function GET(request: NextRequest) {
         },
       }
     )
-    console.log("CACHED " + res.cached + ' for ' + id + ' ' + currency)
+    console.log("CACHED " + res.cached + " for " + id + " " + currency)
     const currentFiatPrice = res.data
 
     return Response.json({ currentFiatPrice }, { status: 200 })

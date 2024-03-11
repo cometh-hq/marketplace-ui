@@ -2,7 +2,7 @@ import React from "react"
 import { XIcon } from "lucide-react"
 
 import globalConfig from "@/config/globalConfig"
-import { trimDecimals } from "@/lib/utils/priceUtil"
+import { trimDecimals } from "@/lib/utils/priceUtils"
 import { cn } from "@/lib/utils/utils"
 
 export interface InputProps

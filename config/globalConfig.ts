@@ -1,4 +1,4 @@
-import { manifest } from "@/manifests"
+import { manifest } from "@/manifests/manifests"
 import { Address, parseEther } from "viem"
 import { z } from "zod"
 

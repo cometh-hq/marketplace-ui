@@ -29,7 +29,7 @@ export function Appear({
   const { ref: appearRef, inView } = useInView({
     threshold: 0,
     rootMargin: "0px 0px 100px 0px",
-    triggerOnce: true
+    triggerOnce: true,
   })
   const [shouldAppear, setShouldAppear] = useState(false)
   useEffect(() => {
