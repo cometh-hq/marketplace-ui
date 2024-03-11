@@ -24,14 +24,12 @@ export type SigninDropdownProps = {
   disabled: boolean
   fullVariant?: boolean
   customText?: string
-  isLinkVariant?: boolean
 }
 
 export function SigninDropdown({
   disabled,
   fullVariant,
   customText,
-  // isLinkVariant,
 }: SigninDropdownProps) {
   const { openConnectModal } = useConnectModal()
   const { connect } = useConnect()
@@ -71,13 +69,10 @@ export function SigninDropdown({
         <Button
           className={cx({
             "h-12 w-full": fullVariant,
-            // "px-0": isLinkVariant,
           })}
-          // variant={isLinkVariant ? "link" : "default"}
           disabled={disabled}
           isLoading={disabled}
         >
-          {/* {!isLinkVariant && <WalletIcon size="16" className="mr-2" />} */}
           {<WalletIcon size="16" className="mr-2" />}
           {customText ? customText : "Login"}
         </Button>
