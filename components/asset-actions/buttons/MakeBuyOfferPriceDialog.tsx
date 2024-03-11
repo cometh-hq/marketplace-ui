@@ -106,7 +106,7 @@ export function MakeBuyOfferPriceDialog({
           </div>
         </div>
         <Button
-          // size="lg"
+          size="lg"
           disabled={!orderParams || !orderParams.price}
           onClick={() => onSubmit(orderParams!.price, orderParams!.validity)}
         >

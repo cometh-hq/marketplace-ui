@@ -144,7 +144,7 @@ export function WrapDialogForm({
         <SwitchNetwork>
           <Button
             type="submit"
-            // size="lg"
+            size="lg"
             className="w-full"
             disabled={!isChainSupported || tokenAction.isPending}
             isLoading={tokenAction.isPending}
@@ -154,7 +154,7 @@ export function WrapDialogForm({
         </SwitchNetwork>
       </form>
       <Button
-        // size="lg"
+        size="lg"
         variant="ghost"
         className="w-full"
         onClick={() => onClose()}
