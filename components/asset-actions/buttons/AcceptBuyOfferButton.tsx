@@ -32,7 +32,6 @@ export function AcceptBuyOfferButton({ offer }: AcceptBuyOfferButtonProps) {
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
-      isVariantLink={true}
       isLoading={isLoading}
       isDisabled={isLoading}
     >

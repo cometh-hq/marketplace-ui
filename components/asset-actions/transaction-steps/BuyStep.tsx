@@ -63,6 +63,7 @@ export function BuyStep({ asset, onValid }: BuyStepProps) {
 
       <SwitchNetwork>
         <Button
+          size="lg"
           className="flex gap-1"
           onClick={onSubmit}
           disabled={isPending}

@@ -13,8 +13,6 @@ export type TransactionDialogProps<T extends Step> = {
   children: React.ReactNode[] | React.ReactNode
   isLoading?: boolean
   isDisabled?: boolean
-  isVariantLink?: boolean
-  variant?: string
 } & React.ComponentProps<typeof Button>
 
 export function TransactionDialogButton<T extends Step>({
@@ -27,25 +25,19 @@ export function TransactionDialogButton<T extends Step>({
   onClose,
   isLoading,
   isDisabled,
-  isVariantLink,
-  variant,
-  ...props
+  size = "lg",
 }: TransactionDialogProps<T>) {
   const componentOnOpenChange = (newOpen: boolean) => {
     onOpenChange?.(newOpen)
     if (!newOpen) onClose()
   }
-
   return (
     <Dialog open={open} modal onOpenChange={componentOnOpenChange}>
       <DialogTrigger asChild>
         <Button
-          size={isVariantLink ? "default" : "lg"}
-          variant={isVariantLink ? "link" : variant || "default"}
-          className={cn(isVariantLink && "h-auto p-0")}
+          size={size}
           disabled={isDisabled}
           isLoading={isLoading}
-          {...props}
         >
           {label}
         </Button>

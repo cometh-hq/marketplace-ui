@@ -38,7 +38,7 @@ export default function ProfilePage({
             User <span className="max-sm:hidden">profile</span> (
             {shortenAddress(params.address)})
           </h1>
-          <CopyButton size="lg" textToCopy={params.address} />
+          <CopyButton textToCopy={params.address} />
         </div>
         <ShareButton textToShow={`Check my assets on`} />
       </div>

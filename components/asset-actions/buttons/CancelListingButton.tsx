@@ -20,7 +20,7 @@ export function CancelListingButton({ asset }: CancelListingButtonProps) {
   return (
     <Button
       className="w-full"
-      size="lg"
+      // size="lg"
       onClick={onConfirm}
       disabled={isPending}
       isLoading={isPending}

@@ -38,21 +38,16 @@ import { WrapStep } from "../transaction-steps/WrapStep"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
-  isVariantLink?: boolean
-  variant?: string
-}
+} & React.ComponentProps<typeof Button>
 
 export function MakeBuyOfferPriceDialog({
   onSubmit,
   asset,
-  isVariantLink,
-  variant,
+  size = "lg",
 }: {
   onSubmit: (price: BigNumber, validity: string) => void
   asset: AssetWithTradeData
-  isVariantLink?: boolean
-  variant?: string
-}) {
+} & React.ComponentProps<typeof Button>) {
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
   const orderParams = useMemo(() => {
@@ -70,9 +65,7 @@ export function MakeBuyOfferPriceDialog({
     <Dialog modal>
       <DialogTrigger asChild>
         <Button
-          size={isVariantLink ? "default" : "lg"}
-          variant={isVariantLink ? "link" : (variant as any) || "default"}
-          className={cn(isVariantLink ? "h-auto p-0" : "")}
+          size={size}
           disabled={!isChainSupported}
         >
           Make an offer
@@ -113,7 +106,7 @@ export function MakeBuyOfferPriceDialog({
           </div>
         </div>
         <Button
-          size="lg"
+          // size="lg"
           disabled={!orderParams || !orderParams.price}
           onClick={() => onSubmit(orderParams!.price, orderParams!.validity)}
         >
@@ -127,8 +120,7 @@ export function MakeBuyOfferPriceDialog({
 
 export function MakeBuyOfferButton({
   asset,
-  isVariantLink,
-  variant,
+  size,
 }: MakeBuyOfferProps) {
   const [open, setOpen] = useState(false)
   const {
@@ -152,12 +144,11 @@ export function MakeBuyOfferButton({
   if (!price) {
     return (
       <MakeBuyOfferPriceDialog
-        isVariantLink={isVariantLink}
+        size={size}
         asset={asset}
         onSubmit={(newPrice, newValidity) => {
           setPrice(newPrice), setValidity(newValidity)
         }}
-        variant={variant}
       />
     )
   }
@@ -165,9 +156,7 @@ export function MakeBuyOfferButton({
   if (isLoading) {
     return (
       <ButtonLoading
-        size={isVariantLink ? "default" : "lg"}
-        variant={isVariantLink ? "link" : "default"}
-        className={cn(isVariantLink && "h-auto p-0")}
+        size={size}
       />
     )
   }
@@ -192,9 +181,9 @@ export function MakeBuyOfferButton({
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={onClose}
-      isVariantLink={isVariantLink}
       isLoading={isLoading}
       isDisabled={isLoading}
+      size={size}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">
