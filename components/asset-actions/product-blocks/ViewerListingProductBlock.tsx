@@ -29,20 +29,23 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Price</ProductBlockLabel>
-        <Price amount={asset.orderbookStats.lowestListingPrice} />
+        <Price
+          amount={asset.orderbookStats.lowestListingPrice}
+          shouldDisplayFiatPrice={true}
+        />
       </ProductBlockDividedColumn>
 
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Best Offer</ProductBlockLabel>
-        <Price amount={asset.orderbookStats.highestOfferPrice} />
+        <Price
+          amount={asset.orderbookStats.highestOfferPrice}
+          shouldDisplayFiatPrice={true}
+        />
       </ProductBlockDividedColumn>
 
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Listed by</ProductBlockLabel>
-        <UserLink
-          className="mt-1"
-          user={{ address: asset.owner as Address }}
-        />
+        <UserLink className="mt-1" user={{ address: asset.owner as Address }} />
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>

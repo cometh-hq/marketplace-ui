@@ -12,7 +12,7 @@ export interface InputProps
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, icon, ...props }, ref) => {
+  ({ className, type, icon, inputUpdateCallback, ...props }, ref) => {
     const [value, setValue] = React.useState("")
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,8 +25,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
 
       setValue(value)
-      if (props.inputUpdateCallback) {
-        props.inputUpdateCallback(value)
+      if (inputUpdateCallback) {
+        inputUpdateCallback(value)
       }
     }
 
@@ -42,8 +42,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         // Dispatch the event from the input element
         ref.current.dispatchEvent(event)
       }
-      if (props.inputUpdateCallback) {
-        props.inputUpdateCallback("")
+      if (inputUpdateCallback) {
+        inputUpdateCallback("")
       }
     }
 
