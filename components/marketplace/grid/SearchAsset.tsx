@@ -23,7 +23,7 @@ export function SearchAsset({ onChange }: SearchAssetProps) {
       ref={SearchRef}
       type="text"
       placeholder="Search name"
-      className="h-[40px] max-md:w-[calc(100%-180px)]"
+      className="h-[40px]"
       icon={<Search size="16" className={"min-w-[17px] opacity-40"} />}
       inputUpdateCallback={handleChange}
     />

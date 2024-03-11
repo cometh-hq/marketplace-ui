@@ -76,7 +76,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
         <div className="flex flex-col gap-3 sm:w-1/3">
           <Label htmlFor="make-buy-offer-price">Validity time</Label>
           <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="sm:w-[180px]">
               <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent>
