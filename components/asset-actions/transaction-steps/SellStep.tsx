@@ -94,7 +94,6 @@ export function SellStep({ asset, onClose }: SellStepProps) {
       <SwitchNetwork>
         <Button
           className="flex w-full gap-1"
-          // size="lg"
           onClick={onSubmit}
           disabled={isPending || !orderParams?.price}
           isLoading={isPending}

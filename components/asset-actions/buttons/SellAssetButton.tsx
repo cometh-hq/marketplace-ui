@@ -40,6 +40,7 @@ export function SellAssetButton({ asset, size = "lg" }: SellAssetButtonProps) {
       onClose={reset}
       isLoading={isLoading}
       isDisabled={isLoading}
+      size={size}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">
