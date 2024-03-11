@@ -33,7 +33,6 @@ export function AcceptBuyOfferButton({ offer }: AcceptBuyOfferButtonProps) {
       steps={requiredSteps}
       onClose={reset}
       isLoading={isLoading}
-      isDisabled={isLoading}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">

@@ -24,7 +24,6 @@ export function TransactionDialogButton<T extends Step>({
   onOpenChange,
   onClose,
   isLoading,
-  isDisabled,
   size = "lg",
 }: TransactionDialogProps<T>) {
   const componentOnOpenChange = (newOpen: boolean) => {
@@ -37,7 +36,7 @@ export function TransactionDialogButton<T extends Step>({
         <Button
           size={size}
           className={cn(size === "sm" && "min-w-[64px]")}
-          disabled={isDisabled}
+          disabled={isLoading}
           isLoading={isLoading}
         >
           {label}

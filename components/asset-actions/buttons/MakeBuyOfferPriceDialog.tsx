@@ -181,9 +181,8 @@ export function MakeBuyOfferButton({
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={onClose}
-      isLoading={isLoading}
-      isDisabled={isLoading}
       size={size}
+      isLoading={isLoading}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">

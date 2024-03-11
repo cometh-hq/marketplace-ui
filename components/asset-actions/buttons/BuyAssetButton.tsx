@@ -56,9 +56,8 @@ export function BuyAssetButton({
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
-      isLoading={isLoading}
-      isDisabled={isLoading}
       size={size}
+      isLoading={isLoading}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">
