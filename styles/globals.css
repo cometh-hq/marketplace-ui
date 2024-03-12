@@ -306,11 +306,11 @@ table tbody tr > td:last-child:after {
 }
 
 /* Fix Gas fees Connect Wallet */
-#cometh-gas-modal-wrapper {
+/* #cometh-gas-modal-wrapper {
   pointer-events: auto;
   position: fixed;
   z-index: 1000;
-}
+} */
 
 /* Inputs */
 input:-webkit-autofill,

@@ -97,7 +97,6 @@ export function SigninDropdown({
   return (
     <>
       <Dialog
-        modal
         open={displaySigninDialog}
         onOpenChange={handleSigninDialogChange}
       >

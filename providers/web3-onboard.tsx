@@ -22,23 +22,20 @@ import {
 import "@web3-onboard/common"
 
 import { useStorageWallet } from "@/services/web3/use-storage-wallet"
-import bitgetWalletModule from "@web3-onboard/bitget"
-import bitKeepWalletModule from "@web3-onboard/bitkeep"
-import bloctoModule from "@web3-onboard/blocto"
-import coinbaseWalletModule from "@web3-onboard/coinbase"
+import Onboard, { OnboardAPI } from "@web3-onboard/core"
+import torusModule from '@web3-onboard/torus'
+import mewWallet from '@web3-onboard/mew-wallet'
+import bitgetWalletModule from '@web3-onboard/bitget'
+import injectedModule from "@web3-onboard/injected-wallets"
+import bloctoModule from '@web3-onboard/blocto'
 import dcentModule from '@web3-onboard/dcent'
 import enrkypt from '@web3-onboard/enkrypt'
 import frameModule from '@web3-onboard/frame'
 import frontierModule from '@web3-onboard/frontier'
 import infinityWalletWalletModule from '@web3-onboard/infinity-wallet'
-import keepkeyModule from '@web3-onboard/keepkey'
-import phantomModule from '@web3-onboard/phantom'
-import mewModule from '@web3-onboard/mew'
-import torusModule from '@web3-onboard/torus'
 import zealWalletModule from '@web3-onboard/zeal'
-import Onboard, { OnboardAPI } from "@web3-onboard/core"
-import injectedModule from "@web3-onboard/injected-wallets"
-
+import xdefiWalletModule from '@web3-onboard/xdefi'
+import phantomModule from '@web3-onboard/phantom'
 import { env } from "@/config/env"
 import networks from "@/config/networks"
 import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
@@ -143,21 +140,19 @@ export function Web3OnboardProvider({
 
   const initOnboard = useCallback((options: SetOnboardOptions) => {
     const wallets = [
+      injectedModule(),
+      torusModule(),
+      phantomModule(),
+      mewWallet(),
       bitgetWalletModule(),
-      bitKeepWalletModule(),
       bloctoModule(),
-      coinbaseWalletModule(),
       dcentModule(),
       enrkypt(),
       frameModule(),
       frontierModule(),
       infinityWalletWalletModule(),
-      keepkeyModule(),
-      phantomModule(),
-      mewModule(),
-      torusModule(),
       zealWalletModule(),
-      injectedModule(),
+      xdefiWalletModule(),
     ]
     if (options.isComethWallet) {
       // TODO: Remove hack once connect is fixed and removed the spread
