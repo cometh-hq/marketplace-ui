@@ -24,7 +24,8 @@ export const useCancelListing = () => {
     },
 
     onSuccess: (_, asset) => {
-      client.refetchQueries({ queryKey: ["cometh", "assets", asset.tokenId] })
+      client.invalidateQueries({ queryKey: ["cometh", "assets", asset.tokenId] })
+      client.invalidateQueries({ queryKey: ["cometh", "search"] }) 
       toast({
         title: "Your order has been canceled.",
       })

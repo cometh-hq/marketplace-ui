@@ -9,7 +9,7 @@ import { X } from "lucide-react"
 import { env } from "@/config/env"
 import { siteConfig } from "@/config/site"
 
-import { ConnectButton } from "./ConnectButton"
+import { AuthenticationButton } from "./AuthenticationButton"
 import { MainNav } from "./MainNav"
 
 export function SiteHeader() {
@@ -85,7 +85,7 @@ export function SiteHeader() {
         </div>
 
         <div className="ml-auto">
-          <ConnectButton />
+          <AuthenticationButton />
         </div>
       </header>
     </div>

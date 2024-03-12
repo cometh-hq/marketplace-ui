@@ -1,6 +1,6 @@
 "use client"
 
-import { useFilters } from "@/services/cometh-marketplace/filtersService"
+import { useAttributeFilters } from "@/services/cometh-marketplace/filtersService"
 import { ArrowLeftIcon, UserIcon } from "lucide-react"
 import { Address } from "viem"
 
@@ -17,9 +17,9 @@ export default function ProfilePage({
 }: {
   params: { address: Address }
 }) {
-  const { filtersRaw } = useFilters()
+  const attributesFilters = useAttributeFilters()
 
-  if (!filtersRaw) {
+  if (!attributesFilters) {
     return null
   }
 
@@ -45,7 +45,7 @@ export default function ProfilePage({
       <AccountAssetActivities walletAddress={params.address}>
         <AssetsSearchGrid
           filteredBy={{ owner: params.address }}
-          filters={filtersRaw}
+          filters={attributesFilters}
         />
       </AccountAssetActivities>
     </div>

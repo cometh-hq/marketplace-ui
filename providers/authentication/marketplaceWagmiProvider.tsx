@@ -2,11 +2,11 @@
 
 import { manifest } from "@/manifests/manifests"
 import { Chain } from "@wagmi/chains"
+import { createWeb3Modal } from "@web3modal/wagmi/react"
 import { createConfig, http, WagmiProvider } from "wagmi"
 
 import { marketplaceChain } from "./marketplaceWagmiChain"
-import { walletConnectors } from "./rainbowkitConnectors"
-import { createWeb3Modal } from "@web3modal/wagmi/react";
+import { walletConnectors } from "./wagmiConnectors"
 
 export const wagmiConfig = createConfig({
   connectors: walletConnectors,
@@ -24,6 +24,7 @@ createWeb3Modal({
     "cometh-connect":
       "https://pbs.twimg.com/profile_images/1679433363818442753/E2kNVLBe_400x400.jpg",
   },
+  featuredWalletIds: ["cometh-connect"],
 })
 
 export function MarketplaceWagmiProvider({

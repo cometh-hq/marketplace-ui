@@ -101,7 +101,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {`${roundedAmount}${
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
-        {fiatPriceNewLine && <br></br>}
+        {fiatPriceNewLine && <br className="hidden sm:inline"></br>}
         {shouldDisplayFiatPrice &&  <FiatPrice className={
           cn(!fiatPriceNewLine && "ml-1")
         } amount={roundedAmount} />}

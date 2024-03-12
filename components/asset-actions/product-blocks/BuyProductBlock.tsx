@@ -3,7 +3,7 @@ import { Address } from "viem"
 
 import { Price } from "@/components/ui/Price"
 import { UserLink } from "@/components/ui/user/UserLink"
-import { ConnectButton } from "@/components/ConnectButton"
+import { AuthenticationButton } from "@/components/AuthenticationButton"
 import { AssetStatusBadge } from "@/components/marketplace/asset/AssetStatusBadge"
 import {
   ProductBlockCenteredColumn,
@@ -35,18 +35,15 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
 
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Listed by</ProductBlockLabel>
-        <UserLink
-          className="mt-1"
-          user={{ address: asset.owner as Address }}
-        />
+        <UserLink className="mt-1" user={{ address: asset.owner as Address }} />
       </ProductBlockDividedColumn>
       <ProductBlockCenteredColumn>
-        <ConnectButton fullVariant customText="Login to buy">
+        <AuthenticationButton fullVariant customText="Login to buy">
           <SwitchNetwork>
             <BuyAssetButton asset={asset} />
             <MakeBuyOfferButton variant="secondary" asset={asset} />
           </SwitchNetwork>
-        </ConnectButton>
+        </AuthenticationButton>
       </ProductBlockCenteredColumn>
     </ProductBlockContainer>
   )
