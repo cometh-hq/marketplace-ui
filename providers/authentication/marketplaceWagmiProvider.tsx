@@ -1,29 +1,29 @@
 "use client"
 
 import { manifest } from "@/manifests/manifests"
-import {
-  getDefaultConfig,
-  getDefaultWallets
-} from "@rainbow-me/rainbowkit"
-import {
-  Chain
-} from "@wagmi/chains"
-import { http, WagmiProvider } from "wagmi"
+import { Chain } from "@wagmi/chains"
+import { createConfig, http, WagmiProvider } from "wagmi"
 
 import { marketplaceChain } from "./marketplaceWagmiChain"
+import { walletConnectors } from "./rainbowkitConnectors"
+import { createWeb3Modal } from "@web3modal/wagmi/react";
 
-
-const { wallets } = getDefaultWallets()
-
-export const wagmiConfig = getDefaultConfig({
-  appName: manifest.marketplaceName,
-  projectId: manifest.walletConnectProjectId,
-  wallets,
+export const wagmiConfig = createConfig({
+  connectors: walletConnectors,
   chains: [marketplaceChain] as [Chain, ...Chain[]],
   transports: {
     [marketplaceChain.id]: http(manifest.rpcUrl),
   },
   ssr: true,
+})
+
+createWeb3Modal({
+  wagmiConfig,
+  projectId: manifest.walletConnectProjectId,
+  connectorImages: {
+    "cometh-connect":
+      "https://pbs.twimg.com/profile_images/1679433363818442753/E2kNVLBe_400x400.jpg",
+  },
 })
 
 export function MarketplaceWagmiProvider({

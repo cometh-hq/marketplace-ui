@@ -1,13 +1,12 @@
 "use client"
 
 import { useCallback } from "react"
-import { manifest } from "@/manifests/manifests"
-import { marketplaceChain } from "@/providers/authentication/marketplaceWagmiChain"
-import { ComethConnectConnector } from "@cometh/connect-sdk-viem"
-import { ConnectButton, useConnectModal } from "@rainbow-me/rainbowkit"
+import { ConnectButton } from "@rainbow-me/rainbowkit"
+import { useWeb3Modal } from "@web3modal/wagmi/react"
 import { cx } from "class-variance-authority"
 import { WalletIcon } from "lucide-react"
 import { useConnect } from "wagmi"
+
 
 import { env } from "@/config/env"
 import { Button } from "@/components/ui/Button"
@@ -33,7 +32,8 @@ export function SigninDropdown({
   customText,
   isLinkVariant,
 }: SigninDropdownProps) {
-  const { openConnectModal } = useConnectModal()
+  const { open, close } = useWeb3Modal()
+
   const { connect } = useConnect()
 
   const handleComethConnectLogin = useCallback(async () => {
@@ -60,7 +60,7 @@ export function SigninDropdown({
       icon: `${env.NEXT_PUBLIC_BASE_PATH}/metamask.svg`,
       isComethWallet: false,
       handleConnect: () => {
-        openConnectModal && openConnectModal()
+        open && open()
       },
     },
   ]
@@ -98,6 +98,7 @@ export function SigninDropdown({
           </CardContent>
           {/* ConnectButton MUST BE included in the DOM for the modal to appear, but can be hidden.*/}
           <div className="hidden">
+            <w3m-button />
             <ConnectButton />
           </div>
         </Card>

@@ -54,6 +54,7 @@ export type PriceTriggerProps = {
   hideSymbol?: boolean
   isNativeToken?: boolean
   shouldDisplayFiatPrice?: boolean
+  fiatPriceNewLine?: boolean
   className?: string
 } & PriceTriggerVariants
 
@@ -68,6 +69,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       hideSymbol = true,
       isNativeToken,
       shouldDisplayFiatPrice = false,
+      fiatPriceNewLine = false,
       className,
     },
     ref
@@ -84,7 +86,6 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       <span
         ref={ref}
         className={cn(
-          "inline-flex items-center gap-x-1.5",
           priceTriggerVariants({ size, variant, className, fontWeight })
         )}
       >
@@ -100,7 +101,10 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {`${roundedAmount}${
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
-        {shouldDisplayFiatPrice && <FiatPrice amount={roundedAmount} />}
+        {fiatPriceNewLine && <br></br>}
+        {shouldDisplayFiatPrice &&  <FiatPrice className={
+          cn(!fiatPriceNewLine && "ml-1")
+        } amount={roundedAmount} />}
       </span>
     )
   }
@@ -114,6 +118,7 @@ export type PriceProps = {
   hideSymbol?: boolean
   isNativeToken?: boolean
   shouldDisplayFiatPrice?: boolean
+  fiatPriceNewLine?: boolean
   className?: string
 } & PriceTriggerVariants
 

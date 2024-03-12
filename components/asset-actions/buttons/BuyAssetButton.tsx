@@ -20,12 +20,14 @@ export type BuyAssetButtonProps = {
   asset: SearchAssetWithTradeData | AssetWithTradeData
   isSmall?: boolean
   isLinkVariant?: boolean
+  variant?: string
 }
 
 export function BuyAssetButton({
   asset,
   isSmall = false,
   isLinkVariant = false,
+  variant
 }: BuyAssetButtonProps) {
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useBuyAssetButton({ asset })
@@ -61,6 +63,7 @@ export function BuyAssetButton({
       isLoading={isLoading}
       isDisabled={isLoading}
       isVariantLink={isLinkVariant}
+      variant={(variant as any)}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">

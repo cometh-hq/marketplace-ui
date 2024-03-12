@@ -1,0 +1,11 @@
+{
+  "version": "v1",
+  "packages": {
+    "@cometh/connect-sdk-viem": {
+      "version": "2.0.0",
+      "signature": "73e2d025fdc801825e4c91d465cd560b",
+      "file": true,
+      "replaced": "^1.1.7"
+    }
+  }
+}

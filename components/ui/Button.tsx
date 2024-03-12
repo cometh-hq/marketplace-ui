@@ -26,7 +26,7 @@ const buttonVariants = cva(
         default: "h-10 py-2 px-4",
         sm: "h-10 px-3 font-medium",
         lg: "h-12 px-8",
-        icon: "h-10 w-10 active:scale-95",
+        icon: "h-10 w-10 active:scale-95"
       },
       groupPosition: {
         isolated: "rounded-lg",

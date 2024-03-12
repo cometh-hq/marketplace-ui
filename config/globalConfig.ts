@@ -50,7 +50,7 @@ const manifestAddressSchema = z
   .min(1)
   .or(addressSchema.transform((v) => [v]))
 const globalConfigContractAddresses =
-  manifestAddressSchema.parse(contractAddress)
+  manifestAddressSchema.parse(contractAddress).map((address) => address.toLowerCase() as Address)
 
 if (!useNativeTokenForOrders && !manifest.erc20) {
   throw new Error(
