@@ -28,7 +28,7 @@ export function SignInDialog({ onLoginSuccess }: SignInFormProps) {
           />
         </DialogHeader>
         <DialogDescription>
-          Enter your Comsmik Battle credentials to view or add external wallets
+          Enter your Cosmik Battle credentials to view or add external wallets
         </DialogDescription>
         <SignInForm onLoginSuccess={onLoginSuccess}  />
       </DialogContent>
