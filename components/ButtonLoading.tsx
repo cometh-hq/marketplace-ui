@@ -3,13 +3,10 @@ import { Loader } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 
 type ButtonLoadingProps = {
-  size?: "default" | "lg"
-  variant?: "default" | "link"
-  className?: string
-}
+} & React.ComponentProps<typeof Button>
 
 export function ButtonLoading({
-  size = "default",
+  size = "sm",
   variant,
   className,
 }: ButtonLoadingProps) {

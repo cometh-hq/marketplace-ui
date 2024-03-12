@@ -56,7 +56,7 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
       </p>
 
       {isPending ? (
-        <ButtonLoading size="lg" />
+        <ButtonLoading />
       ) : (
         <Button className="flex gap-1" onClick={onConfirm}>
           Unwrap{" "}

@@ -101,7 +101,7 @@ export function AssetCardBase({
           " flex w-full flex-1 flex-row items-center bg-transparent p-0 shadow-none transition-all duration-200 ease-in-out sm:inline-flex sm:flex-col sm:items-start sm:border-2"
         )}
       >
-        <div className="relative flex-1 sm:w-full">
+        <div className="relative w-1/3 sm:w-full">
           <AssetImageContainer
             color={getAssetColor(asset)}
             className={cn(isOwnerAsset && "bg-[#f4f2e8]")}
@@ -127,13 +127,13 @@ export function AssetCardBase({
             </Link>
           )}
           {isHovered.value && (
-            <div className="absolute bottom-4 left-[50%] transform translate-x-[-50%] ">
+            <div className="absolute bottom-4 left-[50%] translate-x-[-50%]">
               {renderAssetActions(asset, isOwnerAsset)}
             </div>
           )}
         </div>
 
-        <div className="flex-1 sm:w-full ">
+        <div className="w-2/3 sm:w-full ">
           <Link
             href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
             className={cn(

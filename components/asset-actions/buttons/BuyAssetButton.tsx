@@ -15,19 +15,15 @@ import { AllowanceStep } from "../transaction-steps/AllowanceStep"
 import { BuyStep } from "../transaction-steps/BuyStep"
 import { FundsStep } from "../transaction-steps/FundsStep"
 import { UnwrapStep } from "../transaction-steps/UnwrapStep"
+import { Button } from "@/components/ui/Button"
 
 export type BuyAssetButtonProps = {
   asset: SearchAssetWithTradeData | AssetWithTradeData
-  isSmall?: boolean
-  isLinkVariant?: boolean
-  variant?: string
-}
+ } & React.ComponentProps<typeof Button>
 
 export function BuyAssetButton({
   asset,
-  isSmall = false,
-  isLinkVariant = false,
-  variant
+  size = "lg",
 }: BuyAssetButtonProps) {
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useBuyAssetButton({ asset })
@@ -45,7 +41,7 @@ export function BuyAssetButton({
     <TransactionDialogButton
       label={
         <>
-          {isSmall ? (
+          {size === "sm" ? (
             "Buy now"
           ) : (
             <span>
@@ -60,10 +56,8 @@ export function BuyAssetButton({
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
+      size={size}
       isLoading={isLoading}
-      isDisabled={isLoading}
-      isVariantLink={isLinkVariant}
-      variant={(variant as any)}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">

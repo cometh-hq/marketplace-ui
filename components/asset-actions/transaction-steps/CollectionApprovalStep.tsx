@@ -31,7 +31,7 @@ export function CollectionApprovalStep({
       {isPending ? (
         <ButtonLoading />
       ) : (
-        <Button size="sm" onClick={() => approveCollection()}>
+        <Button onClick={() => approveCollection()}>
           Approve
         </Button>
       )}

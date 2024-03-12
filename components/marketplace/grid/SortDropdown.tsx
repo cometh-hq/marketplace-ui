@@ -53,7 +53,7 @@ export function MarketplaceSortDropdown({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          size={isSmallScreen ? "icon" : "default"}
+          size={isSmallScreen ? "icon" : "sm"}
           role="combobox"
           aria-label="Load a sort..."
           aria-expanded={open}

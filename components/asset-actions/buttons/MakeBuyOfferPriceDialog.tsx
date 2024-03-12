@@ -38,21 +38,18 @@ import { WrapStep } from "../transaction-steps/WrapStep"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData
-  isVariantLink?: boolean
-  variant?: string
-}
+} & React.ComponentProps<typeof Button>
+
+type MakeBuyOfferPriceDialogProps = {
+  onSubmit: (price: BigNumber, validity: string) => void
+  asset: AssetWithTradeData
+} & React.ComponentProps<typeof Button>
 
 export function MakeBuyOfferPriceDialog({
   onSubmit,
   asset,
-  isVariantLink,
-  variant,
-}: {
-  onSubmit: (price: BigNumber, validity: string) => void
-  asset: AssetWithTradeData
-  isVariantLink?: boolean
-  variant?: string
-}) {
+  size = "lg",
+}: MakeBuyOfferPriceDialogProps) {
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
   const orderParams = useMemo(() => {
@@ -69,12 +66,7 @@ export function MakeBuyOfferPriceDialog({
   return (
     <Dialog modal>
       <DialogTrigger asChild>
-        <Button
-          size={isVariantLink ? "default" : "lg"}
-          variant={isVariantLink ? "link" : (variant as any) || "default"}
-          className={cn(isVariantLink ? "h-auto p-0" : "")}
-          disabled={!isChainSupported}
-        >
+        <Button size={size} disabled={!isChainSupported}>
           Make an offer
         </Button>
       </DialogTrigger>
@@ -87,7 +79,7 @@ export function MakeBuyOfferPriceDialog({
           <AssetHeaderImage asset={asset} />
         </div>
 
-        <div className="mt-4 flex gap-4">
+        <div className="mt-4 flex flex-col gap-4 sm:flex-row">
           <div className="flex flex-col gap-3 md:w-2/3">
             <Label htmlFor="make-buy-offer-price">
               Offer price in {globalConfig.ordersDisplayCurrency.symbol} *
@@ -100,7 +92,7 @@ export function MakeBuyOfferPriceDialog({
           <div className="flex flex-col gap-3 md:w-1/3">
             <Label htmlFor="make-buy-offer-price">Validity time</Label>
             <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="sm:w-[180px]">
                 <SelectValue placeholder="" />
               </SelectTrigger>
               <SelectContent>
@@ -125,11 +117,7 @@ export function MakeBuyOfferPriceDialog({
   )
 }
 
-export function MakeBuyOfferButton({
-  asset,
-  isVariantLink,
-  variant,
-}: MakeBuyOfferProps) {
+export function MakeBuyOfferButton({ asset, size }: MakeBuyOfferProps) {
   const [open, setOpen] = useState(false)
   const {
     isLoading,
@@ -152,24 +140,17 @@ export function MakeBuyOfferButton({
   if (!price) {
     return (
       <MakeBuyOfferPriceDialog
-        isVariantLink={isVariantLink}
+        size={size}
         asset={asset}
         onSubmit={(newPrice, newValidity) => {
           setPrice(newPrice), setValidity(newValidity)
         }}
-        variant={variant}
       />
     )
   }
 
   if (isLoading) {
-    return (
-      <ButtonLoading
-        size={isVariantLink ? "default" : "lg"}
-        variant={isVariantLink ? "link" : "default"}
-        className={cn(isVariantLink && "h-auto p-0")}
-      />
-    )
+    return <ButtonLoading size={size} />
   }
 
   if (!requiredSteps?.length || !currentStep) return null
@@ -192,9 +173,8 @@ export function MakeBuyOfferButton({
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={onClose}
-      isVariantLink={isVariantLink}
+      size={size}
       isLoading={isLoading}
-      isDisabled={isLoading}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">
