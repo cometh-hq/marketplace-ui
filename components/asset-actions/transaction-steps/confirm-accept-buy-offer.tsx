@@ -26,7 +26,7 @@ export function ConfirmAcceptBuyOfferStep({ offer, onValid }: ConfirmBuyOfferSte
     const tx = await acceptBuyOffer({ offer })
     if (isSuccess) {
       toast({
-        title: "The purchase offer for your NFT has been accepted!",
+        title: "The purchase offer for your Digital Collectibles has been accepted!",
         description: `${globalConfig.network.explorer}/${tx.transactionHash}`,
       })
     }

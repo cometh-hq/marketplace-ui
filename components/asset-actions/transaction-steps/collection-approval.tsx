@@ -23,7 +23,7 @@ export function CollectionApprovalStep({
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Permissions</h3>
       <p className="text-center">
-        {manifest.collectionName} would like to be able to transfer your NFT,
+        {manifest.collectionName} would like to be able to transfer your Digital Collectibles,
         when a user buys it. Your wallet is going to ask you to approve that allowance.
       </p>
       {isPending ? (

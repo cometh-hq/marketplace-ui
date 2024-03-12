@@ -37,7 +37,7 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
   return (
     <div className="flex flex-col items-center justify-center">
       <p className="text-md my-[32px] text-center">
-        You are about to buy this NFT for <Price amount={price} isNativeToken={true} /> but you are
+        You are about to buy this Digital Collectibles for <Price amount={price} isNativeToken={true} /> but you are
         missing <Price amount={needsToUnwrapData?.balanceToUnwrap} /> in your
         wallet.
         {(!globalConfig.areContractsSponsored || !isComethWallet) && (

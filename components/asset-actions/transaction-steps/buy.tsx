@@ -31,7 +31,7 @@ export function BuyStep({ asset, onValid }: BuyStepProps) {
   const onSubmit = useCallback(async () => {
     const tx = await buy({ asset: asset })
     toast({
-      title: "NFT bought!",
+      title: "Digital Collectibles bought!",
       description: globalConfig.network.explorer?.blockUrl ? (
         <a
           href={`${globalConfig.network.explorer?.blockUrl}/${tx.transactionHash}`}
