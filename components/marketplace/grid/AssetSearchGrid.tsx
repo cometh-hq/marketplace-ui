@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react"
 import { useFilterableNFTsQuery } from "@/services/cometh-marketplace/searchAssetsService"
 import { AssetSearchFilters } from "@cometh/marketplace-sdk"
 import { useInView } from "react-intersection-observer"
+import { useWindowSize } from "usehooks-ts"
 
 import {
   deserializeFilters,
@@ -14,8 +15,9 @@ import { Loading } from "@/components/ui/Loading"
 import { AssetCard } from "./AssetCard"
 import { AssetCardsList } from "./AssetCardsList"
 import { AssetsSearchEmpty } from "./AssetSearchEmpty"
-import { MarketplaceFiltersDropdown } from "./FiltersDropdown"
-import { FiltersResetBtn } from "./FiltersResetBtn"
+import { FiltersDropdown } from "./Filters/FiltersDropdown"
+import FiltersFullscreen from "./Filters/FiltersFullscreen"
+import { FiltersResetBtn } from "./Filters/FiltersResetBtn"
 import { NFTStateFilters } from "./NftStateFilters"
 import { SearchAsset } from "./SearchAsset"
 import { MarketplaceSortDropdown } from "./SortDropdown"
@@ -40,6 +42,7 @@ export const AssetsSearchGrid = ({
     () => deserializeFilters(filtersRaw),
     [filtersRaw]
   )
+
   const {
     data: nfts,
     refetch,
@@ -69,6 +72,9 @@ export const AssetsSearchGrid = ({
     if (inView && !isLoading) fetchNextPage()
   }, [inView, isLoading, fetchNextPage])
 
+  const { width } = useWindowSize()
+  const isMobile = width < 768
+
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <div className="relative flex w-full flex-wrap items-center justify-between gap-4">
@@ -78,8 +84,14 @@ export const AssetsSearchGrid = ({
         <div className="flex items-center justify-between gap-3 max-md:w-full">
           <SearchAsset onChange={setSearch} />
           <div className="flex gap-3">
-            <MarketplaceFiltersDropdown filters={filtersDefinition} />
-            <FiltersResetBtn />
+            {isMobile ? (
+              <FiltersFullscreen filters={filtersDefinition} />
+            ) : (
+              <>
+                <FiltersDropdown filters={filtersDefinition} />
+                <FiltersResetBtn />
+              </>
+            )}
             <Suspense>
               <MarketplaceSortDropdown />
             </Suspense>

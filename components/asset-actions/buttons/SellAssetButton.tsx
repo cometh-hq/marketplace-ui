@@ -13,25 +13,15 @@ import { SellStep } from "../transaction-steps/SellStep"
 
 export type SellAssetButtonProps = {
   asset: AssetWithTradeData
-  isVariantLink?: boolean
-}
+} & React.ComponentProps<typeof ButtonLoading>
 
-export function SellAssetButton({
-  asset,
-  isVariantLink,
-}: SellAssetButtonProps) {
+export function SellAssetButton({ asset, size = "lg" }: SellAssetButtonProps) {
   const [open, setOpen] = useState(false)
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useSellAssetButton({ asset })
 
   if (isLoading) {
-    return (
-      <ButtonLoading
-        size={isVariantLink ? "default" : "lg"}
-        variant={isVariantLink ? "link" : "default"}
-        className={cn(isVariantLink && "h-auto p-0")}
-      />
-    )
+    return <ButtonLoading size={size} />
   }
 
   if (!requiredSteps?.length || !currentStep) return null
@@ -48,9 +38,8 @@ export function SellAssetButton({
       steps={requiredSteps}
       onOpenChange={setOpen}
       onClose={reset}
-      isVariantLink={isVariantLink}
+      size={size}
       isLoading={isLoading}
-      isDisabled={isLoading}
     >
       <Switch value={currentStep.value}>
         <Case value="add-gas">

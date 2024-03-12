@@ -103,7 +103,7 @@ export function AssetCardBase({
       enabled={false}
       condition={true}
       delay={getRandomArrayElement([0, 25, 50, 75, 100])}
-      className="relative w-full justify-self-center"
+      className="relative"
     >
       <Card
         className={cn(
@@ -112,7 +112,7 @@ export function AssetCardBase({
       >
         <Link
           href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
-          className="sm:w-full"
+          className="w-1/3 sm:w-full"
         >
           <AssetImageContainer
             color={getAssetColor(asset)}
@@ -128,7 +128,7 @@ export function AssetCardBase({
             />
           </AssetImageContainer>
         </Link>
-        <div className="w-full">{children}</div>
+        <div className="w-2/3 sm:w-full">{children}</div>
       </Card>
     </Appear>
   )
@@ -144,9 +144,9 @@ function renderAssetActions(
 ) {
   if (asset.orderbookStats.lowestListingPrice && !owner) {
     return (
-      <ConnectButton isLinkVariant customText="Login to buy">
+      <ConnectButton customText="Login to buy">
         <SwitchNetwork variant="link">
-          <BuyAssetButton isSmall asset={asset} />
+          <BuyAssetButton asset={asset} size="sm" />
         </SwitchNetwork>
       </ConnectButton>
     )
@@ -161,11 +161,11 @@ function renderAssetActions(
     )
   } else if (!owner) {
     return (
-      <ConnectButton isLinkVariant customText="Login to buy">
+      <ConnectButton customText="Login to buy">
         <SwitchNetwork variant="link">
           <MakeBuyOfferButton
             asset={asset as unknown as AssetWithTradeData}
-            isVariantLink
+            size="sm"
           />
         </SwitchNetwork>
       </ConnectButton>
@@ -214,16 +214,17 @@ export function AssetCard({ asset, children }: AssetCardProps) {
               ) : owner ? (
                 <SellAssetButton
                   asset={asset as unknown as AssetWithTradeData}
-                  isVariantLink
+                  size="sm"
                 />
               ) : (
                 "No listed yet"
               )}
             </div>
             <div>
-              {asset.orderbookStats.highestOfferPrice && (
-                <div className="text-sm font-medium">Best offer</div>
-              )}
+              {asset.orderbookStats.highestOfferPrice &&
+                !asset.orderbookStats.highestOfferPrice && (
+                  <div className="text-sm font-medium">Best offer</div>
+                )}
               <div className="text-end">{renderAssetActions(asset, owner)}</div>
             </div>
           </div>
