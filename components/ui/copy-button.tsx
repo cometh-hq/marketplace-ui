@@ -14,11 +14,12 @@ import {
 import { cx } from "class-variance-authority"
 
 type CopyButtonProps = {
+  label?: string,
   size?: string,
   textToCopy: string
 }
 
-export function CopyButton({ size = 'sm', textToCopy }: CopyButtonProps) {
+export function CopyButton({ label = "Copy", size = 'sm', textToCopy }: CopyButtonProps) {
   const [_, copy] = useClipboard()
 
   const variants = {
@@ -46,7 +47,7 @@ export function CopyButton({ size = 'sm', textToCopy }: CopyButtonProps) {
         </TooltipTrigger>
         <TooltipContent>
           <p className="text-sm font-bold">
-            Copy
+            {label}
           </p>
         </TooltipContent>
       </Tooltip>

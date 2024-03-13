@@ -44,7 +44,7 @@ export default function ProfilePage({
             <UserIcon size="28" className="mr-2" />
             Profile {user}
           </h1>
-          <CopyButton size="sm" textToCopy={params.address} />
+          <CopyButton label="Copy wallet address" size="sm" textToCopy={params.address} />
         </div>
         <ShareButton textToShow={`Check my assets on`} />
       </div>
