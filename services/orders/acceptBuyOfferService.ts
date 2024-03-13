@@ -81,6 +81,7 @@ export const useAcceptBuyOffer = () => {
       client.invalidateQueries({
         queryKey: ["cometh", "assets", offer.asset?.tokenId],
       })
+      client.invalidateQueries({ queryKey: ["cometh", "search"] })
       client.invalidateQueries({
         queryKey: ["cometh", "received-buy-offers", offer.owner.address],
       })

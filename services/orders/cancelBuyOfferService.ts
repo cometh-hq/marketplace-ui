@@ -42,6 +42,7 @@ export const useCancelBuyOffer = () => {
     },
 
     onSuccess: (_, { offer }) => {
+      client.invalidateQueries({ queryKey: ["cometh", "search"] })
       client.refetchQueries({
         queryKey: ["cometh", "assets", offer.asset?.tokenId],
       })

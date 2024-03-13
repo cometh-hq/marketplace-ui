@@ -68,6 +68,7 @@ export const useBuyAsset = () => {
       client.invalidateQueries({
         queryKey: ["cometh", "assets", asset.tokenId],
       })
+      client.invalidateQueries({ queryKey: ["cometh", "search"] })
     },
   })
 }
