@@ -37,16 +37,15 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
     return attributes?.map((attribute, index) => {
       const property = attribute.trait_type
       const value = `${attribute.value}`
+      // TODO: fix and add again attribute link
       const href = `/nfts/${asset.contractAddress}?${qs.stringify({
         [property as string]: `${value}`,
       })}`
 
       return (
-        <Link key={index} href={href}>
-          <Badge variant="outline" size="default">
-            <span className="mr-1 opacity-60">{property}:</span> {value}
-          </Badge>
-        </Link>
+        <Badge variant="outline" size="default">
+          <span className="mr-1 opacity-60">{property}:</span> {value}
+        </Badge>
       )
     })
   }, [attributes, asset.contractAddress])

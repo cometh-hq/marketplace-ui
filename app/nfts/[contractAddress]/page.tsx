@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect } from "react"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
-import { useFilters } from "@/services/cometh-marketplace/filtersService"
+import { useAttributeFilters } from "@/services/cometh-marketplace/filtersService"
 import { Address } from "viem"
 
 import { AssetsSearchGrid } from "@/components/marketplace/grid/AssetSearchGrid"
@@ -16,16 +16,16 @@ export default function MarketplaceCollectionPage({
   useEffect(() => {
     switchCollection(params.contractAddress)
   }, [params.contractAddress, switchCollection])
-  const { filtersRaw } = useFilters()
+  const attributesFilters = useAttributeFilters()
 
-  if (!filtersRaw) {
+  if (!attributesFilters) {
     return null
   }
 
   return (
     <div className="container mx-auto flex items-center justify-center gap-4 py-5 sm:py-6">
       <Suspense>
-        <AssetsSearchGrid filters={filtersRaw} />
+        <AssetsSearchGrid filters={attributesFilters} />
       </Suspense>
     </div>
   )

@@ -1,7 +1,7 @@
-import { providers } from "ethers"
 import { useMemo } from "react"
+import { providers } from "ethers"
 import type { Account, Chain, Client, Transport } from "viem"
-import { useClient, useConnectorClient } from "wagmi"
+import { useAccount, useClient, useConnectorClient } from "wagmi"
 
 function clientToProvider(client: Client<Transport, Chain>) {
   const { chain, transport } = client
@@ -24,19 +24,27 @@ export function useEthersProvider() {
   return useMemo(() => client && clientToProvider(client), [client])
 }
 
-function clientToSigner(client: Client<Transport, Chain, Account>) {
-  const { account, chain, transport } = client
+function clientToSigner(
+  client: Client<Transport, Chain>,
+  accountAddress: string
+) {
+  const { chain, transport } = client
+
   const network = {
     chainId: chain.id,
     name: chain.name,
     ensAddress: chain.contracts?.ensRegistry?.address,
   }
   const provider = new providers.Web3Provider(transport, network)
-  const signer = provider.getSigner(account.address)
+  const signer = provider.getSigner(accountAddress)
   return signer
 }
 
 export function useEthersSigner() {
   const { data: client } = useConnectorClient()
-  return useMemo(() => (client ? clientToSigner(client) : undefined), [client])
+  const { address } = useAccount()
+  return useMemo(
+    () => (client && address ? clientToSigner(client, address) : undefined),
+    [client, address]
+  )
 }

@@ -2,7 +2,7 @@ import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
 import { UserLink } from "@/components/ui/user/UserLink"
-import { ConnectButton } from "@/components/ConnectButton"
+import { AuthenticationButton } from "@/components/AuthenticationButton"
 import { AssetStatusBadge } from "@/components/marketplace/asset/AssetStatusBadge"
 import {
   ProductBlockCenteredColumn,
@@ -38,11 +38,11 @@ export function SellProductBlock({ asset }: SellProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <ProductBlockCenteredColumn>
-        <ConnectButton fullVariant>
+        <AuthenticationButton fullVariant>
           <SwitchNetwork>
             <SellAssetButton asset={asset} size="sm" />
           </SwitchNetwork>
-        </ConnectButton>
+        </AuthenticationButton>
       </ProductBlockCenteredColumn>
     </ProductBlockContainer>
   )

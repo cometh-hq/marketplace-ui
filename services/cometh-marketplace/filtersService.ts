@@ -1,25 +1,17 @@
-import { useEffect, useState } from "react"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
+import { useQuery } from "@tanstack/react-query"
 
-import {
-  seedFilters,
-  SerializedMarketplacePanelFilters,
-  serializeFilters,
-} from "@/lib/utils/seed"
+import { seedFilters, serializeFilters } from "@/lib/utils/seed"
 
-export function useFilters() {
-  const [filtersRaw, setFiltersRaw] =
-    useState<SerializedMarketplacePanelFilters | null>(null)
+export function useAttributeFilters() {
   const { currentCollectionAddress } = useCurrentCollectionContext()
 
-  useEffect(() => {
-    const fetchFilters = async () => {
+  const { data: attributesFilters } = useQuery({
+    queryKey: ["attributeFilters", currentCollectionAddress],
+    queryFn: async () => {
       const filters = await seedFilters(currentCollectionAddress)
-      setFiltersRaw(serializeFilters(filters))
-    }
-
-    fetchFilters()
-  }, [currentCollectionAddress])
-
-  return { filtersRaw }
+      return serializeFilters(filters)
+    },
+  })
+  return attributesFilters
 }

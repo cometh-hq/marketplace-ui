@@ -19,8 +19,9 @@ const priceTriggerVariants = cva("", {
       success: "text-success",
     },
     size: {
-      default: "text-base",
       sm: "text-sm",
+      default: "text-base",
+      lg: "text-lg",
     },
     fontWeight: {
       default: "font-bold",
@@ -37,8 +38,9 @@ const priceTriggerVariants = cva("", {
 const iconVariants = cva("rounded-full overflow-hidden object-contain", {
   variants: {
     size: {
-      default: "w-5 h-5",
       sm: "w-4 h-4",
+      default: "w-5 h-5",
+      lg: "w-6 h-6",
     },
   },
   defaultVariants: {
@@ -54,6 +56,7 @@ export type PriceTriggerProps = {
   hideSymbol?: boolean
   isNativeToken?: boolean
   shouldDisplayFiatPrice?: boolean
+  fiatPriceNewLine?: boolean
   className?: string
 } & PriceTriggerVariants
 
@@ -68,6 +71,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       hideSymbol = true,
       isNativeToken,
       shouldDisplayFiatPrice = false,
+      fiatPriceNewLine = false,
       className,
     },
     ref
@@ -84,10 +88,10 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       <span
         ref={ref}
         className={cn(
-          "inline-flex items-center gap-x-1.5",
           priceTriggerVariants({ size, variant, className, fontWeight })
         )}
       >
+        Size = {size}
         {!hideIcon && currency.thumb && (
           <span className={cn("relative", iconVariants({ size }))}>
             <Image
@@ -100,7 +104,13 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
         {`${roundedAmount}${
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
-        {shouldDisplayFiatPrice && <FiatPrice amount={roundedAmount} />}
+        {fiatPriceNewLine && <br className="hidden sm:inline"></br>}
+        {shouldDisplayFiatPrice && (
+          <FiatPrice
+            className={cn(!fiatPriceNewLine && "ml-1")}
+            amount={roundedAmount}
+          />
+        )}
       </span>
     )
   }
@@ -114,6 +124,7 @@ export type PriceProps = {
   hideSymbol?: boolean
   isNativeToken?: boolean
   shouldDisplayFiatPrice?: boolean
+  fiatPriceNewLine?: boolean
   className?: string
 } & PriceTriggerVariants
 
