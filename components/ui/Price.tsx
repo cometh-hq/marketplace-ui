@@ -91,7 +91,6 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
           priceTriggerVariants({ size, variant, className, fontWeight })
         )}
       >
-        Size = {size}
         {!hideIcon && currency.thumb && (
           <span className={cn("relative", iconVariants({ size }))}>
             <Image
