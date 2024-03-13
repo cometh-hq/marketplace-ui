@@ -186,9 +186,11 @@ function renderAssetActions(
 
   if (button) {
     return (
-      <AuthenticationButton customText={buttonText}>
-        <SwitchNetwork>{button}</SwitchNetwork>
-      </AuthenticationButton>
+      <div className="hidden sm:block">
+        <AuthenticationButton customText={buttonText}>
+          <SwitchNetwork>{button}</SwitchNetwork>
+        </AuthenticationButton>
+      </div>
     )
   }
 }
