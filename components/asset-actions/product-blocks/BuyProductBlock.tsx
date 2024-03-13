@@ -28,7 +28,7 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Price</ProductBlockLabel>
-        <Price amount={listingPrice} shouldDisplayFiatPrice={true} />
+        <Price size="lg" amount={listingPrice} shouldDisplayFiatPrice={true} />
       </ProductBlockDividedColumn>
 
       <BestOfferColumn asset={asset} />

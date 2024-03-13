@@ -19,8 +19,9 @@ const priceTriggerVariants = cva("", {
       success: "text-success",
     },
     size: {
-      default: "text-base",
       sm: "text-sm",
+      default: "text-base",
+      lg: "text-lg",
     },
     fontWeight: {
       default: "font-bold",
@@ -37,8 +38,9 @@ const priceTriggerVariants = cva("", {
 const iconVariants = cva("rounded-full overflow-hidden object-contain", {
   variants: {
     size: {
-      default: "w-5 h-5",
       sm: "w-4 h-4",
+      default: "w-5 h-5",
+      lg: "w-6 h-6",
     },
   },
   defaultVariants: {
@@ -89,6 +91,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
           priceTriggerVariants({ size, variant, className, fontWeight })
         )}
       >
+        Size = {size}
         {!hideIcon && currency.thumb && (
           <span className={cn("relative", iconVariants({ size }))}>
             <Image
@@ -102,9 +105,12 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
         }`}
         {fiatPriceNewLine && <br className="hidden sm:inline"></br>}
-        {shouldDisplayFiatPrice &&  <FiatPrice className={
-          cn(!fiatPriceNewLine && "ml-1")
-        } amount={roundedAmount} />}
+        {shouldDisplayFiatPrice && (
+          <FiatPrice
+            className={cn(!fiatPriceNewLine && "ml-1")}
+            amount={roundedAmount}
+          />
+        )}
       </span>
     )
   }

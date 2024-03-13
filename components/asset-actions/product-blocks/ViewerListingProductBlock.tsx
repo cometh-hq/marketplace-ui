@@ -32,6 +32,7 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
         <Price
           amount={asset.orderbookStats.lowestListingPrice}
           shouldDisplayFiatPrice={true}
+          size="lg"
         />
       </ProductBlockDividedColumn>
 

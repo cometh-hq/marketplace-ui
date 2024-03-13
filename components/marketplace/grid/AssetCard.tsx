@@ -105,21 +105,20 @@ export function AssetCardBase({
         onMouseEnter={isHovered.setTrue}
         onMouseLeave={isHovered.setFalse}
         className={cn(
-          isOwnerAsset ? "border-[#f4f2e8]" : "border-muted",
+          isOwnerAsset ? "border-[#BFA100]" : "border-muted",
           isHovered.value && "shadow-md",
           cardHeight,
           "min-h-[140px]",
-          " sm:border-1 flex  w-full flex-1 flex-row items-stretch overflow-hidden duration-200 ease-in-out first-letter:transition-all sm:inline-flex sm:flex-col sm:items-start"
+          "  flex  w-full flex-1 flex-row items-stretch overflow-hidden duration-200 ease-in-out first-letter:transition-all sm:inline-flex sm:flex-col sm:items-start sm:border-2"
         )}
       >
         <div className="relative  w-1/3 sm:w-full">
           <Link
             href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
-            className={(cn(isHovered.value && "brightness-90", "block h-full"))}
+            className={cn(isHovered.value && "brightness-90", "block h-full")}
           >
             <AssetImageContainer
               color={getAssetColor(asset)}
-              className={cn(isOwnerAsset && "bg-[#f4f2e8]")}
               isHovered={isHovered.value}
             >
               <AssetImage
@@ -142,11 +141,11 @@ export function AssetCardBase({
           </div>
         </div>
 
-        <div className="w-2/3 sm:w-full ">
+        <div className="h-full w-2/3 sm:w-full">
           <Link
             href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
             className={cn(
-              "text-primary flex flex-nowrap items-center text-sm font-semibold leading-tight "
+              "text-primary flex h-full flex-nowrap text-sm font-semibold leading-tight "
             )}
           >
             <div className="w-full">{children}</div>

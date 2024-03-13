@@ -105,6 +105,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
       JSON.stringify(filters),
       options?.page,
       options?.search,
+      options?.owner
     ],
     queryFn: ({ pageParam }) => {
       return getAssetsPaginated(
