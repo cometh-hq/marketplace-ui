@@ -115,7 +115,7 @@ export function AssetCardBase({
         <div className="relative  w-1/3 sm:w-full">
           <Link
             href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
-            className={(cn(isHovered.value && "brightness-90"), "block h-full")}
+            className={(cn(isHovered.value && "brightness-90", "block h-full"))}
           >
             <AssetImageContainer
               color={getAssetColor(asset)}
