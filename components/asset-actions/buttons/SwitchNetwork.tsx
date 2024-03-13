@@ -1,10 +1,10 @@
 "use client"
 
-import cx from "classnames"
 import { AlertCircle, Loader } from "lucide-react"
 
 import { useCorrectNetwork } from "@/lib/web3/network"
 import { Button } from "@/components/ui/Button"
+import { cx } from "class-variance-authority"
 
 type SwitchNetworkProps = {
   callbackChildren?: React.ReactNode

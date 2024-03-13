@@ -41,12 +41,12 @@ export type MakeBuyOfferProps = {
 } & React.ComponentProps<typeof Button>
 
 type MakeBuyOfferPriceDialogProps = {
-  onSubmit: (price: BigNumber, validity: string) => void
+  submitCallback: (price: BigNumber, validity: string) => void
   asset: AssetWithTradeData
 } & React.ComponentProps<typeof Button>
 
 export function MakeBuyOfferPriceDialog({
-  onSubmit,
+  submitCallback,
   asset,
   size = "lg",
 }: MakeBuyOfferPriceDialogProps) {
@@ -107,7 +107,7 @@ export function MakeBuyOfferPriceDialog({
         <Button
           size="lg"
           disabled={!orderParams || !orderParams.price}
-          onClick={() => onSubmit(orderParams!.price, orderParams!.validity)}
+          onClick={() => submitCallback(orderParams!.price, orderParams!.validity)}
         >
           Make offer for&nbsp;
           <Price amount={orderParams?.price} />
@@ -142,7 +142,7 @@ export function MakeBuyOfferButton({ asset, size }: MakeBuyOfferProps) {
       <MakeBuyOfferPriceDialog
         size={size}
         asset={asset}
-        onSubmit={(newPrice, newValidity) => {
+        submitCallback={(newPrice, newValidity) => {
           setPrice(newPrice), setValidity(newValidity)
         }}
       />
