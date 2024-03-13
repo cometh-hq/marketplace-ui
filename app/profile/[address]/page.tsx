@@ -35,7 +35,7 @@ export default function ProfilePage({
         <div className="flex items-center gap-2">
           <h1 className="inline-flex items-center text-2xl font-bold tracking-tight sm:text-3xl">
             <UserIcon size="28" className="mr-2 max-sm:hidden" />
-            User{" "}<span className="max-sm:hidden">profile</span>{" "} (
+            User&nbsp;<span className="max-sm:hidden">profile &nbsp;</span>(
             {shortenAddress(params.address)})
           </h1>
           <CopyButton textToCopy={params.address} />
