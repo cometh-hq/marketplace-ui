@@ -20,6 +20,7 @@ const priceTriggerVariants = cva("", {
     size: {
       default: "text-base",
       sm: "text-sm",
+      lg: "text-lg",
     },
     fontWeight: {
       default: "font-bold",

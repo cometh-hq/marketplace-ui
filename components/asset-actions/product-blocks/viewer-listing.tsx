@@ -32,12 +32,12 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Price</ProductBlockLabel>
-        <Price amount={asset.orderbookStats.lowestListingPrice} isNativeToken={true} />
+        <Price size="lg" amount={asset.orderbookStats.lowestListingPrice} isNativeToken={true} />
       </ProductBlockDividedColumn>
 
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Best Offer</ProductBlockLabel>
-        <Price amount={asset.orderbookStats.highestOfferPrice} isNativeToken={true} />
+        <Price size="lg" amount={asset.orderbookStats.highestOfferPrice} isNativeToken={true} />
       </ProductBlockDividedColumn>
 
       <ProductBlockDividedColumn>

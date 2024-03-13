@@ -30,7 +30,7 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
     <ProductBlockContainer>
       <ProductBlockDividedColumn>
         <ProductBlockLabel>Price</ProductBlockLabel>
-        <Price amount={listingPrice} isNativeToken={true} />
+        <Price size="lg" amount={listingPrice} isNativeToken={true} />
       </ProductBlockDividedColumn>
 
       <BestOfferColumn asset={asset} />

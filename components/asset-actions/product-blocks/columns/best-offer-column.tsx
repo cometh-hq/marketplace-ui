@@ -19,7 +19,7 @@ export const BestOfferColumn = ({ asset }: BestOfferColumnProps) => {
           Best Offer
         </span>
       </ProductBlockLabel>
-      <Price variant="accent" amount={asset.orderbookStats.highestOfferPrice} isNativeToken={true} />
+      <Price size="lg" variant="accent" amount={asset.orderbookStats.highestOfferPrice} isNativeToken={true} />
     </ProductBlockDividedColumn>
   )
 }
