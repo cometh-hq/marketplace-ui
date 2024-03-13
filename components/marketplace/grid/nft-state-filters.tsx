@@ -62,7 +62,7 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
       {viewerAddress && !isOnProfilePage && (
         <Link href={`/profile/${viewerAddress}`}>
           <NFTStateFilterItem
-            label="My NFTs"
+            label="My collectibles"
             iconComponent={<UserIcon size="16" className="mr-2" />}
           />
         </Link>

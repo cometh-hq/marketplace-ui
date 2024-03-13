@@ -1,10 +1,13 @@
 "use client"
 
+import { useMemo } from "react"
 import {
   useAssetReceivedOffers,
   useAssetSentOffers,
 } from "@/services/orders/asset-buy-offers"
 import { Address } from "viem"
+
+import { useCurrentViewerAddress } from "@/lib/web3/auth"
 
 import { Tabs } from "../../../ui/tabs"
 import { TabBar } from "./tab-bar"
@@ -21,6 +24,11 @@ export const AccountAssetActivities = ({
   walletAddress,
   children,
 }: AccountAssetActivitiesProps) => {
+  const viewerAddress = useCurrentViewerAddress()
+  const owner = useMemo(() => {
+    return walletAddress === viewerAddress
+  }, [viewerAddress, walletAddress])
+
   const receivedOffers = useAssetReceivedOffers({ owner: walletAddress })
   const sentOffers = useAssetSentOffers({ owner: walletAddress })
 
@@ -29,6 +37,7 @@ export const AccountAssetActivities = ({
       <TabBar
         receivedCounter={receivedOffers.length}
         sentCounter={sentOffers.length}
+        owner={owner}
       />
       <AssetsSearchTabContent>{children}</AssetsSearchTabContent>
       <BuyOffersTabContent offers={receivedOffers} />

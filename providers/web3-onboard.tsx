@@ -36,9 +36,15 @@ import infinityWalletWalletModule from '@web3-onboard/infinity-wallet'
 import zealWalletModule from '@web3-onboard/zeal'
 import xdefiWalletModule from '@web3-onboard/xdefi'
 import phantomModule from '@web3-onboard/phantom'
+import walletConnectModule from '@web3-onboard/walletconnect'
 import { env } from "@/config/env"
 import networks from "@/config/networks"
 import { COMETH_CONNECT_STORAGE_LABEL } from "@/config/site"
+
+// const walletConnect = walletConnectModule({
+//   version: 2,
+//   projectId: process.env.WALLET_CONNECT_PROJECTID || "projectId",
+// });
 
 const web3OnboardNetworks = Object.values(networks).map((network) => {
   return {
@@ -153,6 +159,7 @@ export function Web3OnboardProvider({
       infinityWalletWalletModule(),
       zealWalletModule(),
       xdefiWalletModule(),
+      // walletConnect,
     ]
     if (options.isComethWallet) {
       // TODO: Remove hack once connect is fixed and removed the spread
