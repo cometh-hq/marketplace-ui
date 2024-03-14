@@ -192,7 +192,6 @@ const renderActivityEventCell = (activity: AssetActivity) => {
     }
   } else if (isOrderActivity(activity)) {
     let label = ""
-    console.log("bloboblblbbl", activity)
 
     if (activity.order.orderStatus === TradeStatus.FILLED) {
       label =

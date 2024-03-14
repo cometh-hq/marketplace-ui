@@ -39,6 +39,7 @@ const iconVariants = cva("object-contain", {
     size: {
       default: "w-5 h-5",
       sm: "w-4 h-4",
+      lg: "w-6 h-6",
     },
   },
   defaultVariants: {
