@@ -4,7 +4,8 @@ import { useAccount } from "wagmi"
 
 import { CurrentAccountDropdown } from "./account-dropdown/CurrentAccountDropdown"
 import { Button } from "./ui/Button"
-import { useOpenLoginModal } from "@/providers/authentication/rainbowKit/rainbowKitHooks"
+import { useOpenLoginModal } from "@/providers/authentication/authenticationUiSwitch"
+
 
 export function AuthenticationButton({
   children,

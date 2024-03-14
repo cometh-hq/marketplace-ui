@@ -1,6 +1,6 @@
 "use client"
 
-import { MarketplaceWagmiProvider } from "./authentication/rainbowKit/rainbowKitWagmiProvider"
+import { MarketplaceWagmiProvider } from "@/providers/authentication/authenticationUiSwitch"
 import { CurrentCollectionProvider } from "./currentCollection/currentCollectionProvider"
 import { ReactQueryProvider } from "./react-query"
 import { AppThemeProvider } from "./theme"

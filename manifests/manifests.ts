@@ -1,4 +1,4 @@
-import { Manifest } from "@/manifests/types"
+import { AuthenticationUiLibrary, Manifest } from "@/manifests/types"
 import { Address } from "viem"
 
 import { env } from "@/config/env"
@@ -43,6 +43,7 @@ const manifest: Manifest = {
     currencyId: "usd", // all currencies can be found in the currencies.ts file
     currencySymbol: "$", // symbol to display after the amount
   },
+  authenticationUiType: AuthenticationUiLibrary.WEB3_MODAL,
 }
 
 export { manifest }

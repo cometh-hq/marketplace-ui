@@ -365,10 +365,10 @@
     preact "^10.16.0"
     sha.js "^2.4.11"
 
-"@cometh/connect-sdk-viem@2.0.0-rc.1":
-  version "2.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@cometh/connect-sdk-viem/-/connect-sdk-viem-2.0.0-rc.1.tgz#c12b526e6aece83e3d38b01deb763f4ca1731620"
-  integrity sha512-niq7QQYqe0vNeUYcEycsN3iMBz9Pj8o58pwYVmvnpPfm8md1KIAuiZXYAfsh/AcE/DCY4vILlGhWXF+ZlR6m5g==
+"@cometh/connect-sdk-viem@2.0.0-rc.2":
+  version "2.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@cometh/connect-sdk-viem/-/connect-sdk-viem-2.0.0-rc.2.tgz#bcececafa1b3718c9dce320a25531abacf5740ff"
+  integrity sha512-J//R6x5gmCMq2TiFdHz8/0fcxP7M0mp5Sdx4o28WzWYLF8SJtOi96R7743vVzMB7E76Qce08GW0OKt2Ny9I9Rw==
   dependencies:
     "@babel/traverse" "^7.23.4"
     "@cometh/connect-sdk" "^1.2.13"

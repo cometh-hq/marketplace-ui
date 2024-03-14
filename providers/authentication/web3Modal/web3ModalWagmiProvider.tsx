@@ -2,7 +2,7 @@
 
 import { manifest } from "@/manifests/manifests"
 import { Chain } from "@wagmi/chains"
-import { createWeb3Modal } from "@web3modal/wagmi/react"
+import { createWeb3Modal, useWeb3Modal } from "@web3modal/wagmi/react"
 import { createConfig, http, WagmiProvider } from "wagmi"
 
 import { marketplaceChain } from "../marketplaceWagmiChain"
@@ -17,11 +17,17 @@ export const wagmiConfig = createConfig({
   ssr: true,
 })
 
+export const useOpenLoginModal = () => {
+  const { open } = useWeb3Modal()
+  return open
+}
+
+
 createWeb3Modal({
   wagmiConfig,
   projectId: manifest.walletConnectProjectId,
   connectorImages: {
-    "cometh-connect":
+    "cometh":
       "https://pbs.twimg.com/profile_images/1679433363818442753/E2kNVLBe_400x400.jpg",
   },
 })

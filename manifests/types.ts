@@ -1,6 +1,12 @@
 import init from "@web3-onboard/core"
 import { Address } from "viem"
+
 import { SupportedCurrencies } from "../types/currencies"
+
+export enum AuthenticationUiLibrary {
+  RAINBOW_KIT = "RAINBOW_KIT",
+  WEB3_MODAL = "WEB3_MODAL",
+}
 
 export type Manifest = {
   marketplaceName: string
@@ -31,7 +37,8 @@ export type Manifest = {
   rpcUrl?: string
   areContractsSponsored: boolean
   walletConnectProjectId: string
-  
+  authenticationUiType: AuthenticationUiLibrary
+
   fiatCurrency: {
     enable: boolean
     currencyId: SupportedCurrencies

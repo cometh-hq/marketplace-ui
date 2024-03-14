@@ -8,6 +8,7 @@ import { createConfig, http, WagmiProvider } from "wagmi"
 import { marketplaceChain } from "../marketplaceWagmiChain"
 import { MarketplaceRainbowKitProvider } from "./marketplaceRainbowKitProvider"
 import { wagmiConnectors } from "./rainbowKitWagmiConnectors"
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 export const wagmiConfig = createConfig({
   connectors: wagmiConnectors,
@@ -17,6 +18,11 @@ export const wagmiConfig = createConfig({
   },
   ssr: true,
 })
+
+export const useOpenLoginModal = () => {
+  const { openConnectModal } = useConnectModal();
+  return openConnectModal
+} 
 
 export function MarketplaceWagmiProvider({
   children,

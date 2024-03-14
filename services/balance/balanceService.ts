@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react"
-import { wagmiConfig } from "@/providers/authentication/rainbowKit/rainbowKitWagmiProvider"
+import { wagmiConfig } from "@/providers/authentication/authenticationUiSwitch"
 import { useQueryClient } from "@tanstack/react-query"
 import { getBalance, readContract } from "@wagmi/core"
 import { Address, erc20Abi } from "viem"
