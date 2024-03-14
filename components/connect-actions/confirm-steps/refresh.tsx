@@ -24,7 +24,7 @@ export const RefreshStep: React.FC<RefreshStepProps> = ({
   const handleRefresh = async () => {
     setIsLoading(true)
     try {
-      const res = await retrieveWalletAddressFromSigner(userAddress)
+      await retrieveWalletAddressFromSigner(userAddress)
       localStorage.setItem("hasRetrieveWalletAddress", "true")
       
       try {
