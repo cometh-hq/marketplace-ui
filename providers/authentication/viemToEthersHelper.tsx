@@ -21,7 +21,7 @@ function clientToProvider(client: Client<Transport, Chain>) {
 
 export function useEthersProvider() {
   const client = useClient()
-  return useMemo(() => client && clientToProvider(client), [client])
+  return useMemo(() => client && clientToProvider(client as any), [client])
 }
 
 function clientToSigner(
@@ -44,7 +44,7 @@ export function useEthersSigner() {
   const { data: client } = useConnectorClient()
   const { address } = useAccount()
   return useMemo(
-    () => (client && address ? clientToSigner(client, address) : undefined),
+    () => (client && address ? clientToSigner(client as any, address) : undefined),
     [client, address]
   )
 }

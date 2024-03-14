@@ -5,11 +5,11 @@ import { Chain } from "@wagmi/chains"
 import { createWeb3Modal } from "@web3modal/wagmi/react"
 import { createConfig, http, WagmiProvider } from "wagmi"
 
-import { marketplaceChain } from "./marketplaceWagmiChain"
-import { walletConnectors } from "./wagmiConnectors"
+import { marketplaceChain } from "../marketplaceWagmiChain"
+import { wagmiConnectors } from "./web3ModalWagmiConnectors"
 
 export const wagmiConfig = createConfig({
-  connectors: walletConnectors,
+  connectors: wagmiConnectors,
   chains: [marketplaceChain] as [Chain, ...Chain[]],
   transports: {
     [marketplaceChain.id]: http(manifest.rpcUrl),
@@ -24,7 +24,6 @@ createWeb3Modal({
     "cometh-connect":
       "https://pbs.twimg.com/profile_images/1679433363818442753/E2kNVLBe_400x400.jpg",
   },
-  featuredWalletIds: ["cometh-connect"],
 })
 
 export function MarketplaceWagmiProvider({
