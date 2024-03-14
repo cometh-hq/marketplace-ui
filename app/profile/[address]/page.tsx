@@ -20,13 +20,10 @@ export default function ProfilePage({
 }) {
   const { filtersRaw } = useFilters()
   const { username, isFetchingUsername } = useUsername(params.address)
-  console.log("username", username)
-  console.log("params.address", params.address)
   const user =
     username && !isFetchingUsername
       ? `@${username}`
       : shortenAddress(params.address)
-  console.log("user", user)
 
   if (!filtersRaw) {
     return null

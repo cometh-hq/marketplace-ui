@@ -70,7 +70,7 @@ export const UserLink = memo(function UserLink({
 export const UserButton = function UserButton({
   user,
   variant,
-  icon = () => <User className="mr-2 h-4 w-4" />,
+  icon = () => <User className="mr-2 size-4" />,
   forceDisplayAddress = false,
   ...props
 }: UserButtonProps) {

@@ -1,11 +1,12 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { cosmikClient } from "../clients"
+import { ethers } from "ethers"
 
 export const useUsername = (walletAddress: string) => {
   const { data, isFetching } = useQuery({
     queryKey: ["user", "username", walletAddress],
-    queryFn: () => cosmikClient.get(`/users?address=${walletAddress}`),
+    queryFn: () => cosmikClient.get(`/users?address=${ethers.utils.getAddress(walletAddress)}`),
     retry: false,
     enabled: !!walletAddress,
   })
