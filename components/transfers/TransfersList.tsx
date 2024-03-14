@@ -198,6 +198,8 @@ const renderActivityEventCell = (activity: AssetActivity) => {
     if (activity.order.orderStatus === TradeStatus.FILLED) {
       label =
         activity.order.direction === TradeDirection.BUY ? "Purchase" : "Sale"
+    } else if (activity.order.orderStatus === TradeStatus.OPEN) {
+      label = "Make offer"
     } else {
       label = "Listed"
     }
