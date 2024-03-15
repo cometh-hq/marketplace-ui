@@ -22,6 +22,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           event.target.value,
           globalConfig.decimals.inputMaxDecimals
         )
+        if(props.min !== undefined && value < props.min) {
+          value = props.min.toString()
+        }
       }
 
       setValue(value)

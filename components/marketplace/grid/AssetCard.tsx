@@ -10,13 +10,10 @@ import {
 } from "@cometh/marketplace-sdk"
 import { animated, config, useSpring } from "react-spring"
 import { useBoolean } from "usehooks-ts"
-import { custom } from "viem"
 import { useAccount } from "wagmi"
 
-import globalConfig from "@/config/globalConfig"
 import { getRandomArrayElement } from "@/lib/utils/arrays"
 import { getAssetColor } from "@/lib/utils/colorsAttributes"
-import { shortenTokenId } from "@/lib/utils/formatToken"
 import { cn } from "@/lib/utils/utils"
 import { Appear } from "@/components/ui/Appear"
 import { AssetImage } from "@/components/ui/AssetImage"
