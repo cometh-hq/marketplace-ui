@@ -34,7 +34,7 @@ type GlobalConfig = {
     inputMaxDecimals: number
     nativeTokenDecimals: number
   }
-  coinId?: string
+  coinGeckoId?: string
 }
 
 export const NATIVE_TOKEN_ADDRESS_AS_ERC20 =
@@ -49,8 +49,9 @@ const manifestAddressSchema = z
   .array(addressSchema)
   .min(1)
   .or(addressSchema.transform((v) => [v]))
-const globalConfigContractAddresses =
-  manifestAddressSchema.parse(contractAddress).map((address) => address.toLowerCase() as Address)
+const globalConfigContractAddresses = manifestAddressSchema
+  .parse(contractAddress)
+  .map((address) => address.toLowerCase() as Address)
 
 if (!useNativeTokenForOrders && !manifest.erc20) {
   throw new Error(
@@ -74,7 +75,7 @@ const coinId =
   !useNativeTokenForOrders &&
   manifest.erc20 !== null &&
   manifest.fiatCurrency?.enable
-    ? manifest.erc20.id
+    ? manifest.erc20.coinGeckoId
     : network.nativeToken.id
 
 const ordersDisplayCurrency = {
@@ -113,7 +114,7 @@ const globalConfig: GlobalConfig = {
     inputMaxDecimals: 18,
     nativeTokenDecimals: 18,
   },
-  coinId,
+  coinGeckoId: coinId,
 }
 
 export default globalConfig

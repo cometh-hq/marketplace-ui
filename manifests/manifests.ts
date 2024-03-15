@@ -23,7 +23,7 @@ const manifest: Manifest = {
   useNativeTokenForOrders: true,
   // The ERC20 token used if useNativeTokenForOrders is false
   erc20: {
-    id: "token_id", // Used to display the fiat price of the token. You can find the id on CoinGecko
+    coinGeckoId: "token_id", // Used to display the fiat price of the token. You can find the id on CoinGecko
     name: "My Token",
     symbol: "MTK",
     address: "0x42f671d85624b835f906d3aacc47745795e4b4f8",
@@ -43,7 +43,7 @@ const manifest: Manifest = {
     currencyId: "usd", // all currencies can be found in the currencies.ts file
     currencySymbol: "$", // symbol to display after the amount
   },
-  authenticationUiType: AuthenticationUiLibrary.WEB3_MODAL,
+  authenticationUiType: AuthenticationUiLibrary.RAINBOW_KIT,
 }
 
 export { manifest }

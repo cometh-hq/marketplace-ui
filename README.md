@@ -33,7 +33,7 @@ Based on the provided `.env.example`, here's an example of how your `.env` file 
 NEXT_PUBLIC_NODE_ENV=development
 NEXT_PUBLIC_BASE_PATH=""
 NEXT_PUBLIC_RPC_URL="<YOUR_RPC_URL>"
-NEXT_PUBLIC_CONTRACT_ADDRESS=<YOUR_ERC_721_CONTRACT_ADDRESS>
+NEXT_PUBLIC_CONTRACT_ADDRESS=<YOUR_ERC_721_CONTRACT_ADDRESS_1>,<YOUR_ERC_721_CONTRACT_ADDRESS_2>
 NEXT_PUBLIC_NETWORK_ID=<YOUR_NETWORK_ID>
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=<YOUR_WALLET_CONNECT_PROJECT_ID>
 
@@ -51,7 +51,7 @@ The **NEXT_PUBLIC_COMETH_MARKETPLACE_API_URL** is set by default for the polygon
 
 👉 To add *Cometh Connect* in your marketplace, you need to activate the product on your project: [Cometh Connect](https://docs.cometh.io/connect/quickstart/getting-started).
 
-The boilerplate uses RainbowKit which requires a project ID to work. You can get your own project id for the `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID`
+The boilerplate uses RainbowKit or Web 3 modal which require a Walle Connect project ID to work. You can get your own project id for the `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` on the [wallet connect website](https://cloud.walletconnect.com/sign-in).
 
 Setting up `NEXT_PUBLIC_RPC_URL` is not mandatory but we strongly advise so get a private RPC endpoint you can use for your marketplace (Alchemy, Infura...).
 
@@ -63,6 +63,7 @@ Use the `manifests.ts` file to configure essential aspects of your marketplace. 
 - Asset attribute configurations.
 - Network details (update if not on polygon).
 - Currency settings. It's possible to use your own ERC20 instead of the native currency. 
+- Fiat currency settings. You can display live fiat currency conversions. 
 
 🔧 **Important:** It's crucial to customize this `manifests.ts` file to align with the specifics of your marketplace.
 
@@ -135,3 +136,7 @@ All supported `currencyId` can be found in `types/currencies.ts`.
 #### What is an RPC and why would I need one?
 
 An RPC node is the entry point of calls made to the blockchain. By default our tools will use public free RPC urls. However, to avoid throttling and performance issues in production, it is strongly recommended to find a better private RPC dedicated to your app. 
+
+#### Can I use Web 3 modal instead of Rainbow Kit? 
+
+Yes there is a variable in the manifest dedicated to choosing between those two. If you want to use a third different solution you can have a look at the `authenticationUiSwitch.ts` file. 

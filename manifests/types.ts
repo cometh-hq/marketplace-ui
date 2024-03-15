@@ -27,7 +27,7 @@ export type Manifest = {
   chainId: number
   useNativeTokenForOrders: boolean
   erc20: {
-    id?: string
+    coinGeckoId?: string
     name: string
     symbol: string
     address: string

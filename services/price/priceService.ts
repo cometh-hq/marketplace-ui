@@ -6,7 +6,7 @@ import axios from "axios"
 import { env } from "@/config/env"
 import globalConfig from "@/config/globalConfig"
 
-const coinId = globalConfig.coinId?.toLowerCase()
+const coinId = globalConfig.coinGeckoId?.toLowerCase()
 const fiatCurrencyId = manifest.fiatCurrency?.currencyId
 
 const useTokenFiatPrice = () => {
