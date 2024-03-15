@@ -1,3 +1,7 @@
+import { useMemo } from "react"
+import { useAccount } from "wagmi"
+
 export const useIsComethConnectWallet = () => {
-  return false
+  const { connector } = useAccount()
+  return useMemo(() => connector?.type === "cometh", [connector])
 }

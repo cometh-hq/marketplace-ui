@@ -1,6 +1,9 @@
 import { useMemo } from "react"
+import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
+import { ComethProvider, ComethWallet } from "@cometh/connect-sdk"
+import { useQuery } from "@tanstack/react-query"
 import { providers } from "ethers"
-import type { Account, Chain, Client, Transport } from "viem"
+import type { Address, Chain, Client, Transport } from "viem"
 import { useAccount, useClient, useConnectorClient } from "wagmi"
 
 function clientToProvider(client: Client<Transport, Chain>) {
@@ -21,7 +24,7 @@ function clientToProvider(client: Client<Transport, Chain>) {
 
 export function useEthersProvider() {
   const client = useClient()
-  return useMemo(() => client && clientToProvider(client), [client])
+  return useMemo(() => client && clientToProvider(client as any), [client])
 }
 
 function clientToSigner(
@@ -39,12 +42,32 @@ function clientToSigner(
   const signer = provider.getSigner(accountAddress)
   return signer
 }
-
+function useComethWallet(address?: Address) {
+  const { connector } = useAccount()
+  const isComethWallet = useIsComethConnectWallet()
+  const queryResult = useQuery({
+    queryKey: ["useComethWallet", isComethWallet, address],
+    queryFn: async () => {
+      if (!isComethWallet) return null
+      const wallet = await (connector as any).getComethWallet()
+      return wallet as ComethWallet
+    },
+  })
+  return queryResult.data
+}
 export function useEthersSigner() {
   const { data: client } = useConnectorClient()
-  const { address } = useAccount()
-  return useMemo(
-    () => (client && address ? clientToSigner(client, address) : undefined),
-    [client, address]
-  )
+  const { address, connector } = useAccount()
+  const isComethWallet = useIsComethConnectWallet()
+  const comethWallet = useComethWallet(address)
+  return useMemo(() => {
+    if (isComethWallet && comethWallet && connector) {
+      const provider = new ComethProvider(comethWallet)
+      return provider.getSigner()
+    } else {
+      return client && address
+        ? clientToSigner(client as any, address)
+        : undefined
+    }
+  }, [client, address, isComethWallet, comethWallet, connector])
 }

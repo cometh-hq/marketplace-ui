@@ -1,3 +1,5 @@
+"use client"
+
 import globalConfig from "@/config/globalConfig"
 import {
   arbitrum,

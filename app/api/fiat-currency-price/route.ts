@@ -23,7 +23,6 @@ export async function GET(request: NextRequest) {
         },
       }
     )
-    console.log("CACHED " + res.cached + " for " + id + " " + currency)
     const currentFiatPrice = res.data
 
     return Response.json({ currentFiatPrice }, { status: 200 })

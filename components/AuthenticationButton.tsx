@@ -1,10 +1,11 @@
-import { useWeb3Modal } from "@web3modal/wagmi/react"
 import { cx } from "class-variance-authority"
 import { Wallet } from "lucide-react"
 import { useAccount } from "wagmi"
 
 import { CurrentAccountDropdown } from "./account-dropdown/CurrentAccountDropdown"
 import { Button } from "./ui/Button"
+import { useOpenLoginModal } from "@/providers/authentication/authenticationUiSwitch"
+
 
 export function AuthenticationButton({
   children,
@@ -16,14 +17,14 @@ export function AuthenticationButton({
   customText?: string
 }) {
   const account = useAccount()
-  const { open } = useWeb3Modal()
+  const openLoginModal = useOpenLoginModal()
 
   if (account.isConnected && !children) return <CurrentAccountDropdown />
 
   if (!account.isConnected) {
     return (
       <Button
-        onClick={() => open && open()}
+        onClick={() => openLoginModal && openLoginModal()}
         isLoading={account.isReconnecting}
         disabled={account.isReconnecting}
         className={cx({

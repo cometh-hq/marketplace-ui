@@ -1,6 +1,5 @@
 import "@/styles/globals.css"
 
-import { Suspense } from "react"
 import { Metadata } from "next"
 import { AppProviders } from "@/providers/appProviders"
 
