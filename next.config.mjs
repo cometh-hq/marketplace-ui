@@ -14,7 +14,7 @@ const nextConfig = {
   },
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
   rewrites: async () => {
-    return [{ source: "/", destination: "/marketplace" }]
+    return [{ source: "/", destination: "/nfts" }]
   },
 }
 

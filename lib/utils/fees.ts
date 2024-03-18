@@ -15,7 +15,6 @@ export const calculateAmountWithoutFees = (
   priceWithFees: BigNumberish,
   feePercentage: BigNumberish
 ): BigNumber => {
-
   const scaledPercentage = _scalePrecision(feePercentage).div(100)
 
   return _scalePrecision(priceWithFees).div(
@@ -28,7 +27,6 @@ export const calculateFeesAmount = (
   percentage: number
 ): string => {
   const intFeePercentage = percentage * 10 ** FEE_PERCENTAGE_PRECISION
-  
 
   const feeAmount = BigNumber.from(intFeePercentage)
     .mul(price)

@@ -1,49 +1,33 @@
 import { useEffect, useState } from "react"
-import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { ethers } from "ethers"
+import { useChainId, useSwitchChain } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
-import { toast } from "@/components/ui/toast/use-toast"
-
-import { useWallet } from "./auth"
+import { toast } from "@/components/ui/toast/hooks/useToast"
 
 export const useCorrectNetwork = () => {
-  const { onboard } = useWeb3OnboardContext()
+  const { switchChain } = useSwitchChain()
+  const currentChainId = useChainId()
+
   const [isChainSupported, setIsChainSupported] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
-  const supportedChain = ethers.utils.hexValue(globalConfig.network.chainId)
-  const walletChaindId = useWallet()?.chains[0]?.id
+  const supportedChainHex = ethers.utils.hexValue(globalConfig.network.chainId)
+  const supportedChainId = parseInt(supportedChainHex, 16)
 
   useEffect(() => {
-    if (!walletChaindId) {
+    if (!currentChainId) {
       setIsChainSupported(false)
       return
     }
-    setIsChainSupported(
-      parseInt(walletChaindId, 16) === parseInt(supportedChain, 16)
-    )
-  }, [walletChaindId, supportedChain])
-
-  useEffect(() => {
-    if (onboard) {
-      const wallets = onboard.state.select("wallets")
-      const subscribe = wallets.subscribe((wallet) => {
-        const currentChainId =
-          wallet && wallet[0] ? wallet[0].chains[0].id : null
-
-        setIsChainSupported(currentChainId === supportedChain)
-      })
-
-      return () => {
-        subscribe.unsubscribe()
-      }
-    }
-  }, [])
+    setIsChainSupported(currentChainId === supportedChainId)
+  }, [currentChainId, supportedChainId])
 
   const switchNetwork = async () => {
     setIsLoading(true)
     try {
-      await onboard?.setChain({ chainId: supportedChain })
+      await switchChain({
+        chainId: supportedChainId,
+      })
     } catch (error: any) {
       console.error(error)
       toast({

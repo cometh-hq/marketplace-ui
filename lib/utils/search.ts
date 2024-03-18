@@ -10,7 +10,7 @@ import { QueryKey, UseInfiniteQueryResult } from "@tanstack/react-query"
 export const findAssetInSearchResults = (
   search: [
     QueryKey,
-    UseInfiniteQueryResult<AssetWithTradeData[]> | undefined
+    UseInfiniteQueryResult<AssetWithTradeData[]> | undefined,
   ][],
   tokenId: string
 ) => {

@@ -1,4 +1,4 @@
-import { usePathname as useNextPathname } from 'next/navigation'
+import { usePathname as useNextPathname } from "next/navigation"
 
 /**
  * Retrieves the current url pathname, **from the base path**.
@@ -9,10 +9,14 @@ import { usePathname as useNextPathname } from 'next/navigation'
  * when the page hydrates in the browser. See: https://github.com/vercel/next.js/issues/46562
  */
 export function usePathname(): string {
-  let pathname = useNextPathname();
-  if (pathname && process?.env?.NEXT_PUBLIC_BASE_PATH && pathname.startsWith(process.env.NEXT_PUBLIC_BASE_PATH)) {
+  let pathname = useNextPathname()
+  if (
+    pathname &&
+    process?.env?.NEXT_PUBLIC_BASE_PATH &&
+    pathname.startsWith(process.env.NEXT_PUBLIC_BASE_PATH)
+  ) {
     pathname = pathname.substring(process.env.NEXT_PUBLIC_BASE_PATH.length)
-    return pathname === '' ? '/' : pathname
+    return pathname === "" ? "/" : pathname
   }
-  return pathname;
+  return pathname
 }
