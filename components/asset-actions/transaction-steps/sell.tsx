@@ -34,7 +34,7 @@ export type SellStepProps = {
 export function SellStep({ asset, onClose }: SellStepProps) {
   const { mutateAsync: sell, isPending } = useSellAsset()
   const [price, setPrice] = useState("")
-  const [validity, setValidity] = useState("1")
+  const [validity, setValidity] = useState("10")
 
   const orderParams = useMemo(() => {
     if (!price) return null
@@ -76,15 +76,14 @@ export function SellStep({ asset, onClose }: SellStepProps) {
 
         <div className="flex flex-col gap-3 sm:w-auto">
           <Label htmlFor="make-buy-offer-price">Validity time</Label>
-          <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
+          <Select defaultValue="10" onValueChange={(v) => setValidity(v)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">24h</SelectItem>
-              <SelectItem value="2">48h</SelectItem>
-              <SelectItem value="3">72h</SelectItem>
-              <SelectItem value="10">10 days</SelectItem>
+            <SelectItem value="10">10 days</SelectItem>
+            <SelectItem value="20">30 days</SelectItem>
+            <SelectItem value="30">90 days</SelectItem>
             </SelectContent>
           </Select>
         </div>

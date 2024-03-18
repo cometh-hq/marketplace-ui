@@ -8,7 +8,6 @@ import { CollectionApprovalStep } from "../transaction-steps/collection-approval
 import { SellStep } from "../transaction-steps/sell"
 import { AddGasStep } from "../transaction-steps/add-gas"
 import { ButtonLoading } from "@/components/button-loading"
-import { cn } from "@/lib/utils/utils"
 import { useState } from "react"
 
 export type SellAssetButtonProps = {

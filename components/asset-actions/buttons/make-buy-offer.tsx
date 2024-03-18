@@ -54,11 +54,13 @@ export function MakeBuyOfferPriceDialog({
   variant?: string
 }) {
   const [price, setPrice] = useState("")
-  const [validity, setValidity] = useState("1")
+  const [validity, setValidity] = useState("10")
   const orderParams = useMemo(() => {
     try {
       const parsedPrice = parseUnits(price, globalConfig.ordersErc20.decimals)
+      console.log("validity 2", validity)
       return { price: parsedPrice, validity }
+
     } catch (e) {
       return null
     }
@@ -100,15 +102,14 @@ export function MakeBuyOfferPriceDialog({
           </div>
           <div className="flex w-full flex-col gap-3 md:w-1/3">
             <Label htmlFor="make-buy-offer-price">Validity time</Label>
-            <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
+            <Select defaultValue="10" onValueChange={(v) => setValidity(v)}>
               <SelectTrigger className="md:w-[180px]">
                 <SelectValue placeholder="" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">24h</SelectItem>
-                <SelectItem value="2">48h</SelectItem>
-                <SelectItem value="3">72h</SelectItem>
                 <SelectItem value="10">10 days</SelectItem>
+                <SelectItem value="20">30 days</SelectItem>
+                <SelectItem value="30">90 days</SelectItem>
               </SelectContent>
             </Select>
           </div>
