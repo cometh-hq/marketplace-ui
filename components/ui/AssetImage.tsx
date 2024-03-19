@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import Image, { ImageProps } from "next/image"
 import { z } from "zod"
 
@@ -23,7 +23,7 @@ export function AssetImage({
   fallback,
   ...props
 }: AssetImageProps) {
-  const [_src, setSrc] = useState(getImageURL(src ?? fallback ?? null))
+  const [_src, setSrc] = useState(getImageURL(src || fallback || null))
 
   const tried = useRef(false)
   const onError = useCallback(() => {
@@ -32,6 +32,12 @@ export function AssetImage({
     setSrc(getImageURL(fallback) ?? null)
   }, [_src, fallback])
 
+  const isSrcValid = useMemo(() => {
+    const zodUrl = z.string().url()
+    const urlParseRes = zodUrl.safeParse(_src)
+    return urlParseRes.success
+  }, [_src])
+
   if (imageData && imageData.startsWith("<svg")) {
     return (
       <div
@@ -39,12 +45,6 @@ export function AssetImage({
         dangerouslySetInnerHTML={{ __html: imageData }}
       />
     )
-  }
-
-  const zodUrl = z.string().url()
-  const { success: isSrcValid } = zodUrl.safeParse(src)
-  if (!_src) {
-    return <div className="bg-background z-10 size-full" />
   }
 
   if (_src === null || !isSrcValid) {
