@@ -1,3 +1,4 @@
+import { CollectionStandard } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 
@@ -17,4 +18,11 @@ export const useGetCollection = (collectionAddress: Address) => {
     },
     staleTime: 1000 * 15,
   })
+}
+
+export const useGetCollectionStandard = (
+  collectionAddress: Address
+): CollectionStandard | undefined => {
+  const collection = useGetCollection(collectionAddress)
+  return collection.data?.standard
 }

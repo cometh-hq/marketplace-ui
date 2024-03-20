@@ -44,10 +44,15 @@ export function ViewerListingProductBlock({ asset }: SellProductBlockProps) {
         />
       </ProductBlockDividedColumn>
 
-      <ProductBlockDividedColumn>
-        <ProductBlockLabel>Listed by</ProductBlockLabel>
-        <UserLink className="mt-1" user={{ address: asset.owner as Address }} />
-      </ProductBlockDividedColumn>
+      {asset.owner && (
+        <ProductBlockDividedColumn>
+          <ProductBlockLabel>Listed by</ProductBlockLabel>
+          <UserLink
+            className="mt-1"
+            user={{ address: asset.owner as Address }}
+          />
+        </ProductBlockDividedColumn>
+      )}
 
       <ProductBlockCenteredColumn>
         <AuthenticationButton fullVariant>

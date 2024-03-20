@@ -28,14 +28,15 @@ export function SellProductBlock({ asset }: SellProductBlockProps) {
       </ProductBlockDividedColumn>
 
       <BestOfferColumn asset={asset} />
-
-      <ProductBlockDividedColumn>
-        <ProductBlockLabel>Owned by</ProductBlockLabel>
-        <UserLink
-          className="mt-0.5"
-          user={{ address: asset.owner as Address }}
-        />
-      </ProductBlockDividedColumn>
+      {asset.owner && (
+        <ProductBlockDividedColumn>
+          <ProductBlockLabel>Owned by</ProductBlockLabel>
+          <UserLink
+            className="mt-0.5"
+            user={{ address: asset.owner as Address }}
+          />
+        </ProductBlockDividedColumn>
+      )}
 
       <ProductBlockCenteredColumn>
         <AuthenticationButton fullVariant>

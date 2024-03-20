@@ -197,7 +197,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
   const viewerAddress = account.address
 
   const isOwnerAsset = useMemo(() => {
-    return asset.owner === viewerAddress?.toLowerCase()
+    return asset.owner && asset.owner === viewerAddress?.toLowerCase()
   }, [viewerAddress, asset.owner])
 
   return (

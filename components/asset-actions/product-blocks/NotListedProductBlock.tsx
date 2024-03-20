@@ -29,13 +29,15 @@ export function NotListedProductBlock({ asset }: NotListedProductBlockProps) {
 
       <BestOfferColumn asset={asset} />
 
-      <ProductBlockDividedColumn>
-        <ProductBlockLabel>Owned by</ProductBlockLabel>
-        <UserLink
-          className="mt-0.5"
-          user={{ address: asset.owner as Address }}
-        />
-      </ProductBlockDividedColumn>
+      {asset.owner && (
+        <ProductBlockDividedColumn>
+          <ProductBlockLabel>Owned by</ProductBlockLabel>
+          <UserLink
+            className="mt-0.5"
+            user={{ address: asset.owner as Address }}
+          />
+        </ProductBlockDividedColumn>
+      )}
 
       <ProductBlockCenteredColumn>
         <AuthenticationButton customText="Login to make an offer" fullVariant>

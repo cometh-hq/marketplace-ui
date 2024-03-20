@@ -33,10 +33,16 @@ export function BuyProductBlock({ asset }: BuyProductBlockProps) {
 
       <BestOfferColumn asset={asset} />
 
-      <ProductBlockDividedColumn>
-        <ProductBlockLabel>Listed by</ProductBlockLabel>
-        <UserLink className="mt-1" user={{ address: asset.owner as Address }} />
-      </ProductBlockDividedColumn>
+      {asset.owner && (
+        <ProductBlockDividedColumn>
+          <ProductBlockLabel>Listed by</ProductBlockLabel>
+          <UserLink
+            className="mt-1"
+            user={{ address: asset.owner as Address }}
+          />
+        </ProductBlockDividedColumn>
+      )}
+      
       <ProductBlockCenteredColumn>
         <AuthenticationButton fullVariant customText="Login to buy">
           <SwitchNetwork>

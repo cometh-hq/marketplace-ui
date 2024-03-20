@@ -17,7 +17,7 @@ export function ProductBlock({ asset }: ProductBlockProps) {
   const isOnSale = !!asset.orderbookStats.lowestListingPrice
 
   const viewerIsOwner =
-    viewerAddress && isAddressEqual(asset.owner as Address, viewerAddress)
+    viewerAddress && asset.owner && isAddressEqual(asset.owner as Address, viewerAddress)
   const sellBlock = viewerIsOwner && !isOnSale
   const buyBlock = !viewerIsOwner && isOnSale
   const viewerListingBlock = viewerIsOwner && isOnSale
