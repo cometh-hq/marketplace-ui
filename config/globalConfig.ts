@@ -1,5 +1,6 @@
 import { manifest } from "@/manifests/manifests"
-import { Address, parseEther } from "viem"
+import { CollectionUiSettings } from "@/manifests/types"
+import { Address } from "viem"
 import { z } from "zod"
 
 import networks, { NetworkConfig } from "@/config/networks"
@@ -35,6 +36,7 @@ type GlobalConfig = {
     nativeTokenDecimals: number
   }
   coinGeckoId?: string
+  collectionSettingsByAddress: Record<Address, CollectionUiSettings>
 }
 
 export const NATIVE_TOKEN_ADDRESS_AS_ERC20 =
@@ -91,6 +93,18 @@ if (useNativeTokenForOrders) {
 
 const minimumBalanceForGas = network.minimumBalanceForGas
 
+const DEFAULT_COLLECTION_SETTINGS: CollectionUiSettings = {
+  imageAspectRatio: 1,
+}
+let collectionSettingsByAddress: Record<Address, CollectionUiSettings> = {}
+contractAddress.forEach((address) => {
+  const manifestConfig = manifest.collectionSettingsByAddress[address]
+  collectionSettingsByAddress[address] = {
+    ...DEFAULT_COLLECTION_SETTINGS,
+    ...manifestConfig,
+  }
+})
+
 const globalConfig: GlobalConfig = {
   contractAddresses: globalConfigContractAddresses as Address[],
   defaultContractAddress: globalConfigContractAddresses[0] as Address,
@@ -115,6 +129,7 @@ const globalConfig: GlobalConfig = {
     nativeTokenDecimals: 18,
   },
   coinGeckoId: coinId,
+  collectionSettingsByAddress,
 }
 
 export default globalConfig

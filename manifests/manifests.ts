@@ -44,6 +44,7 @@ const manifest: Manifest = {
     currencySymbol: "$", // symbol to display after the amount
   },
   authenticationUiType: AuthenticationUiLibrary.RAINBOW_KIT,
+  collectionSettingsByAddress: {},
 }
 
 export { manifest }
