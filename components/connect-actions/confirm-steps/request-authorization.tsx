@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { cosmikClient } from "@/services/clients"
 
@@ -14,8 +14,10 @@ export const RequestAuthorizationStep: React.FC<
   RequestAuthorizationStepProps
 > = ({ userAddress, onValid }) => {
   const { initNewSignerRequest } = useWeb3OnboardContext()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleNewSignerRequest = async () => {
+    setIsLoading(true)
     try {
       const addSignerRequest = await initNewSignerRequest(userAddress)
       const response = await cosmikClient.post(
@@ -25,13 +27,15 @@ export const RequestAuthorizationStep: React.FC<
       if (response.data.success) {
         onValid()
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error sending the authorization request", error)
       toast({
         title: "Error",
-        description: "There was an error sending the authorization request.",
+        description: error?.message || "There was an error sending the authorization request.",
         variant: "destructive",
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -43,7 +47,7 @@ export const RequestAuthorizationStep: React.FC<
         markertplace. This step is mandatory to link to your Cosmik Battle
         account.
       </p>
-      <Button size="lg" onClick={handleNewSignerRequest}>
+      <Button size="lg" onClick={handleNewSignerRequest} isLoading={isLoading}>
         Request Authorization
       </Button>
     </>

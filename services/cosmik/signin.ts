@@ -30,6 +30,19 @@ export const useCosmikSignin = () => {
       //   localStorage.setItem("user", JSON.stringify(data.user))
       // }
       const hasRetrieveWalletAddressInStorage = localStorage.getItem("hasRetrieveWalletAddress")
+
+      // if (typeof walletAddress === "undefined" || !walletAddress) {
+      //   return push(APP_ROUTES.WALLET_REGISTER.PATH);
+      // } else {
+      //   if (isConnectKeyStore) {
+      //     localStorage.setItem(
+      //       "selectedWallet",
+      //       JSON.stringify(COMETH_CONNECT_LABEL)
+      //     );
+      //   }
+      //   push(callbackUrl || APP_ROUTES.HOME.PATH);
+      // }
+
       if (hasRetrieveWalletAddressInStorage) {
         toast({
           title: "Login successful",

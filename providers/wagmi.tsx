@@ -18,7 +18,6 @@ import { WagmiProvider, createConfig, http } from "wagmi"
 import { type Chain as ViemChain } from 'viem'
 
 import globalConfig from "@/config/globalConfig"
-import networks from "@/config/networks"
 
 export const muster = {
   id: 4078,

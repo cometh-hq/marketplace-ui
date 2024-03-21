@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useWeb3OnboardContext } from "@/providers/web3-onboard"
 import { useStorageWallet } from "@/services/web3/use-storage-wallet"
 import { useWalletConnect } from "@/services/web3/use-wallet-connect"
@@ -20,12 +20,23 @@ export const RefreshStep: React.FC<RefreshStepProps> = ({
   const [isLoading, setIsLoading] = useState(false)
   const { connect: connectWallet } = useWalletConnect()
   const { comethWalletAddressInStorage } = useStorageWallet()
+  const [canRefresh, setCanRefresh] = useState(false)
+
+  useEffect(() => {
+    const retrieveWalletAddress = async () => {
+      await retrieveWalletAddressFromSigner(userAddress)
+      setCanRefresh(true)
+    }
+
+    // polling to check if the user has authorized the device
+    const interval = setInterval(retrieveWalletAddress, 2000)
+    return () => clearInterval(interval)
+  }, [])
 
   const handleRefresh = async () => {
     setIsLoading(true)
     try {
       await retrieveWalletAddressFromSigner(userAddress)
-      localStorage.setItem("hasRetrieveWalletAddress", "true")
       
       try {
         initOnboard({
@@ -63,7 +74,7 @@ export const RefreshStep: React.FC<RefreshStepProps> = ({
         size="lg"
         onClick={handleRefresh}
         isLoading={isLoading}
-        disabled={isLoading}
+        disabled={isLoading || !canRefresh}
       >
         Refresh
       </Button>
