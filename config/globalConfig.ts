@@ -99,7 +99,7 @@ const DEFAULT_COLLECTION_SETTINGS: CollectionUiSettings = {
 let collectionSettingsByAddress: Record<Address, CollectionUiSettings> = {}
 contractAddress.forEach((address) => {
   const manifestConfig = manifest.collectionSettingsByAddress[address]
-  collectionSettingsByAddress[address] = {
+  collectionSettingsByAddress[address.toLowerCase() as Address] = {
     ...DEFAULT_COLLECTION_SETTINGS,
     ...manifestConfig,
   }
