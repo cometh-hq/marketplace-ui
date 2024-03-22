@@ -115,19 +115,25 @@ export function Web3OnboardProvider({
   }
 
   const initNewSignerRequest = async (walletAddress: string) => {
+    if (!isAddress(walletAddress)) {
+      throw new Error("Invalid wallet address.")
+    }
+    
     const connectAuthAdaptor = new ConnectAdaptor({
       chainId: chainId,
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
       baseUrl: process.env.NEXT_PUBLIC_COMETH_CONNECT_BASE_URL!,
     })
 
-    if (isAddress(walletAddress)) {
-      throw new Error("Invalid wallet address.")
-    }
+   
     return await connectAuthAdaptor.initNewSignerRequest(walletAddress)
   }
 
   const retrieveWalletAddressFromSigner = async (walletAddress: string) => {
+    if (!isAddress(walletAddress)) {
+      throw new Error("Invalid wallet address.")
+    }
+
     const connectAuthAdaptor = new ConnectAdaptor({
       chainId: chainId,
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
@@ -139,9 +145,7 @@ export function Web3OnboardProvider({
       apiKey: process.env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY!,
     })
 
-    if (isAddress(walletAddress)) {
-      throw new Error("Invalid wallet address.")
-    }
+   
     await wallet.connect(walletAddress)
   }
 
