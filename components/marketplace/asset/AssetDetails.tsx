@@ -9,6 +9,7 @@ import { Address } from "viem"
 import { shortenTokenId } from "@/lib/utils/formatToken"
 import { Badge } from "@/components/ui/Badge"
 import { ShareButton } from "@/components/ui/ShareButton"
+import { TransferAssetButton } from "@/components/asset-actions/buttons/TransferAssetButton"
 import { ProductBlock } from "@/components/asset-actions/product-blocks/ProductBlock"
 import { BreadcrumbContainer, BreadcrumbElement } from "@/components/Breadcrumb"
 
@@ -64,7 +65,10 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
             {asset.metadata.name}
           </BreadcrumbElement>
         </BreadcrumbContainer>
-        <ShareButton />
+        <div>
+          <TransferAssetButton className="mr-2" asset={asset} />
+          <ShareButton />
+        </div>
       </div>
       <div className="text-2xl font-bold opacity-90">
         #{shortenTokenId(asset.tokenId, 7)}
