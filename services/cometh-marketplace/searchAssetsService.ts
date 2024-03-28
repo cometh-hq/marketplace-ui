@@ -58,6 +58,17 @@ export async function getAssetsPaginated(
   return { nfts, total, nextPage: page + 1 }
 }
 
+export const useSearchAssets = (options: AssetSearchFilters) => {
+  return useQuery({
+    queryKey: [
+      "assets",
+      "search",
+      JSON.stringify(options)
+    ],
+    queryFn: () => comethMarketplaceClient.asset.searchAssets(options),
+  })
+}
+
 export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
   const { filters } = useNFTFilters()
   const { currentCollectionAddress } = useCurrentCollectionContext()
@@ -105,7 +116,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
       JSON.stringify(filters),
       options?.page,
       options?.search,
-      options?.owner
+      options?.owner,
     ],
     queryFn: ({ pageParam }) => {
       return getAssetsPaginated(
