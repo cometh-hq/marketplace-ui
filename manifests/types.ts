@@ -8,7 +8,7 @@ export enum AuthenticationUiLibrary {
   WEB3_MODAL = "WEB3_MODAL",
 }
 
-export type CollectionUiSettings = { imageAspectRatio: number }
+export type CollectionUiSettings = { imageAspectRatio: number, floorPriceAttributeTypes: string[] }
 
 export type Manifest = {
   marketplaceName: string
@@ -47,5 +47,5 @@ export type Manifest = {
     currencySymbol: string
   }
 
-  collectionSettingsByAddress: Record<Address, CollectionUiSettings>
+  collectionSettingsByAddress: Record<Address, Partial<CollectionUiSettings>>
 }
