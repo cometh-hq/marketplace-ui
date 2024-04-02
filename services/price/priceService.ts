@@ -27,8 +27,8 @@ const useTokenFiatPrice = () => {
       const price = res.data.currentFiatPrice[coinId][fiatCurrencyId]
       return price as number
     },
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 15,
+    staleTime: 1000 * 60 * 15,
+    gcTime: 1000 * 60 * 90,
   })
 }
 
@@ -42,7 +42,7 @@ export const useConvertPriceToFiat = (amount?: number | null) => {
     if (!amount || isNaN(amount) || !price || price === 0) {
       return null
     }
-    const fiatPrice = amount / price
+    const fiatPrice = amount * price
     return Math.round(fiatPrice * 100) / 100
   }, [amount, price])
 }
