@@ -1,4 +1,4 @@
-import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ContractTransaction } from "ethers"
 import { useAccount } from "wagmi"
@@ -8,7 +8,7 @@ import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { getFirstListing } from "../cometh-marketplace/buyOffersService"
 
 export type BuyAssetOptions = {
-  asset: AssetWithTradeDataCore
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 }
 
 export const useBuyAsset = () => {

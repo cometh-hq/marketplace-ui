@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { useMakeBuyOfferAsset } from "@/services/orders/makeBuyOfferService"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData} from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
@@ -10,7 +10,7 @@ import { Price } from "@/components/ui/Price"
 import { ButtonLoading } from "@/components/ButtonLoading"
 
 export type ConfirmBuyOfferStepProps = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
   price: BigNumber
   validity: string
   onValid: () => void

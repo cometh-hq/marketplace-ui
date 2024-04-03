@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react"
 import { useSellAsset } from "@/services/orders/sellAssetService"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
 import { parseUnits } from "ethers/lib/utils"
 
 import globalConfig from "@/config/globalConfig"
@@ -19,9 +19,10 @@ import {
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
 
 import { SwitchNetwork } from "../buttons/SwitchNetwork"
+import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
 
 export type SellStepProps = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
   onClose: () => void
 }
 
@@ -58,6 +59,8 @@ export function SellStep({ asset, onClose }: SellStepProps) {
       <div className="flex w-full items-center justify-center">
         <AssetHeaderImage asset={asset} />
       </div>
+
+      <AssetFloorPriceLine asset={asset} />
 
       <div className="mt-4 flex w-full  flex-col gap-4 sm:flex-row">
         <div className="flex flex-col gap-3 sm:w-2/3">

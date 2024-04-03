@@ -184,15 +184,15 @@ function renderAssetActions(
     buttonText = "Buy now "
   } else if (!isOwnerAsset) {
     button = (
-      <MakeBuyOfferButton asset={asset as unknown as AssetWithTradeData} />
+      <MakeBuyOfferButton asset={asset} />
     )
     buttonText = "Make an offer"
   } else if (!asset.orderbookStats.lowestListingPrice) {
-    button = <SellAssetButton asset={asset as unknown as AssetWithTradeData} />
+    button = <SellAssetButton asset={asset} />
     buttonText = "Sell now"
   } else {
     button = (
-      <CancelListingButton asset={asset as unknown as AssetWithTradeData} />
+      <CancelListingButton asset={asset} />
     )
     buttonText = "Cancel listing"
   }

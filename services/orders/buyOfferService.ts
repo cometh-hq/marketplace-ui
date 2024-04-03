@@ -3,6 +3,7 @@ import { useSignOrder } from "@/services/orders/signOrderService"
 import {
   AssetWithTradeData,
   NewOrder,
+  SearchAssetWithTradeData,
   TokenType,
   TradeDirection,
 } from "@cometh/marketplace-sdk"
@@ -27,7 +28,7 @@ export type OrderParams = {
 }
 
 export type BuyOfferParams = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 } & OrderParams
 
 export const useBuyOffer = () => {

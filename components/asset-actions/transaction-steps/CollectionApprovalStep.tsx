@@ -1,12 +1,12 @@
 import { manifest } from "@/manifests/manifests"
 import { useApproveCollection } from "@/services/token-approval/approveCollectionService"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
 
 import { Button } from "@/components/ui/Button"
 import { ButtonLoading } from "@/components/ButtonLoading"
 
 export type CollectionApprovalStepProps = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
   onValid: () => void
 }
 

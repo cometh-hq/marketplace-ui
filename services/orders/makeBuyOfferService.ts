@@ -1,5 +1,5 @@
 import { useEthersSigner } from "@/providers/authentication/viemToEthersHelper"
-import { AssetWithTradeData, TradeDirection } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData, TradeDirection } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
@@ -11,12 +11,12 @@ import { useBuildOfferOrder } from "./buildOfferOrderService"
 import { useBuyOffer } from "./buyOfferService"
 
 export type MakeBuyOfferOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
   price: BigNumber
   validity: string
 }
 
-export const useMakeBuyOfferAsset = (asset: AssetWithTradeData) => {
+export const useMakeBuyOfferAsset = (asset: AssetWithTradeData | SearchAssetWithTradeData) => {
   const client = useQueryClient()
   const buildSignBuyOfferOrder = useBuildOfferOrder({
     tradeDirection: TradeDirection.BUY,

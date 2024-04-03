@@ -2,12 +2,12 @@
 
 import { useCallback } from "react"
 import { useCancelListing } from "@/services/orders/cancelListingService"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
 
 import { Button } from "@/components/ui/Button"
 
 export type CancelListingButtonProps = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 }
 
 export function CancelListingButton({ asset }: CancelListingButtonProps) {
