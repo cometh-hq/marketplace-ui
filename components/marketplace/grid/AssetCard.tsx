@@ -229,7 +229,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
         </span>
         {/* <div className="mb-2">#{shortenTokenId(asset.tokenId, 5)}</div> */}
 
-        <div className="w-full rounded-lg ">
+        <div className="w-full rounded-lg">
           <div className="flex flex-col items-start justify-between gap-1 sm:flex-row">
             <div>
               <div className="text-sm font-medium">Price</div>

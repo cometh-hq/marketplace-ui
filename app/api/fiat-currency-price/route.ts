@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       {
         id: `fiat-currency-price-${id}-${currency}`,
         cache: {
-          ttl: 15 * 60 * 1000,
+          ttl: 90 * 60 * 1000,
         },
       }
     )
