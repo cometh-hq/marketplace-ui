@@ -114,15 +114,15 @@ export function TransferAssetButton({
     }
   }, [isConfirmed, asset.tokenId, client, setOpen])
 
-  const isViewerOwner = useMemo(() => {
+  const isViewerNotOwner = useMemo(() => {
     return (
-      asset.owner &&
-      viewerAddress &&
+      !asset.owner ||
+      !viewerAddress ||
       asset.owner.toLowerCase() !== viewerAddress.toLowerCase()
     )
   }, [asset.owner, viewerAddress])
 
-  if (isViewerOwner) return null
+  if (isViewerNotOwner) return null
 
   return (
     <Dialog modal open={open} onOpenChange={setOpen}>
