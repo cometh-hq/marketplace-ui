@@ -8,8 +8,6 @@ import {
   TradeDirection,
   TradeStatus,
 } from "@cometh/marketplace-sdk"
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
 import { BigNumber, ethers } from "ethers"
 import {
   ArrowLeftRightIcon,
@@ -40,8 +38,8 @@ import {
   TooltipTrigger,
 } from "../ui/Tooltip"
 import { UserButton } from "../ui/user/UserButton"
+import { DateTime } from "luxon"
 
-dayjs.extend(relativeTime)
 
 type TransfersListProps = {
   assetTransfers: AssetTransfers
@@ -224,11 +222,16 @@ const TimestampTooltip = ({
   </TooltipProvider>
 )
 
-const renderTimestampCell = (activity: AssetActivity) => {
-  const activityTimestamp = getActivityTimestamp(activity)
-  const dayJsTimestamp = dayjs(activityTimestamp)
-  const timeFromNow = dayJsTimestamp.fromNow()
-  const readableDate = dayJsTimestamp.format("MMMM D, YYYY [at] h:mm A")
+function ActivityTimestampCell({ activity }: { activity: AssetActivity }) {
+  const { timeFromNow, readableDate } = useMemo(() => {
+    const activityTimestamp = getActivityTimestamp(activity)
+    const luxonTimestamp = DateTime.fromMillis(activityTimestamp)
+
+    return {
+      timeFromNow: luxonTimestamp.toRelative(),
+      readableDate: luxonTimestamp.toLocaleString(DateTime.DATETIME_FULL),
+    }
+  }, [activity])
 
   if (isTransferActivity(activity)) {
     return (
@@ -240,7 +243,7 @@ const renderTimestampCell = (activity: AssetActivity) => {
           className="text-muted-foreground hover:text-secondary-foreground flex items-center gap-2 text-sm font-medium"
         >
           {timeFromNow}
-          <ExternalLink size="18" className="" />
+          <ExternalLink size="18" />
         </a>
       </TimestampTooltip>
     )
@@ -252,6 +255,8 @@ const renderTimestampCell = (activity: AssetActivity) => {
         </div>
       </TimestampTooltip>
     )
+  } else {
+    return null // Or return some default UI for other types of activities
   }
 }
 
@@ -270,6 +275,7 @@ const renderActivitiesRows = (
       <TableRow key={getActivityId(activity)}>
         <TableCell className=" items-center">
           {renderActivityEventCell(activity)}
+          <ActivityTimestampCell activity={activity} />
         </TableCell>
 
         <TableCell>
@@ -296,7 +302,9 @@ const renderActivitiesRows = (
             )}
           </div>
         </TableCell>
-        <TableCell>{renderTimestampCell(activity)}</TableCell>
+        <TableCell>
+          <ActivityTimestampCell activity={activity} />
+        </TableCell>
       </TableRow>
     )
   })

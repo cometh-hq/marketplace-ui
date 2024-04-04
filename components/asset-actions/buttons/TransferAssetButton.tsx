@@ -27,6 +27,7 @@ import {
 import { Input } from "@/components/ui/Input"
 import { Label } from "@/components/ui/Label"
 import { toast } from "@/components/ui/toast/hooks/useToast"
+import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
 
 import {
@@ -62,6 +63,7 @@ export function TransferAssetButton({
   const { data: hash, writeContract, error, isPending } = useWriteContract()
   const [open, setOpen] = useState(false)
   const client = useQueryClient()
+  const invalidateAssetQueries = useInvalidateAssetQueries()
 
   const account = useAccount()
   const viewerAddress = account.address
@@ -108,11 +110,13 @@ export function TransferAssetButton({
         title: "Transfer confirmed",
       })
       setOpen(false)
-      client.invalidateQueries({
-        queryKey: ["cometh", "assets", asset.tokenId],
-      })
+      invalidateAssetQueries(
+        asset.contractAddress as Address,
+        asset.tokenId,
+        asset.owner
+      )
     }
-  }, [isConfirmed, asset.tokenId, client, setOpen])
+  }, [isConfirmed, asset.tokenId, client, setOpen, invalidateAssetQueries])
 
   const isViewerNotOwner = useMemo(() => {
     return (

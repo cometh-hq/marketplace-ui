@@ -6,6 +6,7 @@ import { useAccount } from "wagmi"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 import { getFirstListing } from "../cometh-marketplace/buyOffersService"
+import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
 export type BuyAssetOptions = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
@@ -16,6 +17,7 @@ export const useBuyAsset = () => {
   const nftSwapSdk = useNFTSwapv4()
   const account = useAccount()
   const viewerAddress = account.address
+  const invalidateAssetQueries = useInvalidateAssetQueries()
 
   return useMutation({
     mutationKey: ["buy-asset"],
@@ -65,9 +67,11 @@ export const useBuyAsset = () => {
       return fillTxReceipt
     },
     onSuccess: (_, { asset }) => {
-      client.invalidateQueries({
-        queryKey: ["cometh", "assets", asset.tokenId],
-      })
+      invalidateAssetQueries(
+        asset.contractAddress as string,
+        asset.tokenId,
+        asset.owner
+      )
       client.invalidateQueries({ queryKey: ["cometh", "search"] })
     },
   })

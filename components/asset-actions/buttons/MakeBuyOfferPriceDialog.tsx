@@ -164,6 +164,7 @@ export function MakeBuyOfferButton({ asset, size }: MakeBuyOfferProps) {
 
   const closeDialog = () => {
     setOpen(false)
+    setPrice(null)
   }
 
   const onClose = () => {

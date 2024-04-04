@@ -7,11 +7,13 @@ import { toast } from "@/components/ui/toast/hooks/useToast"
 
 import { getFirstListing } from "../cometh-marketplace/buyOffersService"
 import { cancelOrder } from "./cancelOrderService"
+import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
+import { Address } from "viem"
 
 export const useCancelListing = () => {
-  const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
   const signer = useEthersSigner()
+  const invalidateAssetQueries = useInvalidateAssetQueries()
 
   return useMutation({
     mutationKey: ["cancelListing"],
@@ -24,8 +26,11 @@ export const useCancelListing = () => {
     },
 
     onSuccess: (_, asset) => {
-      client.invalidateQueries({ queryKey: ["cometh", "assets", asset.tokenId] })
-      client.invalidateQueries({ queryKey: ["cometh", "search"] }) 
+      invalidateAssetQueries(
+        asset.contractAddress as Address,
+        asset.tokenId,
+        asset.owner
+      )
       toast({
         title: "Your order has been canceled.",
       })
