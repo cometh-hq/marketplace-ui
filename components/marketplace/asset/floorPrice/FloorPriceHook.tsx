@@ -40,6 +40,9 @@ export const useAssetFloorPriceAttributes = (asset: AssetWithTradeData | undefin
 
 export const useFloorPriceAsset = (asset: AssetWithTradeData | undefined) => {
   const assetFloorPriceAttributes = useAssetFloorPriceAttributes(asset)
+  const shouldSearchAssets = useMemo(() => {
+    return assetFloorPriceAttributes.length > 0
+  }, [assetFloorPriceAttributes])
 
   const attributeFilters = useMemo(() => {
     const filters: AssetAttributeSearch = {}
@@ -53,7 +56,7 @@ export const useFloorPriceAsset = (asset: AssetWithTradeData | undefined) => {
   }, [assetFloorPriceAttributes])
 
   const floorPriceSearch =  useSearchAssets({
-    contractAddress: asset?.contractAddress,
+    contractAddress: shouldSearchAssets ? asset?.contractAddress : undefined,
     orderBy: FilterOrderBy.PRICE,
     direction: FilterDirection.ASC,
     attributes: attributeFilters,
