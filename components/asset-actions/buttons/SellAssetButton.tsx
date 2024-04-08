@@ -1,5 +1,8 @@
 import { useState } from "react"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import {
+  AssetWithTradeData,
+  SearchAssetWithTradeData,
+} from "@cometh/marketplace-sdk"
 
 import { cn } from "@/lib/utils/utils"
 import { useSellAssetButton } from "@/lib/web3/flows/sell"
@@ -12,7 +15,7 @@ import { CollectionApprovalStep } from "../transaction-steps/CollectionApprovalS
 import { SellStep } from "../transaction-steps/SellStep"
 
 export type SellAssetButtonProps = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 } & React.ComponentProps<typeof ButtonLoading>
 
 export function SellAssetButton({ asset, size = "lg" }: SellAssetButtonProps) {

@@ -58,6 +58,22 @@ export async function getAssetsPaginated(
   return { nfts, total, nextPage: page + 1 }
 }
 
+export const useSearchAssets = (searchFilters: Partial<AssetSearchFilters>) => {
+  return useQuery({
+    queryKey: ["assets", "search", JSON.stringify(searchFilters)],
+    queryFn: async () => {
+      const contractAddress = searchFilters.contractAddress
+      if (contractAddress === undefined) {
+        return undefined
+      }
+      return await comethMarketplaceClient.asset.searchAssets({
+        ...searchFilters,
+        contractAddress,
+      })
+    },
+  })
+}
+
 export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
   const { filters } = useNFTFilters()
   const { currentCollectionAddress } = useCurrentCollectionContext()
@@ -105,7 +121,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
       JSON.stringify(filters),
       options?.page,
       options?.search,
-      options?.owner
+      options?.owner,
     ],
     queryFn: ({ pageParam }) => {
       return getAssetsPaginated(
@@ -151,6 +167,13 @@ export const fetchAsset = async ({
   assetId,
 }: FetchAssetOptions) => {
   return comethMarketplaceClient.asset.getAsset(contractAddress, assetId)
+}
+
+export const useGetAsset = (contractAddress: Address, assetId: string) => {
+  return useQuery({
+    queryKey: ["cometh", "getAsset", assetId],
+    queryFn: () => fetchAsset({ contractAddress, assetId }),
+  })
 }
 
 export const useAssetDetails = (contractAddress: Address, assetId: string) => {

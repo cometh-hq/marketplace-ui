@@ -1,9 +1,11 @@
+import { useCallback } from "react"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
 import { InboxIcon, SendIcon, WalletIcon } from "lucide-react"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
+import { useNFTFilters } from "@/lib/utils/nftFilters"
 import { TabsList, TabsTrigger } from "@/components/ui/Tabs"
 
 type TabBarProps = {
@@ -19,9 +21,16 @@ const CollectionTabsTrigger = ({
 }) => {
   const { data: collection } = useGetCollection(collectionAddress)
   const { switchCollection } = useCurrentCollectionContext()
+  const { reset } = useNFTFilters()
+
+  const onClickTabsTrigger = useCallback(() => {
+    switchCollection(collectionAddress)
+    reset()
+  }, [collectionAddress, reset, switchCollection])
+
   return (
     <TabsTrigger
-      onClick={() => switchCollection(collectionAddress)}
+      onClick={onClickTabsTrigger}
       value={COLLECTION_TAB_PREFIX + collectionAddress}
     >
       <WalletIcon size="18" className="mr-2" />{" "}

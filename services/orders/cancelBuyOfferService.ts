@@ -1,10 +1,11 @@
 import { useMemo } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { isAddressEqual } from "viem"
+import { Address, isAddressEqual } from "viem"
 import { useAccount } from "wagmi"
 
 import { BuyOffer } from "@/types/buy-offers"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
+import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
 import { cancelOrder } from "./cancelOrderService"
 
@@ -29,6 +30,7 @@ export type CancelBuyOfferParams = {
 export const useCancelBuyOffer = () => {
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
+  const invalidateAssetQueries = useInvalidateAssetQueries()
 
   return useMutation({
     mutationKey: ["cancelBuyOffer"],
@@ -42,10 +44,11 @@ export const useCancelBuyOffer = () => {
     },
 
     onSuccess: (_, { offer }) => {
-      client.invalidateQueries({ queryKey: ["cometh", "search"] })
-      client.refetchQueries({
-        queryKey: ["cometh", "assets", offer.asset?.tokenId],
-      })
+      invalidateAssetQueries(
+        offer.asset?.contractAddress as Address,
+        offer.asset?.tokenId || "",
+        offer.asset?.owner || ""
+      )
       client.invalidateQueries({
         queryKey: ["cometh", "received-buy-offers", offer.owner.address],
       })

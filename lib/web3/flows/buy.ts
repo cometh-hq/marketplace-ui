@@ -3,7 +3,7 @@ import { fetchNeedsMoreAllowance } from "@/services/allowance/allowanceService"
 import { fetchHasSufficientFunds } from "@/services/balance/fundsService"
 import { fetchHasEnoughGas } from "@/services/balance/gasService"
 import { fetchNeedsToUnwrap } from "@/services/exchange/unwrapService"
-import { AssetWithTradeDataCore } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
@@ -13,7 +13,7 @@ import globalConfig from "@/config/globalConfig"
 import { useStepper } from "@/lib/utils/stepper"
 
 export type UseRequiredBuyingStepsOptions = {
-  asset: AssetWithTradeDataCore
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 }
 
 export type BuyingStepValue = "add-funds" | "buy" | "confirmation"
@@ -26,7 +26,7 @@ export type BuyingStep = {
 const defaultSteps: BuyingStep[] = [{ label: "Payment", value: "buy" }]
 
 export type FetchRequiredBuyingStepsOptions = {
-  asset: AssetWithTradeDataCore
+  asset: AssetWithTradeData | SearchAssetWithTradeData
   address: Address
   wrappedContractAddress: Address
   isComethWallet: boolean
@@ -115,7 +115,7 @@ export const useRequiredBuyingSteps = ({
 }
 
 export type UseBuyAssetButtonOptions = {
-  asset: AssetWithTradeDataCore
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 }
 
 export const useBuyAssetButton = ({ asset }: UseBuyAssetButtonOptions) => {

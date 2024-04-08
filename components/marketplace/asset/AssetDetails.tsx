@@ -9,8 +9,11 @@ import { Address } from "viem"
 import { shortenTokenId } from "@/lib/utils/formatToken"
 import { Badge } from "@/components/ui/Badge"
 import { ShareButton } from "@/components/ui/ShareButton"
+import { TransferAssetButton } from "@/components/asset-actions/buttons/TransferAssetButton"
 import { ProductBlock } from "@/components/asset-actions/product-blocks/ProductBlock"
 import { BreadcrumbContainer, BreadcrumbElement } from "@/components/Breadcrumb"
+
+import AssetFloorPricePanel from "./floorPrice/AssetFloorPricePanel"
 
 export type AssetDetailsProps = {
   asset: AssetWithTradeData
@@ -64,7 +67,10 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
             {asset.metadata.name}
           </BreadcrumbElement>
         </BreadcrumbContainer>
-        <ShareButton />
+        <div>
+          <TransferAssetButton className="mr-2" asset={asset} />
+          <ShareButton />
+        </div>
       </div>
       <div className="text-2xl font-bold opacity-90">
         #{shortenTokenId(asset.tokenId, 7)}
@@ -74,6 +80,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
       </h1>
       <div className="mb-8 mt-2 flex flex-wrap items-center gap-2">{links}</div>
       <ProductBlock asset={asset} />
+      <AssetFloorPricePanel asset={asset} />
       <p className="text-muted-foreground py-6 text-base font-medium max-md:pb-0">
         {asset.metadata.description}
       </p>

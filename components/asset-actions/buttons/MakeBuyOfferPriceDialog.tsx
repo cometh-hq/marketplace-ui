@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import {
+  AssetWithTradeData,
+  SearchAssetWithTradeData,
+} from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 import { parseUnits } from "ethers/lib/utils"
 
@@ -35,14 +38,15 @@ import { AllowanceStep } from "../transaction-steps/AllowanceStep"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/ConfirmMakeBuyOfferStep"
 import { FundsStep } from "../transaction-steps/FundsStep"
 import { WrapStep } from "../transaction-steps/WrapStep"
+import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
 
 export type MakeBuyOfferProps = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 } & React.ComponentProps<typeof Button>
 
 type MakeBuyOfferPriceDialogProps = {
   submitCallback: (price: BigNumber, validity: string) => void
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 } & React.ComponentProps<typeof Button>
 
 export function MakeBuyOfferPriceDialog({
@@ -78,6 +82,7 @@ export function MakeBuyOfferPriceDialog({
         <div className="flex w-full items-center justify-center">
           <AssetHeaderImage asset={asset} />
         </div>
+        <AssetFloorPriceLine asset={asset} />
 
         <div className="mt-4 flex flex-col gap-4 sm:flex-row">
           <div className="flex flex-col gap-3 md:w-2/3">
@@ -107,7 +112,9 @@ export function MakeBuyOfferPriceDialog({
         <Button
           size="lg"
           disabled={!orderParams || !orderParams.price}
-          onClick={() => submitCallback(orderParams!.price, orderParams!.validity)}
+          onClick={() =>
+            submitCallback(orderParams!.price, orderParams!.validity)
+          }
         >
           Make offer for&nbsp;
           <Price amount={orderParams?.price} />
@@ -157,6 +164,7 @@ export function MakeBuyOfferButton({ asset, size }: MakeBuyOfferProps) {
 
   const closeDialog = () => {
     setOpen(false)
+    setPrice(null)
   }
 
   const onClose = () => {

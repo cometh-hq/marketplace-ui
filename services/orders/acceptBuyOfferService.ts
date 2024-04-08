@@ -7,6 +7,7 @@ import { useAccount } from "wagmi"
 import { BuyOffer } from "@/types/buy-offers"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/hooks/useToast"
+import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
 export type AcceptBuyOfferOptions = {
   offer: BuyOffer
@@ -36,6 +37,7 @@ export const useCanAcceptBuyOffer = ({ offer }: UseCanAcceptBuyOfferParams) => {
 export const useAcceptBuyOffer = () => {
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
+  const invalidateAssetQueries = useInvalidateAssetQueries()
 
   return useMutation({
     mutationKey: ["accept-buy-offer"],
@@ -78,10 +80,12 @@ export const useAcceptBuyOffer = () => {
     },
 
     onSuccess: (_, { offer }) => {
-      client.invalidateQueries({
-        queryKey: ["cometh", "assets", offer.asset?.tokenId],
-      })
-      client.invalidateQueries({ queryKey: ["cometh", "search"] })
+      invalidateAssetQueries(
+        offer.asset?.contractAddress as Address,
+        offer.asset?.tokenId || "",
+        offer.asset?.owner || ""
+      )
+
       client.invalidateQueries({
         queryKey: ["cometh", "received-buy-offers", offer.owner.address],
       })

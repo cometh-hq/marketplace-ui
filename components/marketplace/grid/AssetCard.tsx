@@ -10,8 +10,10 @@ import {
 } from "@cometh/marketplace-sdk"
 import { animated, config, useSpring } from "react-spring"
 import { useBoolean } from "usehooks-ts"
+import { Address } from "viem"
 import { useAccount } from "wagmi"
 
+import globalConfig from "@/config/globalConfig"
 import { getRandomArrayElement } from "@/lib/utils/arrays"
 import { getAssetColor } from "@/lib/utils/colorsAttributes"
 import { cn } from "@/lib/utils/utils"
@@ -48,6 +50,7 @@ export type AssetImageContainerProps = {
   color?: string | null
   className?: string
   isHovered?: boolean
+  imageAspectRatio?: number
 }
 
 export function AssetImageContainer({
@@ -55,6 +58,7 @@ export function AssetImageContainer({
   color,
   className,
   isHovered,
+  imageAspectRatio: imageAspectRatio,
 }: AssetImageContainerProps) {
   const style = useSpring({
     to: {
@@ -63,15 +67,21 @@ export function AssetImageContainer({
     config: config.gentle,
   })
 
+  const dynamicRatio = useMemo(() => {
+    return {
+      aspectRatio: imageAspectRatio || 1,
+    }
+  }, [imageAspectRatio])
   return (
     <div className="h-full overflow-hidden">
       <animated.div className="z-10 h-full" style={style}>
         <div
           className={cn(
-            "relative size-auto h-full overflow-hidden p-2 sm:h-[300px] sm:w-full",
+            "relative size-auto h-full overflow-hidden p-2  sm:w-full",
             !color && "bg-muted",
             className
           )}
+          style={dynamicRatio}
         >
           {children}
         </div>
@@ -88,9 +98,15 @@ export function AssetCardBase({
   asset,
 }: AssetCardBaseProps) {
   const isHovered = useBoolean(false)
-  const cardHeight = manifest.fiatCurrency.enable
-    ? "sm:h-[410px]"
-    : "sm:h-[400px]"
+  const imageAspectRatio =
+    globalConfig.collectionSettingsByAddress[
+      asset.contractAddress.toLowerCase() as Address
+    ].imageAspectRatio
+
+  const cardTextHeightsClass = manifest.fiatCurrency.enable
+    ? "sm:h-[110px]"
+    : "sm:h-[100px]"
+
   return (
     <Appear
       enabled={false}
@@ -104,7 +120,6 @@ export function AssetCardBase({
         className={cn(
           isOwnerAsset ? "border-[#BFA100]" : "border-muted",
           isHovered.value && "shadow-md",
-          cardHeight,
           "min-h-[140px]",
           "  flex  w-full flex-1 flex-row items-stretch overflow-hidden duration-200 ease-in-out first-letter:transition-all sm:inline-flex sm:flex-col sm:items-start sm:border-2"
         )}
@@ -117,6 +132,7 @@ export function AssetCardBase({
             <AssetImageContainer
               color={getAssetColor(asset)}
               isHovered={isHovered.value}
+              imageAspectRatio={imageAspectRatio}
             >
               <AssetImage
                 src={src}
@@ -131,14 +147,14 @@ export function AssetCardBase({
           <div
             className={cn(
               !isHovered.value && "hidden",
-              "absolute bottom-4 left-[50%] translate-x-[-50%]"
+              "absolute bottom-4 left-1/2 -translate-x-1/2"
             )}
           >
             {renderAssetActions(asset, isOwnerAsset)}
           </div>
         </div>
 
-        <div className="h-full w-2/3 sm:w-full">
+        <div className={cn(cardTextHeightsClass, "h-full w-2/3 sm:w-full")}>
           <Link
             href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
             className={cn(
@@ -168,15 +184,15 @@ function renderAssetActions(
     buttonText = "Buy now "
   } else if (!isOwnerAsset) {
     button = (
-      <MakeBuyOfferButton asset={asset as unknown as AssetWithTradeData} />
+      <MakeBuyOfferButton asset={asset} />
     )
     buttonText = "Make an offer"
   } else if (!asset.orderbookStats.lowestListingPrice) {
-    button = <SellAssetButton asset={asset as unknown as AssetWithTradeData} />
+    button = <SellAssetButton asset={asset} />
     buttonText = "Sell now"
   } else {
     button = (
-      <CancelListingButton asset={asset as unknown as AssetWithTradeData} />
+      <CancelListingButton asset={asset} />
     )
     buttonText = "Cancel listing"
   }
@@ -213,7 +229,7 @@ export function AssetCard({ asset, children }: AssetCardProps) {
         </span>
         {/* <div className="mb-2">#{shortenTokenId(asset.tokenId, 5)}</div> */}
 
-        <div className="w-full rounded-lg ">
+        <div className="w-full rounded-lg">
           <div className="flex flex-col items-start justify-between gap-1 sm:flex-row">
             <div>
               <div className="text-sm font-medium">Price</div>

@@ -3,6 +3,7 @@ import {
   AssetWithTradeData,
   Collection,
   CollectionFees,
+  SearchAssetWithTradeData,
   TradeDirection,
 } from "@cometh/marketplace-sdk"
 import {
@@ -23,7 +24,7 @@ import {
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 export type BuildOfferOrderOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
   price: BigNumber
   validity: string
   collection: Collection & { collectionFees: CollectionFees }
@@ -94,6 +95,6 @@ export const useBuildOfferOrder = ({
         }
       )
     },
-    [nftSwapSdk, viewer]
+    [nftSwapSdk, viewer, tradeDirection]
   )
 }
