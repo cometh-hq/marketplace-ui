@@ -9,6 +9,7 @@ import { Address } from "viem"
 
 import { AssetFloorPriceDisplay } from "./AssetFloorPriceDisplay"
 import {
+  useAssetFloorPriceAttributes,
   useFloorPriceAsset,
 } from "./FloorPriceHook"
 

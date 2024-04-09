@@ -26,3 +26,8 @@ export const useGetCollectionStandard = (
   const collection = useGetCollection(collectionAddress)
   return collection.data?.standard
 }
+
+export const useCollectionIsERC1155 = (collectionAddress: Address) => {
+  const collectionStandard = useGetCollectionStandard(collectionAddress)
+  return collectionStandard === CollectionStandard.ERC1155
+}
