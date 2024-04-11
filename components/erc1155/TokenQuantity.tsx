@@ -1,11 +1,11 @@
 import React from "react"
 
 interface TokenQuantityProps {
-  value: number
+  value: bigint | number  | string
 }
-const formatValue = (value: number): string => {
-  if (value >= 1000) {
-    return `${(value / 1000).toFixed(1)} k`
+const formatValue = (value: bigint | number | string): string => {
+  if (BigInt(value) >= BigInt(1000)) {
+    return `${(Number(value) / 1000).toFixed(1)} k`
   }
   return value.toString()
 }

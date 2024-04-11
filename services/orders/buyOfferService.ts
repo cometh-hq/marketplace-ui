@@ -31,11 +31,11 @@ export type BuyOfferParams = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
 } & OrderParams
 
-export const useBuyOffer = () => {
+export const usePresignOrder = () => {
   const isComethWallet = useIsComethConnectWallet()
   const signBuyOfferOrder = useSignOrder()
 
-  async function buyOfferConnect({ signer, order }: BuyOfferParams) {
+  async function presignOrderConnect({ signer, order }: BuyOfferParams) {
     const contract = IZeroEx__factory.connect(
       globalConfig.network.zeroExExchange,
       signer
@@ -46,7 +46,7 @@ export const useBuyOffer = () => {
     return txReceipt
   }
 
-  async function buyOfferEOA({
+  async function presignOrderEOA({
     asset,
     order,
     tradeDirection = TradeDirection.BUY,
@@ -75,8 +75,8 @@ export const useBuyOffer = () => {
   }
 
   if (isComethWallet) {
-    return { buyOffer: buyOfferConnect }
+    return { presignOrder: presignOrderConnect }
   }
 
-  return { buyOffer: buyOfferEOA }
+  return { presignOrder: presignOrderEOA }
 }

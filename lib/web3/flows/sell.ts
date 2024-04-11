@@ -43,6 +43,7 @@ export const fetchRequiredSellingSteps = async ({
     tokenId: asset.tokenId,
     nftSwapSdk,
     contractAddress: asset.contractAddress as Address,
+    tokenType: asset.tokenType
   })
 
   const sellingSteps = [

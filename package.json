@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@cometh/connect-sdk-viem": "2.0.1",
-    "@cometh/marketplace-sdk": "2.1.1",
+    "@cometh/marketplace-sdk": "2.2.2",
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/bignumber": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",

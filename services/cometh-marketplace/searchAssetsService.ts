@@ -64,7 +64,7 @@ export const useSearchAssets = (searchFilters: Partial<AssetSearchFilters>) => {
     queryFn: async () => {
       const contractAddress = searchFilters.contractAddress
       if (contractAddress === undefined) {
-        return undefined
+        return null
       }
       return await comethMarketplaceClient.asset.searchAssets({
         ...searchFilters,

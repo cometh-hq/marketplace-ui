@@ -13,7 +13,7 @@ import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetD
 
 import { useGetCollection } from "../cometh-marketplace/collectionService"
 import { useBuildOfferOrder } from "./buildOfferOrderService"
-import { useBuyOffer } from "./buyOfferService"
+import { usePresignOrder } from "./buyOfferService"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
@@ -24,7 +24,6 @@ export type MakeBuyOfferOptions = {
 export const useMakeBuyOfferAsset = (
   asset: AssetWithTradeData | SearchAssetWithTradeData
 ) => {
-  const client = useQueryClient()
   const buildSignBuyOfferOrder = useBuildOfferOrder({
     tradeDirection: TradeDirection.BUY,
   })
@@ -34,7 +33,7 @@ export const useMakeBuyOfferAsset = (
   const invalidateAssetQueries = useInvalidateAssetQueries()
   const signer = useEthersSigner()
 
-  const { buyOffer } = useBuyOffer()
+  const { presignOrder: buyOffer } = usePresignOrder()
 
   return useMutation({
     mutationKey: ["make-buy-offer-asset"],

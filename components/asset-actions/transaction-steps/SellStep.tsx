@@ -1,7 +1,14 @@
 import { useCallback, useMemo, useState } from "react"
+import { useCollectionIsERC1155 } from "@/services/cometh-marketplace/collectionService"
 import { useSellAsset } from "@/services/orders/sellAssetService"
-import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
+import {
+  AssetWithTradeData,
+  SearchAssetWithTradeData,
+} from "@cometh/marketplace-sdk"
+import { BigNumber } from "ethers"
 import { parseUnits } from "ethers/lib/utils"
+import { Address } from "viem"
+import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
@@ -16,10 +23,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select"
+import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
+import TokenQuantity from "@/components/erc1155/TokenQuantity"
+import TokenQuantityInput from "@/components/erc1155/TokenQuantityInput"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
-
-import { SwitchNetwork } from "../buttons/SwitchNetwork"
 import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
+
+import { useAssetOwnershipByOwner } from "../../../services/cometh-marketplace/assetOwners"
+import { SwitchNetwork } from "../buttons/SwitchNetwork"
 
 export type SellStepProps = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
@@ -32,18 +43,30 @@ export type SellStepProps = {
  *
  */
 export function SellStep({ asset, onClose }: SellStepProps) {
+  const account = useAccount()
+  const currentUser = account?.address
   const { mutateAsync: sell, isPending } = useSellAsset(asset)
   const [price, setPrice] = useState("")
+  const [quantity, setQuantity] = useState(BigInt(1))
   const [validity, setValidity] = useState("1")
+  const assetOwnership = useAssetOwnershipByOwner(
+    asset.contractAddress,
+    asset.tokenId,
+    currentUser
+  )
+  const userOwnershipQuantity = assetOwnership.data?.quantity
+
+  const isErc1155 = useAssetIs1155(asset)
 
   const orderParams = useMemo(() => {
     if (!price) return null
     const parsedPrice = parseUnits(price, globalConfig.ordersErc20.decimals)
     return {
       price: parsedPrice,
+      quantity: (isErc1155 ? quantity : BigInt(1)).toString(),
       validity,
     }
-  }, [price, validity])
+  }, [price, validity, isErc1155, quantity])
 
   const onSubmit = useCallback(async () => {
     if (!orderParams) return
@@ -56,8 +79,11 @@ export function SellStep({ asset, onClose }: SellStepProps) {
 
   return (
     <>
-      <div className="flex w-full items-center justify-center">
+      <div className="flex w-full flex-col items-center justify-center">
         <AssetHeaderImage asset={asset} />
+        <div>
+          <h1 className="mt-2 text-2xl font-bold">{asset.metadata.name}</h1>
+        </div>
       </div>
 
       <AssetFloorPriceLine asset={asset} />
@@ -92,6 +118,15 @@ export function SellStep({ asset, onClose }: SellStepProps) {
         </div>
       </div>
 
+      {isErc1155 && userOwnershipQuantity && (
+        <TokenQuantityInput
+          max={BigInt(userOwnershipQuantity)}
+          label="Quantity to sell*"
+          onChange={setQuantity}
+          initialQuantity={BigInt(1)}
+        />
+      )}
+
       <PriceDetails fullPrice={price} />
 
       <SwitchNetwork>
@@ -102,7 +137,11 @@ export function SellStep({ asset, onClose }: SellStepProps) {
           disabled={isPending || !orderParams?.price}
           isLoading={isPending}
         >
-          Sell for <Price amount={orderParams?.price} />
+          <span>Sell</span>
+          {isErc1155 && userOwnershipQuantity && (
+            <span>{quantity.toString()}</span>
+          )}
+          for <Price amount={orderParams?.price} />
         </Button>
       </SwitchNetwork>
     </>

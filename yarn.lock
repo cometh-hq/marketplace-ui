@@ -391,10 +391,10 @@
     siwe "^1.1.6"
     uuid "^9.0.0"
 
-"@cometh/marketplace-sdk@2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@cometh/marketplace-sdk/-/marketplace-sdk-2.1.1.tgz#f5e38561ba5de1af5674207da3fbc5d96dba089b"
-  integrity sha512-IjCr+lOJkRGHw/Cc9LLd16gz+SYecyTIaN+zYT1Nax36zhMfd2sAOpJ8FFgaAXUvTvgy0schLXGNRS3qfX0ftw==
+"@cometh/marketplace-sdk@2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@cometh/marketplace-sdk/-/marketplace-sdk-2.2.2.tgz#9fc7606f48c4606cea899d74511be33dded275c6"
+  integrity sha512-1UY/bA1qbyO8VRl6NPE7Si6wPg6OFFbj5VGmOvW8B7NrKrIBCQhrGiMN+7MUdAlEQG8lpBqUq51IQfE3Etm8+Q==
   dependencies:
     axios "^1.6.2"
     form-data "4.x"
@@ -4927,7 +4927,7 @@ date-fns@^2.29.2, date-fns@^2.29.3:
   dependencies:
     "@babel/runtime" "^7.21.0"
 
-dayjs@1.11.10, dayjs@^1.11.10:
+dayjs@1.11.10:
   version "1.11.10"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.10.tgz#68acea85317a6e164457d6d6947564029a6a16a0"
   integrity sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==

@@ -48,6 +48,7 @@ export const fetchRequiredAcceptBuyOfferSteps = async ({
     tokenId: offer.asset?.tokenId ?? offer.trade.tokenId,
     nftSwapSdk,
     contractAddress: offer.trade.tokenAddress as Address,
+    tokenType: offer.asset?.tokenType ?? offer.trade.tokenType
   })
 
   const sellingSteps = [

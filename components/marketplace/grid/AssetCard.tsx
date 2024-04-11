@@ -27,6 +27,13 @@ import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/MakeBuyOf
 import { SellAssetButton } from "@/components/asset-actions/buttons/SellAssetButton"
 import { SwitchNetwork } from "@/components/asset-actions/buttons/SwitchNetwork"
 import { AuthenticationButton } from "@/components/AuthenticationButton"
+import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
+import TokenQuantity from "@/components/erc1155/TokenQuantity"
+
+import {
+  useAssetOwnedQuantity,
+  useIsViewerAnOwner,
+} from "../../../services/cometh-marketplace/assetOwners"
 
 export type AssetCardProps = {
   asset: SearchAssetWithTradeData & {
@@ -39,7 +46,7 @@ export type AssetCardProps = {
 
 export type AssetCardBaseProps = {
   src?: string | null
-  isOwnerAsset: boolean
+  isViewerAnOwner: boolean
   children?: React.ReactNode | React.ReactNode[]
   fallback?: string | null
   asset: SearchAssetWithTradeData
@@ -94,7 +101,7 @@ export function AssetCardBase({
   src,
   fallback,
   children,
-  isOwnerAsset,
+  isViewerAnOwner,
   asset,
 }: AssetCardBaseProps) {
   const isHovered = useBoolean(false)
@@ -102,6 +109,8 @@ export function AssetCardBase({
     globalConfig.collectionSettingsByAddress[
       asset.contractAddress.toLowerCase() as Address
     ].imageAspectRatio
+  const isErc1155 = useAssetIs1155(asset)
+  const assetOwnedQuantity = useAssetOwnedQuantity(asset)
 
   const cardTextHeightsClass = manifest.fiatCurrency.enable
     ? "sm:h-[110px]"
@@ -118,7 +127,7 @@ export function AssetCardBase({
         onMouseEnter={isHovered.setTrue}
         onMouseLeave={isHovered.setFalse}
         className={cn(
-          isOwnerAsset ? "border-[#BFA100]" : "border-muted",
+          isViewerAnOwner ? "border-owner" : "border-muted",
           isHovered.value && "shadow-md",
           "min-h-[140px]",
           "  flex  w-full flex-1 flex-row items-stretch overflow-hidden duration-200 ease-in-out first-letter:transition-all sm:inline-flex sm:flex-col sm:items-start sm:border-2"
@@ -146,11 +155,28 @@ export function AssetCardBase({
 
           <div
             className={cn(
+              !isErc1155 && "hidden",
+              "bg-foreground/20 text-background absolute left-2 top-2 rounded-lg px-3 py-1 text-sm font-semibold"
+            )}
+          >
+            <TokenQuantity value={asset.supply} />
+          </div>
+          <div
+            className={cn(
+              (!isErc1155 || !assetOwnedQuantity) && "hidden",
+              "bg-foreground/20 text-background border-owner absolute right-2 top-2 rounded-lg border px-3 py-1 text-sm font-semibold"
+            )}
+          >
+            <TokenQuantity value={assetOwnedQuantity} />
+          </div>
+
+          <div
+            className={cn(
               !isHovered.value && "hidden",
               "absolute bottom-4 left-1/2 -translate-x-1/2"
             )}
           >
-            {renderAssetActions(asset, isOwnerAsset)}
+            {renderAssetActions(asset, isViewerAnOwner)}
           </div>
         </div>
 
@@ -175,25 +201,21 @@ function renderAssetActions(
       attributes?: AssetAttribute[]
     }
   },
-  isOwnerAsset: boolean
+  isViewerAnOwner: boolean
 ) {
   let button = undefined
   let buttonText = ""
-  if (asset.orderbookStats.lowestListingPrice && !isOwnerAsset) {
+  if (asset.orderbookStats.lowestListingPrice && !isViewerAnOwner) {
     button = <BuyAssetButton asset={asset} />
     buttonText = "Buy now "
-  } else if (!isOwnerAsset) {
-    button = (
-      <MakeBuyOfferButton asset={asset} />
-    )
+  } else if (!isViewerAnOwner) {
+    button = <MakeBuyOfferButton asset={asset} />
     buttonText = "Make an offer"
   } else if (!asset.orderbookStats.lowestListingPrice) {
     button = <SellAssetButton asset={asset} />
     buttonText = "Sell now"
   } else {
-    button = (
-      <CancelListingButton asset={asset} />
-    )
+    button = <CancelListingButton asset={asset} />
     buttonText = "Cancel listing"
   }
 
@@ -209,18 +231,13 @@ function renderAssetActions(
 }
 
 export function AssetCard({ asset, children }: AssetCardProps) {
-  const account = useAccount()
-  const viewerAddress = account.address
-
-  const isOwnerAsset = useMemo(() => {
-    return asset.owner && asset.owner === viewerAddress?.toLowerCase()
-  }, [viewerAddress, asset.owner])
+  const isViewerAnOwner = useIsViewerAnOwner(asset)
 
   return (
     <AssetCardBase
       src={asset.cachedImageUrl}
       fallback={asset.metadata.image}
-      isOwnerAsset={isOwnerAsset}
+      isViewerAnOwner={isViewerAnOwner}
       asset={asset}
     >
       <div className="p-3">

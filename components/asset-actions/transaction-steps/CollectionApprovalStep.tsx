@@ -18,6 +18,7 @@ export function CollectionApprovalStep({
     tokenAddress: asset.contractAddress,
     tokenId: asset.tokenId,
     onSuccess: onValid,
+    tokenType: asset.tokenType
   })
 
   return (

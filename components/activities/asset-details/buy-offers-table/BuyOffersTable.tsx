@@ -1,23 +1,19 @@
 "use client"
 
 import { useMemo } from "react"
-import { Row } from "@tanstack/react-table"
 import { BigNumber } from "ethers"
-import { Address, isAddressEqual } from "viem"
-import { useAccount } from "wagmi"
-
 import { BuyOffer } from "@/types/buy-offers"
 import { DataTable } from "@/components/DataTable"
 
-import { columns } from "./columns"
+import { useGetBuyOffersColumns } from "./buyOffersColumns"
 
 export type BuyOffersTableProps = {
   offers: BuyOffer[]
+  isErc1155: boolean
 }
 
-export function BuyOffersTable({ offers }: BuyOffersTableProps) {
-  const account = useAccount()
-  const viewer = account.address
+export function BuyOffersTable({ offers, isErc1155 }: BuyOffersTableProps) {
+  const columns = useGetBuyOffersColumns(isErc1155)
 
   const data = useMemo(() => {
     return offers

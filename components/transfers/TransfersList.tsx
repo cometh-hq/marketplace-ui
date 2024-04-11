@@ -2,7 +2,6 @@
 
 import React, { useMemo } from "react"
 import {
-  AssetTransfer,
   AssetTransfers,
   Order,
   TradeDirection,
@@ -12,14 +11,12 @@ import { BigNumber, ethers } from "ethers"
 import {
   ArrowLeftRightIcon,
   ArrowRightIcon,
-  ExternalLink,
   ImagePlusIcon,
   ShoppingCartIcon,
 } from "lucide-react"
 import { Address, isAddressEqual } from "viem"
 import { useAccount } from "wagmi"
 
-import globalConfig from "@/config/globalConfig"
 import {
   Table,
   TableBody,
@@ -31,15 +28,15 @@ import {
 
 import { CopyButton } from "../ui/CopyButton"
 import { Price } from "../ui/Price"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/Tooltip"
-import { UserButton } from "../ui/user/UserButton"
-import { DateTime } from "luxon"
 
+import { UserButton } from "../ui/user/UserButton"
+import {
+  getActivityTimestamp,
+  isOrderActivity,
+  isTransferActivity,
+} from "./activityHelper"
+import { ActivityTimestampCell } from "./ActivityTimestampCell"
+import { AssetActivity, ORDER_TYPE, TRANSFER_TYPE } from "./AssetActivityTypes"
 
 type TransfersListProps = {
   assetTransfers: AssetTransfers
@@ -47,51 +44,9 @@ type TransfersListProps = {
   assetOrders: Order[]
 }
 
-const TRANSFER_TYPE = "transfer"
-const ORDER_TYPE = "order"
-
-type TransferActivity = {
-  activityType: "transfer"
-  transfer: AssetTransfer
-}
-
-type OrderActivity = {
-  activityType: "order"
-  order: Order
-}
-
-type AssetActivity = TransferActivity | OrderActivity
-
 const getUsername = (address: Address, viewerAddress?: Address) => {
   if (viewerAddress && isAddressEqual(address, viewerAddress)) {
     return "You"
-  }
-}
-
-const isTransferActivity = (
-  assetActivity: AssetActivity
-): assetActivity is TransferActivity => {
-  return assetActivity.activityType === TRANSFER_TYPE
-}
-const isOrderActivity = (
-  assetActivity: AssetActivity
-): assetActivity is OrderActivity => {
-  return assetActivity.activityType === ORDER_TYPE
-}
-
-const getActivityTimestamp = (assetActivity: AssetActivity) => {
-  if (isTransferActivity(assetActivity)) {
-    return assetActivity.transfer.timestamp
-  } else if (isOrderActivity(assetActivity)) {
-    const { order } = assetActivity
-    let dateToUse = order.signedAt
-
-    if (order.orderStatus === TradeStatus.FILLED) {
-      dateToUse = order.filledAt as string
-    }
-    return new Date(dateToUse).getTime()
-  } else {
-    throw new Error("Unknown activity type")
   }
 }
 
@@ -196,69 +151,15 @@ const renderActivityEventCell = (activity: AssetActivity) => {
     if (activity.order.orderStatus === TradeStatus.FILLED) {
       label =
         activity.order.direction === TradeDirection.BUY ? "Purchase" : "Sale"
-    } else if (activity.order.orderStatus === TradeStatus.OPEN) {
-      label = "Make offer"
     } else {
-      label = "Listed"
+      label =
+        activity.order.direction === TradeDirection.BUY ? "Purchase offer" : "Listed"
     }
 
     return <ActivityEventCell Icon={ShoppingCartIcon} label={label} />
   }
 }
-const TimestampTooltip = ({
-  children,
-  tooltipContent,
-}: {
-  children: React.ReactNode
-  tooltipContent: string
-}) => (
-  <TooltipProvider delayDuration={200}>
-    <Tooltip defaultOpen={false}>
-      <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent className="px-4 py-3">
-        <span className="font-bold">{tooltipContent}</span>
-      </TooltipContent>
-    </Tooltip>
-  </TooltipProvider>
-)
 
-function ActivityTimestampCell({ activity }: { activity: AssetActivity }) {
-  const { timeFromNow, readableDate } = useMemo(() => {
-    const activityTimestamp = getActivityTimestamp(activity)
-    const luxonTimestamp = DateTime.fromMillis(activityTimestamp)
-
-    return {
-      timeFromNow: luxonTimestamp.toRelative(),
-      readableDate: luxonTimestamp.toLocaleString(DateTime.DATETIME_FULL),
-    }
-  }, [activity])
-
-  if (isTransferActivity(activity)) {
-    return (
-      <TimestampTooltip tooltipContent={readableDate}>
-        <a
-          href={`${globalConfig.network.explorer?.url}/tx/${activity.transfer.transactionHash}`}
-          target="_blank"
-          rel="noreferrer"
-          className="text-muted-foreground hover:text-secondary-foreground flex items-center gap-2 text-sm font-medium"
-        >
-          {timeFromNow}
-          <ExternalLink size="18" />
-        </a>
-      </TimestampTooltip>
-    )
-  } else if (isOrderActivity(activity)) {
-    return (
-      <TimestampTooltip tooltipContent={readableDate}>
-        <div className="text-muted-foreground text-sm font-medium">
-          {timeFromNow}
-        </div>
-      </TimestampTooltip>
-    )
-  } else {
-    return null // Or return some default UI for other types of activities
-  }
-}
 
 const renderActivitiesRows = (
   assetActivities: AssetActivity[],

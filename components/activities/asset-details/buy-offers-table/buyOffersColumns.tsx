@@ -1,26 +1,17 @@
 "use client"
 
+import { useMemo } from "react"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { BuyOffer } from "@/types/buy-offers"
 import { AmountCell } from "@/components/activities/buy-offer-cells/AmountCell"
-import { AssetCell } from "@/components/activities/buy-offer-cells/AssetCell"
 import { CTACell } from "@/components/activities/buy-offer-cells/CancelBuyOfferCell"
-import { CollectionCell } from "@/components/activities/buy-offer-cells/CollectionCell"
 import { DateCell } from "@/components/activities/buy-offer-cells/DateCell"
 import { EmitterCell } from "@/components/activities/buy-offer-cells/EmitterCell"
 
-export const columns: ColumnDef<BuyOffer>[] = [
-  {
-    accessorKey: "link",
-    header: "Collection",
-    cell: CollectionCell,
-  },
-  {
-    accessorKey: "link",
-    header: "Asset",
-    cell: AssetCell,
-  },
+import { QuantityCell } from "../../buy-offer-cells/QuantityCell"
+
+const DEFAULT_COLUMNS: ColumnDef<BuyOffer>[] = [
   {
     accessorKey: "emitter",
     header: "Emitter",
@@ -42,3 +33,18 @@ export const columns: ColumnDef<BuyOffer>[] = [
     cell: CTACell,
   },
 ]
+
+export const useGetBuyOffersColumns = (isErc1155: boolean): ColumnDef<BuyOffer>[] => {
+  return useMemo(() => {
+    const columns = [...DEFAULT_COLUMNS]
+    if (isErc1155) {
+      columns.splice(1, 0, {
+        accessorKey: "trade.tokenQuantity",
+        header: "Quantity",
+        cell: QuantityCell,
+      })
+    }
+
+    return columns
+  }, [isErc1155])
+}
