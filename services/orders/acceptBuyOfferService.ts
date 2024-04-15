@@ -1,41 +1,48 @@
 import { useMemo } from "react"
+import { OrderWithAsset, TokenType, TradeDirection } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import {
+  SignedERC721OrderStruct,
+  SignedERC1155OrderStruct,
+  SignedNftOrderV4,
+} from "@traderxyz/nft-swap-sdk"
 import { ContractTransaction } from "ethers"
 import { Address, isAddressEqual } from "viem"
 import { useAccount } from "wagmi"
 
-import { BuyOffer } from "@/types/buy-offers"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/hooks/useToast"
 import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
+import { getSDKSignedOrderFromOrder } from "./orderHelper"
 
 export type AcceptBuyOfferOptions = {
-  offer: BuyOffer
+  offer: OrderWithAsset
 }
 
 export type UseCanAcceptBuyOfferParams = {
-  offer: BuyOffer
+  offer: OrderWithAsset
 }
 
 export const useCanAcceptBuyOffer = ({ offer }: UseCanAcceptBuyOfferParams) => {
   const account = useAccount()
-  const viewer = account.address
+  const viewer = account.address?.toLowerCase() as Address
   return useMemo(() => {
     if (!viewer) return false
+    if (isAddressEqual(viewer, offer.maker.toLowerCase() as Address))
+      return false
     if (
-      !isAddressEqual(
-        viewer,
-        (offer.asset?.owner as Address) ?? offer.owner.address
-      )
+      offer.asset &&
+      offer.asset.owner !== null &&
+      isAddressEqual(offer.asset.owner as Address, viewer)
     )
       return false
-    if (isAddressEqual(offer.emitter.address, viewer)) return false
     return true
-  }, [offer.asset?.owner, offer.emitter.address, offer.owner.address, viewer])
+  }, [viewer, offer])
 }
 
+
+
 export const useAcceptBuyOffer = () => {
-  const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
   const invalidateAssetQueries = useInvalidateAssetQueries()
 
@@ -44,33 +51,10 @@ export const useAcceptBuyOffer = () => {
     mutationFn: async ({ offer }: AcceptBuyOfferOptions) => {
       if (!nftSwapSdk) throw new Error("Could not initialize SDK")
 
-      const signature = offer.trade.signature || {
-        signatureType: 4,
-        v: 0,
-        r: "0x0000000000000000000000000000000000000000000000000000000000000000",
-        s: "0x0000000000000000000000000000000000000000000000000000000000000000",
-      }
+      const signedOrder = getSDKSignedOrderFromOrder(offer)
 
-      const fillTx: ContractTransaction = await nftSwapSdk.fillSignedOrder({
-        direction: 1,
-        maker: offer.trade.maker,
-        taker: offer.trade.taker,
-        expiry: new Date(offer.trade.expiry).getTime() / 1000,
-        nonce: offer.trade.nonce,
-        erc20Token: offer.trade.erc20Token,
-        erc20TokenAmount: offer.trade.erc20TokenAmount,
-        fees: offer.trade.fees.map((fee) => {
-          return {
-            recipient: fee.recipient,
-            amount: fee.amount,
-            feeData: fee.feeData || "0x",
-          }
-        }),
-        erc721Token: offer.trade.tokenAddress,
-        erc721TokenId: offer.trade.tokenId,
-        erc721TokenProperties: [],
-        signature: signature,
-      })
+      const fillTx: ContractTransaction =
+        await nftSwapSdk.fillSignedOrder(signedOrder)
 
       const fillTxReceipt = await fillTx.wait()
       console.log(
@@ -86,9 +70,6 @@ export const useAcceptBuyOffer = () => {
         offer.asset?.owner || ""
       )
 
-      client.invalidateQueries({
-        queryKey: ["cometh", "received-buy-offers", offer.owner.address],
-      })
       toast({
         title: "Purchased order filled!",
       })

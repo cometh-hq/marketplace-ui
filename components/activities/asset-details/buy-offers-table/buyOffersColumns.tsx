@@ -1,17 +1,18 @@
 "use client"
 
 import { useMemo } from "react"
+import { OrderWithAsset } from "@cometh/marketplace-sdk"
 import { ColumnDef } from "@tanstack/react-table"
 
-import { BuyOffer } from "@/types/buy-offers"
-import { AmountCell } from "@/components/activities/buy-offer-cells/AmountCell"
-import { CTACell } from "@/components/activities/buy-offer-cells/CancelBuyOfferCell"
-import { DateCell } from "@/components/activities/buy-offer-cells/DateCell"
-import { EmitterCell } from "@/components/activities/buy-offer-cells/EmitterCell"
+import { CTACell } from "@/components/activities/order-cells/CancelBuyOfferCell"
+import { DateCell } from "@/components/activities/order-cells/DateCell"
+import { EmitterCell } from "@/components/activities/order-cells/EmitterCell"
+import { OrderPriceCell } from "@/components/activities/order-cells/OrderPriceCell"
 
-import { QuantityCell } from "../../buy-offer-cells/QuantityCell"
+import { OrderProgressCell } from "../../order-cells/OrderProgressCell"
+import { QuantityCell } from "../../order-cells/QuantityCell"
 
-const DEFAULT_COLUMNS: ColumnDef<BuyOffer>[] = [
+const DEFAULT_COLUMNS: ColumnDef<OrderWithAsset>[] = [
   {
     accessorKey: "emitter",
     header: "Emitter",
@@ -19,9 +20,10 @@ const DEFAULT_COLUMNS: ColumnDef<BuyOffer>[] = [
   },
   {
     accessorKey: "amount",
-    header: "Amount",
-    cell: AmountCell,
+    header: "Price",
+    cell: OrderPriceCell,
   },
+
   {
     accessorKey: "date",
     header: "Date",
@@ -34,7 +36,9 @@ const DEFAULT_COLUMNS: ColumnDef<BuyOffer>[] = [
   },
 ]
 
-export const useGetBuyOffersColumns = (isErc1155: boolean): ColumnDef<BuyOffer>[] => {
+export const useGetBuyOffersColumns = (
+  isErc1155: boolean
+): ColumnDef<OrderWithAsset>[] => {
   return useMemo(() => {
     const columns = [...DEFAULT_COLUMNS]
     if (isErc1155) {
@@ -42,6 +46,11 @@ export const useGetBuyOffersColumns = (isErc1155: boolean): ColumnDef<BuyOffer>[
         accessorKey: "trade.tokenQuantity",
         header: "Quantity",
         cell: QuantityCell,
+      })
+      columns.splice(3, 0, {
+        accessorKey: "progress",
+        header: "Progress",
+        cell: OrderProgressCell,
       })
     }
 

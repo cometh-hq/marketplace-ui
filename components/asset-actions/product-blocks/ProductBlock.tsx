@@ -1,34 +1,102 @@
+import { useIsViewerAnOwner } from "@/services/cometh-marketplace/assetOwners"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
-import { Address, isAddressEqual } from "viem"
-import { useAccount } from "wagmi"
+import { Address } from "viem"
 
-import { BuyProductBlock } from "./BuyProductBlock"
-import { NotListedProductBlock } from "./NotListedProductBlock"
-import { SellProductBlock } from "./SellProductBlock"
-import { ViewerListingProductBlock } from "./ViewerListingProductBlock"
+import { Button } from "@/components/ui/Button"
+import { Price } from "@/components/ui/Price"
+import { UserLink } from "@/components/ui/user/UserLink"
+import { useUpdateTabQueryParam } from "@/components/activities/asset-details/tabs/pageTabHooks"
+import { AuthenticationButton } from "@/components/AuthenticationButton"
+import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
+import {
+  ProductBlockCenteredColumn,
+  ProductBlockContainer,
+  ProductBlockDividedColumn,
+  ProductBlockLabel,
+} from "@/components/ProductBlockContainer"
+
+import { BuyAssetButton } from "../buttons/BuyAssetButton"
+import { CancelListingButton } from "../buttons/CancelListingButton"
+import { MakeBuyOfferButton } from "../buttons/MakeBuyOfferPriceDialog"
+import { SellAssetButton } from "../buttons/SellAssetButton"
+import { SwitchNetwork } from "../buttons/SwitchNetwork"
+import { BestOfferColumn } from "./BestOfferColumn"
 
 export type ProductBlockProps = {
   asset: AssetWithTradeData
 }
 
 export function ProductBlock({ asset }: ProductBlockProps) {
-  const account = useAccount()
-  const viewerAddress = account.address
   const isOnSale = !!asset.orderbookStats.lowestListingPrice
 
-  const viewerIsOwner =
-    viewerAddress && asset.owner && isAddressEqual(asset.owner as Address, viewerAddress)
-  const sellBlock = viewerIsOwner && !isOnSale
-  const buyBlock = !viewerIsOwner && isOnSale
-  const viewerListingBlock = viewerIsOwner && isOnSale
+  const isViewerAnOwner = useIsViewerAnOwner(asset)
+  const isAsset1155 = useAssetIs1155(asset)
+  const updateTabQueryParam = useUpdateTabQueryParam()
+  const isAsset721 = !isAsset1155
 
-  if (sellBlock) return <SellProductBlock asset={asset} />
-  if (buyBlock) return <BuyProductBlock asset={asset} />
-  if (viewerListingBlock) return <ViewerListingProductBlock asset={asset} />
+  const listingPrice = asset.orderbookStats.lowestListingPrice
+
+  const shouldDisplaySellButton = isViewerAnOwner && (isAsset1155 || !isOnSale)
+  const shouldDisplayBuyButton = isOnSale && (isAsset1155 || !isViewerAnOwner)
+  const shoulmdDisplayMakeOfferButton = isAsset1155 || !isViewerAnOwner
+  const shouldDisplayCancelListingButton =
+    isAsset721 && isOnSale && isViewerAnOwner
 
   return (
-    <div className="flex flex-col gap-2">
-      <NotListedProductBlock asset={asset} />
-    </div>
+    <ProductBlockContainer>
+      <ProductBlockDividedColumn>
+        <ProductBlockLabel>
+          {isAsset1155 ? "Cheapest listing" : "Price"}
+        </ProductBlockLabel>
+        <Price size="lg" amount={listingPrice} shouldDisplayFiatPrice={true} />
+      </ProductBlockDividedColumn>
+
+      <BestOfferColumn asset={asset} />
+
+      {asset.owner && isOnSale && isAsset721 && (
+        <ProductBlockDividedColumn>
+          <ProductBlockLabel>Listed by</ProductBlockLabel>
+          <UserLink
+            className="mt-1"
+            user={{ address: asset.owner as Address }}
+          />
+        </ProductBlockDividedColumn>
+      )}
+
+      <ProductBlockCenteredColumn>
+        <AuthenticationButton fullVariant customText="Login to buy">
+          <SwitchNetwork>
+            {shouldDisplaySellButton && (
+              <SellAssetButton asset={asset} size="sm" />
+            )}
+            {shouldDisplayBuyButton &&
+              (isAsset721 ? (
+                <BuyAssetButton asset={asset} />
+              ) : (
+                <Button
+                  className="w-full"
+                  size="lg"
+                  onClick={() => updateTabQueryParam("listings")}
+                >
+                  Buy now
+                </Button>
+              ))}
+            {shoulmdDisplayMakeOfferButton && (
+              <MakeBuyOfferButton variant="secondary" asset={asset} />
+            )}
+          </SwitchNetwork>
+        </AuthenticationButton>
+      </ProductBlockCenteredColumn>
+
+      {shouldDisplayCancelListingButton && (
+        <ProductBlockCenteredColumn>
+          <AuthenticationButton fullVariant>
+            <SwitchNetwork>
+              <CancelListingButton asset={asset} />
+            </SwitchNetwork>
+          </AuthenticationButton>
+        </ProductBlockCenteredColumn>
+      )}
+    </ProductBlockContainer>
   )
 }

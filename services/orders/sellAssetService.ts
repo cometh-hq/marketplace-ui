@@ -12,7 +12,7 @@ import { toast } from "@/components/ui/toast/hooks/useToast"
 import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
 import { useGetCollection } from "../cometh-marketplace/collectionService"
-import { useBuildOfferOrder } from "./buildOfferOrderService"
+import { useBuildOrder } from "./buildOfferOrderService"
 import { usePresignOrder } from "./buyOfferService"
 
 export type SellAssetOptions = {
@@ -25,7 +25,7 @@ export type SellAssetOptions = {
 export const useSellAsset = (
   asset: AssetWithTradeData | SearchAssetWithTradeData
 ) => {
-  const buildSignSellOrder = useBuildOfferOrder({
+  const buildSignSellOrder = useBuildOrder({
     tradeDirection: TradeDirection.SELL,
   })
   const signer = useEthersSigner()
@@ -55,6 +55,15 @@ export const useSellAsset = (
       })
       if (!order) throw new Error("Could not build order")
       if (!signer) throw new Error("Could not get signer")
+
+      console.log({
+        asset,
+        price,
+        validity,
+        quantity,
+        collection,
+        order,
+      })
 
       return await presignOrder({
         asset,

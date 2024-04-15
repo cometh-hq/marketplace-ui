@@ -5,12 +5,12 @@ import {
 } from "@/services/orders/cancelBuyOfferService"
 import { Row } from "@tanstack/react-table"
 
-import { BuyOffer } from "@/types/buy-offers"
 import { Button } from "@/components/ui/Button"
 import { AcceptBuyOfferButton } from "@/components/asset-actions/buttons/AcceptBuyOfferButton"
+import { OrderWithAsset } from "@cometh/marketplace-sdk"
 
 export type CTACellProps = {
-  row: Row<BuyOffer>
+  row: Row<OrderWithAsset>
 }
 
 const CancelBuyOfferCell = ({ row }: CTACellProps) => {

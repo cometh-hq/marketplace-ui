@@ -42,7 +42,7 @@ const isSerializedERC1155Asset = (
   return serializedAsset.type === TokenType.ERC1155
 }
 
-export const useBuildOfferOrder = ({
+export const useBuildOrder = ({
   tradeDirection,
 }: {
   tradeDirection: TradeDirection

@@ -1,4 +1,8 @@
-import { TradeDirection, TradeStatus } from "@cometh/marketplace-sdk"
+import {
+  SearchOrdersRequest,
+  TradeDirection,
+  TradeStatus,
+} from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 
 import { comethMarketplaceClient } from "@/lib/clients"
@@ -64,6 +68,8 @@ export function useListings(tokenId: string) {
     isLoading,
   }
 }
+
+
 
 export async function getFirstListing(tokenId: string) {
   const ordersResponse = await comethMarketplaceClient.order.searchOrders({

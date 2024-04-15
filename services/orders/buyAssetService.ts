@@ -7,6 +7,7 @@ import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 import { getFirstListing } from "../cometh-marketplace/buyOffersService"
 import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
+import { getSDKSignedOrderFromOrder } from "./orderHelper"
 
 export type BuyAssetOptions = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
@@ -26,36 +27,7 @@ export const useBuyAsset = () => {
         throw new Error("Could not initialize SDK")
 
       const order = await getFirstListing(asset.tokenId)
-
-      const signature = order.signature
-        ? order.signature
-        : {
-            signatureType: 4,
-            v: 0,
-            r: "0x0000000000000000000000000000000000000000000000000000000000000000",
-            s: "0x0000000000000000000000000000000000000000000000000000000000000000",
-          }
-
-      const formattedZeroXOrder = {
-        direction: 0,
-        maker: order.maker,
-        taker: order.taker,
-        expiry: new Date(order.expiry).getTime() / 1000,
-        nonce: order.nonce,
-        erc20Token: order.erc20Token,
-        erc20TokenAmount: order.erc20TokenAmount,
-        fees: order.fees.map((fee) => {
-          return {
-            recipient: fee.recipient,
-            amount: fee.amount,
-            feeData: fee.feeData || "0x",
-          }
-        }),
-        erc721Token: order.tokenAddress,
-        erc721TokenId: order.tokenId,
-        erc721TokenProperties: [],
-        signature: signature,
-      }
+      const formattedZeroXOrder = getSDKSignedOrderFromOrder(order)
 
       const fillTx: ContractTransaction =
         await nftSwapSdk.fillSignedOrder(formattedZeroXOrder)

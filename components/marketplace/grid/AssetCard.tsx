@@ -5,13 +5,11 @@ import Link from "next/link"
 import { manifest } from "@/manifests/manifests"
 import {
   AssetAttribute,
-  AssetWithTradeData,
   SearchAssetWithTradeData,
 } from "@cometh/marketplace-sdk"
 import { animated, config, useSpring } from "react-spring"
 import { useBoolean } from "usehooks-ts"
 import { Address } from "viem"
-import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { getRandomArrayElement } from "@/lib/utils/arrays"
@@ -153,22 +151,25 @@ export function AssetCardBase({
             </AssetImageContainer>
           </Link>
 
-          <div
+          <Link
+            href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
             className={cn(
               !isErc1155 && "hidden",
               "bg-foreground/20 text-background absolute left-2 top-2 rounded-lg px-3 py-1 text-sm font-semibold"
             )}
           >
             <TokenQuantity value={asset.supply} />
-          </div>
-          <div
+          </Link>
+
+          <Link
+            href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
             className={cn(
               (!isErc1155 || !assetOwnedQuantity) && "hidden",
               "bg-foreground/20 text-background border-owner absolute right-2 top-2 rounded-lg border px-3 py-1 text-sm font-semibold"
             )}
           >
             <TokenQuantity value={assetOwnedQuantity} />
-          </div>
+          </Link>
 
           <div
             className={cn(
@@ -176,7 +177,7 @@ export function AssetCardBase({
               "absolute bottom-4 left-1/2 -translate-x-1/2"
             )}
           >
-            {renderAssetActions(asset, isViewerAnOwner)}
+            <AssetActions asset={asset} isViewerAnOwner={isViewerAnOwner} />
           </div>
         </div>
 
@@ -195,23 +196,30 @@ export function AssetCardBase({
   )
 }
 
-function renderAssetActions(
-  asset: SearchAssetWithTradeData & {
+function AssetActions(
+  {
+    asset,
+    isViewerAnOwner
+  }: {
+    asset: SearchAssetWithTradeData & {
     metadata: {
       attributes?: AssetAttribute[]
     }
   },
-  isViewerAnOwner: boolean
+  isViewerAnOwner: boolean}
 ) {
+
+  const isAsset1155 = useAssetIs1155(asset)
+
   let button = undefined
   let buttonText = ""
-  if (asset.orderbookStats.lowestListingPrice && !isViewerAnOwner) {
+  if (asset.orderbookStats.lowestListingPrice && !isViewerAnOwner ) {
     button = <BuyAssetButton asset={asset} />
     buttonText = "Buy now "
   } else if (!isViewerAnOwner) {
     button = <MakeBuyOfferButton asset={asset} />
     buttonText = "Make an offer"
-  } else if (!asset.orderbookStats.lowestListingPrice) {
+  } else if (!asset.orderbookStats.lowestListingPrice || isAsset1155) {
     button = <SellAssetButton asset={asset} />
     buttonText = "Sell now"
   } else {

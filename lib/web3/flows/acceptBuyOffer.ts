@@ -5,13 +5,13 @@ import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 import { useAccount } from "wagmi"
 
-import { BuyOffer } from "@/types/buy-offers"
 import { useStepper } from "@/lib/utils/stepper"
 
 import { useNFTSwapv4 } from "../nft-swap-sdk"
+import { OrderWithAsset } from "@cometh/marketplace-sdk"
 
 export type UseRequiredSellingStepsOptions = {
-  offer: BuyOffer
+  offer: OrderWithAsset
 }
 
 export type AcceptBuyOfferStepValue =
@@ -29,7 +29,7 @@ const defaultSteps = [
 ] as AcceptBuyOfferStep[]
 
 export type FetchRequiredSellingStepsOptions = {
-  offer: BuyOffer
+  offer: OrderWithAsset
   address: Address
   nftSwapSdk: NonNullable<ReturnType<typeof useNFTSwapv4>>
   isComethWallet: boolean
@@ -45,10 +45,10 @@ export const fetchRequiredAcceptBuyOfferSteps = async ({
 
   const hasApprovedCollection = await fetchHasApprovedCollection({
     address,
-    tokenId: offer.asset?.tokenId ?? offer.trade.tokenId,
+    tokenId: offer.tokenId,
     nftSwapSdk,
-    contractAddress: offer.trade.tokenAddress as Address,
-    tokenType: offer.asset?.tokenType ?? offer.trade.tokenType
+    contractAddress: offer.tokenAddress as Address,
+    tokenType: offer.tokenType
   })
 
   const sellingSteps = [
@@ -84,7 +84,7 @@ export const useRequiredAcceptBuyOfferSteps = ({
 }
 
 export type UseAcceptBuyOfferButtonOptions = {
-  offer: BuyOffer
+  offer: OrderWithAsset
 }
 
 export const useAcceptBuyOfferAssetButton = ({

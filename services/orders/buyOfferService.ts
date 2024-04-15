@@ -9,6 +9,7 @@ import {
 } from "@cometh/marketplace-sdk"
 import { Provider } from "@ethersproject/providers"
 import {
+  ERC1155OrderStructSerialized,
   ERC721OrderStruct,
   NftOrderV4Serialized,
   SignedNftOrderV4,
@@ -52,13 +53,16 @@ export const usePresignOrder = () => {
     tradeDirection = TradeDirection.BUY,
   }: BuyOfferParams) {
     const signedOrder = await signBuyOfferOrder({ order })
+    const isERC1155 = asset.tokenType === TokenType.ERC1155
 
     const buyOffer: NewOrder = {
       tokenAddress: asset.contractAddress,
       tokenId: asset.tokenId,
       tokenProperties: [],
-      tokenQuantity: BigNumber.from(1).toString(),
-      tokenType: TokenType.ERC721,
+      tokenQuantity: isERC1155
+        ? (order as ERC1155OrderStructSerialized).erc1155TokenAmount
+        : BigNumber.from(1).toString(),
+      tokenType: asset.tokenType,
       direction: tradeDirection,
       erc20Token: order.erc20Token,
       erc20TokenAmount: order.erc20TokenAmount,

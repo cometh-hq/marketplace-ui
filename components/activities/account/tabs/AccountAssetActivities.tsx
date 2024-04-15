@@ -2,10 +2,7 @@
 
 import { useCallback } from "react"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
-import {
-  useAssetReceivedOffers,
-  useAssetSentOffers,
-} from "@/services/orders/assetOffersService"
+import { useUserPurchaseOffers } from "@/services/orders/assetOffersService"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
@@ -28,8 +25,8 @@ export const AccountAssetActivities = ({
   walletAddress,
   children,
 }: AccountAssetActivitiesProps) => {
-  const receivedOffers = useAssetReceivedOffers({ owner: walletAddress })
-  const sentOffers = useAssetSentOffers({ owner: walletAddress })
+  const receivedOffers = useUserPurchaseOffers(false)
+  const sentOffers = useUserPurchaseOffers(true)
   const { switchCollection, currentCollectionAddress } =
     useCurrentCollectionContext()
   const { reset } = useNFTFilters()
@@ -53,8 +50,8 @@ export const AccountAssetActivities = ({
       className="w-full"
     >
       <TabBar
-        receivedCounter={receivedOffers.length}
-        sentCounter={sentOffers.length}
+        receivedCounter={receivedOffers ? receivedOffers.length : 0}
+        sentCounter={sentOffers ? sentOffers.length : 0}
       />
       {globalConfig.contractAddresses.map((address) => (
         <CollectionAssetsSearchTabContent
@@ -64,8 +61,12 @@ export const AccountAssetActivities = ({
           {children}
         </CollectionAssetsSearchTabContent>
       ))}
-      <BuyOffersTabContent offers={receivedOffers} />
-      <SendBuyOffersTabContent offers={sentOffers} />
+      {!receivedOffers || !sentOffers ? null : (
+        <>
+          <BuyOffersTabContent offers={receivedOffers} />
+          <SendBuyOffersTabContent offers={sentOffers} />
+        </>
+      )}
     </Tabs>
   )
 }

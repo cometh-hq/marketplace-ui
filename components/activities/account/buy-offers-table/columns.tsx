@@ -1,16 +1,19 @@
 "use client"
 
+import { OrderWithAsset } from "@cometh/marketplace-sdk"
 import { ColumnDef } from "@tanstack/react-table"
 
-import { BuyOffer } from "@/types/buy-offers"
-import { AmountCell } from "@/components/activities/buy-offer-cells/AmountCell"
-import { AssetCell } from "@/components/activities/buy-offer-cells/AssetCell"
-import { CTACell } from "@/components/activities/buy-offer-cells/CancelBuyOfferCell"
-import { CollectionCell } from "@/components/activities/buy-offer-cells/CollectionCell"
-import { DateCell } from "@/components/activities/buy-offer-cells/DateCell"
-import { EmitterCell } from "@/components/activities/buy-offer-cells/EmitterCell"
+import { AssetCell } from "@/components/activities/order-cells/AssetCell"
+import { CTACell } from "@/components/activities/order-cells/CancelBuyOfferCell"
+import { CollectionCell } from "@/components/activities/order-cells/CollectionCell"
+import { DateCell } from "@/components/activities/order-cells/DateCell"
+import { EmitterCell } from "@/components/activities/order-cells/EmitterCell"
+import { OrderPriceCell } from "@/components/activities/order-cells/OrderPriceCell"
 
-export const columns: ColumnDef<BuyOffer>[] = [
+import { OrderProgressCell } from "../../order-cells/OrderProgressCell"
+import { QuantityCell } from "../../order-cells/QuantityCell"
+
+export const columns: ColumnDef<OrderWithAsset>[] = [
   {
     accessorKey: "link",
     header: "Collection",
@@ -27,9 +30,19 @@ export const columns: ColumnDef<BuyOffer>[] = [
     cell: EmitterCell,
   },
   {
-    accessorKey: "amount",
-    header: "Amount",
-    cell: AmountCell,
+    accessorKey: "quantity",
+    header: "Quantity",
+    cell: QuantityCell,
+  },
+  {
+    accessorKey: "price",
+    header: "Price",
+    cell: OrderPriceCell,
+  },
+  {
+    accessorKey: "progress",
+    header: "Progress",
+    cell: OrderProgressCell,
   },
   {
     accessorKey: "date",

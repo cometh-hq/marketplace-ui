@@ -3,15 +3,15 @@ import { useGetCollection } from "@/services/cometh-marketplace/collectionServic
 import { Row } from "@tanstack/react-table"
 import { Address } from "viem"
 
-import { BuyOffer } from "@/types/buy-offers"
 import { Button } from "@/components/ui/Button"
+import { OrderWithAsset } from "@cometh/marketplace-sdk"
 
 export type CollectionCellProps = {
-  row: Row<BuyOffer>
+  row: Row<OrderWithAsset>
 }
 
 export const CollectionCell = ({ row }: CollectionCellProps) => {
-  const tokenAddress = row.original.trade.tokenAddress
+  const tokenAddress = row.original.tokenAddress
   const { data: collection } = useGetCollection(tokenAddress as Address)
 
   return (

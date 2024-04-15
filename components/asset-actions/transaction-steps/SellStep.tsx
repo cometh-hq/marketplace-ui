@@ -63,10 +63,10 @@ export function SellStep({ asset, onClose }: SellStepProps) {
     const parsedPrice = parseUnits(price, globalConfig.ordersErc20.decimals)
     return {
       price: parsedPrice,
-      quantity: (isErc1155 ? quantity : BigInt(1)).toString(),
+      quantity: quantity.toString(),
       validity,
     }
-  }, [price, validity, isErc1155, quantity])
+  }, [price, validity, quantity])
 
   const onSubmit = useCallback(async () => {
     if (!orderParams) return

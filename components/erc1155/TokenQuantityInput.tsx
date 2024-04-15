@@ -3,7 +3,6 @@ import React, { useCallback, useState } from "react"
 import { Button } from "../ui/Button"
 import { Input } from "../ui/Input"
 import { Label } from "../ui/Label"
-import TokenQuantity from "./TokenQuantity"
 
 interface TokenQuantityInputProps {
   max: bigint
@@ -18,7 +17,7 @@ const TokenQuantityInput: React.FC<TokenQuantityInputProps> = ({
   onChange,
   initialQuantity,
 }) => {
-  const [value, setValue] = useState<bigint>(initialQuantity || BigInt(0))
+  const [value, setValue] = useState<bigint>(initialQuantity || BigInt(1))
 
   const handleIncrement = useCallback(() => {
     setValue((prevValue) => {
@@ -31,7 +30,7 @@ const TokenQuantityInput: React.FC<TokenQuantityInputProps> = ({
   const handleDecrement = useCallback(() => {
     setValue((prevValue) => {
       const newValue =
-        prevValue - BigInt(1) < BigInt(0) ? BigInt(0) : prevValue - BigInt(1)
+        prevValue - BigInt(1) < BigInt(1) ? BigInt(1) : prevValue - BigInt(1)
       onChange(newValue)
       return newValue
     })

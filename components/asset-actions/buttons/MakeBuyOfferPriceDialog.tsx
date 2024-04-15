@@ -29,7 +29,10 @@ import {
   SelectValue,
 } from "@/components/ui/Select"
 import { ButtonLoading } from "@/components/ButtonLoading"
+import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
+import TokenQuantityInput from "@/components/erc1155/TokenQuantityInput"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
+import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
 import { Case, Switch } from "@/components/utils/Switch"
 
@@ -38,14 +41,13 @@ import { AllowanceStep } from "../transaction-steps/AllowanceStep"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/ConfirmMakeBuyOfferStep"
 import { FundsStep } from "../transaction-steps/FundsStep"
 import { WrapStep } from "../transaction-steps/WrapStep"
-import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
 } & React.ComponentProps<typeof Button>
 
 type MakeBuyOfferPriceDialogProps = {
-  submitCallback: (price: BigNumber, validity: string) => void
+  submitCallback: (price: BigNumber, validity: string, quantity: BigInt) => void
   asset: AssetWithTradeData | SearchAssetWithTradeData
 } & React.ComponentProps<typeof Button>
 
@@ -56,14 +58,17 @@ export function MakeBuyOfferPriceDialog({
 }: MakeBuyOfferPriceDialogProps) {
   const [price, setPrice] = useState("")
   const [validity, setValidity] = useState("1")
+  const [quantity, setQuantity] = useState(BigInt(1))
+  const isErc1155 = useAssetIs1155(asset)
+
   const orderParams = useMemo(() => {
     try {
       const parsedPrice = parseUnits(price, globalConfig.ordersErc20.decimals)
-      return { price: parsedPrice, validity }
+      return { price: parsedPrice, validity, quantity: quantity }
     } catch (e) {
       return null
     }
-  }, [price, validity])
+  }, [price, validity, quantity])
 
   const { isChainSupported } = useCorrectNetwork()
 
@@ -109,14 +114,25 @@ export function MakeBuyOfferPriceDialog({
             </Select>
           </div>
         </div>
+
+        {isErc1155 && (
+          <TokenQuantityInput
+            max={BigInt(asset.supply)}
+            label="Token purchase quantity*"
+            onChange={setQuantity}
+            initialQuantity={BigInt(1)}
+          />
+        )}
+
         <Button
           size="lg"
           disabled={!orderParams || !orderParams.price}
           onClick={() =>
-            submitCallback(orderParams!.price, orderParams!.validity)
+            submitCallback(orderParams!.price, orderParams!.validity, orderParams!.quantity)
           }
         >
-          Make offer for&nbsp;
+          Make offer for {isErc1155 && <>{quantity.toString()} tokens</>} at the
+          price of&nbsp;
           <Price amount={orderParams?.price} />
         </Button>
       </DialogContent>
@@ -134,6 +150,8 @@ export function MakeBuyOfferButton({ asset, size }: MakeBuyOfferProps) {
     reset,
     price,
     setPrice,
+    quantity,
+    setQuantity,
     validity,
     setValidity,
   } = useMakeBuyOfferAssetButton({ asset })
@@ -149,8 +167,10 @@ export function MakeBuyOfferButton({ asset, size }: MakeBuyOfferProps) {
       <MakeBuyOfferPriceDialog
         size={size}
         asset={asset}
-        submitCallback={(newPrice, newValidity) => {
-          setPrice(newPrice), setValidity(newValidity)
+        submitCallback={(newPrice, newValidity, newQuantity) => {
+          setPrice(newPrice) 
+          setValidity(newValidity)
+          setQuantity(newQuantity)
         }}
       />
     )
@@ -201,6 +221,7 @@ export function MakeBuyOfferButton({ asset, size }: MakeBuyOfferProps) {
           <ConfirmMakeBuyOfferStep
             asset={asset}
             price={price}
+            quantity={quantity}
             validity={validity ?? "1"}
             onValid={closeDialog}
           />

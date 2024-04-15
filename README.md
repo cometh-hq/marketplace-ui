@@ -127,7 +127,7 @@ fiatCurrency: {
 },
 ```
 
-You can generate your own API key on the [CoinGecko website](https://docs.coingecko.com/v3.0.1/reference/setting-up-your-api-key).
+You can generate your own free API key on the [CoinGecko website](https://docs.coingecko.com/v3.0.1/reference/setting-up-your-api-key).
 If you use ERC20 token, you need to manually add the id of the token specified by CoinGecko. [e.g for bitcoin](https://www.dropbox.com/scl/fi/gfnyt5momih7f4dp05101/Capture-d-cran-2024-03-05-20.29.49.png?rlkey=w5w5wjmvagqhdyekrknnxt1i9&dl=0).
 
 All supported `currencyId` can be found in `types/currencies.ts`.
