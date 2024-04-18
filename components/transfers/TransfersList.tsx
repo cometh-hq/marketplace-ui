@@ -195,11 +195,12 @@ const renderActivityEventCell = (activity: AssetActivity) => {
 
     if (activity.order.orderStatus === TradeStatus.FILLED) {
       label =
-        activity.order.direction === TradeDirection.BUY ? "Purchase" : "Sale"
-    } else if (activity.order.orderStatus === TradeStatus.OPEN) {
-      label = "Make offer"
+        activity.order.direction === TradeDirection.BUY ? "Filled purchase" : "Sale"
     } else {
-      label = "Listed"
+      label =
+        activity.order.direction === TradeDirection.BUY
+          ? "Opened offer"
+          : "Listed"
     }
 
     return <ActivityEventCell Icon={ShoppingCartIcon} label={label} />
