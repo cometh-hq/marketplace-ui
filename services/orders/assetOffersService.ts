@@ -1,21 +1,10 @@
 import {
   AssetWithTradeData,
-  FilterDirection,
-  OrderWithAsset,
   SearchOrdersRequest,
-  SearchOrdersSortOption,
-  TradeDirection,
+  TradeDirection
 } from "@cometh/marketplace-sdk"
-import { DateTime } from "luxon"
 import { Address } from "viem"
 import { useAccount } from "wagmi"
-
-import { UnknownUser } from "@/types/user"
-
-import {
-  useReceivedBuyOffers,
-  useSentBuyOffers,
-} from "../cometh-marketplace/buyOffersService"
 import { useSearchOrders } from "../cometh-marketplace/searchOrdersService"
 
 export type UseMakerBuyOffersOptions = {
@@ -37,26 +26,11 @@ export const isMakerBuyOffersOptions = (
   return (options as UseMakerBuyOffersOptions).maker !== undefined
 }
 
-const skeletonTrade = (trade: OrderWithAsset, asset?: AssetWithTradeData) => {
-  const { asset: tradeAsset, maker, erc20TokenAmount, signedAt } = trade
-
-  return {
-    trade,
-    owner: { address: tradeAsset?.owner } as UnknownUser,
-    emitter: { address: maker } as UnknownUser,
-    amount: erc20TokenAmount,
-    date: DateTime.fromISO(signedAt),
-    ...(asset && { asset }),
-  }
-}
-
-
-
 export const useUserPurchaseOffers = (isMaker: boolean) => {
   const account = useAccount()
   const userAddress = account?.address
   const searchOffersParams: SearchOrdersRequest = {
-
+    direction: TradeDirection.BUY
   }
 
   if (userAddress) {

@@ -9,10 +9,10 @@ import globalConfig from "@/config/globalConfig"
 import { useNFTFilters } from "@/lib/utils/nftFilters"
 import { Tabs } from "@/components/ui/Tabs"
 
-import { TabBar } from "./TabBar"
-import { BuyOffersTabContent } from "./tabs-content/BuyOffersTabContent"
+import { ListingsTabContent } from "../../order-tables/listings/ListingsTabContent"
+import { BuyOffersTabContent } from "../../order-tables/offers/BuyOffersTabContent"
+import { AccountTabBar } from "./AccountTabBar"
 import { CollectionAssetsSearchTabContent } from "./tabs-content/CollectionAssetsSearchTabContent"
-import { SendBuyOffersTabContent } from "./tabs-content/SendBuyOffersTabContent"
 
 export type AccountAssetActivitiesProps = {
   walletAddress: Address
@@ -49,7 +49,7 @@ export const AccountAssetActivities = ({
       onValueChange={onTabValueChange}
       className="w-full"
     >
-      <TabBar
+      <AccountTabBar
         receivedCounter={receivedOffers ? receivedOffers.length : 0}
         sentCounter={sentOffers ? sentOffers.length : 0}
       />
@@ -61,12 +61,10 @@ export const AccountAssetActivities = ({
           {children}
         </CollectionAssetsSearchTabContent>
       ))}
-      {!receivedOffers || !sentOffers ? null : (
-        <>
-          <BuyOffersTabContent offers={receivedOffers} />
-          <SendBuyOffersTabContent offers={sentOffers} />
-        </>
-      )}
+
+      <BuyOffersTabContent tabKey="received-offers" owner={walletAddress} />
+      <BuyOffersTabContent tabKey="sent-offers" maker={walletAddress} />
+      <ListingsTabContent maker={walletAddress} />
     </Tabs>
   )
 }

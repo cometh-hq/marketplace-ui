@@ -168,6 +168,7 @@ export function AssetCardBase({
               "bg-foreground/20 text-background border-owner absolute right-2 top-2 rounded-lg border px-3 py-1 text-sm font-semibold"
             )}
           >
+            Owned:{" "}
             <TokenQuantity value={assetOwnedQuantity} />
           </Link>
 

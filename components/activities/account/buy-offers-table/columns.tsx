@@ -4,10 +4,10 @@ import { OrderWithAsset } from "@cometh/marketplace-sdk"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { AssetCell } from "@/components/activities/order-cells/AssetCell"
-import { CTACell } from "@/components/activities/order-cells/CancelBuyOfferCell"
 import { CollectionCell } from "@/components/activities/order-cells/CollectionCell"
 import { DateCell } from "@/components/activities/order-cells/DateCell"
 import { EmitterCell } from "@/components/activities/order-cells/EmitterCell"
+import { OfferCTAsCell } from "@/components/activities/order-cells/OfferCTAsCell"
 import { OrderPriceCell } from "@/components/activities/order-cells/OrderPriceCell"
 
 import { OrderProgressCell } from "../../order-cells/OrderProgressCell"
@@ -31,7 +31,7 @@ export const columns: ColumnDef<OrderWithAsset>[] = [
   },
   {
     accessorKey: "quantity",
-    header: "Quantity",
+    header: "Available quantity",
     cell: QuantityCell,
   },
   {
@@ -52,6 +52,6 @@ export const columns: ColumnDef<OrderWithAsset>[] = [
   {
     accessorKey: "cta",
     header: "",
-    cell: CTACell,
+    cell: OfferCTAsCell,
   },
 ]

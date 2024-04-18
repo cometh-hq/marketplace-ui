@@ -1,5 +1,9 @@
 import { useMemo } from "react"
-import { OrderWithAsset, TokenType, TradeDirection } from "@cometh/marketplace-sdk"
+import {
+  OrderWithAsset,
+  TokenType,
+  TradeDirection,
+} from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   SignedERC721OrderStruct,
@@ -8,15 +12,18 @@ import {
 } from "@traderxyz/nft-swap-sdk"
 import { ContractTransaction } from "ethers"
 import { Address, isAddressEqual } from "viem"
-import { useAccount } from "wagmi"
+import { useAccount, usePublicClient } from "wagmi"
 
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/hooks/useToast"
 import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
-import { getSDKSignedOrderFromOrder } from "./orderHelper"
+
+import { useFillSignedOrder } from "../exchange/fillSignedOrderService"
+import { getViemSignedOrderFromOrder } from "../exchange/viemOrderHelper"
 
 export type AcceptBuyOfferOptions = {
   offer: OrderWithAsset
+  quantity: bigint
 }
 
 export type UseCanAcceptBuyOfferParams = {
@@ -40,23 +47,32 @@ export const useCanAcceptBuyOffer = ({ offer }: UseCanAcceptBuyOfferParams) => {
   }, [viewer, offer])
 }
 
-
-
 export const useAcceptBuyOffer = () => {
-  const nftSwapSdk = useNFTSwapv4()
   const invalidateAssetQueries = useInvalidateAssetQueries()
+  const fillOrder = useFillSignedOrder()
+  const viemPublicClient = usePublicClient()
 
   return useMutation({
     mutationKey: ["accept-buy-offer"],
-    mutationFn: async ({ offer }: AcceptBuyOfferOptions) => {
-      if (!nftSwapSdk) throw new Error("Could not initialize SDK")
+    mutationFn: async ({ offer, quantity }: AcceptBuyOfferOptions) => {
+      if (!viemPublicClient) throw new Error("Could not initialize SDK")
 
-      const signedOrder = getSDKSignedOrderFromOrder(offer)
+      const signedOrder = getViemSignedOrderFromOrder(offer)
 
-      const fillTx: ContractTransaction =
-        await nftSwapSdk.fillSignedOrder(signedOrder)
+      const fillTxHash = await fillOrder(
+        signedOrder,
+        quantity,
+        quantity * BigInt(offer.totalUnitPrice)
+      )
 
-      const fillTxReceipt = await fillTx.wait()
+      if (!fillTxHash) {
+        throw new Error("Could not fill order")
+      }
+
+      const fillTxReceipt = await viemPublicClient.waitForTransactionReceipt({
+        hash: fillTxHash,
+      })
+
       console.log(
         `🎉 🥳 Order filled (accept-buy-offer). TxHash: ${fillTxReceipt.transactionHash}`
       )

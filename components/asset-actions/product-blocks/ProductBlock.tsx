@@ -67,7 +67,7 @@ export function ProductBlock({ asset }: ProductBlockProps) {
         <AuthenticationButton fullVariant customText="Login to buy">
           <SwitchNetwork>
             {shouldDisplaySellButton && (
-              <SellAssetButton asset={asset} size="sm" />
+              <SellAssetButton asset={asset} size="lg" />
             )}
             {shouldDisplayBuyButton &&
               (isAsset721 ? (

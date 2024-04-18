@@ -14,7 +14,7 @@ const formatValue = (value: bigint | number | string): string => {
   if (BigInt(value) >= BigInt(1000)) {
     return `${(Number(value) / 1000).toFixed(1)} k`
   }
-  return value.toString()
+  return BigInt(value).toLocaleString()
 }
 
 const TokenQuantity: React.FC<TokenQuantityProps> = ({ value }) => {
@@ -29,7 +29,7 @@ const TokenQuantity: React.FC<TokenQuantityProps> = ({ value }) => {
           <span>{formatedValue}</span>
         </TooltipTrigger>
         <TooltipContent>
-          <p className="text-sm font-bold">{value.toString()}</p>
+          <p className="text-sm font-bold">{BigInt(value).toLocaleString()}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

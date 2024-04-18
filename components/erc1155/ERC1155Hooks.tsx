@@ -6,7 +6,15 @@ import {
 } from "@cometh/marketplace-sdk"
 
 export const useAssetIs1155 = (
-  asset: AssetWithTradeData | SearchAssetWithTradeData
+  asset?:
+    | {
+        tokenType: TokenType
+      }
+    | AssetWithTradeData
+    | SearchAssetWithTradeData
 ) => {
-  return useMemo(() => asset.tokenType === TokenType.ERC1155, [asset.tokenType])
+  return useMemo(
+    () => !!asset && asset.tokenType === TokenType.ERC1155,
+    [asset]
+  )
 }

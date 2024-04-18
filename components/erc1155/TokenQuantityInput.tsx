@@ -64,7 +64,7 @@ const TokenQuantityInput: React.FC<TokenQuantityInputProps> = ({
         </Label>
       </div>
       <div className="flex items-center space-x-2">
-        <Button onClick={handleDecrement} disabled={value <= BigInt(0)}>
+        <Button onClick={handleDecrement} disabled={value <= BigInt(1)}>
           -
         </Button>
         <Input

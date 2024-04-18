@@ -11,7 +11,7 @@ export const QuantityCell = ({ row }: QuantityCellProps) => {
       {row.original.tokenType === TokenType.ERC721 ? (
         <>Unique</>
       ) : (
-        <TokenQuantity value={row.original.tokenQuantity} />
+        <TokenQuantity value={row.original.tokenQuantityRemaining} />
       )}
     </span>
   )

@@ -3,17 +3,17 @@ import {
   useCanCancelBuyOffer,
   useCancelBuyOffer,
 } from "@/services/orders/cancelBuyOfferService"
+import { OrderWithAsset } from "@cometh/marketplace-sdk"
 import { Row } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/Button"
 import { AcceptBuyOfferButton } from "@/components/asset-actions/buttons/AcceptBuyOfferButton"
-import { OrderWithAsset } from "@cometh/marketplace-sdk"
 
-export type CTACellProps = {
+export type OfferCTAsCellProps = {
   row: Row<OrderWithAsset>
 }
 
-const CancelBuyOfferCell = ({ row }: CTACellProps) => {
+const CancelBuyOfferButton = ({ row }: OfferCTAsCellProps) => {
   const { mutateAsync: cancel, isPending } = useCancelBuyOffer()
 
   return (
@@ -28,12 +28,13 @@ const CancelBuyOfferCell = ({ row }: CTACellProps) => {
   )
 }
 
-export const CTACell = ({ row }: CTACellProps) => {
+export const OfferCTAsCell = ({ row }: OfferCTAsCellProps) => {
   const canAcceptBuyOffer = useCanAcceptBuyOffer({ offer: row.original })
   const canCancelBuyOffer = useCanCancelBuyOffer({ offer: row.original })
 
-  if (canAcceptBuyOffer) return <AcceptBuyOfferButton offer={row.original} />
-  if (canCancelBuyOffer) return <CancelBuyOfferCell row={row} />
+  if (canAcceptBuyOffer)
+    return <AcceptBuyOfferButton size="sm" offer={row.original} />
+  if (canCancelBuyOffer) return <CancelBuyOfferButton row={row} />
 
   return null
 }

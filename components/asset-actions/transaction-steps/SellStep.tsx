@@ -127,7 +127,14 @@ export function SellStep({ asset, onClose }: SellStepProps) {
         />
       )}
 
-      <PriceDetails fullPrice={price} />
+      <PriceDetails
+        quantity={quantity}
+        unitPrice={
+          orderParams
+            ? orderParams.price.toBigInt() / quantity
+            : BigInt(0)
+        }
+      />
 
       <SwitchNetwork>
         <Button

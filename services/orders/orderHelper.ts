@@ -2,7 +2,8 @@ import { OrderWithAsset, TokenType, TradeDirection } from "@cometh/marketplace-s
 import { SignedERC1155OrderStruct, SignedERC721OrderStruct, SignedNftOrderV4 } from "@traderxyz/nft-swap-sdk"
 
 export const getSDKSignedOrderFromOrder = (
-    order: OrderWithAsset
+    order: OrderWithAsset,
+    quantity?: bigint
   ): SignedNftOrderV4 => {
     const signature = order.signature || {
       signatureType: 4,
@@ -48,7 +49,7 @@ export const getSDKSignedOrderFromOrder = (
         fees,
         erc1155Token: order.tokenAddress,
         erc1155TokenId: order.tokenId,
-        erc1155TokenAmount: order.tokenQuantity,
+        erc1155TokenAmount: quantity? quantity : order.tokenQuantity,
         erc1155TokenProperties: [],
         signature,
       }

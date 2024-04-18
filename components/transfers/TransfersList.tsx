@@ -77,11 +77,11 @@ const ActivityEventCell = ({ activity }: { activity: AssetActivity }) => {
 
     if (activity.order.orderStatus === TradeStatus.FILLED) {
       label =
-        activity.order.direction === TradeDirection.BUY ? "Purchase" : "Sale"
+        activity.order.direction === TradeDirection.BUY ? "Filled purchase" : "Sale"
     } else {
       label =
         activity.order.direction === TradeDirection.BUY
-          ? "Purchase offer"
+          ? "Opened offer"
           : "Listed"
     }
 
@@ -131,7 +131,7 @@ const ActivityRow = ({
         <ActivityTimestampCell activity={activity} />
       </TableCell>
       {display1155Columns && (
-        <TableCell>
+        <TableCell className="font-bold">
           {isErc1155 &&
             (isOrderActivity(activity) ? (
               <TokenQuantity value={activity.order.tokenQuantity} />

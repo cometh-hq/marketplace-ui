@@ -1,4 +1,4 @@
-import { env } from '@/config/env';
+
 const wethAbi = [
   {
     "constant": true,

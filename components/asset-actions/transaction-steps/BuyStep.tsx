@@ -26,10 +26,11 @@ export type BuyStepProps = {
  * so we don't have to do any check here
  */
 export function BuyStep({ asset, onValid }: BuyStepProps) {
+  // TODO ADD QUANTITY
   const { mutateAsync: buy, isPending } = useBuyAsset()
 
   const onSubmit = useCallback(async () => {
-    const tx = await buy({ asset: asset })
+    const tx = await buy({ asset: asset, })
     toast({
       title: "NFT bought!",
       description: globalConfig.network.explorer?.blockUrl ? (

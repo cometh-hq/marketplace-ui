@@ -9,8 +9,8 @@ import {
 } from "@cometh/marketplace-sdk"
 import { Provider } from "@ethersproject/providers"
 import {
-  ERC1155OrderStructSerialized,
   ERC721OrderStruct,
+  ERC1155OrderStructSerialized,
   NftOrderV4Serialized,
   SignedNftOrderV4,
 } from "@traderxyz/nft-swap-sdk"
@@ -53,6 +53,7 @@ export const usePresignOrder = () => {
     tradeDirection = TradeDirection.BUY,
   }: BuyOfferParams) {
     const signedOrder = await signBuyOfferOrder({ order })
+    console.log("signedOrder", { order, signedOrder })
     const isERC1155 = asset.tokenType === TokenType.ERC1155
 
     const buyOffer: NewOrder = {
