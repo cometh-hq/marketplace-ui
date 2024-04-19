@@ -2,7 +2,7 @@
 
 import { useMemo } from "react"
 import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
-import { TradeStatus } from "@cometh/marketplace-sdk"
+import { FilterDirection, SearchOrdersSortOption, TradeStatus } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 import { useAccount } from "wagmi"
 
