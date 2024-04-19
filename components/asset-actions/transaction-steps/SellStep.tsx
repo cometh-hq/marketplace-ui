@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from "react"
-import { useCollectionIsERC1155 } from "@/services/cometh-marketplace/collectionService"
 import { useSellAsset } from "@/services/orders/sellAssetService"
 import {
   AssetWithTradeData,
@@ -7,15 +6,15 @@ import {
 } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 import { parseUnits } from "ethers/lib/utils"
-import { Address } from "viem"
+import { parseEther } from "viem"
 import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
-import { Input } from "@/components/ui/Input"
 import { Label } from "@/components/ui/Label"
 import { Price } from "@/components/ui/Price"
 import { PriceDetails } from "@/components/ui/PriceDetails"
+import { PriceInput } from "@/components/ui/PriceInput"
 import {
   Select,
   SelectContent,
@@ -24,7 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/Select"
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
-import TokenQuantity from "@/components/erc1155/TokenQuantity"
 import TokenQuantityInput from "@/components/erc1155/TokenQuantityInput"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
 import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
@@ -46,7 +44,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
   const account = useAccount()
   const currentUser = account?.address
   const { mutateAsync: sell, isPending } = useSellAsset(asset)
-  const [price, setPrice] = useState("")
+  const [unitPrice, setUnitPrice] = useState("")
   const [quantity, setQuantity] = useState(BigInt(1))
   const [validity, setValidity] = useState("1")
   const assetOwnership = useAssetOwnershipByOwner(
@@ -58,15 +56,25 @@ export function SellStep({ asset, onClose }: SellStepProps) {
 
   const isErc1155 = useAssetIs1155(asset)
 
+  const parsedUnitPrice = useMemo(
+    () =>
+      unitPrice
+        ? parseUnits(unitPrice, globalConfig.ordersErc20.decimals)
+        : BigNumber.from(0),
+    [unitPrice]
+  )
+  const totalPrice = useMemo(
+    () => parsedUnitPrice.mul(quantity),
+    [parsedUnitPrice, quantity]
+  )
+
   const orderParams = useMemo(() => {
-    if (!price) return null
-    const parsedPrice = parseUnits(price, globalConfig.ordersErc20.decimals)
     return {
-      price: parsedPrice,
+      price: totalPrice,
       quantity: quantity.toString(),
       validity,
     }
-  }, [price, validity, quantity])
+  }, [totalPrice, validity, quantity])
 
   const onSubmit = useCallback(async () => {
     if (!orderParams) return
@@ -74,6 +82,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
       asset,
       ...orderParams,
     })
+    setQuantity(BigInt(1))
     onClose()
   }, [asset, onClose, orderParams, sell])
 
@@ -91,10 +100,11 @@ export function SellStep({ asset, onClose }: SellStepProps) {
       <div className="mt-4 flex w-full  flex-col gap-4 sm:flex-row">
         <div className="flex flex-col gap-3 sm:w-2/3">
           <Label htmlFor="selling-price">
-            Selling price in {globalConfig.ordersErc20.symbol}*
+            {isErc1155 ? "Unit selling" : "Selling"} price in{" "}
+            {globalConfig.ordersErc20.symbol}*
           </Label>
-          <Input
-            inputUpdateCallback={(inputValue) => setPrice(inputValue)}
+          <PriceInput
+            onInputUpdate={(inputValue) => setUnitPrice(inputValue)}
             id="selling-price"
             placeholder="1.0"
             type="number"
@@ -128,12 +138,9 @@ export function SellStep({ asset, onClose }: SellStepProps) {
       )}
 
       <PriceDetails
+        isErc1155={isErc1155}
         quantity={quantity}
-        unitPrice={
-          orderParams
-            ? orderParams.price.toBigInt() / quantity
-            : BigInt(0)
-        }
+        unitPrice={parseEther(unitPrice)}
       />
 
       <SwitchNetwork>
@@ -148,7 +155,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
           {isErc1155 && userOwnershipQuantity && (
             <span>{quantity.toString()}</span>
           )}
-          for <Price amount={orderParams?.price} />
+          for <Price amount={totalPrice.toString()} />
         </Button>
       </SwitchNetwork>
     </>

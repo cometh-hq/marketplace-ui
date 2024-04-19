@@ -17,6 +17,7 @@ import { getAssetColor } from "@/lib/utils/colorsAttributes"
 import { cn } from "@/lib/utils/utils"
 import { Appear } from "@/components/ui/Appear"
 import { AssetImage } from "@/components/ui/AssetImage"
+import { Button } from "@/components/ui/Button"
 import { Card } from "@/components/ui/Card"
 import { Price } from "@/components/ui/Price"
 import { BuyAssetButton } from "@/components/asset-actions/buttons/BuyAssetButton"
@@ -168,8 +169,7 @@ export function AssetCardBase({
               "bg-foreground/20 text-background border-owner absolute right-2 top-2 rounded-lg border px-3 py-1 text-sm font-semibold"
             )}
           >
-            Owned:{" "}
-            <TokenQuantity value={assetOwnedQuantity} />
+            Owned: <TokenQuantity value={assetOwnedQuantity} />
           </Link>
 
           <div
@@ -197,26 +197,38 @@ export function AssetCardBase({
   )
 }
 
-function AssetActions(
-  {
-    asset,
-    isViewerAnOwner
-  }: {
-    asset: SearchAssetWithTradeData & {
+function AssetListingsButton({ asset }: { asset: SearchAssetWithTradeData }) {
+  return (
+    <Link href={`/nfts/${asset.contractAddress}/${asset.tokenId}?tab=listings`}>
+      <Button className="w-full" size="lg">
+        Buy now
+      </Button>
+    </Link>
+  )
+}
+
+function AssetActions({
+  asset,
+  isViewerAnOwner,
+}: {
+  asset: SearchAssetWithTradeData & {
     metadata: {
       attributes?: AssetAttribute[]
     }
-  },
-  isViewerAnOwner: boolean}
-) {
-
+  }
+  isViewerAnOwner: boolean
+}) {
   const isAsset1155 = useAssetIs1155(asset)
 
   let button = undefined
   let buttonText = ""
-  if (asset.orderbookStats.lowestListingPrice && !isViewerAnOwner ) {
-    button = <BuyAssetButton asset={asset} />
+  if (asset.orderbookStats.lowestListingPrice && !isViewerAnOwner) {
     buttonText = "Buy now "
+    if (!isAsset1155) {
+      button = <BuyAssetButton asset={asset} />
+    } else {
+      button = <AssetListingsButton asset={asset} />
+    }
   } else if (!isViewerAnOwner) {
     button = <MakeBuyOfferButton asset={asset} />
     buttonText = "Make an offer"

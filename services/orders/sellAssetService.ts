@@ -45,7 +45,6 @@ export const useSellAsset = (
       quantity,
     }: SellAssetOptions) => {
       if (!collection) throw new Error("Could not get collection")
-
       const order = buildSignSellOrder({
         asset,
         price,
@@ -55,15 +54,6 @@ export const useSellAsset = (
       })
       if (!order) throw new Error("Could not build order")
       if (!signer) throw new Error("Could not get signer")
-
-      console.log({
-        asset,
-        price,
-        validity,
-        quantity,
-        collection,
-        order,
-      })
 
       return await presignOrder({
         asset,

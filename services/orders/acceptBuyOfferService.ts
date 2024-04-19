@@ -1,25 +1,14 @@
 import { useMemo } from "react"
-import {
-  OrderWithAsset,
-  TokenType,
-  TradeDirection,
-} from "@cometh/marketplace-sdk"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import {
-  SignedERC721OrderStruct,
-  SignedERC1155OrderStruct,
-  SignedNftOrderV4,
-} from "@traderxyz/nft-swap-sdk"
-import { ContractTransaction } from "ethers"
+import { OrderWithAsset } from "@cometh/marketplace-sdk"
+import { useMutation } from "@tanstack/react-query"
 import { Address, isAddressEqual } from "viem"
 import { useAccount, usePublicClient } from "wagmi"
 
-import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/hooks/useToast"
-import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
 import { useFillSignedOrder } from "../exchange/fillSignedOrderService"
 import { getViemSignedOrderFromOrder } from "../exchange/viemOrderHelper"
+import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
 export type AcceptBuyOfferOptions = {
   offer: OrderWithAsset
@@ -85,7 +74,6 @@ export const useAcceptBuyOffer = () => {
         offer.asset?.tokenId || "",
         offer.asset?.owner || ""
       )
-
       toast({
         title: "Purchased order filled!",
       })

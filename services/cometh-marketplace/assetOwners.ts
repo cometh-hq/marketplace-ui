@@ -65,7 +65,7 @@ export const useAssetOwnershipByOwner = (
 }
 
 export const useAssetOwnedQuantity = (
-  asset: AssetWithTradeData | SearchAssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
 ) => {
   const account = useAccount()
   const isErc1155 = useAssetIs1155(asset)
@@ -89,7 +89,7 @@ export const useAssetOwnedQuantity = (
 }
 
 export const useIsViewerAnOwner = (
-  asset: AssetWithTradeData | SearchAssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
 ) => {
   const assetOwnedQuantity = useAssetOwnedQuantity(asset)
   return BigInt(assetOwnedQuantity) > BigInt(0)

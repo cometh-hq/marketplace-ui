@@ -1,18 +1,20 @@
 import {
   AssetWithTradeData,
+  OrderWithAsset,
   SearchAssetWithTradeData,
 } from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useAccount, usePublicClient } from "wagmi"
 
+import { OrderAsset } from "@/types/assets"
 import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
-import { getFirstListing } from "../cometh-marketplace/buyOffersService"
 import { useFillSignedOrder } from "../exchange/fillSignedOrderService"
 import { getViemSignedOrderFromOrder } from "../exchange/viemOrderHelper"
 
 export type BuyAssetOptions = {
-  asset: AssetWithTradeData | SearchAssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
+  order: OrderWithAsset
   quantity: bigint
 }
 
@@ -26,11 +28,10 @@ export const useBuyAsset = () => {
 
   return useMutation({
     mutationKey: ["buy-asset"],
-    mutationFn: async ({ asset, quantity }: BuyAssetOptions) => {
+    mutationFn: async ({ order, quantity }: BuyAssetOptions) => {
       if (!viewerAddress || !viemPublicClient)
         throw new Error("Could not initialize SDK")
 
-      const order = await getFirstListing(asset.tokenId)
       const signedOrder = getViemSignedOrderFromOrder(order)
 
       const fillTxHash = await fillOrder(

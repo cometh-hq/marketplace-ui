@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils/utils"
 
 import { FiatPrice } from "./FiatPrice"
 
-const priceTriggerVariants = cva("flex items-center", {
+const priceTriggerVariants = cva("inline-flex  items-center", {
   variants: {
     variant: {
       default: "",

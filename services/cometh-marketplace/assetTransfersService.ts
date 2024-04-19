@@ -23,7 +23,7 @@ export const useAssetTransfers = (
   tokenId: string
 ) => {
   return useQuery({
-    queryKey: ["cometh", "assetTransfers", tokenId],
+    queryKey: ["cometh", "assetTransfers", contractAddress, tokenId],
     queryFn: () => {
       return fetchAssetTransfers({ contractAddress, tokenId })
     },

@@ -14,17 +14,26 @@ export const useInvalidateAssetQueries = () => {
         queryKey: ["cometh", "assets", tokenId],
       })
       client.invalidateQueries({
+        queryKey: ["cometh", "getAsset", tokenId],
+      })
+      client.invalidateQueries({
         queryKey: ["cometh", "searchOrders", contractAddress],
       })
       client.invalidateQueries({
-        queryKey: ["cometh", "assetTransfers", tokenId],
+        queryKey: ["cometh", "assetTransfers", contractAddress, tokenId],
+      })
+      client.invalidateQueries({
+        queryKey: ["cometh", "asset-owners", contractAddress, tokenId],
+      })
+      client.invalidateQueries({
+        queryKey: [
+          "cometh",
+          "asset-quantity-by-owner",
+          contractAddress,
+          tokenId,
+        ],
       })
       client.invalidateQueries({ queryKey: ["cometh", "search"] })
-      if (ownerBeforeUpdate) {
-        client.invalidateQueries({
-          queryKey: ["cometh", "received-buy-offers", ownerBeforeUpdate],
-        })
-      }
     },
     [client]
   )

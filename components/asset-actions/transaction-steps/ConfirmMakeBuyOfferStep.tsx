@@ -39,10 +39,13 @@ export function ConfirmMakeBuyOfferStep({
     <div className="flex flex-col items-center justify-center gap-4 pt-8">
       <h3 className="text-xl font-semibold">Summary</h3>
       <p className="text-center">
-        You are about to make an offer to buy <br />
-        {quantity.toString()} of this asset for{" "}
-        <Price size="default" amount={price} hideSymbol={false} /> (fees
-        included). <br />
+        You are about to make an offer to buy{" "}
+        <span className="font-bold">{Number(quantity).toLocaleString()}</span>{" "}
+        of this asset for{" "}
+        <span>
+          <Price size="default" amount={price} hideSymbol={false} />
+        </span>{" "}
+        (fees included).
         {globalConfig.areContractsSponsored && isComethWallet && (
           <>This contract is sponsored, so you won&apos;t pay any gas fees.</>
         )}

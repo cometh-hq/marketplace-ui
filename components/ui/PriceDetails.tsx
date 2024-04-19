@@ -3,9 +3,7 @@ import { manifest } from "@/manifests/manifests"
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
-import { parseUnits } from "viem"
 
-import globalConfig from "@/config/globalConfig"
 import {
   calculateAmountWithoutFees,
   calculateFeesAmount,
@@ -16,13 +14,17 @@ import { Price } from "./Price"
 
 type PriceDetailsProps = {
   unitPrice: bigint
+  isErc1155?: boolean
   quantity?: bigint
+  isReceiving?: boolean
   isEthersFormat?: boolean
 }
 
 export function PriceDetails({
   quantity = BigInt(1),
   unitPrice = BigInt(0),
+  isErc1155= false,
+  isReceiving = true,
 }: PriceDetailsProps) {
   const isComethWallet = useIsComethConnectWallet()
   const { currentCollectionAddress } = useCurrentCollectionContext()
@@ -30,7 +32,6 @@ export function PriceDetails({
   const sumOfFeesPercentages = collection
     ? collection.collectionFees.reduce((sum, fee) => sum + fee.feePercentage, 0)
     : 0
-
 
   const contractIsSponsored = manifest.areContractsSponsored && isComethWallet
 
@@ -57,8 +58,8 @@ export function PriceDetails({
   }, [sumOfFeesPercentages, unitPrice, quantity])
 
   return (
-    <div className="rounded border p-4 shadow">
-      {quantity > BigInt(1) && (
+    <div className="w-full rounded border p-4 shadow">
+      {isErc1155 && (
         <>
           <div className="flex  flex-col justify-between sm:flex-row">
             <span>Unit price:</span>
@@ -81,7 +82,7 @@ export function PriceDetails({
         </>
       )}
       <div className="flex  flex-col justify-between sm:flex-row">
-        <span>You will receive:</span>
+        <span>{isReceiving ? "You will receive:" : "Total without fees"}</span>
         <span>
           <Price
             fontWeight="normal"

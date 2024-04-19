@@ -1,8 +1,8 @@
 import { useCanAcceptBuyOffer } from "@/services/orders/acceptBuyOfferService"
 import {
   useCanCancelBuyOffer,
-  useCancelBuyOffer,
-} from "@/services/orders/cancelBuyOfferService"
+  useCancelOrder,
+} from "@/services/orders/cancelOrderHooks"
 import { OrderWithAsset } from "@cometh/marketplace-sdk"
 import { Row } from "@tanstack/react-table"
 
@@ -14,7 +14,7 @@ export type OfferCTAsCellProps = {
 }
 
 const CancelBuyOfferButton = ({ row }: OfferCTAsCellProps) => {
-  const { mutateAsync: cancel, isPending } = useCancelBuyOffer()
+  const { mutateAsync: cancel, isPending } = useCancelOrder()
 
   return (
     <Button

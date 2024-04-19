@@ -2,14 +2,10 @@ import { useCallback, useState } from "react"
 import { useAcceptBuyOffer } from "@/services/orders/acceptBuyOfferService"
 import { OrderWithAsset, TokenType } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
-
-import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
 import { Price } from "@/components/ui/Price"
 import { PriceDetails } from "@/components/ui/PriceDetails"
-import { toast } from "@/components/ui/toast/hooks/useToast"
 import { ButtonLoading } from "@/components/ButtonLoading"
-import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import TokenQuantityInput from "@/components/erc1155/TokenQuantityInput"
 
 export type ConfirmBuyOfferStepProps = {
@@ -31,16 +27,10 @@ export function ConfirmAcceptBuyOfferStep({
   const [quantity, setQuantity] = useState(BigInt(1))
 
   const onConfirm = useCallback(async () => {
-    const tx = await acceptBuyOffer({ offer, quantity: quantity })
-    if (isSuccess) {
-      toast({
-        title:
-          "The purchase offer for your NFT has been accepted with success!",
-        description: `${globalConfig.network.explorer}/${tx.transactionHash}`,
-      })
-      onValid()
-    }
-  }, [acceptBuyOffer, offer, onValid, isSuccess, quantity])
+    await acceptBuyOffer({ offer, quantity: quantity })
+    setQuantity(BigInt(1))
+    onValid()
+  }, [acceptBuyOffer, offer, quantity, onValid])
 
   const amount = offer.erc20TokenAmount
   const fees = offer.totalFees
@@ -53,10 +43,10 @@ export function ConfirmAcceptBuyOfferStep({
         <p className="text-center">
           You are about to fill part of an offer for{" "}
           <span className="font-bold">{offer.asset?.metadata.name}</span>. There
-          is a quantity of <span className="font-bold">{offer.tokenQuantityRemaining} NFTs</span> available to sell on
-          this order for a unit price of{" "}
-          <Price size="default" amount={offer.totalUnitPrice} /> (fees
-          included)
+          is a quantity of{" "}
+          <span className="font-bold">{offer.tokenQuantityRemaining} NFTs</span>{" "}
+          available to sell on this order for a unit price of{" "}
+          <Price size="default" amount={offer.totalUnitPrice} /> (fees included)
         </p>
       ) : (
         <p className="text-center">
@@ -78,7 +68,8 @@ export function ConfirmAcceptBuyOfferStep({
       )}
       <PriceDetails
         quantity={quantity}
-        unitPrice={BigInt(offer.erc20UnitTokenAmount)}
+        isErc1155={isErc1155}
+        unitPrice={BigInt(offer.totalUnitPrice)}
       />
       {isPending ? (
         <ButtonLoading />

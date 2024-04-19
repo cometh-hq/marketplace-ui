@@ -148,9 +148,13 @@ export function TransferAssetButton({
         <DialogHeader>
           <DialogTitle>Asset transfer</DialogTitle>
         </DialogHeader>
-        <div className="flex w-full items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center">
           <AssetHeaderImage asset={asset} />
+          <div>
+            <h1 className="mt-2 text-2xl font-bold">{asset.metadata.name}</h1>
+          </div>
         </div>
+
         <div className="mt-4">
           <Label htmlFor="transfer-address">Transfer asset to address:</Label>
           <Input

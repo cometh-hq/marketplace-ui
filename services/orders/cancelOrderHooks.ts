@@ -5,6 +5,7 @@ import { Address, isAddressEqual } from "viem"
 import { useAccount } from "wagmi"
 
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
+import { toast } from "@/components/ui/toast/hooks/useToast"
 import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
 import { cancelOrder } from "./cancelOrderService"
@@ -27,7 +28,7 @@ export type CancelBuyOfferParams = {
   offer: OrderWithAsset
 }
 
-export const useCancelBuyOffer = () => {
+export const useCancelOrder = () => {
   const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
   const account = useAccount()
@@ -52,8 +53,12 @@ export const useCancelBuyOffer = () => {
         offer.asset?.tokenId || "",
         offer.asset?.owner || ""
       )
+
       client.invalidateQueries({
-        queryKey: ["cometh", "sent-buy-offers", viewAddress],
+        queryKey: ["cometh", "search-orders"],
+      })
+      toast({
+        title: "Your order has been canceled.",
       })
     },
   })

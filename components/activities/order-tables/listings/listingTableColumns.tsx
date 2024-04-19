@@ -8,10 +8,10 @@ import { AssetCell } from "@/components/activities/order-cells/AssetCell"
 import { CollectionCell } from "@/components/activities/order-cells/CollectionCell"
 import { DateCell } from "@/components/activities/order-cells/DateCell"
 import { EmitterCell } from "@/components/activities/order-cells/EmitterCell"
-import { OfferCTAsCell } from "@/components/activities/order-cells/OfferCTAsCell"
 import { OrderPriceCell } from "@/components/activities/order-cells/OrderPriceCell"
 import { OrderProgressCell } from "@/components/activities/order-cells/OrderProgressCell"
 import { QuantityCell } from "@/components/activities/order-cells/QuantityCell"
+import { ListingCTAsCell } from "@/components/activities/order-cells/ListingCTAsCell"
 
 export const columns: ColumnDef<OrderWithAsset>[] = []
 
@@ -34,7 +34,7 @@ const DEFAULT_COLUMNS: ColumnDef<OrderWithAsset>[] = [
   {
     accessorKey: "cta",
     header: "",
-    cell: OfferCTAsCell,
+    cell: ListingCTAsCell,
   },
 ]
 

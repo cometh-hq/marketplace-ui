@@ -1,4 +1,7 @@
-import { useIsViewerAnOwner } from "@/services/cometh-marketplace/assetOwners"
+import {
+  useAssetOwnedQuantity,
+  useIsViewerAnOwner,
+} from "@/services/cometh-marketplace/assetOwners"
 import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
@@ -8,6 +11,7 @@ import { UserLink } from "@/components/ui/user/UserLink"
 import { useUpdateTabQueryParam } from "@/components/activities/asset-details/tabs/pageTabHooks"
 import { AuthenticationButton } from "@/components/AuthenticationButton"
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
+import TokenQuantity from "@/components/erc1155/TokenQuantity"
 import {
   ProductBlockCenteredColumn,
   ProductBlockContainer,
@@ -30,6 +34,7 @@ export function ProductBlock({ asset }: ProductBlockProps) {
   const isOnSale = !!asset.orderbookStats.lowestListingPrice
 
   const isViewerAnOwner = useIsViewerAnOwner(asset)
+  const assetOwnedQuantity = useAssetOwnedQuantity(asset)
   const isAsset1155 = useAssetIs1155(asset)
   const updateTabQueryParam = useUpdateTabQueryParam()
   const isAsset721 = !isAsset1155
@@ -62,6 +67,26 @@ export function ProductBlock({ asset }: ProductBlockProps) {
           />
         </ProductBlockDividedColumn>
       )}
+
+      <div className="flex w-full">
+        {isAsset1155 && (
+          <div className=" mr-2 rounded-lg border px-3 py-1 text-sm font-semibold">
+            Supply:{" "}
+            <TokenQuantity value={asset.supply} />
+          </div>
+        )}
+        {isViewerAnOwner && (
+          <div className="border-owner rounded-lg border px-3 py-1 text-sm font-semibold">
+            Owned
+            {isAsset1155 && (
+              <>
+                {": "}
+                <TokenQuantity value={assetOwnedQuantity} />
+              </>
+            )}
+          </div>
+        )}
+      </div>
 
       <ProductBlockCenteredColumn>
         <AuthenticationButton fullVariant customText="Login to buy">

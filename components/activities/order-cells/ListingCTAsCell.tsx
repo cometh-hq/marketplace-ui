@@ -1,23 +1,17 @@
-import { useIsViewerAnOwner } from "@/services/cometh-marketplace/assetOwners"
-import { useCanAcceptBuyOffer } from "@/services/orders/acceptBuyOfferService"
-import {
-  useCanCancelBuyOffer,
-  useCancelBuyOffer,
-} from "@/services/orders/cancelBuyOfferService"
+import { useCancelOrder } from "@/services/orders/cancelOrderHooks"
 import { OrderWithAsset } from "@cometh/marketplace-sdk"
 import { Row } from "@tanstack/react-table"
 import { useAccount } from "wagmi"
 
 import { Button } from "@/components/ui/Button"
-import { AcceptBuyOfferButton } from "@/components/asset-actions/buttons/AcceptBuyOfferButton"
-import { CancelListingButton } from "@/components/asset-actions/buttons/CancelListingButton"
+import { BuyAssetButton } from "@/components/asset-actions/buttons/BuyAssetButton"
 
-export type OfferCTAsCellProps = {
+export type ListingCTAsCellProps = {
   row: Row<OrderWithAsset>
 }
 
-const CancelBuyOfferButton = ({ row }: OfferCTAsCellProps) => {
-  const { mutateAsync: cancel, isPending } = useCancelBuyOffer()
+const CancelListingButton = ({ row }: ListingCTAsCellProps) => {
+  const { mutateAsync: cancel, isPending } = useCancelOrder()
 
   return (
     <Button
@@ -31,17 +25,24 @@ const CancelBuyOfferButton = ({ row }: OfferCTAsCellProps) => {
   )
 }
 
-export const OfferCTAsCell = ({ row }: OfferCTAsCellProps) => {
+export const ListingCTAsCell = ({ row }: ListingCTAsCellProps) => {
   const account = useAccount()
   const userAddress = account.address?.toLowerCase()
   const isListingMaker = row.original.maker.toLowerCase() === userAddress
 
-// TODO: Make simple button to cancel listing
-// TODO: Add quantity in BuyStep
+  const asset = row.original.asset
 
-  if (isListingMaker)
-    return <CancelListingButton />
-  if (canCancelBuyOffer) return 
+  if (!asset) {
+    return null
+  }
 
-  return null
+  return (
+    <>
+      {isListingMaker ? (
+        <CancelListingButton row={row} />
+      ) : (
+        <BuyAssetButton size="sm" asset={asset} listing={row.original} />
+      )}
+    </>
+  )
 }
