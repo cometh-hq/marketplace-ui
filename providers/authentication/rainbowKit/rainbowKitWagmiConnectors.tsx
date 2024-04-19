@@ -10,7 +10,7 @@ if (env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY && typeof window !== "undefined") {
   })
   wallets.unshift({
     groupName: "Recommended",
-    wallets: [comethConnectWallet],
+    wallets: [comethConnectWallet as any],
   })
 }
 
