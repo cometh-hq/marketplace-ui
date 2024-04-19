@@ -1,31 +1,41 @@
 import { useEthersSigner } from "@/providers/authentication/viemToEthersHelper"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import {
+  AssetWithTradeData,
+  SearchAssetWithTradeData,
+} from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { Address } from "viem"
 
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { toast } from "@/components/ui/toast/hooks/useToast"
+import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
-import { getFirstListing } from "../cometh-marketplace/buyOffersService"
+import { getCheapestListing } from "../cometh-marketplace/buyOffersService"
 import { cancelOrder } from "./cancelOrderService"
 
 export const useCancelListing = () => {
-  const client = useQueryClient()
   const nftSwapSdk = useNFTSwapv4()
   const signer = useEthersSigner()
+  const invalidateAssetQueries = useInvalidateAssetQueries()
 
   return useMutation({
     mutationKey: ["cancelListing"],
-    mutationFn: async (asset: AssetWithTradeData) => {
-      const nonce = (await getFirstListing(asset.tokenId)).nonce
+    mutationFn: async (
+      asset: AssetWithTradeData | SearchAssetWithTradeData
+    ) => {
+      const nonce = (await getCheapestListing(asset.tokenId)).nonce
       if (!nonce) throw new Error("No nonce found on asset")
       if (!signer) throw new Error("Could not get signer")
-
-      return await cancelOrder({ nonce, nftSwapSdk })
+      const tokenType = asset.tokenType
+      return await cancelOrder({ nonce, nftSwapSdk, tokenType })
     },
 
     onSuccess: (_, asset) => {
-      client.invalidateQueries({ queryKey: ["cometh", "assets", asset.tokenId] })
-      client.invalidateQueries({ queryKey: ["cometh", "search"] }) 
+      invalidateAssetQueries(
+        asset.contractAddress as Address,
+        asset.tokenId,
+        asset.owner
+      )
       toast({
         title: "Your order has been canceled.",
       })

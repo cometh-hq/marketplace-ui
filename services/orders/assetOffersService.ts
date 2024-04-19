@@ -1,13 +1,11 @@
-import { AssetWithTradeData, OrderWithAsset } from "@cometh/marketplace-sdk"
-import { DateTime } from "luxon"
-import { Address } from "viem"
-
-import { UnknownUser } from "@/types/user"
-
 import {
-  useReceivedBuyOffers,
-  useSentBuyOffers,
-} from "../cometh-marketplace/buyOffersService"
+  AssetWithTradeData,
+  SearchOrdersRequest,
+  TradeDirection
+} from "@cometh/marketplace-sdk"
+import { Address } from "viem"
+import { useAccount } from "wagmi"
+import { useSearchOrders } from "../cometh-marketplace/searchOrdersService"
 
 export type UseMakerBuyOffersOptions = {
   maker: Address
@@ -28,37 +26,21 @@ export const isMakerBuyOffersOptions = (
   return (options as UseMakerBuyOffersOptions).maker !== undefined
 }
 
-const skeletonTrade = (trade: OrderWithAsset, asset?: AssetWithTradeData) => {
-  const { asset: tradeAsset, maker, erc20TokenAmount, signedAt } = trade
-
-  return {
-    trade,
-    owner: { address: tradeAsset?.owner } as UnknownUser,
-    emitter: { address: maker } as UnknownUser,
-    amount: erc20TokenAmount,
-    date: DateTime.fromISO(signedAt),
-    ...(asset && { asset }),
+export const useUserPurchaseOffers = (isMaker: boolean) => {
+  const account = useAccount()
+  const userAddress = account?.address
+  const searchOffersParams: SearchOrdersRequest = {
+    direction: TradeDirection.BUY
   }
+
+  if (userAddress) {
+    if (isMaker) {
+      searchOffersParams.maker = userAddress
+    } else {
+      searchOffersParams.assetOwner = userAddress
+    }
+  }
+
+  const { data: offersSearch, isPending } = useSearchOrders(searchOffersParams)
+  return offersSearch?.orders ?? null
 }
-
-export const useAssetOffers = (
-  props: UseBuyOffersOptions,
-  useOffers: (address: Address) => {
-    data: OrderWithAsset[]
-    isLoading: boolean
-  }
-) => {
-  if (isMakerBuyOffersOptions(props)) {
-    return []
-  }
-  const address = props.asset ? props.asset.owner : props.owner
-  const { data: trades } = useOffers(address as Address)
-
-  return trades.map((trade) => skeletonTrade(trade, props.asset))
-}
-
-export const useAssetReceivedOffers = (props: UseBuyOffersOptions) =>
-  useAssetOffers(props, useReceivedBuyOffers)
-
-export const useAssetSentOffers = (props: UseBuyOffersOptions) =>
-  useAssetOffers(props, useSentBuyOffers)

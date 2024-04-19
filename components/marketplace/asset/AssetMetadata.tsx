@@ -41,12 +41,12 @@ export function AssetMetadata({ asset }: { asset: AssetWithTradeData }) {
                   <TableCell className="py-3 text-right font-medium">
                     <Button asChild variant="link">
                       {attribute.value?.toString ? (
-                        <Link href={`/nfts/${asset.contractAddress}/?trait=${attribute.value}`}>
+                        <Link href={`/nfts/${asset.contractAddress}/?${attribute.trait_type}=${attribute.value}`}>
                           {attribute.value.toString()}
                         </Link>
                       ) : (
                         <Link
-                          href={`/nfts/${asset.contractAddress}/?trait=${JSON.stringify(
+                          href={`/nfts/${asset.contractAddress}/?${attribute.trait_type}=${JSON.stringify(
                             attribute.value
                           )}`}
                         >

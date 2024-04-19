@@ -59,6 +59,9 @@
 
   --ring: 215 20.2% 65.1%;
 
+  /* Color for ownership borders and symbolic */
+  --owner: 50.58 100% 37.45%;
+
   --radius: 8px;
 }
 

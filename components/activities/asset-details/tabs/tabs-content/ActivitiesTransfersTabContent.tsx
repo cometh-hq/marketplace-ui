@@ -9,11 +9,13 @@ import { TransfersList } from "@/components/transfers/TransfersList"
 type ActivitiesTransfersTabContentProps = {
   assetTransfers: AssetTransfers
   assetOrders: Order[]
+  display1155Columns: boolean
 }
 
 export const ActivitiesTransfersTabContent = ({
   assetTransfers,
   assetOrders,
+  display1155Columns,
 }: ActivitiesTransfersTabContentProps) => {
   return (
     <TabsContent value="activity">
@@ -21,6 +23,7 @@ export const ActivitiesTransfersTabContent = ({
         <TransfersList
           assetTransfers={assetTransfers}
           assetOrders={assetOrders}
+          display1155Columns={display1155Columns}
         />
       </Card>
     </TabsContent>

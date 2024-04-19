@@ -1,7 +1,7 @@
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { fetchHasEnoughGas } from "@/services/balance/gasService"
 import { fetchHasApprovedCollection } from "@/services/token-approval/approveCollectionService"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 import { useAccount } from "wagmi"
@@ -11,7 +11,7 @@ import { useStepper } from "@/lib/utils/stepper"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
 
 export type UseRequiredSellingStepsOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 }
 
 export type SellingStepValue = "token-approval" | "sell" | "confirmation"
@@ -24,7 +24,7 @@ export type SellingStep = {
 const defaultSteps = [{ label: "Pricing", value: "sell" }] as SellingStep[]
 
 export type FetchRequiredSellingStepsOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
   address: Address
   nftSwapSdk: NonNullable<ReturnType<typeof useNFTSwapv4>>
   isComethWallet: boolean
@@ -43,6 +43,7 @@ export const fetchRequiredSellingSteps = async ({
     tokenId: asset.tokenId,
     nftSwapSdk,
     contractAddress: asset.contractAddress as Address,
+    tokenType: asset.tokenType
   })
 
   const sellingSteps = [
@@ -79,7 +80,7 @@ export const useRequiredSellingSteps = ({
 }
 
 export type UseSellAssetButtonOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 }
 
 export const useSellAssetButton = ({ asset }: UseSellAssetButtonOptions) => {

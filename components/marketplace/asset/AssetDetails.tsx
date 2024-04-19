@@ -13,7 +13,7 @@ import { TransferAssetButton } from "@/components/asset-actions/buttons/Transfer
 import { ProductBlock } from "@/components/asset-actions/product-blocks/ProductBlock"
 import { BreadcrumbContainer, BreadcrumbElement } from "@/components/Breadcrumb"
 
-import AssetFloorPrice from "./AssetFloorPrice"
+import AssetFloorPricePanel from "./floorPrice/AssetFloorPricePanel"
 
 export type AssetDetailsProps = {
   asset: AssetWithTradeData
@@ -80,7 +80,7 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
       </h1>
       <div className="mb-8 mt-2 flex flex-wrap items-center gap-2">{links}</div>
       <ProductBlock asset={asset} />
-      <AssetFloorPrice asset={asset}  />
+      <AssetFloorPricePanel asset={asset} />
       <p className="text-muted-foreground py-6 text-base font-medium max-md:pb-0">
         {asset.metadata.description}
       </p>

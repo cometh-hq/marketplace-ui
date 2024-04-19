@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils/utils"
 
 import { FiatPrice } from "./FiatPrice"
 
-const priceTriggerVariants = cva("", {
+const priceTriggerVariants = cva("inline-flex  items-center", {
   variants: {
     variant: {
       default: "",
@@ -60,7 +60,7 @@ export type PriceTriggerProps = {
   className?: string
 } & PriceTriggerVariants
 
-const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
+const PriceTrigger = forwardRef<HTMLDivElement, PriceTriggerProps>(
   (
     {
       formattedAmount,
@@ -85,20 +85,21 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
       : globalConfig.ordersErc20
 
     return (
-      <span
+      <div
         ref={ref}
         className={cn(
           priceTriggerVariants({ size, variant, className, fontWeight })
         )}
+
       >
         {!hideIcon && currency.thumb && (
-          <span className={cn("relative", iconVariants({ size }))}>
+          <div className={cn("relative mr-1", iconVariants({ size }))}>
             <Image
               src={`${env.NEXT_PUBLIC_BASE_PATH}/tokens/${currency.thumb}`}
               alt={currency.symbol}
               fill
             />
-          </span>
+          </div>
         )}
         {`${roundedAmount}${
           !hideSymbol || !currency.thumb ? ` ${currency.symbol}` : ""
@@ -110,7 +111,7 @@ const PriceTrigger = forwardRef<HTMLSpanElement, PriceTriggerProps>(
             amount={roundedAmount}
           />
         )}
-      </span>
+      </div>
     )
   }
 )

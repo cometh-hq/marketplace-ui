@@ -4,7 +4,7 @@ import { fetchNeedsMoreAllowance } from "@/services/allowance/allowanceService"
 import { fetchHasSufficientFunds } from "@/services/balance/fundsService"
 import { fetchHasEnoughGas } from "@/services/balance/gasService"
 import { fetchNeedsToWrap } from "@/services/exchange/wrapService"
-import { AssetWithTradeData } from "@cometh/marketplace-sdk"
+import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
@@ -16,7 +16,7 @@ import { useStepper } from "@/lib/utils/stepper"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
 
 export type UseRequiredMakeBuyOfferSteps = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
   price?: BigNumber | null
   validity?: string | null
 }
@@ -120,13 +120,14 @@ export const useRequiredMakeBuyOfferSteps = ({
 }
 
 export type UseMakeBuyOfferAssetButtonOptions = {
-  asset: AssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData
 }
 
 export const useMakeBuyOfferAssetButton = ({
   asset,
 }: UseMakeBuyOfferAssetButtonOptions) => {
   const [price, setPrice] = useState<BigNumber | null>(null)
+  const [quantity, setQuantity] = useState<BigInt>(BigInt(1))
   const [validity, setValidity] = useState<string | null>(null)
 
   const {
@@ -148,6 +149,8 @@ export const useMakeBuyOfferAssetButton = ({
     reset,
     price,
     setPrice,
+    quantity,
+    setQuantity,
     validity,
     setValidity,
     refetch,

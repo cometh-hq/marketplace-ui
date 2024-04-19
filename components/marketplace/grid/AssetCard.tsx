@@ -5,13 +5,11 @@ import Link from "next/link"
 import { manifest } from "@/manifests/manifests"
 import {
   AssetAttribute,
-  AssetWithTradeData,
   SearchAssetWithTradeData,
 } from "@cometh/marketplace-sdk"
 import { animated, config, useSpring } from "react-spring"
 import { useBoolean } from "usehooks-ts"
 import { Address } from "viem"
-import { useAccount } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { getRandomArrayElement } from "@/lib/utils/arrays"
@@ -19,6 +17,7 @@ import { getAssetColor } from "@/lib/utils/colorsAttributes"
 import { cn } from "@/lib/utils/utils"
 import { Appear } from "@/components/ui/Appear"
 import { AssetImage } from "@/components/ui/AssetImage"
+import { Button } from "@/components/ui/Button"
 import { Card } from "@/components/ui/Card"
 import { Price } from "@/components/ui/Price"
 import { BuyAssetButton } from "@/components/asset-actions/buttons/BuyAssetButton"
@@ -27,6 +26,13 @@ import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/MakeBuyOf
 import { SellAssetButton } from "@/components/asset-actions/buttons/SellAssetButton"
 import { SwitchNetwork } from "@/components/asset-actions/buttons/SwitchNetwork"
 import { AuthenticationButton } from "@/components/AuthenticationButton"
+import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
+import TokenQuantity from "@/components/erc1155/TokenQuantity"
+
+import {
+  useAssetOwnedQuantity,
+  useIsViewerAnOwner,
+} from "../../../services/cometh-marketplace/assetOwners"
 
 export type AssetCardProps = {
   asset: SearchAssetWithTradeData & {
@@ -39,7 +45,7 @@ export type AssetCardProps = {
 
 export type AssetCardBaseProps = {
   src?: string | null
-  isOwnerAsset: boolean
+  isViewerAnOwner: boolean
   children?: React.ReactNode | React.ReactNode[]
   fallback?: string | null
   asset: SearchAssetWithTradeData
@@ -94,7 +100,7 @@ export function AssetCardBase({
   src,
   fallback,
   children,
-  isOwnerAsset,
+  isViewerAnOwner,
   asset,
 }: AssetCardBaseProps) {
   const isHovered = useBoolean(false)
@@ -102,6 +108,8 @@ export function AssetCardBase({
     globalConfig.collectionSettingsByAddress[
       asset.contractAddress.toLowerCase() as Address
     ].imageAspectRatio
+  const isErc1155 = useAssetIs1155(asset)
+  const assetOwnedQuantity = useAssetOwnedQuantity(asset)
 
   const cardTextHeightsClass = manifest.fiatCurrency.enable
     ? "sm:h-[110px]"
@@ -118,7 +126,7 @@ export function AssetCardBase({
         onMouseEnter={isHovered.setTrue}
         onMouseLeave={isHovered.setFalse}
         className={cn(
-          isOwnerAsset ? "border-[#BFA100]" : "border-muted",
+          isViewerAnOwner ? "border-owner" : "border-muted",
           isHovered.value && "shadow-md",
           "min-h-[140px]",
           "  flex  w-full flex-1 flex-row items-stretch overflow-hidden duration-200 ease-in-out first-letter:transition-all sm:inline-flex sm:flex-col sm:items-start sm:border-2"
@@ -144,13 +152,33 @@ export function AssetCardBase({
             </AssetImageContainer>
           </Link>
 
+          <Link
+            href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
+            className={cn(
+              !isErc1155 && "hidden",
+              "bg-foreground/20 text-background absolute left-2 top-2 rounded-lg px-3 py-1 text-sm font-semibold"
+            )}
+          >
+            <TokenQuantity value={asset.supply} />
+          </Link>
+
+          <Link
+            href={`/nfts/${asset.contractAddress}/${asset.tokenId}`}
+            className={cn(
+              (!isErc1155 || !assetOwnedQuantity) && "hidden",
+              "bg-foreground/20 text-background border-owner absolute right-2 top-2 rounded-lg border px-3 py-1 text-sm font-semibold"
+            )}
+          >
+            Owned: <TokenQuantity value={assetOwnedQuantity} />
+          </Link>
+
           <div
             className={cn(
               !isHovered.value && "hidden",
               "absolute bottom-4 left-1/2 -translate-x-1/2"
             )}
           >
-            {renderAssetActions(asset, isOwnerAsset)}
+            <AssetActions asset={asset} isViewerAnOwner={isViewerAnOwner} />
           </div>
         </div>
 
@@ -169,31 +197,46 @@ export function AssetCardBase({
   )
 }
 
-function renderAssetActions(
+function AssetListingsButton({ asset }: { asset: SearchAssetWithTradeData }) {
+  return (
+    <Link href={`/nfts/${asset.contractAddress}/${asset.tokenId}?tab=listings`}>
+      <Button className="w-full" size="lg">
+        Buy now
+      </Button>
+    </Link>
+  )
+}
+
+function AssetActions({
+  asset,
+  isViewerAnOwner,
+}: {
   asset: SearchAssetWithTradeData & {
     metadata: {
       attributes?: AssetAttribute[]
     }
-  },
-  isOwnerAsset: boolean
-) {
+  }
+  isViewerAnOwner: boolean
+}) {
+  const isAsset1155 = useAssetIs1155(asset)
+
   let button = undefined
   let buttonText = ""
-  if (asset.orderbookStats.lowestListingPrice && !isOwnerAsset) {
-    button = <BuyAssetButton asset={asset} />
+  if (asset.orderbookStats.lowestListingPrice && !isViewerAnOwner) {
     buttonText = "Buy now "
-  } else if (!isOwnerAsset) {
-    button = (
-      <MakeBuyOfferButton asset={asset as unknown as AssetWithTradeData} />
-    )
+    if (!isAsset1155) {
+      button = <BuyAssetButton asset={asset} />
+    } else {
+      button = <AssetListingsButton asset={asset} />
+    }
+  } else if (!isViewerAnOwner) {
+    button = <MakeBuyOfferButton asset={asset} />
     buttonText = "Make an offer"
-  } else if (!asset.orderbookStats.lowestListingPrice) {
-    button = <SellAssetButton asset={asset as unknown as AssetWithTradeData} />
+  } else if (!asset.orderbookStats.lowestListingPrice || isAsset1155) {
+    button = <SellAssetButton asset={asset} />
     buttonText = "Sell now"
   } else {
-    button = (
-      <CancelListingButton asset={asset as unknown as AssetWithTradeData} />
-    )
+    button = <CancelListingButton asset={asset} />
     buttonText = "Cancel listing"
   }
 
@@ -209,18 +252,13 @@ function renderAssetActions(
 }
 
 export function AssetCard({ asset, children }: AssetCardProps) {
-  const account = useAccount()
-  const viewerAddress = account.address
-
-  const isOwnerAsset = useMemo(() => {
-    return asset.owner === viewerAddress?.toLowerCase()
-  }, [viewerAddress, asset.owner])
+  const isViewerAnOwner = useIsViewerAnOwner(asset)
 
   return (
     <AssetCardBase
       src={asset.cachedImageUrl}
       fallback={asset.metadata.image}
-      isOwnerAsset={isOwnerAsset}
+      isViewerAnOwner={isViewerAnOwner}
       asset={asset}
     >
       <div className="p-3">
