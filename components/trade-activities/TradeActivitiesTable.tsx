@@ -131,7 +131,7 @@ const ActivityRow = ({
   const shouldHideReceiver = useMemo(
     () =>
       isOrderActivity(activity) &&
-      (activity.order.orderStatus === TradeStatus.OPEN ||
+      (activity.order.orderStatus !== TradeStatus.FILLED ||
         activity.order.tokenType === TokenType.ERC1155),
     [activity]
   )
