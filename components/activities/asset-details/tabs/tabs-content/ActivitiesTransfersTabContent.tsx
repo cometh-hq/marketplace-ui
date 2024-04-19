@@ -1,14 +1,14 @@
 "use client"
 
-import { AssetTransfers, Order } from "@cometh/marketplace-sdk"
+import { AssetTransfers, OrderWithAsset } from "@cometh/marketplace-sdk"
 
 import { Card } from "@/components/ui/Card"
 import { TabsContent } from "@/components/ui/Tabs"
-import { TransfersList } from "@/components/transfers/TransfersList"
+import { TradeActivitiesTable } from "@/components/trade-activities/TradeActivitiesTable"
 
 type ActivitiesTransfersTabContentProps = {
   assetTransfers: AssetTransfers
-  assetOrders: Order[]
+  assetOrders: OrderWithAsset[]
 }
 
 export const ActivitiesTransfersTabContent = ({
@@ -17,10 +17,12 @@ export const ActivitiesTransfersTabContent = ({
 }: ActivitiesTransfersTabContentProps) => {
   return (
     <TabsContent value="activity">
-      <Card>
-        <TransfersList
+      <Card className="rounded-md">
+        <TradeActivitiesTable
           assetTransfers={assetTransfers}
-          assetOrders={assetOrders}
+          orders={assetOrders}
+          display1155Columns={false}
+          displayAssetColumns={false}
         />
       </Card>
     </TabsContent>

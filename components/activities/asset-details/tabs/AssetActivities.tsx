@@ -1,7 +1,7 @@
 import {
   AssetTransfers,
   AssetWithTradeData,
-  Order,
+  OrderWithAsset,
 } from "@cometh/marketplace-sdk"
 
 import { Tabs } from "@/components/ui/Tabs"
@@ -14,7 +14,7 @@ import { BuyOffersTabContent } from "./tabs-content/BuyOffersTabContent"
 export type AssetActivitiesProps = {
   asset: AssetWithTradeData
   assetTransfers: AssetTransfers
-  assetOrders: Order[]
+  assetOrders: OrderWithAsset[]
 }
 
 export const AssetActivities = ({

@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
-import { InboxIcon, SendIcon, WalletIcon } from "lucide-react"
+import { CalendarIcon, InboxIcon, SendIcon, WalletIcon } from "lucide-react"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
@@ -45,6 +45,9 @@ export const TabBar = ({ receivedCounter, sentCounter }: TabBarProps) => {
       {globalConfig.contractAddresses.map((address) => (
         <CollectionTabsTrigger key={address} collectionAddress={address} />
       ))}
+      <TabsTrigger value="account-activities">
+        <CalendarIcon size="18" className="mr-2" /> Activities
+      </TabsTrigger>
       <TabsTrigger value="received-offers">
         <InboxIcon size="18" className="mr-2" /> Received Offers (
         {receivedCounter})

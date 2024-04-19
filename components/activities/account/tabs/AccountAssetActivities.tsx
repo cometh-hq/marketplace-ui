@@ -11,6 +11,7 @@ import { Address } from "viem"
 import globalConfig from "@/config/globalConfig"
 import { useNFTFilters } from "@/lib/utils/nftFilters"
 import { Tabs } from "@/components/ui/Tabs"
+import { AccountActivitiesTab } from "@/components/trade-activities/AccountActivitiesTab"
 
 import { TabBar } from "./TabBar"
 import { BuyOffersTabContent } from "./tabs-content/BuyOffersTabContent"
@@ -66,6 +67,7 @@ export const AccountAssetActivities = ({
       ))}
       <BuyOffersTabContent offers={receivedOffers} />
       <SendBuyOffersTabContent offers={sentOffers} />
+      <AccountActivitiesTab walletAddress={walletAddress} />
     </Tabs>
   )
 }
