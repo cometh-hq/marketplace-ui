@@ -2,7 +2,7 @@
 
 import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
 import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
-import { TradeStatus } from "@cometh/marketplace-sdk"
+import { FilterDirection, SearchOrdersSortOption, TradeStatus } from "@cometh/marketplace-sdk"
 import { ArrowLeftIcon } from "lucide-react"
 import { Address } from "viem"
 
@@ -25,6 +25,8 @@ export const CollectionActivities = ({
     tokenAddress: contractAddress,
     limit: NB_COLLECTION_ORDERS_SHOWN,
     statuses: [TradeStatus.FILLED, TradeStatus.OPEN],
+    orderBy: SearchOrdersSortOption.UPDATED_AT,
+    orderByDirection: FilterDirection.DESC,
   })
   const collection = useGetCollection(contractAddress as Address)
 
@@ -40,7 +42,9 @@ export const CollectionActivities = ({
       </div>
       <h1 className="mb-2 inline-flex items-center text-2xl font-medium sm:text-3xl">
         Activities for collection{" "}
-        <span className="ml-2 font-bold">"{collection?.data?.name}"</span>
+        <span className="ml-2 font-bold">
+          &quot;{collection?.data?.name}&quot;
+        </span>
       </h1>
       {isPending ? (
         <div className=" w-full  text-center text-xl">

@@ -29,6 +29,8 @@ export const AccountActivitiesTab = ({
         TradeStatus.EXPIRED,
         TradeStatus.CANCELLED_BY_TRANSFER,
       ],
+      orderBy: SearchOrdersSortOption.UPDATED_AT,
+      orderByDirection: FilterDirection.DESC,
     })
   const { data: takerOrdersSearch, isPending: isPendingTakerOrders } =
     useSearchOrders({
@@ -41,6 +43,8 @@ export const AccountActivitiesTab = ({
         TradeStatus.EXPIRED,
         TradeStatus.CANCELLED_BY_TRANSFER,
       ],
+      orderBy: SearchOrdersSortOption.UPDATED_AT,
+      orderByDirection: FilterDirection.DESC,
     })
   const allOrders = useMemo(() => {
     return (makerOrdersSearch?.orders || []).concat(
