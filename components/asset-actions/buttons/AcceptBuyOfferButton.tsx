@@ -42,7 +42,8 @@ export function AcceptBuyOfferButton({ offer, size }: AcceptBuyOfferButtonProps)
         </Case>
         <Case value="token-approval">
           <CollectionApprovalStep
-            asset={offer.asset! || offer.trade}
+            contractAddress={offer.trade.tokenAddress}
+            tokenId={offer.trade.tokenId}
             onValid={nextStep}
           />
         </Case>

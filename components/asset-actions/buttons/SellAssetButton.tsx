@@ -49,7 +49,11 @@ export function SellAssetButton({ asset, size = "lg" }: SellAssetButtonProps) {
           <AddGasStep onValid={nextStep} />
         </Case>
         <Case value="token-approval">
-          <CollectionApprovalStep asset={asset} onValid={nextStep} />
+          <CollectionApprovalStep
+            contractAddress={asset.contractAddress}
+            tokenId={asset.tokenId}
+            onValid={nextStep}
+          />
         </Case>
         <Case value="sell">
           <SellStep asset={asset} onClose={closeDialog} />
