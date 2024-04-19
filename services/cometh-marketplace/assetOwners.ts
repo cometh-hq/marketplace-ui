@@ -10,6 +10,7 @@ import { useAccount } from "wagmi"
 
 import { comethMarketplaceClient } from "@/lib/clients"
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
+import { OrderAsset } from "@/types/assets"
 
 export const useAssetOwners = (contractAddress: string, assetId: string) => {
   const { data, isLoading } = useQuery({

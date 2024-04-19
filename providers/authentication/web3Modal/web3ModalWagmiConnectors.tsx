@@ -18,5 +18,5 @@ if (env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY && typeof window !== "undefined") {
   const comethConnectConnectorInstance = comethConnectConnector({
     apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY,
   })
-  wagmiConnectors.push(comethConnectConnectorInstance)
+  wagmiConnectors.push(comethConnectConnectorInstance as any)
 }

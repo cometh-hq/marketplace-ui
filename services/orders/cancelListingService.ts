@@ -23,7 +23,9 @@ export const useCancelListing = () => {
     mutationFn: async (
       asset: AssetWithTradeData | SearchAssetWithTradeData
     ) => {
-      const nonce = (await getCheapestListing(asset.tokenId)).nonce
+      const nonce = (
+        await getCheapestListing(asset.contractAddress, asset.tokenId)
+      ).nonce
       if (!nonce) throw new Error("No nonce found on asset")
       if (!signer) throw new Error("Could not get signer")
       const tokenType = asset.tokenType
