@@ -30,7 +30,7 @@ export const getActivityTimestamp = (assetActivity: AssetActivity) => {
     let dateToUse = order.signedAt
 
     if (order.orderStatus === TradeStatus.FILLED) {
-      dateToUse = order.filledAt as string
+      dateToUse = order.lastFilledAt as string
     }
     return new Date(dateToUse).getTime()
   } else {

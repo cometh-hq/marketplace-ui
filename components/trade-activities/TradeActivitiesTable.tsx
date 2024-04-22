@@ -17,7 +17,6 @@ import {
   ScrollTextIcon,
   ShoppingCartIcon,
 } from "lucide-react"
-import { Address, isAddressEqual } from "viem"
 import { useAccount } from "wagmi"
 
 import {
@@ -29,6 +28,7 @@ import {
   TableRow,
 } from "@/components/ui/Table"
 
+import TokenQuantity from "../erc1155/TokenQuantity"
 import { CopyButton } from "../ui/CopyButton"
 import { Price } from "../ui/Price"
 import { UserButton } from "../ui/user/UserButton"
@@ -137,8 +137,11 @@ const ActivityRow = ({
   )
 
   const isErc1155 = useMemo(() => {
-    return false
-  }, [])
+    const tokenType = isOrderActivity(activity)
+      ? activity.order.tokenType
+      : activity.transfer.tokenType
+    return tokenType === TokenType.ERC1155
+  }, [activity])
 
   const bgClass = useMemo(
     () => (rowIndex % 2 === 0 ? "bg-muted/30" : ""),
@@ -157,12 +160,12 @@ const ActivityRow = ({
       )}
       {display1155Columns && (
         <TableCell className="font-bold">
-          {/* {isErc1155 &&
+          {isErc1155 &&
             (isOrderActivity(activity) ? (
               <TokenQuantity value={activity.order.tokenQuantity} />
             ) : (
               <TokenQuantity value={activity.transfer.quantity} />
-            ))} */}
+            ))}
         </TableCell>
       )}
       <TableCell>
