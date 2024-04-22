@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react"
 import { ethers } from "ethers"
-import { useChainId, useSwitchChain } from "wagmi"
+import { useAccount, useSwitchChain } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
 import { toast } from "@/components/ui/toast/hooks/useToast"
 
 export const useCorrectNetwork = () => {
   const { switchChain } = useSwitchChain()
-  const currentChainId = useChainId()
+  
+  const account = useAccount()
+  const currentChainId = account.chainId
 
   const [isChainSupported, setIsChainSupported] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
