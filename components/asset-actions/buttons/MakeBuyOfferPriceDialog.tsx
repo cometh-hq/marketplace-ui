@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/Select"
 import { ButtonLoading } from "@/components/ButtonLoading"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
+import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
 import { Case, Switch } from "@/components/utils/Switch"
 
@@ -38,7 +39,7 @@ import { AllowanceStep } from "../transaction-steps/AllowanceStep"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/ConfirmMakeBuyOfferStep"
 import { FundsStep } from "../transaction-steps/FundsStep"
 import { WrapStep } from "../transaction-steps/WrapStep"
-import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
+import { OrderExpirySelect } from "./OrderExpirySelect"
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
@@ -49,13 +50,15 @@ type MakeBuyOfferPriceDialogProps = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
 } & React.ComponentProps<typeof Button>
 
+const DEFAULT_VALIDITY = "3"
+
 export function MakeBuyOfferPriceDialog({
   submitCallback,
   asset,
   size = "lg",
 }: MakeBuyOfferPriceDialogProps) {
   const [price, setPrice] = useState("")
-  const [validity, setValidity] = useState("1")
+  const [validity, setValidity] = useState(DEFAULT_VALIDITY)
   const orderParams = useMemo(() => {
     try {
       const parsedPrice = parseUnits(price, globalConfig.ordersErc20.decimals)
@@ -95,18 +98,10 @@ export function MakeBuyOfferPriceDialog({
             />
           </div>
           <div className="flex flex-col gap-3 md:w-1/3">
-            <Label htmlFor="make-buy-offer-price">Validity time</Label>
-            <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
-              <SelectTrigger className="sm:w-[180px]">
-                <SelectValue placeholder="" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">24h</SelectItem>
-                <SelectItem value="2">48h</SelectItem>
-                <SelectItem value="3">72h</SelectItem>
-                <SelectItem value="10">10 days</SelectItem>
-              </SelectContent>
-            </Select>
+            <OrderExpirySelect
+              setValidity={setValidity}
+              defaultValidity={DEFAULT_VALIDITY}
+            />
           </div>
         </div>
         <Button
