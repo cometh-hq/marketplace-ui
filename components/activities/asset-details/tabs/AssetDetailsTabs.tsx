@@ -4,6 +4,7 @@ import {
   AssetTransfers,
   AssetWithTradeData,
   Order,
+  OrderWithAsset,
 } from "@cometh/marketplace-sdk"
 
 import { Tabs } from "@/components/ui/Tabs"
@@ -21,7 +22,7 @@ export type AssetActivitiesProps = {
   asset: AssetWithTradeData
   assetTransfers: AssetTransfers
   assetOwners: AssetOwners
-  assetOrders: Order[]
+  assetOrders: OrderWithAsset[]
 }
 
 export const AssetDetailsTabs = ({
@@ -35,6 +36,7 @@ export const AssetDetailsTabs = ({
 
   return (
     <Tabs
+      id="tabs"
       value={currentTab}
       onValueChange={setCurrentTab}
       className="mb-4 w-full"

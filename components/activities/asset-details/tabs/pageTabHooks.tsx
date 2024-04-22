@@ -18,9 +18,11 @@ export function useUpdateTabQueryParam(): (newTab: string) => void {
 
   return useCallback(
     (newTab: string) => {
-      router.push(pathname + "?" + createQueryString("tab", newTab), {
+      router.push(pathname + "?" + createQueryString("tab", newTab) , {
         scroll: false,
       })
+      const tabsDiv = document.getElementById("tabs")
+      tabsDiv?.scrollIntoView()
     },
     [router, pathname, createQueryString]
   )

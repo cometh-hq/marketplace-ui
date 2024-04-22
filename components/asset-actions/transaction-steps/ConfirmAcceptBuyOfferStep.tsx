@@ -1,7 +1,9 @@
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
+import { useAssetOwnedQuantity } from "@/services/cometh-marketplace/assetOwners"
 import { useAcceptBuyOffer } from "@/services/orders/acceptBuyOfferService"
 import { OrderWithAsset, TokenType } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
+
 import { Button } from "@/components/ui/Button"
 import { Price } from "@/components/ui/Price"
 import { PriceDetails } from "@/components/ui/PriceDetails"
@@ -32,6 +34,16 @@ export function ConfirmAcceptBuyOfferStep({
     onValid()
   }, [acceptBuyOffer, offer, quantity, onValid])
 
+  const userOwnedQuantity = useAssetOwnedQuantity(offer.asset!)
+
+  const transactionMaxiumQuantity = useMemo(
+    () =>
+      BigInt(userOwnedQuantity) < BigInt(offer.tokenQuantityRemaining)
+        ? BigInt(userOwnedQuantity)
+        : BigInt(offer.tokenQuantityRemaining),
+    [userOwnedQuantity, offer.tokenQuantityRemaining]
+  )
+
   const amount = offer.erc20TokenAmount
   const fees = offer.totalFees
   const amountWithFees = BigNumber.from(amount).add(fees).toString()
@@ -60,7 +72,7 @@ export function ConfirmAcceptBuyOfferStep({
 
       {isErc1155 && (
         <TokenQuantityInput
-          max={BigInt(offer.tokenQuantityRemaining)}
+          max={transactionMaxiumQuantity}
           label="Quantity to sell*"
           onChange={setQuantity}
           initialQuantity={BigInt(1)}

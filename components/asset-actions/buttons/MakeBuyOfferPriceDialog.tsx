@@ -42,10 +42,7 @@ import { AllowanceStep } from "../transaction-steps/AllowanceStep"
 import { ConfirmMakeBuyOfferStep } from "../transaction-steps/ConfirmMakeBuyOfferStep"
 import { FundsStep } from "../transaction-steps/FundsStep"
 import { WrapStep } from "../transaction-steps/WrapStep"
-<<<<<<< HEAD
-=======
 import { OrderExpirySelect } from "./OrderExpirySelect"
->>>>>>> 4ce83fac072dcfa9c4c10d0363e1165eb8cae9c0
 
 export type MakeBuyOfferProps = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
@@ -63,9 +60,8 @@ export function MakeBuyOfferPriceDialog({
   asset,
   size = "lg",
 }: MakeBuyOfferPriceDialogProps) {
-<<<<<<< HEAD
   const [unitPrice, setUnitPrice] = useState("")
-  const [validity, setValidity] = useState("1")
+  const [validity, setValidity] = useState(DEFAULT_VALIDITY)
   const [quantity, setQuantity] = useState(BigInt(1))
   const isErc1155 = useAssetIs1155(asset)
 
@@ -80,10 +76,6 @@ export function MakeBuyOfferPriceDialog({
     () => parsedUnitPrice.mul(quantity),
     [parsedUnitPrice, quantity]
   )
-=======
-  const [price, setPrice] = useState("")
-  const [validity, setValidity] = useState(DEFAULT_VALIDITY)
->>>>>>> 4ce83fac072dcfa9c4c10d0363e1165eb8cae9c0
   const orderParams = useMemo(() => {
     try {
       return { price: totalPrice, validity, quantity: quantity }

@@ -26,9 +26,9 @@ import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import TokenQuantityInput from "@/components/erc1155/TokenQuantityInput"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
 import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
-import { OrderExpirySelect } from "../buttons/OrderExpirySelect"
 
 import { useAssetOwnershipByOwner } from "../../../services/cometh-marketplace/assetOwners"
+import { OrderExpirySelect } from "../buttons/OrderExpirySelect"
 import { SwitchNetwork } from "../buttons/SwitchNetwork"
 
 export type SellStepProps = {
@@ -116,7 +116,10 @@ export function SellStep({ asset, onClose }: SellStepProps) {
         </div>
 
         <div className="flex flex-col gap-3 sm:w-1/3">
-          <OrderExpirySelect setValidity={setValidity} defaultValidity={DEFAULT_VALIDITY} />
+          <OrderExpirySelect
+            setValidity={setValidity}
+            defaultValidity={DEFAULT_VALIDITY}
+          />
         </div>
       </div>
 
@@ -147,7 +150,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
           {isErc1155 && userOwnershipQuantity && (
             <span>{quantity.toString()}</span>
           )}
-          for <Price amount={totalPrice.toString()} />
+          for <Price size="sm" amount={totalPrice.toString()} />
         </Button>
       </SwitchNetwork>
     </>
