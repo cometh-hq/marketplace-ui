@@ -11,7 +11,7 @@ export const OrderPriceCell = ({ row }: OrderPriceCellProps) => {
   return (
     <Price
       size="sm"
-      amount={row.original.totalPrice}
+      amount={row.original.totalUnitPrice}
       className="font-semibold"
     />
   )

@@ -29,7 +29,7 @@ export const BuyOffersTabContent = ({
   owner,
   tabKey = "buy-offers",
 }: ActivitiesBuyOffersTabContentProps) => {
-  const isErc1155 = useAssetIs1155(asset)
+  const isErc1155 = useAssetIs1155(asset) || !asset
 
   const searchOffersParams = useMemo(() => {
     const searchOffersParams: SearchOrdersRequest = {
