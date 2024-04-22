@@ -8,6 +8,7 @@ import { Address } from "viem"
 import globalConfig from "@/config/globalConfig"
 import { useNFTFilters } from "@/lib/utils/nftFilters"
 import { Tabs } from "@/components/ui/Tabs"
+import { AccountActivitiesTab } from "@/components/trade-activities/AccountActivitiesTab"
 
 import { ListingsTabContent } from "../../order-tables/listings/ListingsTabContent"
 import { BuyOffersTabContent } from "../../order-tables/offers/BuyOffersTabContent"
@@ -65,6 +66,7 @@ export const AccountAssetActivities = ({
       <BuyOffersTabContent tabKey="received-offers" owner={walletAddress} />
       <BuyOffersTabContent tabKey="sent-offers" maker={walletAddress} />
       <ListingsTabContent maker={walletAddress} />
+      <AccountActivitiesTab walletAddress={walletAddress} />
     </Tabs>
   )
 }

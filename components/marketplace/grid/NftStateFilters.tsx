@@ -1,10 +1,12 @@
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
-import { LayoutGridIcon, TagIcon, UserIcon } from "lucide-react"
+import { CalendarIcon, LayoutGridIcon, TagIcon, UserIcon } from "lucide-react"
 import { useAccount } from "wagmi"
 
 import { useNFTFilters } from "@/lib/utils/nftFilters"
 import { Button } from "@/components/ui/Button"
+
+import { useCurrentCollectionContext } from "../../../providers/currentCollection/currentCollectionContext"
 
 export type NFTStateFilterItemProps = {
   label: string
@@ -39,6 +41,8 @@ type NFTStateFiltersProps = {
 
 export function NFTStateFilters({ results }: NFTStateFiltersProps) {
   const { get } = useSearchParams()
+  const currentCollectionContext = useCurrentCollectionContext()
+  const contractAddress = currentCollectionContext.currentCollectionAddress
   const pathname = usePathname()
   const account = useAccount()
   const viewerAddress = account.address
@@ -66,6 +70,12 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
           />
         </Link>
       )}
+
+      <Link href={`/activities/${contractAddress}`}>
+        <Button variant="ghost">
+          <CalendarIcon size="16" className="mr-2" /> Activities
+        </Button>
+      </Link>
     </div>
   )
 }

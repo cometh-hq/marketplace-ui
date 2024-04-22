@@ -26,6 +26,7 @@ import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import TokenQuantityInput from "@/components/erc1155/TokenQuantityInput"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
 import AssetFloorPriceLine from "@/components/marketplace/asset/floorPrice/AssetFloorPriceLine"
+import { OrderExpirySelect } from "../buttons/OrderExpirySelect"
 
 import { useAssetOwnershipByOwner } from "../../../services/cometh-marketplace/assetOwners"
 import { SwitchNetwork } from "../buttons/SwitchNetwork"
@@ -34,6 +35,8 @@ export type SellStepProps = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
   onClose: () => void
 }
+
+const DEFAULT_VALIDITY = "3"
 
 /**
  * Arriving at this stage means that the user has approved the collection
@@ -46,7 +49,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
   const { mutateAsync: sell, isPending } = useSellAsset(asset)
   const [unitPrice, setUnitPrice] = useState("")
   const [quantity, setQuantity] = useState(BigInt(1))
-  const [validity, setValidity] = useState("1")
+  const [validity, setValidity] = useState(DEFAULT_VALIDITY)
   const assetOwnership = useAssetOwnershipByOwner(
     asset.contractAddress,
     asset.tokenId,
@@ -113,18 +116,7 @@ export function SellStep({ asset, onClose }: SellStepProps) {
         </div>
 
         <div className="flex flex-col gap-3 sm:w-1/3">
-          <Label htmlFor="make-buy-offer-price">Validity time</Label>
-          <Select defaultValue="3" onValueChange={(v) => setValidity(v)}>
-            <SelectTrigger className="sm:w-[180px]">
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="1">24h</SelectItem>
-              <SelectItem value="2">48h</SelectItem>
-              <SelectItem value="3">72h</SelectItem>
-              <SelectItem value="10">10 days</SelectItem>
-            </SelectContent>
-          </Select>
+          <OrderExpirySelect setValidity={setValidity} defaultValidity={DEFAULT_VALIDITY} />
         </div>
       </div>
 

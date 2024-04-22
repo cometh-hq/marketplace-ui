@@ -22,7 +22,7 @@ export function CollectionApprovalStep({
     tokenAddress: asset.contractAddress,
     tokenId: asset.tokenId,
     onSuccess: onValid,
-    tokenType: asset.tokenType
+    tokenType: asset.tokenType,
   })
 
   return (
@@ -36,9 +36,7 @@ export function CollectionApprovalStep({
       {isPending ? (
         <ButtonLoading />
       ) : (
-        <Button onClick={() => approveCollection()}>
-          Approve
-        </Button>
+        <Button onClick={() => approveCollection()}>Approve</Button>
       )}
     </div>
   )
