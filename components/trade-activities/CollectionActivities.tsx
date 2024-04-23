@@ -1,8 +1,14 @@
 "use client"
 
 import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
+import { useSearchFilledEvents } from "@/services/cometh-marketplace/searchFilledEventsService"
 import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
-import { FilterDirection, SearchOrdersSortOption, TradeStatus } from "@cometh/marketplace-sdk"
+import {
+  CollectionStandard,
+  FilterDirection,
+  SearchOrdersSortOption,
+  TradeStatus,
+} from "@cometh/marketplace-sdk"
 import { ArrowLeftIcon } from "lucide-react"
 import { Address } from "viem"
 
@@ -21,15 +27,20 @@ const NB_COLLECTION_ORDERS_SHOWN = 300
 export const CollectionActivities = ({
   contractAddress,
 }: CollectionActivitiesProps) => {
-  const { data: orderSearch, isPending } = useSearchOrders({
+  const { data: orderSearch, isPending: isPendingOrders } = useSearchOrders({
     tokenAddress: contractAddress,
     limit: NB_COLLECTION_ORDERS_SHOWN,
-    statuses: [TradeStatus.FILLED, TradeStatus.OPEN],
+    statuses: [TradeStatus.OPEN],
     orderBy: SearchOrdersSortOption.UPDATED_AT,
     orderByDirection: FilterDirection.DESC,
   })
-  const collection = useGetCollection(contractAddress as Address)
-
+  const { data: filledEventsSearch, isPending: isPendingFilledEvents } =
+    useSearchFilledEvents({
+      tokenAddress: contractAddress,
+      limit: NB_COLLECTION_ORDERS_SHOWN,
+    })
+  const { data: collection } = useGetCollection(contractAddress as Address)
+  const isPending = isPendingOrders || isPendingFilledEvents
   return (
     <div className="w-full">
       <div className="mb-3">
@@ -42,9 +53,7 @@ export const CollectionActivities = ({
       </div>
       <h1 className="mb-2 inline-flex items-center text-2xl font-medium sm:text-3xl">
         Activities for collection{" "}
-        <span className="ml-2 font-bold">
-          &quot;{collection?.data?.name}&quot;
-        </span>
+        <span className="ml-2 font-bold">&quot;{collection?.name}&quot;</span>
       </h1>
       {isPending ? (
         <div className=" w-full  text-center text-xl">
@@ -56,7 +65,10 @@ export const CollectionActivities = ({
         <div className="rounded-md border">
           <TradeActivitiesTable
             orders={orderSearch?.orders}
-            display1155Columns={false}
+            orderFilledEvents={filledEventsSearch?.filledEvents}
+            display1155Columns={
+              collection?.standard === CollectionStandard.ERC1155
+            }
             maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
             displayAssetColumns={true}
           />

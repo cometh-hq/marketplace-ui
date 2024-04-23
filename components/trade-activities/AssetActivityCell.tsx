@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useMemo } from "react"
-import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
 import { Address } from "viem"
 
@@ -10,23 +9,21 @@ import globalConfig from "@/config/globalConfig"
 import { AssetImageContainer } from "../marketplace/grid/AssetCard"
 import { AssetImage } from "../ui/AssetImage"
 import { Link } from "../ui/Link"
-import { isOrderActivity, isTransferActivity } from "./activityHelper"
+import {
+  isFilledEventActivity,
+  isOrderActivity,
+  isTransferActivity,
+} from "./activityHelper"
+import { useActivityCollection, useActivityContractAddress } from "./activityHooks"
 import { AssetActivity } from "./AssetActivityTypes"
 
 export function ActivityAssetCell({ activity }: { activity: AssetActivity }) {
-  const currentCollectionContext = useCurrentCollectionContext()
-  const activityContractAddress = useMemo(() => {
-    return isOrderActivity(activity)
-      ? activity.order.tokenAddress
-      : activity.transfer.contractAddress
-  }, [activity])
+  const activityContractAddress = useActivityContractAddress(activity)
+  const collection = useActivityCollection(activity )
   const imageAspectRatio =
     globalConfig.collectionSettingsByAddress[
       activityContractAddress.toLowerCase() as Address
     ].imageAspectRatio
-  const { data: collection } = useGetCollection(
-    activityContractAddress as Address
-  )
 
   if (isTransferActivity(activity)) {
     return (
@@ -36,8 +33,10 @@ export function ActivityAssetCell({ activity }: { activity: AssetActivity }) {
         #{activity.transfer.tokenId}
       </Link>
     )
-  } else if (isOrderActivity(activity)) {
-    const asset = activity.order.asset
+  } else if (isOrderActivity(activity) || isFilledEventActivity(activity)) {
+    const asset = isOrderActivity(activity)
+      ? activity.order.asset
+      : activity.filledEvent.asset
     if (!asset) return null
 
     return (

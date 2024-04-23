@@ -4,6 +4,7 @@ import {
   AssetTransfers,
   AssetWithTradeData,
   Order,
+  OrderFilledEventWithAsset,
   OrderWithAsset,
 } from "@cometh/marketplace-sdk"
 
@@ -14,8 +15,8 @@ import { AssetMetadata } from "@/components/marketplace/asset/AssetMetadata"
 
 import { ListingsTabContent } from "../../order-tables/listings/ListingsTabContent"
 import { BuyOffersTabContent } from "../../order-tables/offers/BuyOffersTabContent"
-import { useQueryParamTab } from "./pageTabHooks"
 import { AssetDetailsTabBar } from "./AssetDetailsTabBar"
+import { useQueryParamTab } from "./pageTabHooks"
 import { ActivitiesTransfersTabContent } from "./tabs-content/ActivitiesTransfersTabContent"
 
 export type AssetActivitiesProps = {
@@ -23,12 +24,14 @@ export type AssetActivitiesProps = {
   assetTransfers: AssetTransfers
   assetOwners: AssetOwners
   assetOrders: OrderWithAsset[]
+  assetFilledEvents: OrderFilledEventWithAsset[]
 }
 
 export const AssetDetailsTabs = ({
   asset,
   assetTransfers,
   assetOrders,
+  assetFilledEvents,
   assetOwners,
 }: AssetActivitiesProps) => {
   const isErc1155 = useAssetIs1155(asset)
@@ -46,6 +49,7 @@ export const AssetDetailsTabs = ({
       <ActivitiesTransfersTabContent
         assetTransfers={assetTransfers}
         assetOrders={assetOrders}
+        assetFilledEvents={assetFilledEvents}
         display1155Columns={isErc1155}
       />
       <ListingsTabContent asset={asset} />

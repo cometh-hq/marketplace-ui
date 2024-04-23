@@ -3,6 +3,7 @@
 import { useAssetOwners } from "@/services/cometh-marketplace/assetOwners"
 import { useAssetTransfers } from "@/services/cometh-marketplace/assetTransfersService"
 import { useAssetDetails } from "@/services/cometh-marketplace/searchAssetsService"
+import { useSearchFilledEvents } from "@/services/cometh-marketplace/searchFilledEventsService"
 import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
 import {
   FilterDirection,
@@ -25,16 +26,26 @@ export default function DetailsPage({
   const { data: asset } = useAssetDetails(contractAddress, assetId)
   const { data: assetTransfers } = useAssetTransfers(contractAddress, assetId)
   const { data: assetOwners } = useAssetOwners(contractAddress, assetId)
-  const { data: assetOrders } = useSearchOrders({
+  const { data: assetOrdersSearch } = useSearchOrders({
     tokenAddress: contractAddress,
     tokenIds: [assetId],
-    statuses: [TradeStatus.FILLED, TradeStatus.OPEN],
+    statuses: [TradeStatus.OPEN],
     orderBy: SearchOrdersSortOption.UPDATED_AT,
     orderByDirection: FilterDirection.DESC,
     limit: 100,
   })
+  const { data: assetFilledEventsSearch } = useSearchFilledEvents({
+    tokenAddress: contractAddress,
+    tokenIds: [assetId],
+    limit: 100,
+  })
 
-  const loading = !asset || !assetTransfers || !assetOrders
+  const loading =
+    !asset ||
+    !assetTransfers ||
+    !assetOrdersSearch ||
+    !assetOwners ||
+    !assetFilledEventsSearch
 
   return (
     <div className="container py-6">
@@ -46,7 +57,8 @@ export default function DetailsPage({
           {assetTransfers && assetOwners && (
             <AssetDetailsTabs
               asset={asset}
-              assetOrders={assetOrders?.orders}
+              assetOrders={assetOrdersSearch?.orders}
+              assetFilledEvents={assetFilledEventsSearch?.filledEvents}
               assetTransfers={assetTransfers}
               assetOwners={assetOwners}
             />
