@@ -61,12 +61,12 @@ export const AccountActivitiesTab = ({
         </div>
       ) : (
         <div className="rounded-md border">
-          {/* <TradeActivitiesTable
+          { <TradeActivitiesTable
             orders={allOrders}
             display1155Columns={false}
             maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
             displayAssetColumns={true}
-          /> */}
+          /> }
         </div>
       )}
     </TabsContent>
