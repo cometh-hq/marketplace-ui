@@ -19,11 +19,13 @@ type ActivitiesFiltersControlsProps = {
     filtersOverride: Partial<SearchOrdersRequest>
   ) => void
   defaultStatuses?: TradeStatus[]
+  disableAttributesFilters?: boolean
 }
 
 export const ActivitiesFiltersControls = ({
   onFiltersOverrideChange,
   defaultStatuses = [TradeStatus.OPEN, TradeStatus.FILLED],
+  disableAttributesFilters = false,
 }: ActivitiesFiltersControlsProps) => {
   const [selectedStatuses, setSelectedStatuses] =
     useState<TradeStatus[]>(defaultStatuses)
@@ -71,16 +73,22 @@ export const ActivitiesFiltersControls = ({
           selectedStatuses={selectedStatuses}
         />
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        {isMobile ? (
-          <FiltersFullscreen attributeFilterOptions={attributeFilterOptions} />
-        ) : (
-          <>
-            <FiltersDropdown attributeFilterOptions={attributeFilterOptions} />
-            <FiltersResetBtn />
-          </>
-        )}
-      </div>
+      {!disableAttributesFilters && (
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {isMobile ? (
+            <FiltersFullscreen
+              attributeFilterOptions={attributeFilterOptions}
+            />
+          ) : (
+            <>
+              <FiltersDropdown
+                attributeFilterOptions={attributeFilterOptions}
+              />
+              <FiltersResetBtn />
+            </>
+          )}
+        </div>
+      )}
     </div>
   )
 }

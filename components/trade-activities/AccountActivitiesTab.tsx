@@ -52,7 +52,11 @@ export const AccountActivitiesTab = ({
 
   return (
     <TabsContent value="account-activities" className="w-full">
-      <ActivitiesFiltersControls defaultStatuses={[]} onFiltersOverrideChange={setFiltersOverride} />
+      <ActivitiesFiltersControls
+        defaultStatuses={[]}
+        onFiltersOverrideChange={setFiltersOverride}
+        disableAttributesFilters
+      />
       {isPending ? (
         <div className=" w-full  text-center text-xl">
           Loading profile activities
@@ -61,12 +65,14 @@ export const AccountActivitiesTab = ({
         </div>
       ) : (
         <div className="rounded-md border">
-          { <TradeActivitiesTable
-            orders={allOrders}
-            display1155Columns={false}
-            maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
-            displayAssetColumns={true}
-          /> }
+          {
+            <TradeActivitiesTable
+              orders={allOrders}
+              display1155Columns={false}
+              maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
+              displayAssetColumns={true}
+            />
+          }
         </div>
       )}
     </TabsContent>
