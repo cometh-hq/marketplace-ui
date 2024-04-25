@@ -7,5 +7,5 @@ export type FilterSwitchLineProps = {
 }
 
 export type FiltersDropdownProps = {
-  filters: MarketplacePanelFilters
+  attributeFilterOptions: MarketplacePanelFilters
 }

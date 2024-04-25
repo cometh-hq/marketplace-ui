@@ -13,7 +13,9 @@ import { FilterMultiCombobox } from "./FilterMultiCombobox"
 import { FiltersBadgeCounter } from "./FiltersBadgeCounter"
 import { FiltersDropdownProps } from "./types"
 
-export const FiltersDropdown = ({ filters }: FiltersDropdownProps) => {
+export const FiltersDropdown = ({
+  attributeFilterOptions: filters,
+}: FiltersDropdownProps) => {
   const { filtersCounter } = useNFTFilters()
 
   return (

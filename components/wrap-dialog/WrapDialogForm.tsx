@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect } from "react"
-import { useBalance } from "@/services/balance/balanceService"
+import { useAllBalances } from "@/services/balance/balanceService"
 import { useUnwrapToken } from "@/services/exchange/unwrapTokenService"
 import { useWrapToken } from "@/services/exchange/wrapTokenService"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -59,7 +59,7 @@ export function WrapDialogForm({
   const { isChainSupported } = useCorrectNetwork()
   const wrapToken = useWrapToken()
   const unwrapToken = useUnwrapToken()
-  const balance = useBalance()
+  const balance = useAllBalances()
 
   const tokenAction = isUnwrap ? unwrapToken : wrapToken
   const maxBalance = isUnwrap ? balance.wrapped : balance.native

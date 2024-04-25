@@ -39,7 +39,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <AppProviders>
-          <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+          <div className="relative flex min-h-screen w-full flex-col">
             <SiteHeader />
             <AppContent>{children}</AppContent>
           </div>

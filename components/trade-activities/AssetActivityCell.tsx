@@ -14,7 +14,6 @@ import { isOrderActivity, isTransferActivity } from "./activityHelper"
 import { AssetActivity } from "./AssetActivityTypes"
 
 export function ActivityAssetCell({ activity }: { activity: AssetActivity }) {
-  const currentCollectionContext = useCurrentCollectionContext()
   const activityContractAddress = useMemo(() => {
     return isOrderActivity(activity)
       ? activity.order.tokenAddress
@@ -23,7 +22,7 @@ export function ActivityAssetCell({ activity }: { activity: AssetActivity }) {
   const imageAspectRatio =
     globalConfig.collectionSettingsByAddress[
       activityContractAddress.toLowerCase() as Address
-    ].imageAspectRatio
+    ]?.imageAspectRatio
   const { data: collection } = useGetCollection(
     activityContractAddress as Address
   )

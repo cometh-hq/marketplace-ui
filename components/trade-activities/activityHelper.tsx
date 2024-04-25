@@ -1,6 +1,11 @@
 "use client"
 
-import { AssetTransfers, Order, TradeStatus } from "@cometh/marketplace-sdk"
+import {
+  AssetTransfers,
+  Order,
+  TradeDirection,
+  TradeStatus,
+} from "@cometh/marketplace-sdk"
 import { Address, isAddressEqual } from "viem"
 
 import {
@@ -64,7 +69,12 @@ export const getActivityEmitter = (
       viewerAddress
     )
   } else if (isOrderActivity(assetActivity)) {
-    return getFormattedUser(assetActivity.order.maker as Address, viewerAddress)
+    return getFormattedUser(
+      (assetActivity.order.direction === TradeDirection.SELL
+        ? assetActivity.order.maker
+        : assetActivity.order.taker) as Address,
+      viewerAddress
+    )
   } else {
     throw new Error("Unknown activity type")
   }
@@ -80,7 +90,12 @@ export const getActivityReceiver = (
       viewerAddress
     )
   } else if (isOrderActivity(assetActivity)) {
-    return getFormattedUser(assetActivity.order.taker as Address, viewerAddress)
+    return getFormattedUser(
+      (assetActivity.order.direction === TradeDirection.SELL
+        ? assetActivity.order.taker
+        : assetActivity.order.maker) as Address,
+      viewerAddress
+    )
   } else {
     throw new Error("Unknown activity type")
   }

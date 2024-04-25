@@ -24,9 +24,9 @@ import { FiltersBadgeCounter } from "./FiltersBadgeCounter"
 import { FiltersResetBtn } from "./FiltersResetBtn"
 
 const FiltersFullscreen = ({
-  filters,
+  attributeFilterOptions: filters,
 }: {
-  filters: MarketplacePanelFilters
+  attributeFilterOptions: MarketplacePanelFilters
 }) => {
   const { filtersCounter } = useNFTFilters()
   const [isOpen, setIsOpen] = useState(false)
