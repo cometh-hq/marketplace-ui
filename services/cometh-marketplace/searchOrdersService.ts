@@ -13,6 +13,6 @@ export const useSearchOrders = (searchRequest: SearchOrdersRequest) => {
     ],
     queryFn: () => {
       return comethMarketplaceClient.order.searchOrders(searchRequest)
-    },
+    }
   })
 }

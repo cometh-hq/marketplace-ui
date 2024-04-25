@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useAttributeFilters } from "@/services/cometh-marketplace/filtersService"
 import { useCurrentAttributesFilters } from "@/services/cometh-marketplace/searchAssetsService"
 import { SearchOrdersRequest, TradeStatus } from "@cometh/marketplace-sdk"
+import { useQueryClient } from "@tanstack/react-query"
 import { useWindowSize } from "usehooks-ts"
 
 import { deserializeFilters, MarketplacePanelFilters } from "@/lib/utils/seed"
@@ -28,6 +29,7 @@ export const ActivitiesFiltersControls = ({
     useState<TradeStatus[]>(defaultStatuses)
 
   const currentAttributesFilters = useCurrentAttributesFilters()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     const filtersOverride: Partial<SearchOrdersRequest> = {
@@ -37,7 +39,12 @@ export const ActivitiesFiltersControls = ({
       filtersOverride.attributes = currentAttributesFilters
     }
     onFiltersOverrideChange(filtersOverride)
-  }, [selectedStatuses, currentAttributesFilters, onFiltersOverrideChange])
+  }, [
+    selectedStatuses,
+    currentAttributesFilters,
+    onFiltersOverrideChange,
+    queryClient,
+  ])
 
   const { width } = useWindowSize()
   const isMobile = width < 768
