@@ -55,7 +55,7 @@ export const AccountTabBar = ({
         <CollectionTabsTrigger key={address} collectionAddress={address} />
       ))}
       <TabsTrigger value="account-activities">
-        <CalendarIcon size="18" className="mr-2" /> Activities
+        <CalendarIcon size="18" className="mr-2" /> User activities
       </TabsTrigger>
       <TabsTrigger value="listings">
         <ScrollTextIcon size="18" className="mr-2" /> Listings{" "}

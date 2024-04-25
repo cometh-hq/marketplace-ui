@@ -1,3 +1,4 @@
+import { TransfersSearch } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 
@@ -27,5 +28,18 @@ export const useAssetTransfers = (
     queryFn: () => {
       return fetchAssetTransfers({ contractAddress, tokenId })
     },
+  })
+}
+
+export const useSearchTransfers = (searchTransfersParams: TransfersSearch) => {
+  return useQuery({
+    queryKey: [
+      "cometh",
+      "assetTransfers",
+      searchTransfersParams.tokenAddress,
+      JSON.stringify(searchTransfersParams),
+    ],
+    queryFn: () =>
+      comethMarketplaceClient.transfer.transferSearch(searchTransfersParams),
   })
 }

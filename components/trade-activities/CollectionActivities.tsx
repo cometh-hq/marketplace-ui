@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
 import { useSearchFilledEvents } from "@/services/cometh-marketplace/searchFilledEventsService"
 import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
@@ -9,6 +9,7 @@ import {
   FilterDirection,
   SearchOrdersRequest,
   SearchOrdersSortOption,
+  TradeStatus,
 } from "@cometh/marketplace-sdk"
 import { ArrowLeftIcon } from "lucide-react"
 import { Address } from "viem"
@@ -32,17 +33,32 @@ export const CollectionActivities = ({
   const [filtersOverride, setFiltersOverride] = useState<
     Partial<SearchOrdersRequest>
   >({})
-  const { data: orderSearch, isPending: isPendingOrders  } = useSearchOrders({
+
+  // Hack until activities have a dedicated endpoint
+  const hackedFiltersOverride = useMemo(() => {
+    const hackedFiltersOverride = { ...filtersOverride }
+    if (hackedFiltersOverride.statuses) {
+      hackedFiltersOverride.statuses = hackedFiltersOverride.statuses.filter(
+        (status) => status !== TradeStatus.FILLED
+      )
+    }
+    return hackedFiltersOverride
+  }, [filtersOverride])
+
+  const { data: orderSearch, isPending: isPendingOrders } = useSearchOrders({
     tokenAddress: contractAddress,
     limit: NB_COLLECTION_ORDERS_SHOWN,
     orderBy: SearchOrdersSortOption.UPDATED_AT,
     orderByDirection: FilterDirection.DESC,
-    ...filtersOverride,
+    ...hackedFiltersOverride,
   })
+
   const { data: filledEventsSearch, isPending: isPendingFilledEvents } =
     useSearchFilledEvents({
       tokenAddress: contractAddress,
-      limit: NB_COLLECTION_ORDERS_SHOWN,
+      limit: hackedFiltersOverride?.statuses?.includes(TradeStatus.FILLED)
+        ? NB_COLLECTION_ORDERS_SHOWN
+        : 0,
     })
   const { data: collection } = useGetCollection(contractAddress as Address)
   const isPending = isPendingOrders || isPendingFilledEvents
@@ -59,11 +75,7 @@ export const CollectionActivities = ({
       <h1 className="mb-2 inline-flex items-center text-2xl font-medium sm:text-3xl">
         Activities for collection{" "}
         <span className="ml-2 font-bold">
-          {collection?.name ? (
-            <>&quot;{collection?.name}&quot;</>
-          ) : (
-            "..."
-          )}
+          {collection?.name ? <>&quot;{collection?.name}&quot;</> : "..."}
         </span>
       </h1>
       <ActivitiesFiltersControls onFiltersOverrideChange={setFiltersOverride} />
@@ -81,13 +93,13 @@ export const CollectionActivities = ({
           </div>
           <div className="rounded-md border">
             <TradeActivitiesTable
-               orders={orderSearch?.orders}
-               orderFilledEvents={filledEventsSearch?.filledEvents}
-               display1155Columns={
-                 collection?.standard === CollectionStandard.ERC1155
-               }
-               maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
-               displayAssetColumns={true}
+              orders={orderSearch?.orders}
+              orderFilledEvents={filledEventsSearch?.filledEvents}
+              display1155Columns={
+                collection?.standard === CollectionStandard.ERC1155
+              }
+              maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
+              displayAssetColumns={true}
             />
           </div>
         </>

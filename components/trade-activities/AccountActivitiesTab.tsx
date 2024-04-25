@@ -6,9 +6,11 @@ import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersServi
 import {
   FilterDirection,
   SearchOrdersRequest,
-  SearchOrdersSortOption
+  SearchOrdersSortOption,
+  TradeStatus,
 } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
+
 import { TradeActivitiesTable } from "@/components/trade-activities/TradeActivitiesTable"
 
 import { Loading } from "../ui/Loading"
@@ -25,13 +27,24 @@ export const AccountActivitiesTab = ({
   const [filtersOverride, setFiltersOverride] = useState<
     Partial<SearchOrdersRequest>
   >({})
+  // Hack until activities have a dedicated endpoint
+  const hackedFiltersOverride = useMemo(() => {
+    const hackedFiltersOverride = { ...filtersOverride }
+    if (hackedFiltersOverride.statuses) {
+      hackedFiltersOverride.statuses = hackedFiltersOverride.statuses.filter(
+        (status) => status !== TradeStatus.FILLED
+      )
+    }
+    return hackedFiltersOverride
+  }, [filtersOverride])
+
   const { data: makerOrdersSearch, isPending: isPendingMakerOrders } =
     useSearchOrders({
       maker: walletAddress,
       limit: NB_COLLECTION_ORDERS_SHOWN,
       orderBy: SearchOrdersSortOption.UPDATED_AT,
       orderByDirection: FilterDirection.DESC,
-      ...filtersOverride,
+      ...hackedFiltersOverride,
     })
   const { data: takerOrdersSearch, isPending: isPendingTakerOrders } =
     useSearchOrders({
@@ -39,21 +52,27 @@ export const AccountActivitiesTab = ({
       limit: NB_COLLECTION_ORDERS_SHOWN,
       orderBy: SearchOrdersSortOption.UPDATED_AT,
       orderByDirection: FilterDirection.DESC,
-      ...filtersOverride,
+      ...hackedFiltersOverride,
     })
+
+  const searchFilledEventsLimit = hackedFiltersOverride?.statuses?.includes(
+    TradeStatus.FILLED
+  )
+    ? NB_COLLECTION_ORDERS_SHOWN
+    : 0
   const {
     data: takerFilledEventsSearch,
     isPending: isPendingTakerFilledEvents,
   } = useSearchFilledEvents({
     taker: walletAddress,
-    limit: NB_COLLECTION_ORDERS_SHOWN,
+    limit: searchFilledEventsLimit,
   })
   const {
     data: makerFilledEventsSearch,
     isPending: isPendingMakerFilledEvents,
   } = useSearchFilledEvents({
     maker: walletAddress,
-    limit: NB_COLLECTION_ORDERS_SHOWN,
+    limit: searchFilledEventsLimit,
   })
 
   const allOrders = useMemo(() => {

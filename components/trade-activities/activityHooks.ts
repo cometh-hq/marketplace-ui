@@ -1,5 +1,9 @@
 import { useMemo } from "react"
 import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
+import {
+  SearchFilledEventsRequest,
+  SearchOrdersRequest,
+} from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 
@@ -57,9 +61,10 @@ export const useActivityUnitPrice = (activity: AssetActivity) => {
         }
       })
       const feesSum = totalFeesFromCollection(fees)
-      return (BigNumber.from(filledEvent.erc20FillAmount).add(feesSum)).div(
-        filledEvent.fillAmount
-      ).toString()
+      return BigNumber.from(filledEvent.erc20FillAmount)
+        .add(feesSum)
+        .div(filledEvent.fillAmount)
+        .toString()
     } else if (isOrderActivity(activity)) {
       return activity.order.totalUnitPrice
     }
