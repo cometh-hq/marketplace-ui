@@ -46,7 +46,7 @@ export const TabBar = ({ receivedCounter, sentCounter }: TabBarProps) => {
         <CollectionTabsTrigger key={address} collectionAddress={address} />
       ))}
       <TabsTrigger value="account-activities">
-        <CalendarIcon size="18" className="mr-2" /> Activities
+        <CalendarIcon size="18" className="mr-2" /> User activities
       </TabsTrigger>
       <TabsTrigger value="received-offers">
         <InboxIcon size="18" className="mr-2" /> Received Offers (

@@ -73,7 +73,7 @@ export function NFTStateFilters({ results }: NFTStateFiltersProps) {
 
       <Link href={`/activities/${contractAddress}`}>
         <Button variant="ghost">
-          <CalendarIcon size="16" className="mr-2" /> Activities
+          <CalendarIcon size="16" className="mr-2" /> Collection activities
         </Button>
       </Link>
     </div>
