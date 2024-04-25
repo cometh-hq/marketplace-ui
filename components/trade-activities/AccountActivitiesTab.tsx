@@ -1,20 +1,19 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useSearchFilledEvents } from "@/services/cometh-marketplace/searchFilledEventsService"
 import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
 import {
   FilterDirection,
-  SearchOrdersSortOption,
-  TradeStatus,
+  SearchOrdersRequest,
+  SearchOrdersSortOption
 } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
-import { useAccount } from "wagmi"
-
 import { TradeActivitiesTable } from "@/components/trade-activities/TradeActivitiesTable"
 
 import { Loading } from "../ui/Loading"
 import { TabsContent } from "../ui/Tabs"
+import { ActivitiesFiltersControls } from "./ActivitiesFiltersControls"
 
 const NB_COLLECTION_ORDERS_SHOWN = 300
 
@@ -23,31 +22,24 @@ export const AccountActivitiesTab = ({
 }: {
   walletAddress: Address
 }) => {
+  const [filtersOverride, setFiltersOverride] = useState<
+    Partial<SearchOrdersRequest>
+  >({})
   const { data: makerOrdersSearch, isPending: isPendingMakerOrders } =
     useSearchOrders({
       maker: walletAddress,
       limit: NB_COLLECTION_ORDERS_SHOWN,
-      statuses: [
-        TradeStatus.OPEN,
-        TradeStatus.CANCELLED,
-        TradeStatus.EXPIRED,
-        TradeStatus.CANCELLED_BY_TRANSFER,
-      ],
       orderBy: SearchOrdersSortOption.UPDATED_AT,
       orderByDirection: FilterDirection.DESC,
+      ...filtersOverride,
     })
   const { data: takerOrdersSearch, isPending: isPendingTakerOrders } =
     useSearchOrders({
       taker: walletAddress,
       limit: NB_COLLECTION_ORDERS_SHOWN,
-      statuses: [
-        TradeStatus.OPEN,
-        TradeStatus.CANCELLED,
-        TradeStatus.EXPIRED,
-        TradeStatus.CANCELLED_BY_TRANSFER,
-      ],
       orderBy: SearchOrdersSortOption.UPDATED_AT,
       orderByDirection: FilterDirection.DESC,
+      ...filtersOverride,
     })
   const {
     data: takerFilledEventsSearch,
@@ -87,6 +79,10 @@ export const AccountActivitiesTab = ({
 
   return (
     <TabsContent value="account-activities" className="w-full">
+      <ActivitiesFiltersControls
+        defaultStatuses={[]}
+        onFiltersOverrideChange={setFiltersOverride}
+      />
       {isPending ? (
         <div className=" w-full  text-center text-xl">
           Loading profile activities
@@ -95,13 +91,15 @@ export const AccountActivitiesTab = ({
         </div>
       ) : (
         <div className="rounded-md border">
-          <TradeActivitiesTable
-            orders={allOrders}
-            orderFilledEvents={allFilledEvents}
-            display1155Columns={true}
-            maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
-            displayAssetColumns={true}
-          />
+          {
+            <TradeActivitiesTable
+              orders={allOrders}
+              orderFilledEvents={allFilledEvents}
+              display1155Columns={true}
+              maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
+              displayAssetColumns={true}
+            />
+          }
         </div>
       )}
     </TabsContent>

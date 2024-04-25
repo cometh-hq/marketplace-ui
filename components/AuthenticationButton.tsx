@@ -1,11 +1,14 @@
+import { useOpenLoginModal } from "@/providers/authentication/authenticationUiSwitch"
 import { cx } from "class-variance-authority"
-import { Wallet } from "lucide-react"
+import { UserIcon, Wallet } from "lucide-react"
+import { useWindowSize } from "usehooks-ts"
 import { useAccount } from "wagmi"
+
+import { cn } from "@/lib/utils/utils"
 
 import { CurrentAccountDropdown } from "./account-dropdown/CurrentAccountDropdown"
 import { Button } from "./ui/Button"
-import { useOpenLoginModal } from "@/providers/authentication/authenticationUiSwitch"
-
+import { Link } from "./ui/Link"
 
 export function AuthenticationButton({
   children,
@@ -19,7 +22,21 @@ export function AuthenticationButton({
   const account = useAccount()
   const openLoginModal = useOpenLoginModal()
 
-  if (account.isConnected && !children) return <CurrentAccountDropdown />
+  const { width } = useWindowSize()
+  const isMobile = width < 640
+
+  if (account.isConnected && !children)
+    return (
+      <>
+        <CurrentAccountDropdown />
+        <Link href={`/profile/${account.address}`}>
+          <Button className="ml-3" size={isMobile ? "icon" : "default"}>
+            <UserIcon className={cn(!isMobile && "mr-2")} size="18" />
+            {!isMobile && "Profile"}
+          </Button>
+        </Link>
+      </>
+    )
 
   if (!account.isConnected) {
     return (

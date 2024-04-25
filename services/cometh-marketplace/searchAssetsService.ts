@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import { useCurrentCollectionContext } from "@/providers/currentCollection/currentCollectionContext"
 import {
   AssetWithTradeData,
@@ -74,37 +75,43 @@ export const useSearchAssets = (searchFilters: Partial<AssetSearchFilters>) => {
   })
 }
 
+const NON_ATTRIBUTE_PARAM_FILTERS = [
+  "isOnSale",
+  "orderBy",
+  "direction",
+  "owner",
+  "contractAddress",
+]
+
+export const useCurrentAttributesFilters = () => {
+  const { filters } = useNFTFilters()
+  const currentAttributeFilters = useMemo(() => {
+    const attributeKeys = Object.keys(filters).filter(
+      (key) => !NON_ATTRIBUTE_PARAM_FILTERS.includes(key)
+    )
+    const attributeFilters: [Record<string, string[]>] = [{}]
+    attributeKeys.forEach((key) => {
+      const value = filters[key]
+      if (value) {
+        attributeFilters[0][key] = value
+      }
+    })
+
+    if (Object.keys(attributeFilters[0]).length === 0) {
+      attributeFilters.pop()
+    }
+
+    return attributeFilters
+  }, [filters])
+
+  return currentAttributeFilters
+}
+
 export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
   const { filters } = useNFTFilters()
   const { currentCollectionAddress } = useCurrentCollectionContext()
 
-  const upperKey = (key: string) => key.charAt(0).toUpperCase() + key.slice(1)
-
-  const excludedKeys = (key: string) => {
-    return (
-      key !== "isOnSale" &&
-      key !== "orderBy" &&
-      key !== "direction" &&
-      key !== "owner" &&
-      key !== "contractAddress"
-    )
-  }
-
-  const parsedAttributes: [Record<string, string[]>] = [{}]
-
-  Object.keys(filters).forEach((key) => {
-    if (excludedKeys(key)) {
-      const value = filters[key]
-      if (value) {
-        parsedAttributes[0][upperKey(key)] =
-          typeof value === "string" ? [value] : value
-      }
-    }
-  })
-
-  if (Object.keys(parsedAttributes[0]).length === 0) {
-    parsedAttributes.pop()
-  }
+  const currentAttributesFilters = useCurrentAttributesFilters()
 
   const {
     data,
@@ -130,8 +137,8 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
           isOnSale: filters.isOnSale,
           orderBy: filters.orderBy ?? FilterOrderBy.LISTING_DATE,
           direction: filters.direction ?? FilterDirection.DESC,
-          ...(parsedAttributes.length > 0
-            ? { attributes: parsedAttributes }
+          ...(currentAttributesFilters.length > 0
+            ? { attributes: currentAttributesFilters }
             : {}),
           ...(options?.search && { name: options.search }),
           ...(options?.owner && { owner: options.owner }),

@@ -18,8 +18,8 @@ export function SiteHeader() {
   const toggleMenu = () => setIsOpen(!isOpen)
 
   return (
-    <div className="container mx-auto py-5 sm:py-10">
-      <header className="flex items-center gap-x-5 md:justify-between">
+    <div className="bg-background border-b-muted sticky top-0 z-50 mx-auto w-full border-b py-2 sm:py-3">
+      <header className="container flex items-center gap-x-5 md:justify-between">
         <div
           onClick={() => !isOpen && setIsOpen(true)}
           className={cx("w-[20px] cursor-pointer md:hidden", {

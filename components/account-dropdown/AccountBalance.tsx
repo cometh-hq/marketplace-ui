@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Image from "next/image"
-import { useBalance } from "@/services/balance/balanceService"
+import { useAllBalances } from "@/services/balance/balanceService"
 
 import { env } from "@/config/env"
 import globalConfig from "@/config/globalConfig"
@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/Separator"
 import { WrapButton } from "@/components/asset-actions/buttons/WrapButton"
 
 export function AccountBalance() {
-  const balance = useBalance()
+  const balance = useAllBalances()
   const [isUnwrap, setIsUnwrap] = useState(false)
 
   return (
@@ -20,6 +20,7 @@ export function AccountBalance() {
             balance={balance.native}
             currency={globalConfig.network.nativeToken.symbol}
             logo={globalConfig.network.nativeToken.thumb}
+            hideFiatPrice={!globalConfig.useNativeForOrders}
           />
           <Separator />
           <AccountBalanceLine
@@ -48,12 +49,14 @@ type AccountBalanceLineProps = {
   balance: string
   currency: string
   logo?: string | { native: string; wrapped: string }
+  hideFiatPrice?: boolean
 }
 
 export function AccountBalanceLine({
   balance,
   currency,
   logo,
+  hideFiatPrice = false,
 }: AccountBalanceLineProps) {
   const logoSrc =
     typeof logo === "string" ? logo : logo?.native || logo?.wrapped
@@ -73,7 +76,7 @@ export function AccountBalanceLine({
       <span className="text-[15px] font-semibold">
         {balance} {currency}
       </span>
-      <FiatPrice amount={balance} />
+      {!hideFiatPrice && <FiatPrice amount={balance} />}
     </div>
   )
 }

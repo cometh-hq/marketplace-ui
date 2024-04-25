@@ -93,7 +93,7 @@ export const useWrappedBalance = (address?: Address) => {
   return useMemo(() => balanceToBigNumber(balance?.value), [balance])
 }
 
-export const useBalance = () => {
+export const useAllBalances = () => {
   const viewerAddress = useAccount().address
   const native = useNativeBalance(viewerAddress)
   const ERC20 = useERC20Balance(viewerAddress)

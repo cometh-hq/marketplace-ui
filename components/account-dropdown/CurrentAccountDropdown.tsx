@@ -2,11 +2,13 @@
 
 import Image from "next/image"
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
-import { User } from "lucide-react"
+import { useAllBalances } from "@/services/balance/balanceService"
+import { WalletIcon } from "lucide-react"
 import { useWindowSize } from "usehooks-ts"
 import { useAccount } from "wagmi"
 
 import { env } from "@/config/env"
+import globalConfig from "@/config/globalConfig"
 import { Button, ButtonProps } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import {
@@ -17,7 +19,7 @@ import {
 import { UserLink } from "@/components/ui/user/UserLink"
 
 import { CopyButton } from "../ui/CopyButton"
-import { AccountBalance } from "./AccountBalance"
+import { AccountBalance, AccountBalanceLine } from "./AccountBalance"
 import { AccountLogoutAction } from "./AccountLogoutAction"
 
 export type AccountDropdownProps = {
@@ -32,6 +34,7 @@ export function CurrentAccountDropdown({
   const account = useAccount()
   const viewerAddress = account.address
   const { width } = useWindowSize()
+  const balances = useAllBalances()
 
   const isMobile = width < 640
 
@@ -42,9 +45,20 @@ export function CurrentAccountDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={isMobile ? "icon" : "default"}>
-          <User size="18" className="md:mr-1" />
-          {!isMobile && "Account"}
+        <Button variant="secondary" size={isMobile ? "icon" : "default"}>
+          <WalletIcon size="18" className="md:mr-2" />
+          {!isMobile && balances && (
+            <AccountBalanceLine
+              balance={
+                globalConfig.useNativeForOrders
+                  ? balances.native
+                  : balances.ERC20
+              }
+              currency={globalConfig.ordersErc20.symbol}
+              logo={globalConfig.ordersErc20.thumb}
+              hideFiatPrice
+            />
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" asChild>
@@ -55,7 +69,7 @@ export function CurrentAccountDropdown({
               <Image src={walletIcon} alt="" width={40} height={40} />
               <div>
                 <CardTitle className="relative -mb-2 text-sm font-semibold">
-                  Account
+                  Wallet
                 </CardTitle>
                 <div className="flex items-center">
                   {viewerAddress && (

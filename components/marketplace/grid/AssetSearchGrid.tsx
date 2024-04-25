@@ -38,7 +38,7 @@ export const AssetsSearchGrid = ({
   const [search, setSearch] = useState("")
   const [initialResults, setInitialResults] = useState<number | null>(null)
 
-  const filtersDefinition = useMemo(
+  const attributesFilterOptions = useMemo(
     () => deserializeFilters(filtersRaw),
     [filtersRaw]
   )
@@ -85,10 +85,10 @@ export const AssetsSearchGrid = ({
           <SearchAsset onChange={setSearch} />
           <div className="flex gap-3">
             {isMobile ? (
-              <FiltersFullscreen filters={filtersDefinition} />
+              <FiltersFullscreen attributeFilterOptions={attributesFilterOptions} />
             ) : (
               <>
-                <FiltersDropdown filters={filtersDefinition} />
+                <FiltersDropdown attributeFilterOptions={attributesFilterOptions} />
                 <FiltersResetBtn />
               </>
             )}

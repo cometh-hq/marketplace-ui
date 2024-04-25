@@ -4,6 +4,7 @@ import {
   AssetTransfers,
   Order,
   OrderFilledEventWithAsset,
+  TradeDirection,
   TradeStatus,
 } from "@cometh/marketplace-sdk"
 import { Address, isAddressEqual } from "viem"
@@ -79,10 +80,17 @@ export const getActivityEmitter = (
       viewerAddress
     )
   } else if (isOrderActivity(assetActivity)) {
-    return getFormattedUser(assetActivity.order.maker as Address, viewerAddress)
+    return getFormattedUser(
+      (assetActivity.order.direction === TradeDirection.SELL
+        ? assetActivity.order.maker
+        : assetActivity.order.taker) as Address,
+      viewerAddress
+    )
   } else if (isFilledEventActivity(assetActivity)) {
     return getFormattedUser(
-      assetActivity.filledEvent.maker as Address,
+      (assetActivity.filledEvent.direction === TradeDirection.SELL
+        ? assetActivity.filledEvent.maker
+        : assetActivity.filledEvent.taker) as Address,
       viewerAddress
     )
   } else {
@@ -100,10 +108,17 @@ export const getActivityReceiver = (
       viewerAddress
     )
   } else if (isOrderActivity(assetActivity)) {
-    return getFormattedUser(assetActivity.order.taker as Address, viewerAddress)
-  } else if (isFilledEventActivity(assetActivity)) {
     return getFormattedUser(
-      assetActivity.filledEvent.taker as Address,
+      (assetActivity.order.direction === TradeDirection.SELL
+        ? assetActivity.order.taker
+        : assetActivity.order.maker) as Address,
+      viewerAddress
+    )
+  } else if (isFilledEventActivity(assetActivity)) {
+    getFormattedUser(
+      (assetActivity.filledEvent.direction === TradeDirection.SELL
+        ? assetActivity.filledEvent.taker
+        : assetActivity.filledEvent.maker) as Address,
       viewerAddress
     )
   } else {
