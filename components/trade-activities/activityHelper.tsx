@@ -115,7 +115,7 @@ export const getActivityReceiver = (
       viewerAddress
     )
   } else if (isFilledEventActivity(assetActivity)) {
-    getFormattedUser(
+    return getFormattedUser(
       (assetActivity.filledEvent.direction === TradeDirection.SELL
         ? assetActivity.filledEvent.taker
         : assetActivity.filledEvent.maker) as Address,
