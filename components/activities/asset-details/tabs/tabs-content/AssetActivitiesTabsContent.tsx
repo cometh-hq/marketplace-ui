@@ -17,7 +17,7 @@ type ActivitiesTransfersTabContentProps = {
   display1155Columns: boolean
 }
 
-export const ActivitiesTransfersTabContent = ({
+export const AssetActivitiesTabsContent = ({
   assetTransfers,
   assetOrders,
   assetFilledEvents,

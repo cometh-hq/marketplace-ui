@@ -12,6 +12,7 @@ export const useAssetIs1155 = (
       }
     | AssetWithTradeData
     | SearchAssetWithTradeData
+    | null
 ) => {
   return useMemo(
     () => !!asset && asset.tokenType === TokenType.ERC1155,

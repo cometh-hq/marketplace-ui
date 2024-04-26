@@ -17,7 +17,7 @@ import { ListingsTabContent } from "../../order-tables/listings/ListingsTabConte
 import { BuyOffersTabContent } from "../../order-tables/offers/BuyOffersTabContent"
 import { AssetDetailsTabBar } from "./AssetDetailsTabBar"
 import { useQueryParamTab } from "./pageTabHooks"
-import { ActivitiesTransfersTabContent } from "./tabs-content/ActivitiesTransfersTabContent"
+import { AssetActivitiesTabsContent } from "./tabs-content/AssetActivitiesTabsContent"
 
 export type AssetActivitiesProps = {
   asset: AssetWithTradeData
@@ -46,17 +46,17 @@ export const AssetDetailsTabs = ({
     >
       <AssetDetailsTabBar isErc1155={isErc1155} />
       <AssetMetadata asset={asset} />
-      <ActivitiesTransfersTabContent
+      <AssetActivitiesTabsContent
         assetTransfers={assetTransfers}
         assetOrders={assetOrders}
         assetFilledEvents={assetFilledEvents}
         display1155Columns={isErc1155}
       />
-      <ListingsTabContent asset={asset} />
+      <BuyOffersTabContent asset={asset} />
 
       {isErc1155 && (
         <>
-          <BuyOffersTabContent asset={asset} />
+          <ListingsTabContent asset={asset} />
           <AssetOwnersTableTab owners={assetOwners} />
         </>
       )}

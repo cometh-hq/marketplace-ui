@@ -188,7 +188,11 @@ const ActivityRow = ({
       )}
       {display1155Columns && (
         <TableCell className="font-bold">
-          {isErc1155 && <TokenQuantity value={transferQuantity} />}
+          {isErc1155 ? (
+            <TokenQuantity value={transferQuantity} />
+          ) : (
+            <span className="text-muted-foreground">Unique</span>
+          )}
         </TableCell>
       )}
       <TableCell>

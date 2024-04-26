@@ -15,7 +15,7 @@ export type OrderProgressCellProps = { row: Row<OrderWithAsset> }
 
 export const OrderProgressCell = ({ row }: OrderProgressCellProps) => {
   if (row.original.tokenType === TokenType.ERC721)
-    return <div className="font-bold">Open</div>
+    return <div className="text-muted-foreground font-bold">Opened</div>
 
   return (
     <div>

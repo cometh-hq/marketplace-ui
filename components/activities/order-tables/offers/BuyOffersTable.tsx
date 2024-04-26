@@ -17,7 +17,7 @@ export function BuyOffersTable({
   isErc1155,
   isSpecificAsset,
 }: BuyOffersTableProps) {
-  const columns = useGetBuyOffersColumns(isErc1155, isSpecificAsset)
+  const columns = useGetBuyOffersColumns(isSpecificAsset, isErc1155)
 
   return <DataTable columns={columns} data={offers} />
 }

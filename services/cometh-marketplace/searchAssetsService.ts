@@ -135,8 +135,8 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
         {
           contractAddress: currentCollectionAddress,
           isOnSale: filters.isOnSale,
-          orderBy: filters.orderBy ?? FilterOrderBy.LISTING_DATE,
-          direction: filters.direction ?? FilterDirection.DESC,
+          orderBy: filters.orderBy ?? FilterOrderBy.PRICE,
+          direction: filters.direction ?? FilterDirection.ASC,
           ...(currentAttributesFilters.length > 0
             ? { attributes: currentAttributesFilters }
             : {}),

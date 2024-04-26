@@ -199,13 +199,14 @@ export function AssetCardBase({
 
 function AssetListingsButton({ asset }: { asset: SearchAssetWithTradeData }) {
   return (
-    <Link href={`/nfts/${asset.contractAddress}/${asset.tokenId}?tab=listings`}>
+    <Link href={`/nfts/${asset.contractAddress}/${asset.tokenId}?tab=listings#tabs`}>
       <Button className="w-full" size="lg">
         Buy now
       </Button>
     </Link>
   )
 }
+
 
 function AssetActions({
   asset,
@@ -233,8 +234,17 @@ function AssetActions({
     button = <MakeBuyOfferButton asset={asset} />
     buttonText = "Make an offer"
   } else if (!asset.orderbookStats.lowestListingPrice || isAsset1155) {
-    button = <SellAssetButton asset={asset} />
-    buttonText = "Sell now"
+    if (isAsset1155 && asset.orderbookStats.lowestListingPrice) {
+      button = (
+        <div className='flex flex-col items-center justify-center gap-2'>
+          <SellAssetButton asset={asset} />
+          <AssetListingsButton asset={asset} />
+        </div>
+      )
+    } else {
+      button = <SellAssetButton asset={asset} />
+      buttonText = "Sell now"
+    }
   } else {
     button = <CancelListingButton asset={asset} />
     buttonText = "Cancel listing"

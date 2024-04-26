@@ -8,6 +8,7 @@ import {
   SearchOrdersRequest,
   SearchOrdersSortOption,
   TradeDirection,
+  TradeStatus,
 } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
@@ -32,6 +33,7 @@ export const ListingsTabContent = ({
       limit: 999,
       orderBy: SearchOrdersSortOption.SIGNED_AT,
       orderByDirection: FilterDirection.DESC,
+      statuses: [TradeStatus.OPEN]
     }
     if (asset) {
       searchOffersParams.tokenAddress = asset.contractAddress

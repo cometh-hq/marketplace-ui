@@ -8,9 +8,9 @@ import {
 import { useQuery } from "@tanstack/react-query"
 import { useAccount } from "wagmi"
 
+import { OrderAsset } from "@/types/assets"
 import { comethMarketplaceClient } from "@/lib/clients"
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
-import { OrderAsset } from "@/types/assets"
 
 export const useAssetOwners = (contractAddress: string, assetId: string) => {
   const { data, isLoading } = useQuery({
@@ -90,8 +90,9 @@ export const useAssetOwnedQuantity = (
 }
 
 export const useIsViewerAnOwner = (
-  asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
+  asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset | null
 ) => {
+  if (!asset) return false
   const assetOwnedQuantity = useAssetOwnedQuantity(asset)
   return BigInt(assetOwnedQuantity) > BigInt(0)
 }

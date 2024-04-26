@@ -5,10 +5,11 @@ import { Address, isAddressEqual } from "viem"
 import { useAccount, usePublicClient } from "wagmi"
 
 import { toast } from "@/components/ui/toast/hooks/useToast"
+import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
+import { useIsViewerAnOwner } from "../cometh-marketplace/assetOwners"
 import { useFillSignedOrder } from "../exchange/fillSignedOrderService"
 import { getViemSignedOrderFromOrder } from "../exchange/viemOrderHelper"
-import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
 export type AcceptBuyOfferOptions = {
   offer: OrderWithAsset
@@ -22,18 +23,13 @@ export type UseCanAcceptBuyOfferParams = {
 export const useCanAcceptBuyOffer = ({ offer }: UseCanAcceptBuyOfferParams) => {
   const account = useAccount()
   const viewer = account.address?.toLowerCase() as Address
+  const isViewerAnOwner = useIsViewerAnOwner(offer.asset)
   return useMemo(() => {
     if (!viewer) return false
     if (isAddressEqual(viewer, offer.maker.toLowerCase() as Address))
       return false
-    if (
-      offer.asset &&
-      offer.asset.owner !== null &&
-      isAddressEqual(offer.asset.owner as Address, viewer)
-    )
-      return false
-    return true
-  }, [viewer, offer])
+    return isViewerAnOwner
+  }, [viewer, offer, isViewerAnOwner])
 }
 
 export const useAcceptBuyOffer = () => {
