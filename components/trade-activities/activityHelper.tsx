@@ -70,7 +70,7 @@ export const getFormattedUser = (
   }
 }
 
-export const getActivityEmitter = (
+export const getActivityNftOwner = (
   assetActivity: AssetActivity,
   viewerAddress?: Address
 ) => {
@@ -98,7 +98,7 @@ export const getActivityEmitter = (
   }
 }
 
-export const getActivityReceiver = (
+export const getActivityNftReceiver = (
   assetActivity: AssetActivity,
   viewerAddress?: Address
 ) => {

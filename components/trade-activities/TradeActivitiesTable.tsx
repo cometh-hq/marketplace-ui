@@ -7,19 +7,7 @@ import {
   Order,
   OrderFilledEventWithAsset,
   TokenType,
-  TradeDirection,
-  TradeStatus,
 } from "@cometh/marketplace-sdk"
-import { ethers } from "ethers"
-import {
-  ArrowLeftRightIcon,
-  ArrowRightIcon,
-  BanIcon,
-  ImagePlusIcon,
-  ScrollTextIcon,
-  ShoppingCartIcon,
-} from "lucide-react"
-import { useAccount } from "wagmi"
 
 import {
   Table,
@@ -31,13 +19,10 @@ import {
 } from "@/components/ui/Table"
 
 import TokenQuantity from "../erc1155/TokenQuantity"
-import { CopyButton } from "../ui/CopyButton"
 import { Price } from "../ui/Price"
-import { UserButton } from "../ui/user/UserButton"
+import { ActivityEventCell } from "./ActivityEventCell"
 import {
-  getActivityEmitter,
   getActivityId,
-  getActivityReceiver,
   getMergedActivities,
   isFilledEventActivity,
   isOrderActivity,
@@ -45,6 +30,7 @@ import {
 } from "./activityHelper"
 import { useActivityCollection, useActivityUnitPrice } from "./activityHooks"
 import { ActivityTimestampCell } from "./ActivityTimestampCell"
+import { ActivityUsersCell } from "./ActivityUsersCell"
 import { ActivityAssetCell } from "./AssetActivityCell"
 import { AssetActivity } from "./AssetActivityTypes"
 
@@ -57,7 +43,7 @@ type TransfersListProps = {
   displayAssetColumns: boolean
 }
 
-const GenericActivityEventCell = ({
+export const GenericActivityEventCell = ({
   Icon,
   label,
 }: {
@@ -70,53 +56,6 @@ const GenericActivityEventCell = ({
   </div>
 )
 
-const ActivityEventCell = ({ activity }: { activity: AssetActivity }) => {
-  if (isTransferActivity(activity)) {
-    if (activity.transfer.fromAddress === ethers.constants.AddressZero) {
-      return <GenericActivityEventCell Icon={ImagePlusIcon} label="Mint" />
-    } else {
-      return (
-        <GenericActivityEventCell Icon={ArrowLeftRightIcon} label="Transfer" />
-      )
-    }
-  } else if (isOrderActivity(activity)) {
-    let icon = ScrollTextIcon
-    let label = ""
-    if (activity.order.orderStatus === TradeStatus.FILLED) {
-      label =
-        activity.order.direction === TradeDirection.BUY
-          ? "Filled purchase offer"
-          : "Sale"
-      icon = ShoppingCartIcon
-    } else if (activity.order.orderStatus === TradeStatus.OPEN) {
-      label =
-        activity.order.direction === TradeDirection.BUY
-          ? "Sent purchase offer"
-          : "Listed"
-    } else if (activity.order.orderStatus === TradeStatus.EXPIRED) {
-      label =
-        activity.order.direction === TradeDirection.BUY
-          ? "Expired purchase offer"
-          : "Expired listing"
-      icon = BanIcon
-    } else {
-      label =
-        activity.order.direction === TradeDirection.BUY
-          ? "Cancelled purchase offer"
-          : "Cancelled listing"
-      icon = BanIcon
-    }
-
-    return <GenericActivityEventCell Icon={icon} label={label} />
-  } else if (isFilledEventActivity(activity)) {
-    const label =
-      activity.filledEvent.direction === TradeDirection.BUY
-        ? "Filled purchase offer"
-        : "Sale"
-    return <GenericActivityEventCell Icon={ShoppingCartIcon} label={label} />
-  }
-}
-
 const ActivityRow = ({
   activity,
   display1155Columns,
@@ -128,26 +67,8 @@ const ActivityRow = ({
   displayAssetColumns: boolean
   rowIndex: number
 }) => {
-  const account = useAccount()
-  const viewerAddress = account.address
   const collection = useActivityCollection(activity)
   const activityUnitPrice = useActivityUnitPrice(activity)
-
-  const activityEmitter = useMemo(
-    () => getActivityEmitter(activity, viewerAddress),
-    [activity, viewerAddress]
-  )
-  const activityReceiver = useMemo(
-    () => getActivityReceiver(activity, viewerAddress),
-    [activity, viewerAddress]
-  )
-  const shouldHideReceiver = useMemo(
-    () =>
-      isOrderActivity(activity) &&
-      (activity.order.orderStatus !== TradeStatus.FILLED ||
-        activity.order.tokenType === TokenType.ERC1155),
-    [activity]
-  )
 
   const isErc1155 = useMemo(() => {
     if (isOrderActivity(activity)) {
@@ -205,17 +126,7 @@ const ActivityRow = ({
         )}
       </TableCell>
       <TableCell className="justify-start">
-        <div className="flex items-center gap-2">
-          <UserButton user={activityEmitter} />
-          <CopyButton textToCopy={activityEmitter.address} />
-          {!shouldHideReceiver && (
-            <>
-              <ArrowRightIcon size={18} />
-              <UserButton user={activityReceiver} />
-              <CopyButton textToCopy={activityReceiver.address} />
-            </>
-          )}
-        </div>
+        <ActivityUsersCell activity={activity} />
       </TableCell>
       <TableCell>
         <ActivityTimestampCell activity={activity} />
