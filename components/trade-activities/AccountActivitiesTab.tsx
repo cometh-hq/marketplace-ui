@@ -101,6 +101,7 @@ export const AccountActivitiesTab = ({
       <ActivitiesFiltersControls
         defaultStatuses={[]}
         onFiltersOverrideChange={setFiltersOverride}
+        disableAttributesFilters
       />
       {isPending ? (
         <div className=" w-full  text-center text-xl">

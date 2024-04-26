@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useAttributeFilters } from "@/services/cometh-marketplace/filtersService"
 import { useCurrentAttributesFilters } from "@/services/cometh-marketplace/searchAssetsService"
 import { SearchOrdersRequest, TradeStatus } from "@cometh/marketplace-sdk"
+import { useQueryClient } from "@tanstack/react-query"
 import { useWindowSize } from "usehooks-ts"
 
 import { deserializeFilters, MarketplacePanelFilters } from "@/lib/utils/seed"
@@ -18,16 +19,19 @@ type ActivitiesFiltersControlsProps = {
     filtersOverride: Partial<SearchOrdersRequest>
   ) => void
   defaultStatuses?: TradeStatus[]
+  disableAttributesFilters?: boolean
 }
 
 export const ActivitiesFiltersControls = ({
   onFiltersOverrideChange,
   defaultStatuses = [TradeStatus.OPEN, TradeStatus.FILLED],
+  disableAttributesFilters = false,
 }: ActivitiesFiltersControlsProps) => {
   const [selectedStatuses, setSelectedStatuses] =
     useState<TradeStatus[]>(defaultStatuses)
 
   const currentAttributesFilters = useCurrentAttributesFilters()
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     const filtersOverride: Partial<SearchOrdersRequest> = {
@@ -37,7 +41,12 @@ export const ActivitiesFiltersControls = ({
       filtersOverride.attributes = currentAttributesFilters
     }
     onFiltersOverrideChange(filtersOverride)
-  }, [selectedStatuses, currentAttributesFilters, onFiltersOverrideChange])
+  }, [
+    selectedStatuses,
+    currentAttributesFilters,
+    onFiltersOverrideChange,
+    queryClient,
+  ])
 
   const { width } = useWindowSize()
   const isMobile = width < 768
@@ -64,16 +73,22 @@ export const ActivitiesFiltersControls = ({
           selectedStatuses={selectedStatuses}
         />
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-2">
-        {isMobile ? (
-          <FiltersFullscreen attributeFilterOptions={attributeFilterOptions} />
-        ) : (
-          <>
-            <FiltersDropdown attributeFilterOptions={attributeFilterOptions} />
-            <FiltersResetBtn />
-          </>
-        )}
-      </div>
+      {!disableAttributesFilters && (
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {isMobile ? (
+            <FiltersFullscreen
+              attributeFilterOptions={attributeFilterOptions}
+            />
+          ) : (
+            <>
+              <FiltersDropdown
+                attributeFilterOptions={attributeFilterOptions}
+              />
+              <FiltersResetBtn />
+            </>
+          )}
+        </div>
+      )}
     </div>
   )
 }

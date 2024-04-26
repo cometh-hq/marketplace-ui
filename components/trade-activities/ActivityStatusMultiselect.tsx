@@ -3,6 +3,7 @@ import { TradeStatus } from "@cometh/marketplace-sdk"
 import Select from "react-select"
 
 import { cn } from "@/lib/utils/utils"
+import MULTISELECT_CLASSNAMES from "@/styles/multiSelectClassNames"
 
 export type TradeStatusOption = {
   value: TradeStatus
@@ -56,13 +57,11 @@ export const ActivityStatusMultiselect = ({
   return (
     <Select
       isMulti
-      classNames={{
-        control: (state) => cn("border-input bg-background"),
-      }}
       options={filteredOptions}
       placeholder="Select order status"
       onChange={onChange}
       value={selectedOptions}
+      classNames={MULTISELECT_CLASSNAMES as any}
     />
   )
 }
