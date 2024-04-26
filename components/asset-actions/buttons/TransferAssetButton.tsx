@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
+import erc1155Abi from "@/abis/erc1155Abi"
 import {
   AssetWithTradeData,
   SearchAssetWithTradeData,
@@ -27,9 +28,15 @@ import {
 import { Input } from "@/components/ui/Input"
 import { Label } from "@/components/ui/Label"
 import { toast } from "@/components/ui/toast/hooks/useToast"
+import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
+import TokenQuantityInput from "@/components/erc1155/TokenQuantityInput"
 import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
 
+import {
+  useAssetOwnedQuantity,
+  useIsViewerAnOwner,
+} from "../../../services/cometh-marketplace/assetOwners"
 import {
   Tooltip,
   TooltipContent,
@@ -62,7 +69,11 @@ export function TransferAssetButton({
   const [isPristine, setIsPristine] = useState(true)
   const { data: hash, writeContract, error, isPending } = useWriteContract()
   const [open, setOpen] = useState(false)
-  const client = useQueryClient()
+  const [quantity, setQuantity] = useState(BigInt(1))
+
+  const isErc1155 = useAssetIs1155(asset)
+  const assetOwnedQuantity = useAssetOwnedQuantity(asset)
+  const isViewerAnOwner = useIsViewerAnOwner(asset)
   const invalidateAssetQueries = useInvalidateAssetQueries()
 
   const account = useAccount()
@@ -80,23 +91,39 @@ export function TransferAssetButton({
 
   const transferAsset = useCallback(() => {
     if (!viewerAddress) return
-    writeContract({
-      address: asset.contractAddress as Address,
-      abi: erc721Abi,
-      functionName: "safeTransferFrom",
-      args: [
-        asset.owner as Address,
-        receiverAddress as Address,
-        BigInt(asset.tokenId),
-      ],
-    })
+    if (!isErc1155) {
+      writeContract({
+        address: asset.contractAddress as Address,
+        abi: erc721Abi,
+        functionName: "safeTransferFrom",
+        args: [
+          viewerAddress as Address,
+          receiverAddress as Address,
+          BigInt(asset.tokenId),
+        ],
+      })
+    } else {
+      writeContract({
+        address: asset.contractAddress as Address,
+        abi: erc1155Abi,
+        functionName: "safeTransferFrom",
+        args: [
+          viewerAddress as Address,
+          receiverAddress as Address,
+          BigInt(asset.tokenId),
+          quantity,
+          "0x",
+        ],
+      })
+    }
   }, [
     viewerAddress,
     asset.contractAddress,
-    asset.owner,
     receiverAddress,
     asset.tokenId,
     writeContract,
+    isErc1155,
+    quantity,
   ])
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -116,17 +143,15 @@ export function TransferAssetButton({
         asset.owner
       )
     }
-  }, [isConfirmed, asset.tokenId, client, setOpen, invalidateAssetQueries])
+  }, [
+    isConfirmed,
+    invalidateAssetQueries,
+    asset.contractAddress,
+    asset.owner,
+    asset.tokenId,
+  ])
 
-  const isViewerNotOwner = useMemo(() => {
-    return (
-      !asset.owner ||
-      !viewerAddress ||
-      asset.owner.toLowerCase() !== viewerAddress.toLowerCase()
-    )
-  }, [asset.owner, viewerAddress])
-
-  if (isViewerNotOwner) return null
+  if (!isViewerAnOwner) return null
 
   return (
     <Dialog modal open={open} onOpenChange={setOpen}>
@@ -168,6 +193,14 @@ export function TransferAssetButton({
             </div>
           )}
         </div>
+        {isErc1155 && (
+          <TokenQuantityInput
+            max={BigInt(assetOwnedQuantity)}
+            label="Quantity to transfer*"
+            onChange={setQuantity}
+            initialQuantity={BigInt(1)}
+          />
+        )}
         <div className="mt-4">
           <strong>
             Make sure to enter a valid address for this network. You will
