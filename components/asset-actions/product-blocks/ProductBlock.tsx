@@ -103,7 +103,7 @@ export function ProductBlock({ asset }: ProductBlockProps) {
                   size="lg"
                   onClick={() => updateTabQueryParam("listings")}
                 >
-                  Buy now
+                  Listings
                 </Button>
               ))}
             {shoulmdDisplayMakeOfferButton && (

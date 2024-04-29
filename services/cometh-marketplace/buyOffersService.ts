@@ -6,25 +6,6 @@ import { useQuery } from "@tanstack/react-query"
 
 import { comethMarketplaceClient } from "@/lib/clients"
 
-export function useListings(tokenId: string) {
-  const { data, isLoading } = useQuery({
-    queryKey: ["cometh", "listings", tokenId],
-    queryFn: async () => {
-      const response = await comethMarketplaceClient.order.searchOrders({
-        tokenIds: [tokenId],
-        statuses: [TradeStatus.OPEN],
-        direction: TradeDirection.SELL,
-      })
-      return response.orders
-    },
-  })
-
-  return {
-    data: data ?? [],
-    isLoading,
-  }
-}
-
 export async function getCheapestListing(
   tokenAddress: string,
   tokenId: string

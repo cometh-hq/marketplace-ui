@@ -45,21 +45,27 @@ export const CollectionActivities = ({
     return hackedFiltersOverride
   }, [filtersOverride])
 
-  const { data: orderSearch, isPending: isPendingOrders } = useSearchOrders({
-    tokenAddress: contractAddress,
-    limit: NB_COLLECTION_ORDERS_SHOWN,
-    orderBy: SearchOrdersSortOption.UPDATED_AT,
-    orderByDirection: FilterDirection.DESC,
-    ...hackedFiltersOverride,
-  })
+  const { data: orderSearch, isPending: isPendingOrders } = useSearchOrders(
+    {
+      tokenAddress: contractAddress,
+      limit: NB_COLLECTION_ORDERS_SHOWN,
+      orderBy: SearchOrdersSortOption.UPDATED_AT,
+      orderByDirection: FilterDirection.DESC,
+      ...hackedFiltersOverride,
+    },
+    filtersOverride?.statuses?.includes(TradeStatus.FILLED) &&
+      filtersOverride?.statuses?.length === 1
+  )
 
   const { data: filledEventsSearch, isPending: isPendingFilledEvents } =
-    useSearchFilledEvents({
-      tokenAddress: contractAddress,
-      limit: hackedFiltersOverride?.statuses?.includes(TradeStatus.FILLED)
-        ? NB_COLLECTION_ORDERS_SHOWN
-        : 0,
-    })
+    useSearchFilledEvents(
+      {
+        tokenAddress: contractAddress,
+        limit: NB_COLLECTION_ORDERS_SHOWN,
+      },
+      !filtersOverride?.statuses?.includes(TradeStatus.FILLED) &&
+        filtersOverride?.statuses?.length !== 0
+    )
   const { data: collection } = useGetCollection(contractAddress as Address)
   const isPending = isPendingOrders || isPendingFilledEvents
   return (

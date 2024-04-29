@@ -201,7 +201,7 @@ function AssetListingsButton({ asset }: { asset: SearchAssetWithTradeData }) {
   return (
     <Link href={`/nfts/${asset.contractAddress}/${asset.tokenId}?tab=listings#tabs`}>
       <Button className="w-full" size="lg">
-        Buy now
+        Listings
       </Button>
     </Link>
   )

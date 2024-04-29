@@ -3,16 +3,28 @@ import { useQuery } from "@tanstack/react-query"
 
 import { comethMarketplaceClient } from "@/lib/clients"
 
-export const useSearchFilledEvents = (searchRequest: SearchFilledEventsRequest) => {
+export const useSearchFilledEvents = (
+  searchRequest: SearchFilledEventsRequest,
+  disabled: boolean = false
+) => {
   return useQuery({
     queryKey: [
       "cometh",
       "searchFilledEvents",
+      disabled,
       searchRequest.tokenAddress,
       JSON.stringify(searchRequest),
     ],
     queryFn: () => {
-      return comethMarketplaceClient.order.searchOrderFilledEvents(searchRequest)
+      if (disabled) {
+        return {
+          filledEvents: [],
+          total: 0,
+        }
+      }
+      return comethMarketplaceClient.order.searchOrderFilledEvents(
+        searchRequest
+      )
     },
   })
 }

@@ -41,11 +41,16 @@ export const getActivityTimestamp = (assetActivity: AssetActivity) => {
     return assetActivity.transfer.timestamp
   } else if (isOrderActivity(assetActivity)) {
     const { order } = assetActivity
-    let dateToUse = order.signedAt
 
+    let dateToUse = ''
     if (order.orderStatus === TradeStatus.FILLED) {
       dateToUse = order.lastFilledAt as string
+    } else if (order.orderStatus === TradeStatus.OPEN) {
+      dateToUse = order.signedAt
+    } else {
+      dateToUse = order.cancelledAt as string
     }
+    
     return new Date(dateToUse).getTime()
   } else if (isFilledEventActivity(assetActivity)) {
     return new Date(assetActivity.filledEvent.blockTimestamp).getTime()

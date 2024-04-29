@@ -17,7 +17,7 @@ export const useInvalidateAssetQueries = () => {
         queryKey: ["cometh", "getAsset", tokenId],
       })
       client.invalidateQueries({
-        queryKey: ["cometh", "searchOrders", contractAddress],
+        queryKey: ["cometh", "searchOrders"],
       })
       client.invalidateQueries({
         queryKey: ["cometh", "assetTransfers", contractAddress, tokenId],

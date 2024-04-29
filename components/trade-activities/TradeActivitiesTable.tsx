@@ -7,6 +7,7 @@ import {
   Order,
   OrderFilledEventWithAsset,
   TokenType,
+  TradeStatus,
 } from "@cometh/marketplace-sdk"
 
 import {
@@ -80,11 +81,16 @@ const ActivityRow = ({
     }
   }, [activity, collection])
 
-  const transferQuantity = useMemo(() => {
+  const activityQuantity = useMemo(() => {
     if (isTransferActivity(activity)) {
       return activity.transfer.quantity
     } else if (isOrderActivity(activity)) {
-      return activity.order.tokenQuantity
+      const { order } = activity
+      if (order.orderStatus === TradeStatus.OPEN) {
+        return order.tokenQuantity
+      } else {
+        return order.tokenQuantityRemaining
+      }
     } else if (isFilledEventActivity(activity)) {
       return activity.filledEvent.fillAmount
     } else {
@@ -110,7 +116,7 @@ const ActivityRow = ({
       {display1155Columns && (
         <TableCell className="font-bold">
           {isErc1155 ? (
-            <TokenQuantity value={transferQuantity} />
+            <TokenQuantity value={activityQuantity} />
           ) : (
             <span className="text-muted-foreground">Unique</span>
           )}
