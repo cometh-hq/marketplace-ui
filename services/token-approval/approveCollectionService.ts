@@ -1,9 +1,9 @@
-import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { useMutation } from "@tanstack/react-query"
 import { UserFacingERC721AssetDataSerializedV4 } from "@traderxyz/nft-swap-sdk"
 import { Address } from "viem"
 import { useAccount } from "wagmi"
 
+import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 export type FetchHasApprovedCollectionParams = {
   address: Address
@@ -55,7 +55,12 @@ export const useApproveCollection = ({
         tokenId: tokenId.toString(),
         type: "ERC721",
       }
-      return nftSwapSdk.approveTokenOrNftByAsset(item, viewerAddress)
+      const approvalTx = await nftSwapSdk.approveTokenOrNftByAsset(
+        item,
+        viewerAddress
+      )
+      const approvalTxReceipt = await approvalTx.wait()
+      return approvalTxReceipt
     },
 
     onSuccess,
