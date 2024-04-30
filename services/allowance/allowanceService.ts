@@ -78,14 +78,13 @@ export const useERC20Allow = (
     mutationFn: async () => {
       if (!nftSwapSdk || !viemWalletClient || !viemPublicClient) return
       const spender = nftSwapSdk?.exchangeProxyContractAddress!
-      const { request } = await viemPublicClient.simulateContract({
+
+      const txHash = await viemWalletClient.writeContract({
         address: globalConfig.ordersErc20.address,
         abi: erc20Abi,
         functionName: "approve",
         args: [spender as Address, BigInt(price.toString())],
-        account: viemWalletClient.account,
       })
-      const txHash = await viemWalletClient.writeContract(request)
       const transaction = await viemPublicClient.waitForTransactionReceipt({
         hash: txHash,
       })
