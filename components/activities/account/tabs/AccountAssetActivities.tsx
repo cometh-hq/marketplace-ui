@@ -69,7 +69,11 @@ export const AccountAssetActivities = ({
         </CollectionAssetsSearchTabContent>
       ))}
 
-      <BuyOffersTabContent tabKey="received-offers" owner={walletAddress} />
+      <BuyOffersTabContent
+        tabKey="received-offers"
+        owner={walletAddress}
+        filteredOutMaker={walletAddress}
+      />
       <BuyOffersTabContent tabKey="sent-offers" maker={walletAddress} />
       <ListingsTabContent maker={walletAddress} />
       <AccountActivitiesTab walletAddress={walletAddress} />

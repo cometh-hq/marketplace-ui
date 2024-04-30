@@ -48,7 +48,9 @@ export const useBuyOffersSearch = ({
     if (!filterMaker) {
       return offersSearch?.orders
     }
-    return offersSearch?.orders?.filter((order) => order.maker !== filterMaker)
+    return offersSearch?.orders?.filter(
+      (order) => order.maker.toLowerCase() !== filterMaker.toLowerCase()
+    )
   }, [offersSearch?.orders, filterMaker])
 
   return { offers: filteredOrders, isPending }
