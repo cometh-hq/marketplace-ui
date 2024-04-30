@@ -13,10 +13,9 @@ const isErc20NativeToken = (order: ViemSignedOrder): boolean => {
   return order.erc20Token.toLowerCase() === ETH_ADDRESS_AS_ERC20
 }
 
-
-(BigInt.prototype as any).toJSON = function() {
+;(BigInt.prototype as any).toJSON = function () {
   return this.toString()
-} 
+}
 
 // Fork from NFT swap SDK to allow custom erc1155BuyAmount. Can be improved
 export const useFillSignedOrder = () => {
@@ -60,14 +59,13 @@ export const useFillSignedOrder = () => {
             functionName: "buyERC1155",
             args: [order, signature, erc1155BuyAmount, "0x"],
             value: needsEthAttached ? transactionValue : undefined,
-            
           })
         } else {
           // TODO(detect if erc20 token is wrapped token, then switch true. if true when not wrapped token, tx will fail)
           let unwrapNativeToken: boolean = false
 
           try {
-            const { request } = await viemPublicClient.simulateContract({
+            const txHash = await walletClient.writeContract({
               address: globalConfig.network.zeroExExchange,
               abi: zeroExAbi,
               functionName: "sellERC1155",
@@ -79,9 +77,7 @@ export const useFillSignedOrder = () => {
                 unwrapNativeToken,
                 "0x",
               ],
-              account: userAddress,
             })
-            const txHash = await walletClient.writeContract(request)
 
             return txHash
           } catch (error) {

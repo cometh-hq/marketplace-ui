@@ -13,6 +13,7 @@ import {
   polygon,
   polygonMumbai,
 } from "@wagmi/chains"
+import { polygonAmoy } from "viem/chains"
 
 const wagmiChains = [
   mainnet,
@@ -25,6 +26,7 @@ const wagmiChains = [
   celo,
   avalanche,
   polygonMumbai,
+  polygonAmoy,
 ]
 let matchingChain = wagmiChains.find(
   (chain) => chain.id === globalConfig.network.chainId

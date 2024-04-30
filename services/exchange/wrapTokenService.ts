@@ -35,15 +35,13 @@ export const useWrapToken = () => {
         throw new Error("Could not wrap token")
       }
 
-      const { request } = await viemPublicClient.simulateContract({
+      const txHash = await viemWalletClient.writeContract({
         address: globalConfig.ordersErc20.address,
         abi: wethAbi,
         functionName: "deposit",
         args: [],
-        value: amount.toBigInt(),
-        account: viewerAddress,
+        value: amount.toBigInt()
       })
-      const txHash = await viemWalletClient.writeContract(request)
       const transaction = await viemPublicClient.waitForTransactionReceipt({
         hash: txHash,
       })

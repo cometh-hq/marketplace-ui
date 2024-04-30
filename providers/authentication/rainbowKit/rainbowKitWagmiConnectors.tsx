@@ -1,3 +1,4 @@
+import { manifest } from "@/manifests/manifests"
 import { getComethConnectWallet } from "@cometh/connect-sdk-viem"
 import { connectorsForWallets, getDefaultWallets } from "@rainbow-me/rainbowkit"
 
@@ -7,6 +8,7 @@ const wallets = getDefaultWallets().wallets
 if (env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY && typeof window !== "undefined") {
   const comethConnectWallet = getComethConnectWallet({
     apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY,
+    rpcUrl: manifest.rpcUrl
   })
   wallets.unshift({
     groupName: "Recommended",

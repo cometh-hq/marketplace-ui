@@ -20,7 +20,7 @@ export const getERC20Balance = async (
   erc20Address: Address,
   walletAddress: Address
 ): Promise<bigint> => {
-  const balance = await readContract(wagmiConfig, {
+  const balance = await readContract(wagmiConfig as any, {
     address: erc20Address,
     abi: erc20Abi,
     functionName: "balanceOf",
@@ -39,7 +39,7 @@ export const getOrdersERC20Balance = async (
 export const getNativeBalance = async (
   walletAddress: Address
 ): Promise<bigint> => {
-  const balance = await getBalance(wagmiConfig, {
+  const balance = await getBalance(wagmiConfig as any, {
     address: walletAddress,
   })
 

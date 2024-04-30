@@ -22,14 +22,13 @@ export const useUnwrapToken = () => {
         throw new Error("Could not unwrap token")
       }
 
-      const { request } = await viemPublicClient.simulateContract({
+      const txHash = await viemWalletClient.writeContract({
         address: globalConfig.ordersErc20.address,
         abi: wethAbi,
         functionName: 'withdraw',
         args: [BigInt(amount.toString())],
         account: viemWalletClient.account
       })
-      const txHash = await viemWalletClient.writeContract(request)
       const transaction = await viemPublicClient.waitForTransactionReceipt( 
         { hash: txHash }
       )

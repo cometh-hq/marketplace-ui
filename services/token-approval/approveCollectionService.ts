@@ -1,10 +1,13 @@
-import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { TokenType } from "@cometh/marketplace-sdk"
 import { useMutation } from "@tanstack/react-query"
-import { UserFacingERC1155AssetDataSerializedV4, UserFacingERC721AssetDataSerializedV4 } from "@traderxyz/nft-swap-sdk"
+import {
+  UserFacingERC721AssetDataSerializedV4,
+  UserFacingERC1155AssetDataSerializedV4,
+} from "@traderxyz/nft-swap-sdk"
 import { Address } from "viem"
 import { useAccount } from "wagmi"
 
+import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 export type FetchHasApprovedCollectionParams = {
   address: Address
@@ -19,13 +22,15 @@ export const fetchHasApprovedCollection = async ({
   tokenId,
   nftSwapSdk,
   contractAddress,
-  tokenType
+  tokenType,
 }: FetchHasApprovedCollectionParams) => {
   try {
-    const item: UserFacingERC721AssetDataSerializedV4 | UserFacingERC1155AssetDataSerializedV4 = {
+    const item:
+      | UserFacingERC721AssetDataSerializedV4
+      | UserFacingERC1155AssetDataSerializedV4 = {
       tokenAddress: contractAddress,
       tokenId: tokenId.toString(),
-      type: tokenType
+      type: tokenType,
     }
     const approvalStatus = await nftSwapSdk.loadApprovalStatus(item, address)
     return approvalStatus.contractApproved
@@ -55,12 +60,19 @@ export const useApproveCollection = ({
   return useMutation({
     mutationFn: async () => {
       if (!nftSwapSdk || !viewerAddress) throw new Error("SDK not initialized")
-      const item: UserFacingERC721AssetDataSerializedV4 | UserFacingERC1155AssetDataSerializedV4 = {
+      const item:
+        | UserFacingERC721AssetDataSerializedV4
+        | UserFacingERC1155AssetDataSerializedV4 = {
         tokenAddress: tokenAddress,
         tokenId: tokenId.toString(),
-        type: tokenType
+        type: tokenType,
       }
-      return nftSwapSdk.approveTokenOrNftByAsset(item, viewerAddress)
+      const approvalTx = await nftSwapSdk.approveTokenOrNftByAsset(
+        item,
+        viewerAddress
+      )
+      const approvalTxReceipt = await approvalTx.wait()
+      return approvalTxReceipt
     },
 
     onSuccess,
