@@ -85,10 +85,14 @@ export const AssetsSearchGrid = ({
           <SearchAsset onChange={setSearch} />
           <div className="flex gap-3">
             {isMobile ? (
-              <FiltersFullscreen attributeFilterOptions={attributesFilterOptions} />
+              <FiltersFullscreen
+                attributeFilterOptions={attributesFilterOptions}
+              />
             ) : (
               <>
-                <FiltersDropdown attributeFilterOptions={attributesFilterOptions} />
+                <FiltersDropdown
+                  attributeFilterOptions={attributesFilterOptions}
+                />
                 <FiltersResetBtn />
               </>
             )}
@@ -117,7 +121,14 @@ export const AssetsSearchGrid = ({
             ))}
           </AssetCardsList>
           <div ref={loadMoreRef} className="py-10">
-            {isFetchingNextPage ? "Loading more NFTs..." : <div></div>}
+            {isFetchingNextPage ? (
+              <div className="text-muted-foreground flex flex-col items-center font-medium ">
+                <div>Loading more NFTs... </div>
+                <Loading />
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         </>
       )}

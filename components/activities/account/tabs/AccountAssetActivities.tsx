@@ -9,6 +9,7 @@ import globalConfig from "@/config/globalConfig"
 import { useNFTFilters } from "@/lib/utils/nftFilters"
 import { Tabs } from "@/components/ui/Tabs"
 import { AccountActivitiesTab } from "@/components/trade-activities/AccountActivitiesTab"
+import { useBuyOffersSearch } from "@/components/trade-activities/activityDataHooks"
 
 import { ListingsTabContent } from "../../order-tables/listings/ListingsTabContent"
 import { BuyOffersTabContent } from "../../order-tables/offers/BuyOffersTabContent"
@@ -26,8 +27,13 @@ export const AccountAssetActivities = ({
   walletAddress,
   children,
 }: AccountAssetActivitiesProps) => {
-  const receivedOffers = useUserPurchaseOffers(false)
-  const sentOffers = useUserPurchaseOffers(true)
+  const { offers: receivedOffers } = useBuyOffersSearch({
+    owner: walletAddress,
+    filteredOutMaker: walletAddress,
+  })
+  const { offers: sentOffers } = useBuyOffersSearch({
+    maker: walletAddress,
+  })
   const { switchCollection, currentCollectionAddress } =
     useCurrentCollectionContext()
   const { reset } = useNFTFilters()
