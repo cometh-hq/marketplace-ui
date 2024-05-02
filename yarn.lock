@@ -224,11 +224,7 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
-<<<<<<< HEAD
-"@babel/runtime@^7.12.0", "@babel/runtime@^7.24.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
-=======
-"@babel/runtime@^7.12.0", "@babel/runtime@^7.19.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
->>>>>>> main
+"@babel/runtime@^7.12.0", "@babel/runtime@^7.19.4", "@babel/runtime@^7.24.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
   version "7.24.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.4.tgz#de795accd698007a66ba44add6cc86542aff1edd"
   integrity sha512-dkxf7+hn8mFBwKjs9bvBlArzLVxVbS8usaPUDd5p2a9JCL9tB8OaOVN1isD4+Xyk4ns89/xeOmbQvgdK7IIVdA==
@@ -379,29 +375,22 @@
     preact "^10.16.0"
     sha.js "^2.4.11"
 
-"@cometh/connect-sdk-viem@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@cometh/connect-sdk-viem/-/connect-sdk-viem-2.0.2.tgz#2190281f10cdecd676ea2eade542ce2b3ff9156c"
-  integrity sha512-1ERiY9sqk4TVKkPrLPFYfC9CWSMPG1VCYkpbOV5Uk+LfxdUFmy4HNxSMpUCW3sLikddb9C38iO9HmZctZUHtBg==
+"@cometh/connect-sdk-viem@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@cometh/connect-sdk-viem/-/connect-sdk-viem-2.0.1.tgz#c807793f72636361be849bade0fd7391f5849350"
+  integrity sha512-FUNDESvy37hsWlaTg26GrEMVyGGitXHUp/9fD4t0BRCH+vZ9sKis3o7q0iz++KUs4+UsvUpcOVuuHr++Hz2Xvw==
   dependencies:
     "@babel/traverse" "^7.23.4"
-    "@cometh/connect-sdk" "^1.2.18"
+    "@cometh/connect-sdk" "^1.2.16"
     "@rainbow-me/rainbowkit" "^2"
     "@types/babel__core" "^7.20.0"
     viem "^2"
     wagmi "^2"
 
-<<<<<<< HEAD
 "@cometh/connect-sdk@^1.2.16":
   version "1.2.18"
   resolved "https://registry.yarnpkg.com/@cometh/connect-sdk/-/connect-sdk-1.2.18.tgz#14c606e414727e2970394d717553ea1ac401d20c"
   integrity sha512-7c39wVarvd+zI6pw0ANo87Ka26j5b3+crINgnzLxFnL79XeIWk7q4nTOzYIOqfS1VWTW+mIohI0hq0P2RObOqg==
-=======
-"@cometh/connect-sdk@^1.2.18":
-  version "1.2.19"
-  resolved "https://registry.yarnpkg.com/@cometh/connect-sdk/-/connect-sdk-1.2.19.tgz#90f38fd69153f65b4c674c3b276ea408ecbc0f13"
-  integrity sha512-VEe+wih7MTr9qLNTvu6pi6Cf10X1zRy7rgnxoAEy9E2b+NZWkWatwS4lAwPN7zIHeHNTk8k5cuSGgmV8fx1LRw==
->>>>>>> main
   dependencies:
     "@alembic/ui" "^1.5.4"
     "@babel/traverse" "^7.23.4"
@@ -2928,20 +2917,12 @@
     react-remove-scroll "2.5.7"
     ua-parser-js "^1.0.37"
 
-<<<<<<< HEAD
-"@rainbow-me/rainbowkit@^2.0.2":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-2.0.5.tgz#efe34e97ee342b8cd10538384f71e9ca01ab8306"
-  integrity sha512-JVBgl0J1EvYXrGxDJmqEVMFrjE3gGidHyacFilKu/zJdaHFGXogsmCG51DdaU3gsas0Aqbq9kqK13qk49VSfAg==
-  dependencies:
-=======
 "@rainbow-me/rainbowkit@^2.0.6":
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-2.0.6.tgz#0524ec073b97660499c18ef061ed202a9cbf489b"
   integrity sha512-Bl1abhfEClnlo66trh3ruGp1fIJ9s3LI4IpHxSvnB0otWrhT/ZtYuIeO7ISBGPEqst0/bfRea1TM1FCr9s0HXA==
   dependencies:
     "@coinbase/wallet-sdk" "3.9.3"
->>>>>>> main
     "@vanilla-extract/css" "1.14.0"
     "@vanilla-extract/dynamic" "2.1.0"
     "@vanilla-extract/sprinkles" "1.6.1"
@@ -3724,15 +3705,6 @@
     "@walletconnect/ethereum-provider" "2.11.1"
     "@walletconnect/modal" "2.6.2"
 
-<<<<<<< HEAD
-"@wagmi/connectors@4.1.26":
-  version "4.1.26"
-  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-4.1.26.tgz#dda4e2cc3c3943cff66a68e1ce382260d25cd74f"
-  integrity sha512-0bANLzi4gZcszPnCj3l7+DPztCG+L+W1Zm/a02YmEh2MaQC/blBsbAdb2JALdW66HJJE8m4cNZjPJPTsS2/MQQ==
-  dependencies:
-    "@coinbase/wallet-sdk" "3.9.1"
-    "@metamask/sdk" "0.14.3"
-=======
 "@wagmi/connectors@4.3.0":
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-4.3.0.tgz#fd82eb1d1374dc9a45e9f3e15fa642d7566899b1"
@@ -3740,24 +3712,11 @@
   dependencies:
     "@coinbase/wallet-sdk" "3.9.1"
     "@metamask/sdk" "0.18.6"
->>>>>>> main
     "@safe-global/safe-apps-provider" "0.18.1"
     "@safe-global/safe-apps-sdk" "8.1.0"
     "@walletconnect/ethereum-provider" "2.11.2"
     "@walletconnect/modal" "2.6.2"
 
-<<<<<<< HEAD
-"@wagmi/core@2.6.17":
-  version "2.6.17"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.6.17.tgz#46445d12bc46b1fa59d50165ccb50280eac34957"
-  integrity sha512-Ghr7PlD5HO1YJrsaC52j/csgaigBAiTR7cFiwrY7WdwvWLsR5na4Dv6KfHTU3d3al0CKDLanQdRS5nB4mX1M+g==
-  dependencies:
-    eventemitter3 "5.0.1"
-    mipd "0.0.5"
-    zustand "4.4.1"
-
-=======
->>>>>>> main
 "@wagmi/core@2.6.5":
   version "2.6.5"
   resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.6.5.tgz#7d1b7d94083d0b01c9ac4bb69e37d0d82b1640b5"
@@ -4185,88 +4144,14 @@
     joi "17.9.1"
     lodash.uniqby "^4.7.0"
 
-<<<<<<< HEAD
-"@web3modal/common@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/common/-/common-4.1.9.tgz#cd4e0a6b5786e8d2d0affa242b237569ae3c8614"
-  integrity sha512-UZ6dDQ5t6q+oUFMI2ONg3a8gctpNJTFj2qTdPic4/xHuktLf5nHm8LK9NGhMpUqjm7VRN95xpnTeM0gSSmcF6w==
-=======
 "@web3modal/common@4.1.11":
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/@web3modal/common/-/common-4.1.11.tgz#74fe5e870c0cccac10fe6d5fed57f307877beee8"
   integrity sha512-zcoaixcI3dLC/D0QlhpT8MNCd717O1/3r1AemC5/9Wbk2F+YKXkzJZHmWlXoTvlTw9DH07rJzs9YTPxFyn855w==
->>>>>>> main
   dependencies:
     bignumber.js "9.1.2"
     dayjs "1.11.10"
 
-<<<<<<< HEAD
-"@web3modal/core@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/core/-/core-4.1.9.tgz#5ddb4e032c084503414a381145b95f0f274dbbe5"
-  integrity sha512-qe+w8LzbZBehcpBSTYgWFVK4jmpKwnRWRVsvgq301108c2NNtxDsWHZ324r4jmmgY1qhmdoZqTRqJspUyGfMJQ==
-  dependencies:
-    "@web3modal/common" "4.1.9"
-    "@web3modal/wallet" "4.1.9"
-    valtio "1.11.2"
-
-"@web3modal/polyfills@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/polyfills/-/polyfills-4.1.9.tgz#3091c4b88358497a561c137eab17d4db23dec302"
-  integrity sha512-skpS7RYX8IEV/V69a7agZD398ffvFkvA6cPqj01aThTrB9dP2THJSuUDQswfWC2frSOFnEdZbJ3LkaQb0eUjzg==
-  dependencies:
-    buffer "6.0.3"
-
-"@web3modal/scaffold-react@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/scaffold-react/-/scaffold-react-4.1.9.tgz#7dd9965b70a330aa00f90798fba4a875bcca6a48"
-  integrity sha512-AoYtCMpdjvYPqDkz8QGgY77LXFkwrGHQqwg7igHYtFSerUDnKOBp7z3+Uv19UiDnAds95m5n+jiw3QijesVLZA==
-  dependencies:
-    "@web3modal/scaffold" "4.1.9"
-
-"@web3modal/scaffold-utils@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/scaffold-utils/-/scaffold-utils-4.1.9.tgz#ad4d8bf6ab928dc6867cea733e0be6a0f7e0739f"
-  integrity sha512-W5Ek2m2AroraH/PbmI3BfCA1tDGGZA4zhXei5zJMH9/Zox7ltE7kApVmWjS33KfPz46KmifrqLjc+hJs78QO3w==
-  dependencies:
-    "@web3modal/core" "4.1.9"
-    "@web3modal/polyfills" "4.1.9"
-    valtio "1.11.2"
-
-"@web3modal/scaffold-vue@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/scaffold-vue/-/scaffold-vue-4.1.9.tgz#be98684639f90cdcd6fb476993b000d9e9b596d2"
-  integrity sha512-DRiiBdBEgemyyz6Onb4LGPYj3DlPfFS9XfDqNzNo0AqfC4dYqaRd1dCbJ2YgXglqT/CQ+2J2dCVNmpWGYyR62w==
-  dependencies:
-    "@web3modal/scaffold" "4.1.9"
-
-"@web3modal/scaffold@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/scaffold/-/scaffold-4.1.9.tgz#b462db7dccc80221dbc306b31c8bd525f5ca302d"
-  integrity sha512-Q0eQdrxO27jQRvy85TF1b6+MK1DSMTSbkb9R4cQIU2IeO1ilTneYuiZtnUII9nlx4j9nXNFywcXWYfb9nvo3nw==
-  dependencies:
-    "@web3modal/common" "4.1.9"
-    "@web3modal/core" "4.1.9"
-    "@web3modal/siwe" "4.1.9"
-    "@web3modal/ui" "4.1.9"
-    "@web3modal/wallet" "4.1.9"
-    lit "3.1.0"
-
-"@web3modal/siwe@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/siwe/-/siwe-4.1.9.tgz#a9e568cd77f5162d92c7f9f2e610556b761280d6"
-  integrity sha512-4KKToXWkj9sK9kKSPAhaoO/yza3K1BChkr7+pOHIVwL7sl4HB7UQUvLKPffANNx/mz4wi0SgrvQB5WCdnmhcCA==
-  dependencies:
-    "@web3modal/core" "4.1.9"
-    "@web3modal/scaffold-utils" "4.1.9"
-    lit "3.1.0"
-    valtio "1.11.2"
-
-"@web3modal/ui@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/ui/-/ui-4.1.9.tgz#02dc44b5f424e1e13af439d6770118b1b3c5d1a2"
-  integrity sha512-GoVbFLvf6l0m2JUShDNfjGNIzKMG3OCUxOZ4yu2H8ajZPKOSy5ZxEYM23H6ISYlAo3zDgTYzjWPctQB20A+W3w==
-=======
 "@web3modal/core@4.1.11":
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/@web3modal/core/-/core-4.1.11.tgz#7dbc7ab82a98df8feb9033c2ee3ac853e6135fcc"
@@ -4332,31 +4217,10 @@
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/@web3modal/ui/-/ui-4.1.11.tgz#48a6e57bae1614414c3627d4ba9712441fa61ef0"
   integrity sha512-lentHZvUpNjVasvNI8/jrVPIAV1M5zJKZ4Q4AeYwUJdEtlRon1uq10MRylmvlZAjWb98U130uJy245Fz87Th/w==
->>>>>>> main
   dependencies:
     lit "3.1.0"
     qrcode "1.5.3"
 
-<<<<<<< HEAD
-"@web3modal/wagmi@^4.1.1":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/wagmi/-/wagmi-4.1.9.tgz#5a41f4de37c4c44099a10add679b47f440176c91"
-  integrity sha512-+2F2NI5UtTEUQ4pMXsz2zwpdVcsXhy7HfwFf4afLdloY/eG4ckqACYyGVqm4TQ3IC2CqW9zIyPRNUYTYa0iZng==
-  dependencies:
-    "@web3modal/polyfills" "4.1.9"
-    "@web3modal/scaffold" "4.1.9"
-    "@web3modal/scaffold-react" "4.1.9"
-    "@web3modal/scaffold-utils" "4.1.9"
-    "@web3modal/scaffold-vue" "4.1.9"
-    "@web3modal/siwe" "4.1.9"
-
-"@web3modal/wallet@4.1.9":
-  version "4.1.9"
-  resolved "https://registry.yarnpkg.com/@web3modal/wallet/-/wallet-4.1.9.tgz#660e969e9e91361614f68ff25ef04375875c953b"
-  integrity sha512-YkFzTxtFImBVkFM7NZwUSxlDmz+uLp2hFJdWDbQI0THLLkKAjn4kE5EuQHjKILdMtIqx01seqn75BadyC/WYog==
-  dependencies:
-    "@web3modal/polyfills" "4.1.9"
-=======
 "@web3modal/wagmi@^4.1.11":
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/@web3modal/wagmi/-/wagmi-4.1.11.tgz#6b98f9bea2269ef760c58dd8c8d445b64187b9fa"
@@ -4375,7 +4239,6 @@
   integrity sha512-6eJSpNcrBxufJFEQu9+ZOMUZxPqa8438RvfYKCU9nLXwoBtweo6ecpQw2yhXDlrfG+uJZhFabtPxROabn2M8Kg==
   dependencies:
     "@web3modal/polyfills" "4.1.11"
->>>>>>> main
     zod "3.22.4"
 
 abitype@0.9.3:
@@ -4756,29 +4619,8 @@ axios@^1.6.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.2.tgz#de67d42c755b571d3e698df1b6504cde9b0ee9f2"
   integrity sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==
-<<<<<<< HEAD
-=======
   dependencies:
     follow-redirects "^1.15.0"
-    form-data "^4.0.0"
-    proxy-from-env "^1.1.0"
-
-axios@^1.6.7:
-  version "1.6.7"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.7.tgz#7b48c2e27c96f9c68a2f8f31e2ab19f59b06b0a7"
-  integrity sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==
-  dependencies:
-    follow-redirects "^1.15.4"
-    form-data "^4.0.0"
-    proxy-from-env "^1.1.0"
-
-axios@^1.6.8:
-  version "1.6.8"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.8.tgz#66d294951f5d988a00e87a0ffb955316a619ea66"
-  integrity sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==
->>>>>>> main
-  dependencies:
-    follow-redirects "^1.15.6"
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
@@ -6529,11 +6371,6 @@ follow-redirects@^1.15.0:
   version "1.15.2"
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.2.tgz"
   integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
-
-follow-redirects@^1.15.6:
-  version "1.15.6"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.6.tgz#7f815c0cda4249c74ff09e95ef97c23b5fd0399b"
-  integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
 
 follow-redirects@^1.15.6:
   version "1.15.6"
@@ -10131,17 +9968,10 @@ viem@^2:
     isows "1.0.3"
     ws "8.13.0"
 
-<<<<<<< HEAD
-viem@^2.8.9:
-  version "2.9.23"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.9.23.tgz#43a286779bc68b974794e3673175734b92d5db3b"
-  integrity sha512-KolNI8H8tNkOA6xkC5UnlQjoorJxk4F1F9h42pHnH9/CtrWG9Ka4xmAWwhO2xKNPA2sNsAsJLmedBsz2uvaQow==
-=======
 viem@^2.9.28:
   version "2.9.28"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.9.28.tgz#75b6bd110801a4340fee2daa3eb0bffbe9cc990e"
   integrity sha512-/1iTg8yQlCNJ+7wSmdsBNB/vhjWqFJtTH6XZXHjGXrZnlBxAtHR5ZAr5TvTJc/2nhVIVE4BkCe5JCrIiSuZodg==
->>>>>>> main
   dependencies:
     "@adraffy/ens-normalize" "1.10.0"
     "@noble/curves" "1.2.0"
@@ -10166,15 +9996,6 @@ wagmi@^2:
     "@wagmi/core" "2.6.5"
     use-sync-external-store "1.2.0"
 
-<<<<<<< HEAD
-wagmi@^2.5.7:
-  version "2.5.20"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.5.20.tgz#de1799c1eacb46d252b5a7838c5882f46882362d"
-  integrity sha512-K/9qk6+t/+NKFdbQyB7LtFgl3UXnGjvgyzAyfMQ+dF56uTSJipQwc94CSlN8kdQXTIOvhUSK2P7WJrdTEd15AA==
-  dependencies:
-    "@wagmi/connectors" "4.1.26"
-    "@wagmi/core" "2.6.17"
-=======
 wagmi@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.7.0.tgz#99a6ed038e6e8eea405c64d3bce4d680b3fad06b"
@@ -10182,7 +10003,6 @@ wagmi@^2.7.0:
   dependencies:
     "@wagmi/connectors" "4.3.0"
     "@wagmi/core" "2.8.0"
->>>>>>> main
     use-sync-external-store "1.2.0"
 
 watchpack@2.4.0:

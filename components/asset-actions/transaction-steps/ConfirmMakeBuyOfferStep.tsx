@@ -11,6 +11,7 @@ import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
 import { Price } from "@/components/ui/Price"
 import { ButtonLoading } from "@/components/ButtonLoading"
+import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 
 export type ConfirmBuyOfferStepProps = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
@@ -29,6 +30,7 @@ export function ConfirmMakeBuyOfferStep({
 }: ConfirmBuyOfferStepProps) {
   const { mutateAsync: makeBuyOffer, isPending } = useMakeBuyOfferAsset(asset)
   const isComethWallet = useIsComethConnectWallet()
+  const isErc1155 = useAssetIs1155(asset)
 
   const onConfirm = useCallback(async () => {
     await makeBuyOffer({ asset, price, validity, quantity })
@@ -40,8 +42,14 @@ export function ConfirmMakeBuyOfferStep({
       <h3 className="text-xl font-semibold">Summary</h3>
       <p className="text-center">
         You are about to make an offer to buy{" "}
-        <span className="font-bold">{Number(quantity).toLocaleString()}</span>{" "}
-        of this asset for{" "}
+        {isErc1155 && (
+          <>
+            <span className="font-bold">
+              {Number(quantity).toLocaleString()}
+            </span>{" of "}
+          </>
+        )}
+        this asset for{" "}
         <span>
           <Price size="default" amount={price} hideSymbol={false} />
         </span>{" "}
