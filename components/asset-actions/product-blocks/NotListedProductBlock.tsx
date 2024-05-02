@@ -2,7 +2,7 @@ import { AssetWithTradeData } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
 
 import { UserLink } from "@/components/ui/user/UserLink"
-import { AuthenticationButton } from "@/components/AuthenticationButton"
+import { AuthenticationButton } from "@/components/login/AuthenticationButton"
 import { AssetStatusBadge } from "@/components/marketplace/asset/AssetStatusBadge"
 import {
   ProductBlockCenteredColumn,

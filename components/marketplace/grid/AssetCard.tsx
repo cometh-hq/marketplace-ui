@@ -26,7 +26,7 @@ import { CancelListingButton } from "@/components/asset-actions/buttons/CancelLi
 import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/MakeBuyOfferPriceDialog"
 import { SellAssetButton } from "@/components/asset-actions/buttons/SellAssetButton"
 import { SwitchNetwork } from "@/components/asset-actions/buttons/SwitchNetwork"
-import { AuthenticationButton } from "@/components/AuthenticationButton"
+import { AuthenticationButton } from "@/components/login/AuthenticationButton"
 
 export type AssetCardProps = {
   asset: SearchAssetWithTradeData & {
@@ -183,17 +183,13 @@ function renderAssetActions(
     button = <BuyAssetButton asset={asset} />
     buttonText = "Buy now "
   } else if (!isOwnerAsset) {
-    button = (
-      <MakeBuyOfferButton asset={asset} />
-    )
+    button = <MakeBuyOfferButton asset={asset} />
     buttonText = "Make an offer"
   } else if (!asset.orderbookStats.lowestListingPrice) {
     button = <SellAssetButton asset={asset} />
     buttonText = "Sell now"
   } else {
-    button = (
-      <CancelListingButton asset={asset} />
-    )
+    button = <CancelListingButton asset={asset} />
     buttonText = "Cancel listing"
   }
 
