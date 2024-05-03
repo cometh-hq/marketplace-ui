@@ -28,8 +28,8 @@ export const TraditionalWalletsButton = ({
   return (
     <Button
       onClick={onButtonClick}
-      isLoading={account.isReconnecting}
-      disabled={account.isReconnecting}
+      isLoading={account.isReconnecting || account.isConnecting}
+      disabled={account.isReconnecting || account.isConnecting}
       className={cx({
         "h-12 w-full ": fullVariant,
       })}

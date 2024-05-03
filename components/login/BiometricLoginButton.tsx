@@ -25,8 +25,8 @@ export const BiometricLoginButton = ({
       className={cx({
         "border-r-2 border-muted w-full": true,
       })}
-      isLoading={account.isReconnecting}
-      disabled={account.isReconnecting}
+      isLoading={account.isReconnecting || account.isConnecting}
+      disabled={account.isReconnecting || account.isConnecting}
       size="lg"
       onClick={biometricLogin}
     >

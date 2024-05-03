@@ -1,20 +1,30 @@
 "use client"
 
+import { useCallback, useEffect, useMemo } from "react"
 import { manifest } from "@/manifests/manifests"
 import { Chain } from "@wagmi/chains"
 import { createWeb3Modal, useWeb3Modal } from "@web3modal/wagmi/react"
-import { createConfig, http, WagmiProvider } from "wagmi"
+import { createConfig, CreateConnectorFn, http, WagmiProvider } from "wagmi"
 
+import { useComethConnectConnector } from "../comethConnectHooks"
 import { marketplaceChain } from "../marketplaceWagmiChain"
 import { wagmiConnectors } from "./web3ModalWagmiConnectors"
 
-export const wagmiConfig = createConfig({
+const DEFAULT_WAGMI_CONFIG_PARAMS = {
   connectors: wagmiConnectors,
   chains: [marketplaceChain] as [Chain, ...Chain[]],
   transports: {
     [marketplaceChain.id]: http(manifest.rpcUrl),
   },
   ssr: true,
+}
+
+export const wagmiConfig = createConfig(DEFAULT_WAGMI_CONFIG_PARAMS)
+
+createWeb3Modal({
+  wagmiConfig: wagmiConfig,
+  projectId: manifest.walletConnectProjectId,
+  connectorImages: {},
 })
 
 export const useOpenLoginModal = () => {
@@ -22,20 +32,31 @@ export const useOpenLoginModal = () => {
   return open
 }
 
-
-createWeb3Modal({
-  wagmiConfig,
-  projectId: manifest.walletConnectProjectId,
-  connectorImages: {
-    "cometh":
-      "https://pbs.twimg.com/profile_images/1679433363818442753/E2kNVLBe_400x400.jpg",
-  },
-})
-
 export function MarketplaceWagmiProvider({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <WagmiProvider config={wagmiConfig}>{children}</WagmiProvider>
+  const comethConnectConnector = useComethConnectConnector()
+
+  const getWagmiConfig = useCallback(
+    (connectorToInsert?: CreateConnectorFn) => {
+      const connectors = [...wagmiConnectors]
+      if (connectorToInsert) {
+        connectors.push(connectorToInsert)
+      }
+      return createConfig({
+        ...DEFAULT_WAGMI_CONFIG_PARAMS,
+        connectors: connectors,
+      })
+    },
+    []
+  )
+
+  const coreWagmiConfig = useMemo(
+    () => getWagmiConfig(comethConnectConnector as any),
+    [getWagmiConfig, comethConnectConnector]
+  )
+
+  return <WagmiProvider config={coreWagmiConfig}>{children}</WagmiProvider>
 }
