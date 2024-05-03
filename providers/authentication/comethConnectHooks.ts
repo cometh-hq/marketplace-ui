@@ -10,8 +10,26 @@ export const useIsComethConnectWallet = () => {
   return useMemo(() => connector?.type === "cometh", [connector])
 }
 
-export const useComethConnectLogin = () => {
-  const { connect } = useConnect()
+export const useComethConnectLogin = (
+  userWalletAddress?: string,
+  onConnectError?: (error: Error) => void
+) => {
+  const handleConnectError = useCallback(
+    (error: Error) => {
+      console.error("Error connecting with Cometh Connect", error)
+      if (onConnectError) {
+        onConnectError(error)
+      } else {
+        throw error
+      }
+    },
+    [onConnectError]
+  )
+  const { connect } = useConnect({
+    mutation: {
+      onError: handleConnectError,
+    },
+  })
 
   return useCallback(() => {
     if (!env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY) {
@@ -20,7 +38,8 @@ export const useComethConnectLogin = () => {
     const connector = comethConnectConnector({
       apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY,
       rpcUrl: manifest.rpcUrl,
+      walletAddress: userWalletAddress,
     })
     connect({ connector: connector as any })
-  }, [connect])
+  }, [connect, userWalletAddress])
 }

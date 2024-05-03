@@ -12,7 +12,8 @@ export const BiometricLoginButton = ({
   onPreClick?: () => void
 }) => {
   const account = useAccount()
-  const comethConnectLogin = useComethConnectLogin()
+  // Can define user wallet and error handling here
+  const comethConnectLogin = useComethConnectLogin(undefined, undefined)
 
   const biometricLogin = useCallback(() => {
     onPreClick()
