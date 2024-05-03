@@ -7,7 +7,7 @@ import {
   AssetWithTradeData,
   OrderWithAsset,
   SearchAssetWithTradeData,
-  TokenType,
+  TokenType
 } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
@@ -36,7 +36,6 @@ export type FetchRequiredBuyingStepsOptions = {
   asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
   order?: OrderWithAsset
   address: Address
-  wrappedContractAddress: Address
   isComethWallet: boolean
 }
 
@@ -44,7 +43,6 @@ export const fetchRequiredBuyingSteps = async ({
   asset,
   order,
   address,
-  wrappedContractAddress,
   isComethWallet,
 }: FetchRequiredBuyingStepsOptions) => {
   if (!order) {
@@ -64,7 +62,7 @@ export const fetchRequiredBuyingSteps = async ({
     (await fetchNeedsMoreAllowance({
       address,
       price,
-      contractAddress: wrappedContractAddress,
+      contractAddress: globalConfig.ordersErc20.address,
       spender: globalConfig.network.zeroExExchange,
     }))
 
@@ -119,7 +117,6 @@ export const useRequiredBuyingSteps = ({
         asset,
         order: order,
         address: viewerAddress,
-        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
         isComethWallet,
       })
 

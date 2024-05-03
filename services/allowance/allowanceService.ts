@@ -41,7 +41,7 @@ export const fetchWrappedAllowance = async ({
   contractAddress: Address
 }) => {
   try {
-    const result = await readContract(wagmiConfig, {
+    const result = await readContract(wagmiConfig as any, {
       address: contractAddress,
       abi: erc20Abi,
       functionName: "allowance",

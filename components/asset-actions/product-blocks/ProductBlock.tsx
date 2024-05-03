@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button"
 import { Price } from "@/components/ui/Price"
 import { UserLink } from "@/components/ui/user/UserLink"
 import { useUpdateTabQueryParam } from "@/components/activities/asset-details/tabs/pageTabHooks"
-import { AuthenticationButton } from "@/components/AuthenticationButton"
+import { AuthenticationButton } from "@/components/login/AuthenticationButton"
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import TokenQuantity from "@/components/erc1155/TokenQuantity"
 import {

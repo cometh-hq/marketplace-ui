@@ -25,7 +25,7 @@ import { CancelListingButton } from "@/components/asset-actions/buttons/CancelLi
 import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/MakeBuyOfferPriceDialog"
 import { SellAssetButton } from "@/components/asset-actions/buttons/SellAssetButton"
 import { SwitchNetwork } from "@/components/asset-actions/buttons/SwitchNetwork"
-import { AuthenticationButton } from "@/components/AuthenticationButton"
+
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import TokenQuantity from "@/components/erc1155/TokenQuantity"
 
@@ -33,6 +33,7 @@ import {
   useAssetOwnedQuantity,
   useIsViewerAnOwner,
 } from "../../../services/cometh-marketplace/assetOwners"
+import { AuthenticationButton } from "@/components/login/AuthenticationButton"
 
 export type AssetCardProps = {
   asset: SearchAssetWithTradeData & {
