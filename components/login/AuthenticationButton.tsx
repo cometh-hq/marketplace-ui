@@ -58,8 +58,8 @@ export function AuthenticationButton({
           <DialogTrigger asChild>
             <Button
               size={isMobile ? "icon" : "default"}
-              isLoading={account.isReconnecting}
-              disabled={account.isReconnecting}
+              isLoading={account.isReconnecting || account.isConnecting}
+              disabled={account.isReconnecting || account.isConnecting}
             >
               {customText ? (
                 customText

@@ -10,6 +10,19 @@ export const useIsComethConnectWallet = () => {
   return useMemo(() => connector?.type === "cometh", [connector])
 }
 
+export const useComethConnectConnector = (userWalletAddress?: string) => {
+  return useMemo(() => {
+    if (!env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY) {
+      return undefined
+    }
+    return comethConnectConnector({
+      apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY,
+      rpcUrl: manifest.rpcUrl,
+      walletAddress: userWalletAddress,
+    })
+  }, [userWalletAddress])
+}
+
 export const useComethConnectLogin = (
   userWalletAddress?: string,
   onConnectError?: (error: Error) => void
@@ -31,15 +44,9 @@ export const useComethConnectLogin = (
     },
   })
 
+  const comethConnectConnector = useComethConnectConnector(userWalletAddress)
+
   return useCallback(() => {
-    if (!env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY) {
-      throw new Error("COMETH_CONNECT_API_KEY is not set")
-    }
-    const connector = comethConnectConnector({
-      apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY,
-      rpcUrl: manifest.rpcUrl,
-      walletAddress: userWalletAddress,
-    })
-    connect({ connector: connector as any })
-  }, [connect, userWalletAddress])
+    connect({ connector: comethConnectConnector as any })
+  }, [connect, comethConnectConnector])
 }
