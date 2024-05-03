@@ -151,7 +151,7 @@ const WalletDebugPanels = () => {
       apiKey: env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY,
       walletAddress: newWalletAddress,
     })
-    connect({ connector })
+    connect({ connector: connector as any })
   }, [newWalletAddress, disconnect, connect, account?.isConnected])
 
   return (
