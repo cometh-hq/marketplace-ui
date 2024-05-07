@@ -1,5 +1,5 @@
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
-import { fetchHasEnoughGas } from "@/services/balance/gasService"
+import { computeHasEnoughGas } from "@/services/balance/gasService"
 import { fetchHasApprovedCollection } from "@/services/token-approval/approveCollectionService"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
@@ -9,6 +9,7 @@ import { useStepper } from "@/lib/utils/stepper"
 
 import { useNFTSwapv4 } from "../nft-swap-sdk"
 import { OrderWithAsset } from "@cometh/marketplace-sdk"
+import { useNativeBalance } from "@/services/balance/balanceService"
 
 export type UseRequiredSellingStepsOptions = {
   offer: OrderWithAsset
@@ -33,6 +34,7 @@ export type FetchRequiredSellingStepsOptions = {
   address: Address
   nftSwapSdk: NonNullable<ReturnType<typeof useNFTSwapv4>>
   isComethWallet: boolean
+  nativeBalance?: bigint
 }
 
 export const fetchRequiredAcceptBuyOfferSteps = async ({
@@ -40,8 +42,9 @@ export const fetchRequiredAcceptBuyOfferSteps = async ({
   address,
   nftSwapSdk,
   isComethWallet,
+  nativeBalance,
 }: FetchRequiredSellingStepsOptions) => {
-  const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
+  const { hasEnoughGas } = computeHasEnoughGas(address, isComethWallet, nativeBalance)
 
   const hasApprovedCollection = await fetchHasApprovedCollection({
     address,
@@ -67,6 +70,7 @@ export const useRequiredAcceptBuyOfferSteps = ({
   const viewerAddress = account.address
   const nftSwapSdk = useNFTSwapv4()
   const isComethWallet = useIsComethConnectWallet()
+  const {balance: nativeBalance} = useNativeBalance(viewerAddress)
   return useQuery({
     queryKey: ["requiredAcceptBuyOfferSteps", offer],
     queryFn: async () => {
@@ -76,6 +80,7 @@ export const useRequiredAcceptBuyOfferSteps = ({
         address: viewerAddress,
         nftSwapSdk,
         isComethWallet,
+        nativeBalance
       })
     },
     refetchOnWindowFocus: false,

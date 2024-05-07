@@ -75,6 +75,7 @@ export const getFormattedUser = (
   }
 }
 
+
 export const getActivityNftOwner = (
   assetActivity: AssetActivity,
   viewerAddress?: Address

@@ -1,11 +1,12 @@
-import { useEffect, useMemo } from "react"
-import { wagmiConfig } from "@/providers/authentication/authenticationUiSwitch"
+"use client"
+
+import { useCallback, useEffect, useMemo } from "react"
 import { useQueryClient } from "@tanstack/react-query"
-import { getBalance, readContract } from "@wagmi/core"
 import { Address, erc20Abi } from "viem"
 import {
   useAccount,
   useBlockNumber,
+  useReadContract,
   useBalance as useWagmiBalance,
 } from "wagmi"
 
@@ -16,88 +17,113 @@ import {
 } from "@/lib/utils/formatBalance"
 import { smartRounding } from "@/lib/utils/priceUtils"
 
-export const getERC20Balance = async (
-  erc20Address: Address,
-  walletAddress: Address
-): Promise<bigint> => {
-  const balance = await readContract(wagmiConfig as any, {
-    address: erc20Address,
-    abi: erc20Abi,
-    functionName: "balanceOf",
-    args: [walletAddress],
-  })
-
-  return balance
-}
-
-export const getOrdersERC20Balance = async (
-  walletAddress: Address
-): Promise<bigint> => {
-  return getERC20Balance(globalConfig.ordersErc20.address, walletAddress)
-}
-
-export const getNativeBalance = async (
-  walletAddress: Address
-): Promise<bigint> => {
-  const balance = await getBalance(wagmiConfig as any, {
-    address: walletAddress,
-  })
-
-  return balance.value
-}
+const BALANCE_REFRESH_BLOCK_INTERVAL = 10
+const LATEST_BLOCK_CACHE_MS = 2_000
 
 export const useNativeBalance = (address?: Address) => {
   const queryClient = useQueryClient()
-  const { data: blockNumber } = useBlockNumber({ watch: true })
-  const { data: balance, queryKey } = useWagmiBalance({
+  const { data: blockNumber } = useBlockNumber({
+    watch: true,
+    cacheTime: LATEST_BLOCK_CACHE_MS,
+  })
+  const userAddresse = useAccount().address
+  const addressToUse = address || userAddresse
+  const {
+    data: balance,
+    queryKey,
+    isPending,
+  } = useWagmiBalance({
     chainId: globalConfig.network.chainId,
-    address,
+    address: addressToUse,
+    query: {
+      staleTime: Infinity,
+      gcTime: Infinity,
+    },
   })
 
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey })
-  }, [blockNumber, queryClient, queryKey])
+  const blockNumberRefreshTick = blockNumber
+    ? blockNumber / BigInt(BALANCE_REFRESH_BLOCK_INTERVAL)
+    : blockNumber
 
-  return useMemo(() => balanceToBigNumber(balance?.value), [balance])
+  const stringQueryKey = useMemo(() => JSON.stringify(queryKey), [queryKey])
+
+  const refreshBalance = useCallback(
+    () => queryClient.invalidateQueries({ queryKey }, { cancelRefetch: false }),
+    [queryClient]
+  )
+  useEffect(() => {
+    refreshBalance()
+  }, [blockNumberRefreshTick, refreshBalance, stringQueryKey])
+
+  return useMemo(() => {
+    return {
+      bigNumberBalance: balanceToBigNumber(balance?.value),
+      balance: balance?.value,
+      refreshBalance: refreshBalance,
+      isPending,
+    }
+  }, [balance, refreshBalance, isPending])
 }
 
-export const useERC20Balance = (address?: Address) => {
+export const useERC20Balance = (
+  erc20Address?: Address,
+  userAddress?: Address
+) => {
   const queryClient = useQueryClient()
-  const { data: blockNumber } = useBlockNumber({ watch: true })
-  const { data: balance, queryKey } = useWagmiBalance({
-    chainId: globalConfig.network.chainId,
-    address,
-    token: globalConfig.ordersErc20.address,
+  const { data: blockNumber } = useBlockNumber({
+    watch: true,
+    cacheTime: LATEST_BLOCK_CACHE_MS,
   })
+  const account = useAccount()
+  const userAddressToUse = userAddress || account.address
+  const {
+    data: balance,
+    queryKey,
+    isPending,
+  } = useReadContract({
+    address: erc20Address,
+    abi: erc20Abi,
+    functionName: "balanceOf",
+    args: [userAddressToUse!],
+    query: {
+      staleTime: Infinity,
+      gcTime: Infinity,
+    },
+  })
+  const blockNumberRefreshTick = blockNumber
+    ? blockNumber / BigInt(BALANCE_REFRESH_BLOCK_INTERVAL)
+    : blockNumber
+
+  const stringQueryKey = useMemo(() => JSON.stringify(queryKey), [queryKey])
+
+  const refreshBalance = useCallback(
+    () => queryClient.invalidateQueries({ queryKey }, { cancelRefetch: false }),
+    [queryClient]
+  )
 
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey })
-  }, [blockNumber, queryClient, queryKey])
+    refreshBalance()
+  }, [blockNumberRefreshTick, refreshBalance, stringQueryKey])
 
-  return useMemo(() => balanceToBigNumber(balance?.value), [balance])
-}
-
-export const useWrappedBalance = (address?: Address) => {
-  const queryClient = useQueryClient()
-  const { data: blockNumber } = useBlockNumber({ watch: true })
-  const { data: balance, queryKey } = useWagmiBalance({
-    chainId: globalConfig.network.chainId,
-    address,
-    token: globalConfig.network.wrappedNativeToken.address,
-  })
-
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey })
-  }, [blockNumber, queryClient, queryKey])
-
-  return useMemo(() => balanceToBigNumber(balance?.value), [balance])
+  return useMemo(() => {
+    return {
+      bigNumberBalance: balanceToBigNumber(balance),
+      balance: balance,
+      refreshBalance: refreshBalance,
+      isPending,
+    }
+  }, [balance, refreshBalance, isPending])
 }
 
 export const useAllBalances = () => {
   const viewerAddress = useAccount().address
-  const native = useNativeBalance(viewerAddress)
-  const ERC20 = useERC20Balance(viewerAddress)
-  const wrapped = useWrappedBalance(viewerAddress)
+  const { bigNumberBalance: native } = useNativeBalance(viewerAddress)
+  const { bigNumberBalance: ERC20 } = useERC20Balance(
+    globalConfig.ordersErc20.address
+  )
+  const { bigNumberBalance: wrapped } = useERC20Balance(
+    globalConfig.network.wrappedNativeToken.address
+  )
 
   return {
     native: smartRounding(

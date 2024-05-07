@@ -1,7 +1,11 @@
 "use client"
 
 import { useCallback, useEffect } from "react"
-import { useAllBalances } from "@/services/balance/balanceService"
+import {
+  useAllBalances,
+  useERC20Balance,
+  useNativeBalance,
+} from "@/services/balance/balanceService"
 import { useUnwrapToken } from "@/services/exchange/unwrapTokenService"
 import { useWrapToken } from "@/services/exchange/wrapTokenService"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -60,13 +64,21 @@ export function WrapDialogForm({
   const wrapToken = useWrapToken()
   const unwrapToken = useUnwrapToken()
   const balance = useAllBalances()
+  const { refreshBalance: refreshNativeBalance } = useNativeBalance()
+  const { refreshBalance: refreshErc20Balance } = useERC20Balance(
+    globalConfig.ordersErc20.address
+  )
 
   const tokenAction = isUnwrap ? unwrapToken : wrapToken
   const maxBalance = isUnwrap ? balance.wrapped : balance.native
 
   useEffect(() => {
-    if (tokenAction.isSuccess) onClose()
-  }, [tokenAction, onClose])
+    if (tokenAction.isSuccess) {
+      refreshNativeBalance()
+      refreshErc20Balance()
+      onClose()
+    }
+  }, [tokenAction, onClose, refreshNativeBalance, refreshErc20Balance])
 
   const schema = z.object({
     amount: z

@@ -50,10 +50,13 @@ export function ConfirmMakeBuyOfferStep({
           </>
         )}
         this asset for{" "}
-        <span>
-          <Price size="default" amount={price} hideSymbol={false} />
-        </span>{" "}
-        (fees included).
+        <Price
+          size="default"
+          amount={price}
+          hideSymbol={false}
+          isNativeToken={false}
+        />{" "}
+        (fees included). <br />
         {globalConfig.areContractsSponsored && isComethWallet && (
           <>This contract is sponsored, so you won&apos;t pay any gas fees.</>
         )}

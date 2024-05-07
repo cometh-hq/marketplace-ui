@@ -17,13 +17,10 @@ export type UnwrapStepProps = {
 
 export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
   const { mutateAsync: unwrapToken, isPending } = useUnwrapToken()
-  const account = useAccount()
-  const viewerAddress = account.address
   const isComethWallet = useIsComethConnectWallet()
 
-  const { data: needsToUnwrapData } = useNeedsToUnwrap({
+  const needsToUnwrapData = useNeedsToUnwrap({
     price,
-    address: viewerAddress,
   })
 
   useEffect(() => {
@@ -46,7 +43,7 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
         {(!globalConfig.areContractsSponsored || !isComethWallet) && (
           <>
             The minimum amount of native token includes{" "}
-            <Price amount={globalConfig.minimumBalanceForGas} /> which are
+            <Price amount={globalConfig.minimumBalanceForGas} isNativeToken /> which are
             necessary to pay for gas. It seems that you have wrapped some native
             token, you need to unwrap some{" "}
             {globalConfig.network.wrappedNativeToken.symbol} first as a sales
@@ -62,7 +59,7 @@ export function UnwrapStep({ price, onValid }: UnwrapStepProps) {
           Unwrap{" "}
           <Price
             amount={needsToUnwrapData?.balanceToUnwrap}
-            isNativeToken={true}
+            isNativeToken={false}
           />
         </Button>
       )}

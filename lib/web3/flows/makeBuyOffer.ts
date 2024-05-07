@@ -1,10 +1,17 @@
 import { useState } from "react"
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { fetchNeedsMoreAllowance } from "@/services/allowance/allowanceService"
-import { fetchHasSufficientFunds } from "@/services/balance/fundsService"
-import { fetchHasEnoughGas } from "@/services/balance/gasService"
-import { fetchNeedsToWrap } from "@/services/exchange/wrapService"
-import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
+import {
+  useERC20Balance,
+  useNativeBalance,
+} from "@/services/balance/balanceService"
+import { computeHasSufficientFunds } from "@/services/balance/fundsService"
+import { computeHasEnoughGas } from "@/services/balance/gasService"
+import { computeNeedsToWrap } from "@/services/exchange/wrapService"
+import {
+  AssetWithTradeData,
+  SearchAssetWithTradeData,
+} from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
@@ -40,37 +47,42 @@ const suffixSteps: MakeBuyOfferStep[] = [
 export type FetchRequiredBuyingStepsOptions = {
   price: BigNumber
   address: Address
-  wrappedContractAddress: Address
   spender: Address
   isComethWallet: boolean
+  nativeBalance?: bigint
+  erc20Balance?: bigint
 }
 
 export const fetchRequiredMakeBuyOfferSteps = async ({
   price,
   address,
-  wrappedContractAddress,
   spender,
   isComethWallet,
+  nativeBalance,
+  erc20Balance,
 }: FetchRequiredBuyingStepsOptions) => {
-  const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
+  const { hasEnoughGas } = computeHasEnoughGas(
+    address,
+    isComethWallet,
+    nativeBalance
+  )
   const displayAddGasStep = !hasEnoughGas
 
   const displayAddFundsStep = price
-    ? !(
-        await fetchHasSufficientFunds({
-          address,
-          price,
-        })
-      )?.hasSufficientFunds
+    ? !computeHasSufficientFunds({
+        nativeBalance,
+        erc20Balance,
+        price,
+      })?.hasSufficientFunds
     : false
 
   const displayWrapStep =
     globalConfig.useNativeForOrders &&
-    (await fetchNeedsToWrap({
+    computeNeedsToWrap({
       price,
-      address,
-      wrappedContractAddress,
-    }))
+      nativeBalance,
+      erc20Balance,
+    })
 
   const displaysAllowanceStep = price
     ? await fetchNeedsMoreAllowance({
@@ -100,6 +112,10 @@ export const useRequiredMakeBuyOfferSteps = ({
   const viewerAddress = account.address
   const isComethWallet = useIsComethConnectWallet()
   const nftSwapSdk = useNFTSwapv4()
+  const { balance: nativeBalance } = useNativeBalance(viewerAddress)
+  const { balance: erc20Balance } = useERC20Balance(
+    globalConfig.ordersErc20.address
+  )
 
   return useQuery({
     queryKey: ["requiredBuyingSteps", asset, price],
@@ -108,9 +124,10 @@ export const useRequiredMakeBuyOfferSteps = ({
       return fetchRequiredMakeBuyOfferSteps({
         price: price!,
         address: viewerAddress,
-        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
         spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
         isComethWallet,
+        nativeBalance,
+        erc20Balance,
       })
     },
 

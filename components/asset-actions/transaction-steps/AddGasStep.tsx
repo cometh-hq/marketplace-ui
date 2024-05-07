@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react"
-import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
+import { useEffect } from "react"
+import { useNativeBalance } from "@/services/balance/balanceService"
 import {
-  fetchHasEnoughGas,
+  computeHasEnoughGas,
   useHasEnoughGas,
 } from "@/services/balance/gasService"
 import { useAccount } from "wagmi"
@@ -17,21 +17,12 @@ export type AddGasStepProps = {
 export function AddGasStep({ onValid }: AddGasStepProps) {
   const account = useAccount()
   const viewer = account.address
-  const [isRefreshingBalance, setIsRefreshingBalance] = useState(false)
-  const isComethWallet = useIsComethConnectWallet()
+  const {
+    refreshBalance,
+    isPending: isRefreshingBalance,
+  } = useNativeBalance(viewer)
 
-  const { data } = useHasEnoughGas(viewer)
-
-  const checkBalance = async () => {
-    setIsRefreshingBalance(true)
-
-    if (!viewer) return
-    const { hasEnoughGas } = await fetchHasEnoughGas(viewer, isComethWallet)
-    if (hasEnoughGas) {
-      onValid()
-    }
-    setIsRefreshingBalance(false)
-  }
+  const data = useHasEnoughGas(viewer)
 
   useEffect(() => {
     if (data?.hasEnoughGas === true) {
@@ -60,7 +51,7 @@ export function AddGasStep({ onValid }: AddGasStepProps) {
       <p>
         Wallet address: <strong>{viewer}</strong>
       </p>
-      <Button isLoading={isRefreshingBalance} onClick={checkBalance}>
+      <Button isLoading={isRefreshingBalance} onClick={refreshBalance}>
         Refresh balance
       </Button>
     </div>

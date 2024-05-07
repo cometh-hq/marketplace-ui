@@ -54,8 +54,16 @@ export function CurrentAccountDropdown({
                   ? balances.native
                   : balances.ERC20
               }
-              currency={globalConfig.ordersErc20.symbol}
-              logo={globalConfig.ordersErc20.thumb}
+              currency={
+                globalConfig.useNativeForOrders
+                  ? globalConfig.network.nativeToken.symbol
+                  : globalConfig.ordersErc20.symbol
+              }
+              logo={
+                globalConfig.useNativeForOrders
+                  ? globalConfig.network.nativeToken.thumb
+                  : globalConfig.ordersErc20.thumb
+              }
               hideFiatPrice
             />
           )}

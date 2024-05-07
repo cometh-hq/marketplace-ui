@@ -33,7 +33,7 @@ import { useActivityCollection, useActivityUnitPrice } from "./activityHooks"
 import { ActivityTimestampCell } from "./ActivityTimestampCell"
 import { ActivityUsersCell } from "./ActivityUsersCell"
 import { ActivityAssetCell } from "./AssetActivityCell"
-import { AssetActivity } from "./AssetActivityTypes"
+import { AssetActivity} from "./AssetActivityTypes"
 
 type TransfersListProps = {
   assetTransfers?: AssetTransfers
@@ -70,6 +70,7 @@ const ActivityRow = ({
 }) => {
   const collection = useActivityCollection(activity)
   const activityUnitPrice = useActivityUnitPrice(activity)
+
 
   const isErc1155 = useMemo(() => {
     if (isOrderActivity(activity)) {

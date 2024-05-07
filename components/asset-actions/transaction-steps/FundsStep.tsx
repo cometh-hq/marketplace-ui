@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect } from "react"
 import {
-  fetchHasSufficientFunds,
-  useHasSufficientFunds,
-} from "@/services/balance/fundsService"
+  useERC20Balance,
+  useNativeBalance,
+} from "@/services/balance/balanceService"
+import { useHasSufficientFunds } from "@/services/balance/fundsService"
 import { BigNumber } from "ethers"
 import { useAccount } from "wagmi"
 
@@ -18,10 +19,21 @@ export type FundsStepProps = {
 export function FundsStep({ price, onValid }: FundsStepProps) {
   const account = useAccount()
   const viewer = account.address
-  const [isRefreshingBalance, setIsRefreshingBalance] = useState(false)
+  const {
+    balance: nativeBalance,
+    refreshBalance: refreshNativeBalance,
+    isPending: isPendingNativeBalance,
+  } = useNativeBalance(viewer)
+  const {
+    balance: erc20Balance,
+    refreshBalance: refreshErc20Balance,
+    isPending: isPendingErc20Balance,
+  } = useERC20Balance(globalConfig.ordersErc20.address)
+  const isRefreshingBalance = isPendingNativeBalance || isPendingErc20Balance
 
-  const { data } = useHasSufficientFunds({
-    address: viewer,
+  const data = useHasSufficientFunds({
+    nativeBalance: nativeBalance,
+    erc20Balance: erc20Balance,
     price: price,
   })
 
@@ -31,22 +43,14 @@ export function FundsStep({ price, onValid }: FundsStepProps) {
     }
   }, [data?.hasSufficientFunds, onValid])
 
+  const checkBalance = useCallback(() => {
+    refreshNativeBalance()
+    refreshErc20Balance()
+  }, [refreshNativeBalance, refreshErc20Balance])
+
   if (!data?.missingBalance) return null
 
   const { missingBalance } = data
-
-  const checkBalance = async () => {
-    setIsRefreshingBalance(true)
-    if (!viewer) return
-    const { hasSufficientFunds } = await fetchHasSufficientFunds({
-      address: viewer,
-      price,
-    })
-    if (hasSufficientFunds) {
-      onValid()
-    }
-    setIsRefreshingBalance(false)
-  }
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 pt-8">

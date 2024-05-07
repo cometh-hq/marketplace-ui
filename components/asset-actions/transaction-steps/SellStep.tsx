@@ -15,13 +15,6 @@ import { Label } from "@/components/ui/Label"
 import { Price } from "@/components/ui/Price"
 import { PriceDetails } from "@/components/ui/PriceDetails"
 import { PriceInput } from "@/components/ui/PriceInput"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/Select"
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import TokenQuantityInput from "@/components/erc1155/TokenQuantityInput"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"

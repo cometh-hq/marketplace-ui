@@ -1,8 +1,12 @@
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { fetchNeedsMoreAllowance } from "@/services/allowance/allowanceService"
-import { fetchHasSufficientFunds } from "@/services/balance/fundsService"
-import { fetchHasEnoughGas } from "@/services/balance/gasService"
-import { fetchNeedsToUnwrap } from "@/services/exchange/unwrapService"
+import {
+  useERC20Balance,
+  useNativeBalance,
+} from "@/services/balance/balanceService"
+import { computeHasSufficientFunds } from "@/services/balance/fundsService"
+import { computeHasEnoughGas } from "@/services/balance/gasService"
+import { computeNeedToUnwrap } from "@/services/exchange/unwrapService"
 import {
   AssetWithTradeData,
   OrderWithAsset,
@@ -37,6 +41,8 @@ export type FetchRequiredBuyingStepsOptions = {
   order?: OrderWithAsset
   address: Address
   isComethWallet: boolean
+  nativeBalance?: bigint
+  erc20Balance?: bigint
 }
 
 export const fetchRequiredBuyingSteps = async ({
@@ -44,6 +50,8 @@ export const fetchRequiredBuyingSteps = async ({
   order,
   address,
   isComethWallet,
+  nativeBalance,
+  erc20Balance,
 }: FetchRequiredBuyingStepsOptions) => {
   if (!order) {
     return []
@@ -66,23 +74,25 @@ export const fetchRequiredBuyingSteps = async ({
       spender: globalConfig.network.zeroExExchange,
     }))
 
-  const missingFundsData = await fetchHasSufficientFunds({
-    address,
+  const missingFundsData = computeHasSufficientFunds({
     price,
+    nativeBalance,
+    erc20Balance,
   })
   const displayAddFundsStep = !missingFundsData?.hasSufficientFunds
 
-  const needsToUnwrapData = await fetchNeedsToUnwrap({
-    address,
+  const needsToUnwrapData = computeNeedToUnwrap({
     price,
     isComethWallet,
+    nativeBalance,
+    wrappedBalance: erc20Balance,
   })
   const displayAddUnwrappedNativeTokenStep =
     needsToUnwrapData.needsToUnwrap &&
     globalConfig.useNativeForOrders &&
     !displayAddFundsStep
 
-  const { hasEnoughGas } = await fetchHasEnoughGas(address, isComethWallet)
+  const { hasEnoughGas } = computeHasEnoughGas(address, isComethWallet, nativeBalance)
   const displayAddGasStep = !hasEnoughGas
 
   const buyingSteps = [
@@ -107,6 +117,10 @@ export const useRequiredBuyingSteps = ({
   const account = useAccount()
   const viewerAddress = account.address
   const isComethWallet = useIsComethConnectWallet()
+  const { balance: nativeBalance } = useNativeBalance(viewerAddress)
+  const { balance: erc20Balance } = useERC20Balance(
+    globalConfig.ordersErc20.address
+  )
   return useQuery({
     queryKey: ["requiredBuyingSteps", asset, viewerAddress],
     queryFn: async () => {
@@ -117,6 +131,8 @@ export const useRequiredBuyingSteps = ({
         asset,
         order: order,
         address: viewerAddress,
+        nativeBalance,
+        erc20Balance,
         isComethWallet,
       })
 
