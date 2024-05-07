@@ -19,19 +19,19 @@ export type FetchNeedsToWrapOptions = {
  * otherwise returns false because the user has sufficient funds wrapped
  * to cover the price
  */
-export const computeNeedsToWrap = async ({
+export const computeNeedsToWrap = ({
   price,
   nativeBalance,
   erc20Balance,
-}: FetchNeedsToWrapOptions): Promise<boolean> => {
-  const hasSufficientFunds = await computeHasSufficientFunds({
+}: FetchNeedsToWrapOptions): boolean => {
+  const { hasSufficientFunds } = computeHasSufficientFunds({
     price,
     nativeBalance,
     erc20Balance,
   })
   if (!hasSufficientFunds) return false
 
-  return !balanceToBigNumber(erc20Balance).gte(price)
+  return balanceToBigNumber(erc20Balance).lt(price)
 }
 
 export type UseNeedsToWrapOptions = {
