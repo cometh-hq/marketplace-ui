@@ -12,7 +12,7 @@ export const useIsComethConnectWallet = () => {
 
 export const useComethConnectConnector = (userWalletAddress?: string) => {
   return useMemo(() => {
-    if (!env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY) {
+    if (!env.NEXT_PUBLIC_COMETH_CONNECT_API_KEY || typeof window === 'undefined') {
       return undefined
     }
     return comethConnectConnector({

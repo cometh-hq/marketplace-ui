@@ -33,16 +33,15 @@ import { CopyButton } from "../ui/CopyButton"
 import { Price } from "../ui/Price"
 import { UserButton } from "../ui/user/UserButton"
 import {
-  getActivityEmitter,
   getActivityId,
-  getActivityReceiver,
   getMergedActivities,
   isOrderActivity,
   isTransferActivity,
 } from "./activityHelper"
 import { ActivityTimestampCell } from "./ActivityTimestampCell"
 import { ActivityAssetCell } from "./AssetActivityCell"
-import { AssetActivity, ORDER_TYPE, TRANSFER_TYPE } from "./AssetActivityTypes"
+import { AssetActivity} from "./AssetActivityTypes"
+import { ActivityUsersCell } from "./ActivityUserCell"
 
 type TransfersListProps = {
   assetTransfers?: AssetTransfers
@@ -120,21 +119,6 @@ const ActivityRow = ({
   const account = useAccount()
   const viewerAddress = account.address
 
-  const activityEmitter = useMemo(
-    () => getActivityEmitter(activity, viewerAddress),
-    [activity, viewerAddress]
-  )
-  const activityReceiver = useMemo(
-    () => getActivityReceiver(activity, viewerAddress),
-    [activity, viewerAddress]
-  )
-  const shouldHideReceiver = useMemo(
-    () =>
-      isOrderActivity(activity) &&
-      (activity.order.orderStatus !== TradeStatus.FILLED ||
-        activity.order.tokenType === TokenType.ERC1155),
-    [activity]
-  )
 
   const isErc1155 = useMemo(() => {
     return false
@@ -177,17 +161,7 @@ const ActivityRow = ({
         )}
       </TableCell>
       <TableCell className="justify-start">
-        <div className="flex items-center gap-2">
-          <UserButton user={activityEmitter} />
-          <CopyButton textToCopy={activityEmitter.address} />
-          {!shouldHideReceiver && (
-            <>
-              <ArrowRightIcon size={18} />
-              <UserButton user={activityReceiver} />
-              <CopyButton textToCopy={activityReceiver.address} />
-            </>
-          )}
-        </div>
+        <ActivityUsersCell  activity={activity} />
       </TableCell>
       <TableCell>
         <ActivityTimestampCell activity={activity} />
