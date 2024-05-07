@@ -128,7 +128,7 @@ export type PriceProps = {
   className?: string
 } & PriceTriggerVariants
 
-export const Price = ({ amount, isNativeToken, ...rest }: PriceProps) => {
+export const Price = ({ amount, isNativeToken = globalConfig.useNativeForOrders, ...rest }: PriceProps) => {
   if (!amount) return "-"
   const formattedAmount = formatUnits(
     amount.toString(),

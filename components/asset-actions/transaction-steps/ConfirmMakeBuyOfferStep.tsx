@@ -1,7 +1,10 @@
 import { useCallback } from "react"
 import { useIsComethConnectWallet } from "@/providers/authentication/comethConnectHooks"
 import { useMakeBuyOfferAsset } from "@/services/orders/makeBuyOfferService"
-import { AssetWithTradeData, SearchAssetWithTradeData} from "@cometh/marketplace-sdk"
+import {
+  AssetWithTradeData,
+  SearchAssetWithTradeData,
+} from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
@@ -36,8 +39,13 @@ export function ConfirmMakeBuyOfferStep({
       <p className="text-center">
         You are about to make an offer to buy <br />
         this asset for{" "}
-        <Price size="default" amount={price} hideSymbol={false} /> (fees
-        included). <br />
+        <Price
+          size="default"
+          amount={price}
+          hideSymbol={false}
+          isNativeToken={false}
+        />{" "}
+        (fees included). <br />
         {globalConfig.areContractsSponsored && isComethWallet && (
           <>This contract is sponsored, so you won&apos;t pay any gas fees.</>
         )}

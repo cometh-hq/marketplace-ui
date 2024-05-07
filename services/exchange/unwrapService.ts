@@ -1,15 +1,16 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 import { BigNumber } from "ethers"
-import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 
-import { fetchHasSufficientFunds } from "../balance/fundsService"
+import { useERC20Balance, useNativeBalance } from "../balance/balanceService"
+import { computeHasSufficientFunds } from "../balance/fundsService"
 
-export type FetchNeedsToUnwrapOptions = {
+export type ComputeNeedsToUnwrapOptions = {
   price: BigNumber
-  address: Address
   isComethWallet?: boolean
+  nativeBalance?: bigint
+  wrappedBalance?: bigint
 }
 
 export type NeedsToUnwrapData = {
@@ -22,11 +23,12 @@ export type NeedsToUnwrapData = {
  * otherwise returns false because the user has sufficient funds wrapped
  * to cover the price
  */
-export const fetchNeedsToUnwrap = async ({
+export const computeNeedToUnwrap = ({
   price,
-  address,
   isComethWallet,
-}: FetchNeedsToUnwrapOptions): Promise<NeedsToUnwrapData> => {
+  nativeBalance,
+  wrappedBalance,
+}: ComputeNeedsToUnwrapOptions): NeedsToUnwrapData => {
   if (!globalConfig.useNativeForOrders) {
     return {
       needsToUnwrap: false,
@@ -39,10 +41,11 @@ export const fetchNeedsToUnwrap = async ({
       ? price.add(BigNumber.from(globalConfig.minimumBalanceForGas))
       : price
 
-  const missingNativeTokenData = await fetchHasSufficientFunds({
-    address,
+  const missingNativeTokenData = computeHasSufficientFunds({
     price: targetedNativeBalance,
     includeWrappedNative: false,
+    nativeBalance,
+    erc20Balance: wrappedBalance,
   })
 
   if (
@@ -63,20 +66,18 @@ export const fetchNeedsToUnwrap = async ({
 
 export type UseNeedsToUnwrapOptions = {
   price?: BigNumber | null
-  address?: Address | null
 }
 
-export const useNeedsToUnwrap = ({
-  price,
-  address,
-}: UseNeedsToUnwrapOptions) => {
-  return useQuery({
-    queryKey: ["needsToUnwrap", price, address],
-    queryFn: async () =>
-      fetchNeedsToUnwrap({
-        price: price!,
-        address: address!,
-      }),
-    enabled: !!address && !!price,
-  })
+export const useNeedsToUnwrap = ({ price }: UseNeedsToUnwrapOptions) => {
+  const { balance: nativeBalance } = useNativeBalance()
+  const { balance: erc20Balance } = useERC20Balance(
+    globalConfig.ordersErc20.address
+  )
+  return useMemo(() => {
+    return computeNeedToUnwrap({
+      price: price!,
+      nativeBalance,
+      wrappedBalance: erc20Balance,
+    })
+  }, [price, nativeBalance, erc20Balance])
 }

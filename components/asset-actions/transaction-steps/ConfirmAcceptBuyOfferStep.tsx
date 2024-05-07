@@ -35,7 +35,7 @@ export function ConfirmAcceptBuyOfferStep({
       })
       onValid()
     }
-  }, [acceptBuyOffer, offer, isSuccess])
+  }, [acceptBuyOffer, offer, isSuccess, onValid])
 
   const amount = offer.trade.erc20TokenAmount
   const fees = offer.trade.totalFees

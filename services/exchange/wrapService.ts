@@ -1,17 +1,17 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 import { balanceToBigNumber } from "@/lib/utils/formatBalance"
 
-import { getOrdersERC20Balance } from "../balance/balanceService"
-import { fetchHasSufficientFunds } from "../balance/fundsService"
+import { useERC20Balance, useNativeBalance } from "../balance/balanceService"
+import { computeHasSufficientFunds } from "../balance/fundsService"
 
 export type FetchNeedsToWrapOptions = {
   price: BigNumber
-  address: Address
-  wrappedContractAddress: Address
+  nativeBalance?: bigint
+  erc20Balance?: bigint
 }
 
 /**
@@ -19,19 +19,19 @@ export type FetchNeedsToWrapOptions = {
  * otherwise returns false because the user has sufficient funds wrapped
  * to cover the price
  */
-export const fetchNeedsToWrap = async ({
+export const computeNeedsToWrap = async ({
   price,
-  address,
-  wrappedContractAddress,
+  nativeBalance,
+  erc20Balance,
 }: FetchNeedsToWrapOptions): Promise<boolean> => {
-  const hasSufficientFunds = await fetchHasSufficientFunds({
-    address,
+  const hasSufficientFunds = await computeHasSufficientFunds({
     price,
+    nativeBalance,
+    erc20Balance,
   })
   if (!hasSufficientFunds) return false
 
-  const wrappedBalance = await getOrdersERC20Balance(address)
-  return !balanceToBigNumber(wrappedBalance).gte(price)
+  return !balanceToBigNumber(erc20Balance).gte(price)
 }
 
 export type UseNeedsToWrapOptions = {
@@ -40,14 +40,12 @@ export type UseNeedsToWrapOptions = {
 }
 
 export const useNeedsToWrap = ({ price, address }: UseNeedsToWrapOptions) => {
-  return useQuery({
-    queryKey: ["needsToWrap", price, address],
-    queryFn: async () =>
-      fetchNeedsToWrap({
-        price: price!,
-        address: address!,
-        wrappedContractAddress: globalConfig.network.wrappedNativeToken.address,
-      }),
-    enabled: !!address && !!price,
-  })
+  const { balance: nativeBalance } = useNativeBalance()
+  const { balance: erc20Balance } = useERC20Balance(
+    globalConfig.ordersErc20.address
+  )
+  return useMemo(() => {
+    if (!price || !address) return false
+    return computeNeedsToWrap({ price, nativeBalance, erc20Balance })
+  }, [price, address, nativeBalance, erc20Balance])
 }

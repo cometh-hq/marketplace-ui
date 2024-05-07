@@ -1,40 +1,43 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 import { BigNumber } from "ethers"
-import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 import { balanceToBigNumber } from "@/lib/utils/formatBalance"
-
-import { getNativeBalance, getOrdersERC20Balance } from "./balanceService"
+import { useERC20Balance, useNativeBalance } from "./balanceService"
 
 export type FetchHasSufficientFundsOptions = {
-  address: Address
   price?: BigNumber | null
   includeWrappedNative?: boolean
+  nativeBalance?: bigint
+  erc20Balance?: bigint
 }
 
 export type UseHasSufficientFundsOptions = {
-  address?: Address | null
   price?: BigNumber | null
+  nativeBalance?: bigint
+  erc20Balance?: bigint
   includeWrappedNative?: boolean
 }
 
-export const fetchHasSufficientFunds = async ({
-  address,
+export const computeHasSufficientFunds = ({
   price,
+  nativeBalance,
+  erc20Balance,
   includeWrappedNative = true,
 }: FetchHasSufficientFundsOptions) => {
-  const [mainBalance, erc20Balance] = await Promise.all([
-    getNativeBalance(address),
-    getOrdersERC20Balance(address),
-  ])
-
   let availableFunds = BigNumber.from(0)
+  if (!nativeBalance || !erc20Balance) {
+    return {
+      hasSufficientFunds: false,
+      missingBalance: BigNumber.from(0),
+    }
+  }
+
   if (includeWrappedNative || !globalConfig.useNativeForOrders) {
     availableFunds = availableFunds.add(balanceToBigNumber(erc20Balance))
   }
   if (globalConfig.useNativeForOrders) {
-    availableFunds = availableFunds.add(mainBalance)
+    availableFunds = availableFunds.add(nativeBalance)
   }
 
   const hasSufficientFunds = availableFunds.gte(price ?? 0)
@@ -50,19 +53,17 @@ export const fetchHasSufficientFunds = async ({
 }
 
 export const useHasSufficientFunds = ({
-  address,
   price,
   includeWrappedNative = true,
 }: UseHasSufficientFundsOptions) => {
-  return useQuery({
-    queryKey: ["hasSufficientFunds", address, price],
-    queryFn: async () =>
-      fetchHasSufficientFunds({
-        address: address!,
-        price,
-        includeWrappedNative,
-      }),
-
-    enabled: !!address && !!price,
-  })
+  const { balance: nativeBalance } = useNativeBalance()
+  const { balance: erc20Balance } = useERC20Balance(globalConfig.ordersErc20.address)
+  return useMemo(() => {
+    return computeHasSufficientFunds({
+      price,
+      nativeBalance,
+      erc20Balance,
+      includeWrappedNative,
+    })
+  }, [price, nativeBalance, erc20Balance, includeWrappedNative])
 }

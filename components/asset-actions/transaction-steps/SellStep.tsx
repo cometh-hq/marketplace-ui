@@ -9,13 +9,6 @@ import { Input } from "@/components/ui/Input"
 import { Label } from "@/components/ui/Label"
 import { Price } from "@/components/ui/Price"
 import { PriceDetails } from "@/components/ui/PriceDetails"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/Select"
 import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImage"
 
 import { SwitchNetwork } from "../buttons/SwitchNetwork"
