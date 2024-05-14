@@ -1,3 +1,5 @@
+import { useMemo } from "react"
+import { CollectionStandard } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { Address } from "viem"
 
@@ -17,4 +19,18 @@ export const useGetCollection = (collectionAddress: Address) => {
     },
     staleTime: 1000 * 15,
   })
+}
+
+export const useGetCollectionStandard = (
+  collectionAddress: Address
+): CollectionStandard | undefined => {
+  const collection = useGetCollection(collectionAddress)
+  return collection.data?.standard
+}
+
+export const useCollectionIsERC1155 = (collectionAddress: Address) => {
+  const collectionStandard = useGetCollectionStandard(collectionAddress)
+  return useMemo(() => {
+    return collectionStandard === CollectionStandard.ERC1155
+  }, [collectionStandard])
 }

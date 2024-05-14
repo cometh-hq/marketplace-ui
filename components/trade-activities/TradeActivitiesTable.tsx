@@ -3,22 +3,12 @@
 import React, { useMemo } from "react"
 import {
   AssetTransfers,
+  CollectionStandard,
   Order,
+  OrderFilledEventWithAsset,
   TokenType,
-  TradeDirection,
   TradeStatus,
 } from "@cometh/marketplace-sdk"
-import { BigNumber, ethers } from "ethers"
-import {
-  ArrowLeftRightIcon,
-  ArrowRightIcon,
-  BanIcon,
-  ImagePlusIcon,
-  ScrollTextIcon,
-  ShoppingCartIcon,
-} from "lucide-react"
-import { Address, isAddressEqual } from "viem"
-import { useAccount } from "wagmi"
 
 import {
   Table,
@@ -29,29 +19,32 @@ import {
   TableRow,
 } from "@/components/ui/Table"
 
-import { CopyButton } from "../ui/CopyButton"
+import TokenQuantity from "../erc1155/TokenQuantity"
 import { Price } from "../ui/Price"
-import { UserButton } from "../ui/user/UserButton"
+import { ActivityEventCell } from "./ActivityEventCell"
 import {
   getActivityId,
   getMergedActivities,
+  isFilledEventActivity,
   isOrderActivity,
   isTransferActivity,
 } from "./activityHelper"
+import { useActivityCollection, useActivityUnitPrice } from "./activityHooks"
 import { ActivityTimestampCell } from "./ActivityTimestampCell"
+import { ActivityUsersCell } from "./ActivityUsersCell"
 import { ActivityAssetCell } from "./AssetActivityCell"
 import { AssetActivity} from "./AssetActivityTypes"
-import { ActivityUsersCell } from "./ActivityUserCell"
 
 type TransfersListProps = {
   assetTransfers?: AssetTransfers
   maxTransfersToShow?: number
   orders?: Order[]
+  orderFilledEvents?: OrderFilledEventWithAsset[]
   display1155Columns: boolean
   displayAssetColumns: boolean
 }
 
-const GenericActivityEventCell = ({
+export const GenericActivityEventCell = ({
   Icon,
   label,
 }: {
@@ -64,47 +57,6 @@ const GenericActivityEventCell = ({
   </div>
 )
 
-const ActivityEventCell = ({ activity }: { activity: AssetActivity }) => {
-  if (isTransferActivity(activity)) {
-    if (activity.transfer.fromAddress === ethers.constants.AddressZero) {
-      return <GenericActivityEventCell Icon={ImagePlusIcon} label="Mint" />
-    } else {
-      return (
-        <GenericActivityEventCell Icon={ArrowLeftRightIcon} label="Transfer" />
-      )
-    }
-  } else if (isOrderActivity(activity)) {
-    let label = ""
-    let icon = ScrollTextIcon
-    if (activity.order.orderStatus === TradeStatus.FILLED) {
-      label =
-        activity.order.direction === TradeDirection.BUY
-          ? "Filled purchase offer"
-          : "Sale"
-      icon = ShoppingCartIcon
-    } else if (activity.order.orderStatus === TradeStatus.OPEN) {
-      label =
-        activity.order.direction === TradeDirection.BUY
-          ? "Sent purchase offer"
-          : "Listed"
-    } else if (activity.order.orderStatus === TradeStatus.EXPIRED) {
-      label =
-        activity.order.direction === TradeDirection.BUY
-          ? "Expired purchase offer"
-          : "Expired listing"
-      icon = BanIcon
-    } else {
-      label =
-        activity.order.direction === TradeDirection.BUY
-          ? "Cancelled purchase offer"
-          : "Cancelled listing"
-      icon = BanIcon
-    }
-
-    return <GenericActivityEventCell Icon={icon} label={label} />
-  }
-}
-
 const ActivityRow = ({
   activity,
   display1155Columns,
@@ -116,13 +68,36 @@ const ActivityRow = ({
   displayAssetColumns: boolean
   rowIndex: number
 }) => {
-  const account = useAccount()
-  const viewerAddress = account.address
+  const collection = useActivityCollection(activity)
+  const activityUnitPrice = useActivityUnitPrice(activity)
 
 
   const isErc1155 = useMemo(() => {
-    return false
-  }, [])
+    if (isOrderActivity(activity)) {
+      return activity.order.tokenType === TokenType.ERC1155
+    } else if (isTransferActivity(activity)) {
+      return activity.transfer.tokenType === TokenType.ERC1155
+    } else if (isFilledEventActivity(activity)) {
+      return collection?.standard === CollectionStandard.ERC1155
+    }
+  }, [activity, collection])
+
+  const activityQuantity = useMemo(() => {
+    if (isTransferActivity(activity)) {
+      return activity.transfer.quantity
+    } else if (isOrderActivity(activity)) {
+      const { order } = activity
+      if (order.orderStatus === TradeStatus.OPEN) {
+        return order.tokenQuantity
+      } else {
+        return order.tokenQuantityRemaining
+      }
+    } else if (isFilledEventActivity(activity)) {
+      return activity.filledEvent.fillAmount
+    } else {
+      throw new Error("Unknown activity type")
+    }
+  }, [activity])
 
   const bgClass = useMemo(
     () => (rowIndex % 2 === 0 ? "bg-muted/30" : ""),
@@ -141,27 +116,24 @@ const ActivityRow = ({
       )}
       {display1155Columns && (
         <TableCell className="font-bold">
-          {/* {isErc1155 &&
-            (isOrderActivity(activity) ? (
-              <TokenQuantity value={activity.order.tokenQuantity} />
-            ) : (
-              <TokenQuantity value={activity.transfer.quantity} />
-            ))} */}
+          {isErc1155 ? (
+            <TokenQuantity value={activityQuantity} />
+          ) : (
+            <span className="text-muted-foreground">Unique</span>
+          )}
         </TableCell>
       )}
       <TableCell>
-        {isOrderActivity(activity) && (
+        {activityUnitPrice && (
           <Price
             size="sm"
-            amount={BigNumber.from(activity.order.erc20TokenAmount)
-              .add(activity.order.totalFees)
-              .toString()}
+            amount={activityUnitPrice}
             className="font-semibold"
           />
         )}
       </TableCell>
       <TableCell className="justify-start">
-        <ActivityUsersCell  activity={activity} />
+        <ActivityUsersCell activity={activity} />
       </TableCell>
       <TableCell>
         <ActivityTimestampCell activity={activity} />
@@ -174,12 +146,18 @@ export function TradeActivitiesTable({
   assetTransfers = [],
   maxTransfersToShow,
   orders = [],
+  orderFilledEvents = [],
   display1155Columns,
   displayAssetColumns = false,
 }: TransfersListProps) {
   const mergedActivities = useMemo(() => {
-    return getMergedActivities(assetTransfers, orders, maxTransfersToShow)
-  }, [assetTransfers, orders, maxTransfersToShow])
+    return getMergedActivities(
+      assetTransfers,
+      orders,
+      orderFilledEvents,
+      maxTransfersToShow
+    )
+  }, [assetTransfers, orders, orderFilledEvents, maxTransfersToShow])
 
   return (
     <Table className="rounded-md">

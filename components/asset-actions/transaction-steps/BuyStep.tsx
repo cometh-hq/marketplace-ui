@@ -1,11 +1,13 @@
-import { useCallback } from "react"
+import { useCallback, useState } from "react"
 import { useBuyAsset } from "@/services/orders/buyAssetService"
 import {
   AssetWithTradeData,
+  OrderWithAsset,
   SearchAssetWithTradeData,
 } from "@cometh/marketplace-sdk"
 import { ExternalLinkIcon } from "lucide-react"
 
+import { OrderAsset } from "@/types/assets"
 import globalConfig from "@/config/globalConfig"
 import { Button } from "@/components/ui/Button"
 import { CopyButton } from "@/components/ui/CopyButton"
@@ -17,7 +19,10 @@ import { AssetHeaderImage } from "@/components/marketplace/asset/AssetHeaderImag
 import { SwitchNetwork } from "../buttons/SwitchNetwork"
 
 export type BuyStepProps = {
-  asset: SearchAssetWithTradeData | AssetWithTradeData
+  asset: SearchAssetWithTradeData | AssetWithTradeData | OrderAsset
+  order: OrderWithAsset
+  quantity: bigint
+  transactionPrice: bigint
   onValid: () => void
 }
 
@@ -25,11 +30,17 @@ export type BuyStepProps = {
  * Arriving at this stage means that the user has sufficient funds
  * so we don't have to do any check here
  */
-export function BuyStep({ asset, onValid }: BuyStepProps) {
+export function BuyStep({
+  asset,
+  onValid,
+  order,
+  quantity,
+  transactionPrice,
+}: BuyStepProps) {
   const { mutateAsync: buy, isPending } = useBuyAsset()
 
   const onSubmit = useCallback(async () => {
-    const tx = await buy({ asset: asset })
+    const tx = await buy({ order, quantity, asset })
     toast({
       title: "NFT bought!",
       description: globalConfig.network.explorer?.blockUrl ? (
@@ -50,11 +61,16 @@ export function BuyStep({ asset, onValid }: BuyStepProps) {
       ),
     })
     onValid()
-  }, [asset, buy, onValid])
+  }, [asset, order, quantity, buy, onValid])
 
   return (
     <div className="flex flex-col items-center justify-center gap-[16px] pt-[16px]">
-      <AssetHeaderImage asset={asset} />
+      <div className="flex w-full flex-col items-center justify-center">
+        <AssetHeaderImage asset={asset} />
+        <div>
+          <h1 className="mt-2 text-2xl font-bold">{asset.metadata.name}</h1>
+        </div>
+      </div>
 
       <InfoBox
         title="Secured Transaction"
@@ -69,7 +85,7 @@ export function BuyStep({ asset, onValid }: BuyStepProps) {
           disabled={isPending}
           isLoading={isPending}
         >
-          Buy now for <Price amount={asset.orderbookStats.lowestListingPrice} />
+          Buy now for <Price amount={transactionPrice} />
         </Button>
       </SwitchNetwork>
     </div>

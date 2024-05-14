@@ -10,6 +10,7 @@ import {
 import { Provider } from "@ethersproject/providers"
 import {
   ERC721OrderStruct,
+  ERC1155OrderStructSerialized,
   NftOrderV4Serialized,
   SignedNftOrderV4,
 } from "@traderxyz/nft-swap-sdk"
@@ -31,11 +32,11 @@ export type BuyOfferParams = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
 } & OrderParams
 
-export const useBuyOffer = () => {
+export const usePresignOrder = () => {
   const isComethWallet = useIsComethConnectWallet()
   const signBuyOfferOrder = useSignOrder()
 
-  async function buyOfferConnect({ signer, order }: BuyOfferParams) {
+  async function presignOrderConnect({ signer, order }: BuyOfferParams) {
     const contract = IZeroEx__factory.connect(
       globalConfig.network.zeroExExchange,
       signer
@@ -46,19 +47,23 @@ export const useBuyOffer = () => {
     return txReceipt
   }
 
-  async function buyOfferEOA({
+  async function presignOrderEOA({
     asset,
     order,
     tradeDirection = TradeDirection.BUY,
   }: BuyOfferParams) {
     const signedOrder = await signBuyOfferOrder({ order })
+    console.log("signedOrder", { order, signedOrder })
+    const isERC1155 = asset.tokenType === TokenType.ERC1155
 
     const buyOffer: NewOrder = {
       tokenAddress: asset.contractAddress,
       tokenId: asset.tokenId,
       tokenProperties: [],
-      tokenQuantity: BigNumber.from(1).toString(),
-      tokenType: TokenType.ERC721,
+      tokenQuantity: isERC1155
+        ? (order as ERC1155OrderStructSerialized).erc1155TokenAmount
+        : BigNumber.from(1).toString(),
+      tokenType: asset.tokenType,
       direction: tradeDirection,
       erc20Token: order.erc20Token,
       erc20TokenAmount: order.erc20TokenAmount,
@@ -75,8 +80,8 @@ export const useBuyOffer = () => {
   }
 
   if (isComethWallet) {
-    return { buyOffer: buyOfferConnect }
+    return { presignOrder: presignOrderConnect }
   }
 
-  return { buyOffer: buyOfferEOA }
+  return { presignOrder: presignOrderEOA }
 }

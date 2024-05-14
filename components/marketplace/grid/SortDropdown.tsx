@@ -26,7 +26,7 @@ import { FILTERS_SORT } from "@/config/filters"
 
 interface MarketplaceSortDropdownProps extends PopoverProps {}
 
-const DEFAULT_SORT_LABEL = FILTERS_SORT[2].label
+const DEFAULT_SORT_LABEL = FILTERS_SORT[0].label
 
 export function MarketplaceSortDropdown({
   ...props

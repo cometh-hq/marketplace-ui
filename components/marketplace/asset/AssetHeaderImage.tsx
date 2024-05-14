@@ -1,9 +1,11 @@
+import { useIsViewerAnOwner } from "@/services/cometh-marketplace/assetOwners"
 import {
   AssetWithTradeData,
   SearchAssetWithTradeData,
 } from "@cometh/marketplace-sdk"
 import { useAccount } from "wagmi"
 
+import { OrderAsset } from "@/types/assets"
 import { cn } from "@/lib/utils/utils"
 import { AspectRatio } from "@/components/ui/AspectRatio"
 import { AssetImage } from "@/components/ui/AssetImage"
@@ -11,11 +13,9 @@ import { AssetImage } from "@/components/ui/AssetImage"
 export const AssetHeaderImage = ({
   asset,
 }: {
-  asset: SearchAssetWithTradeData | AssetWithTradeData
+  asset: SearchAssetWithTradeData | AssetWithTradeData | OrderAsset
 }) => {
-  const account = useAccount()
-  const viewerAddress = account.address
-  const owner = asset.owner === viewerAddress
+  const isViewerAnOwner = useIsViewerAnOwner(asset)
 
   if (
     !asset.cachedImageUrl &&
@@ -28,8 +28,8 @@ export const AssetHeaderImage = ({
   return (
     <div
       className={cn(
-        "w-full overflow-hidden rounded-xl lg:w-[55%]",
-        owner ? "bg-[#f4f2e8]" : "bg-muted"
+        "bg-muted w-full overflow-hidden rounded-xl border lg:w-[55%]",
+        isViewerAnOwner ? "border-owner" : "border-muted"
       )}
     >
       <AspectRatio ratio={1}>
@@ -40,7 +40,7 @@ export const AssetHeaderImage = ({
             imageData={asset.metadata.image_data}
             height={380}
             width={320}
-            className="relative  size-full rounded-xl object-contain p-[10%]"
+            className="relative  size-full rounded-xl object-contain p-[5%]"
           />
         </div>
       </AspectRatio>

@@ -3,6 +3,7 @@
 import {
   AssetTransfers,
   Order,
+  OrderFilledEventWithAsset,
   TradeDirection,
   TradeStatus,
 } from "@cometh/marketplace-sdk"
@@ -10,6 +11,8 @@ import { Address, isAddressEqual } from "viem"
 
 import {
   AssetActivity,
+  FILLED_EVENT_TYPE,
+  FilledEventActivity,
   ORDER_TYPE,
   OrderActivity,
   TRANSFER_TYPE,
@@ -27,17 +30,30 @@ export const isOrderActivity = (
   return assetActivity.activityType === ORDER_TYPE
 }
 
+export const isFilledEventActivity = (
+  assetActivity: AssetActivity
+): assetActivity is FilledEventActivity => {
+  return assetActivity.activityType === FILLED_EVENT_TYPE
+}
+
 export const getActivityTimestamp = (assetActivity: AssetActivity) => {
   if (isTransferActivity(assetActivity)) {
     return assetActivity.transfer.timestamp
   } else if (isOrderActivity(assetActivity)) {
     const { order } = assetActivity
-    let dateToUse = order.signedAt
 
+    let dateToUse = ''
     if (order.orderStatus === TradeStatus.FILLED) {
-      dateToUse = order.filledAt as string
+      dateToUse = order.lastFilledAt as string
+    } else if (order.orderStatus === TradeStatus.OPEN) {
+      dateToUse = order.signedAt
+    } else {
+      dateToUse = order.cancelledAt as string
     }
+    
     return new Date(dateToUse).getTime()
+  } else if (isFilledEventActivity(assetActivity)) {
+    return new Date(assetActivity.filledEvent.blockTimestamp).getTime()
   } else {
     throw new Error("Unknown activity type")
   }
@@ -76,6 +92,13 @@ export const getActivityNftOwner = (
         : assetActivity.order.taker) as Address,
       viewerAddress
     )
+  } else if (isFilledEventActivity(assetActivity)) {
+    return getFormattedUser(
+      (assetActivity.filledEvent.direction === TradeDirection.SELL
+        ? assetActivity.filledEvent.maker
+        : assetActivity.filledEvent.taker) as Address,
+      viewerAddress
+    )
   } else {
     throw new Error("Unknown activity type")
   }
@@ -97,6 +120,13 @@ export const getActivityNftReceiver = (
         : assetActivity.order.maker) as Address,
       viewerAddress
     )
+  } else if (isFilledEventActivity(assetActivity)) {
+    return getFormattedUser(
+      (assetActivity.filledEvent.direction === TradeDirection.SELL
+        ? assetActivity.filledEvent.taker
+        : assetActivity.filledEvent.maker) as Address,
+      viewerAddress
+    )
   } else {
     throw new Error("Unknown activity type")
   }
@@ -107,6 +137,8 @@ export const getActivityId = (assetActivity: AssetActivity) => {
     return TRANSFER_TYPE + assetActivity.transfer.id
   } else if (isOrderActivity(assetActivity)) {
     return ORDER_TYPE + assetActivity.order.id
+  } else if (isFilledEventActivity(assetActivity)) {
+    return FILLED_EVENT_TYPE + assetActivity.filledEvent.id
   } else {
     throw new Error("Unknown activity type")
   }
@@ -115,6 +147,7 @@ export const getActivityId = (assetActivity: AssetActivity) => {
 export const getMergedActivities = (
   assetTransfers: AssetTransfers,
   assetOrders: Order[],
+  assetFilledEvents: OrderFilledEventWithAsset[],
   maxActivitiesToShow?: number
 ): AssetActivity[] => {
   const transferActivites = assetTransfers.map((asset) => ({
@@ -125,9 +158,14 @@ export const getMergedActivities = (
     activityType: ORDER_TYPE,
     order,
   }))
+  const filledEventActivities = assetFilledEvents.map((filledEvent) => ({
+    activityType: FILLED_EVENT_TYPE,
+    filledEvent,
+  }))
   const activities = [
     ...transferActivites,
     ...orderActivities,
+    ...filledEventActivities,
   ] as AssetActivity[]
   activities.sort((activity1, activity2) => {
     const activity1Timestamp = getActivityTimestamp(activity1)

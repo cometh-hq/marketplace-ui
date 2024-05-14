@@ -12,20 +12,20 @@ import { toast } from "@/components/ui/toast/hooks/useToast"
 import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
 import { useGetCollection } from "../cometh-marketplace/collectionService"
-import { useBuildOfferOrder } from "./buildOfferOrderService"
-import { useBuyOffer } from "./buyOfferService"
+import { useBuildOrder } from "./buildOfferOrderService"
+import { usePresignOrder } from "./buyOfferService"
 
 export type MakeBuyOfferOptions = {
   asset: AssetWithTradeData | SearchAssetWithTradeData
   price: BigNumber
+  quantity: BigInt
   validity: string
 }
 
 export const useMakeBuyOfferAsset = (
   asset: AssetWithTradeData | SearchAssetWithTradeData
 ) => {
-  const client = useQueryClient()
-  const buildSignBuyOfferOrder = useBuildOfferOrder({
+  const buildSignBuyOfferOrder = useBuildOrder({
     tradeDirection: TradeDirection.BUY,
   })
   const { data: collection } = useGetCollection(
@@ -34,11 +34,11 @@ export const useMakeBuyOfferAsset = (
   const invalidateAssetQueries = useInvalidateAssetQueries()
   const signer = useEthersSigner()
 
-  const { buyOffer } = useBuyOffer()
+  const { presignOrder: buyOffer } = usePresignOrder()
 
   return useMutation({
     mutationKey: ["make-buy-offer-asset"],
-    mutationFn: async ({ asset, price, validity }: MakeBuyOfferOptions) => {
+    mutationFn: async ({ asset, price, validity, quantity }: MakeBuyOfferOptions) => {
       if (!collection) throw new Error("Could not get collection")
 
       const order = buildSignBuyOfferOrder({
@@ -46,6 +46,7 @@ export const useMakeBuyOfferAsset = (
         price,
         validity,
         collection,
+        quantity: quantity.toString()
       })
 
       if (!order) throw new Error("Could not build order")

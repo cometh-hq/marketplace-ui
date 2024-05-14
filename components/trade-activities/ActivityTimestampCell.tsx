@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useMemo } from "react"
+import { TradeStatus } from "@cometh/marketplace-sdk"
 import { ExternalLink } from "lucide-react"
 import { DateTime } from "luxon"
 
@@ -14,6 +15,7 @@ import {
 } from "../ui/Tooltip"
 import {
   getActivityTimestamp,
+  isFilledEventActivity,
   isOrderActivity,
   isTransferActivity,
 } from "./activityHelper"
@@ -36,6 +38,9 @@ const TimestampTooltip = ({
   </TooltipProvider>
 )
 
+const getTxLink = (txHash: string) =>
+  `${globalConfig.network.explorer?.url}/tx/${txHash}`
+
 export function ActivityTimestampCell({
   activity,
 }: {
@@ -51,11 +56,31 @@ export function ActivityTimestampCell({
     }
   }, [activity])
 
-  if (isTransferActivity(activity)) {
+  const transactionLink = useMemo(() => {
+    if (isTransferActivity(activity)) {
+      return getTxLink(activity.transfer.transactionHash)
+    } else if (isFilledEventActivity(activity)) {
+      return getTxLink(activity.filledEvent.txHash)
+    } else if (isOrderActivity(activity)) {
+      const { order } = activity
+      if (order.orderStatus === TradeStatus.OPEN) {
+        return order.signedTxHash ? getTxLink(order.signedTxHash) : null
+      } else if (order.orderStatus === TradeStatus.CANCELLED) {
+        return order.lastCancelledTxHash
+          ? getTxLink(order.lastCancelledTxHash)
+          : null
+      } else if (order.orderStatus === TradeStatus.FILLED) {
+        return order.lastFilledTxHash ? getTxLink(order.lastFilledTxHash) : null
+      }
+    }
+    return null
+  }, [activity])
+
+  if (transactionLink) {
     return (
       <TimestampTooltip tooltipContent={readableDate}>
         <a
-          href={`${globalConfig.network.explorer?.url}/tx/${activity.transfer.transactionHash}`}
+          href={transactionLink}
           target="_blank"
           rel="noreferrer"
           className="text-muted-foreground hover:text-secondary-foreground flex items-center gap-2 text-sm font-medium"

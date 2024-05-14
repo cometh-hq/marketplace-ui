@@ -144,6 +144,7 @@ export const useMakeBuyOfferAssetButton = ({
   asset,
 }: UseMakeBuyOfferAssetButtonOptions) => {
   const [price, setPrice] = useState<BigNumber | null>(null)
+  const [quantity, setQuantity] = useState<BigInt>(BigInt(1))
   const [validity, setValidity] = useState<string | null>(null)
 
   const {
@@ -165,6 +166,8 @@ export const useMakeBuyOfferAssetButton = ({
     reset,
     price,
     setPrice,
+    quantity,
+    setQuantity,
     validity,
     setValidity,
     refetch,

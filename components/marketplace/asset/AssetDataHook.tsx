@@ -24,10 +24,24 @@ export const useInvalidateAssetQueries = () => {
         queryKey: ["cometh", "assets", tokenId],
       })
       client.invalidateQueries({
-        queryKey: ["cometh", "searchOrders", contractAddress],
+        queryKey: ["cometh", "getAsset", tokenId],
       })
       client.invalidateQueries({
-        queryKey: ["cometh", "assetTransfers", tokenId],
+        queryKey: ["cometh", "searchOrders"],
+      })
+      client.invalidateQueries({
+        queryKey: ["cometh", "assetTransfers", contractAddress, tokenId],
+      })
+      client.invalidateQueries({
+        queryKey: ["cometh", "asset-owners", contractAddress, tokenId],
+      })
+      client.invalidateQueries({
+        queryKey: [
+          "cometh",
+          "asset-quantity-by-owner",
+          contractAddress,
+          tokenId,
+        ],
       })
       client.invalidateQueries({ queryKey: ["cometh", "search"] })
       refreshNativeBalance()
