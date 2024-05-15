@@ -1,64 +1,77 @@
 import { fetchNeedsMoreAllowance } from "@/services/allowance/allowanceService"
 import { computeHasSufficientFunds } from "@/services/balance/fundsService" // Assuming this is a non-hook version
-import { OrderWithAsset } from "@cometh/marketplace-sdk"
+import {
+  AssetWithTradeData,
+  OrderWithAsset,
+  SearchAssetWithTradeData,
+} from "@cometh/marketplace-sdk"
 import { NftSwapV4 } from "@traderxyz/nft-swap-sdk"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 
+import { OrderAsset } from "@/types/assets"
 import globalConfig from "@/config/globalConfig"
 import { comethMarketplaceClient } from "@/lib/clients"
 
-export const validateBuyOffer = async (
-  order: OrderWithAsset,
-  erc20Balance: bigint,
-  nftSwapSdk: NftSwapV4
-) => {
+export type ValidateOrderOptions = {
+  order: OrderWithAsset
+  erc20Balance: bigint | undefined
+  nativeBalance: bigint | undefined
+  nftSwapSdk: NftSwapV4 | null
+}
+
+export const validateBuyOffer = async ({
+  order,
+  erc20Balance,
+  nativeBalance,
+  nftSwapSdk,
+}: ValidateOrderOptions) => {
   const { hasSufficientFunds, missingBalance } = computeHasSufficientFunds({
-    price: BigNumber.from(order.totalPrice || 0),
-    erc20Balance: erc20Balance,
+    price: BigNumber.from(order.totalPrice),
+    erc20Balance,
+    nativeBalance,
   })
 
-  const needsMoreAllowance = await fetchNeedsMoreAllowance({
-    address: `0x${order.maker}`,
+  const allowance = await fetchNeedsMoreAllowance({
+    address: order?.maker as Address,
     spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
-    price: BigNumber.from(order.totalPrice || 0),
+    price: BigNumber.from(order.totalPrice),
     contractAddress: globalConfig.ordersErc20.address,
   })
 
   return {
     hasSufficientFunds,
     missingBalance,
-    needsMoreAllowance,
+    allowance,
   }
 }
 
-export const validateSellListing = async (
-  order: OrderWithAsset,
-  nftSwapSdk: NftSwapV4
-) => {
+export const validateSellListing = async ({
+  order,
+  erc20Balance,
+  nftSwapSdk,
+}: ValidateOrderOptions) => {
   const assetOwnersResponse =
     await comethMarketplaceClient.asset.getAssetOwners(
-      order.tokenAddress,
-      order.tokenId.toString(),
-      order.maker,
+      order?.tokenAddress || "",
+      order?.tokenId.toString() || "",
+      order?.maker || "",
       999999
     )
 
   const isOwner = assetOwnersResponse.some(
-    (owner) => owner.owner.toLowerCase() === order.maker.toLowerCase()
+    (owner) => owner.owner.toLowerCase() === order?.maker.toLowerCase()
   )
 
   const allowance = await fetchNeedsMoreAllowance({
-    address: `0x${order.maker}`,
+    address: order?.maker as Address,
     spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
-    price: BigNumber.from(order.totalPrice || 0),
+    price: BigNumber.from(order?.totalPrice || 0),
     contractAddress: globalConfig.ordersErc20.address,
   })
 
-  const hasApproval = BigNumber.from(allowance).gte(order.tokenQuantity)
-
   return {
     isOwner,
-    hasApproval,
+    allowance,
   }
 }
