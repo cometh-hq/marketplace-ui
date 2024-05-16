@@ -1,4 +1,3 @@
-import { off } from "process"
 import { useEffect, useState } from "react"
 import {
   useERC20Balance,
@@ -29,20 +28,14 @@ const useValidateBuyOffer = (order: OrderWithAsset) => {
   const [validationResult, setValidationResult] = useState<any>(null)
   const nftSwapSdk = useNFTSwapv4()
   const { balance: nativeBalance } = useNativeBalance(order.maker as Address)
-
   const { balance: erc20Balance } = useERC20Balance(
     globalConfig.ordersErc20.address,
     order.maker as Address
   )
 
-  console.log("!!", order)
-  console.log("erc20Balance", erc20Balance)
-  console.log("nativeBalance", nativeBalance)
-  console.log("totalprice", BigNumber.from(order.totalPrice))
-
   useEffect(() => {
     async function validate() {
-      if (order.totalPrice && nftSwapSdk && erc20Balance) {
+      if (order.totalPrice && nftSwapSdk) {
         const validationResults = await validateBuyOffer({
           order,
           erc20Balance,
@@ -68,21 +61,17 @@ const generateErrorMessages = (validationResult: any) => {
     validationResult.missingBalance &&
     !validationResult.missingBalance.isZero()
   ) {
-    const missingBalanceValue = formatUnits(
-      validationResult.missingBalance,
-      "matic"
-    )
+    const missingBalanceValue = formatUnits(validationResult.missingBalance)
     title = "Insufficient Funds"
-    message = `Maker has a missing balance of ${missingBalanceValue}. Please ensure he has funds to complete the transaction.`
+    message = `The offer cannot be accepted because the maker of the offer does not have enough MATIC in their balance. Please ensure that the maker has sufficient funds to cover the offer amount of ${missingBalanceValue} MATIC before proceeding.`
   }
 
-  if (validationResult && !validationResult.allowance) {
+  if (validationResult && validationResult.allowance) {
     title = "Allowance Required"
     message =
-      "Maker does not have enough  allowance for this transaction. Try again."
+      "The maker of the offer has not granted the necessary allowance for this transaction. Please ask them to approve the required tokens and try again."
   }
 
-  console.log("validationResult", { validationResult })
   return { title, message }
 }
 
@@ -113,8 +102,6 @@ export function AcceptBuyOfferButton({
     return <div>Asset not found</div>
   }
 
-  console.log("generateErrorMessages", errorMessages)
-
   return (
     <TransactionDialogButton
       label="Accept"
@@ -136,7 +123,7 @@ export function AcceptBuyOfferButton({
         </Case>
         <Case value="confirm-accept-buy-offer">
           {errorMessages && errorMessages.title ? (
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5 text-red-400">
               <h3 className="w-full text-center text-xl font-semibold">
                 {errorMessages.title}
               </h3>
