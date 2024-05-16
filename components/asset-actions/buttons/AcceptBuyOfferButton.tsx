@@ -4,8 +4,8 @@ import {
   useNativeBalance,
 } from "@/services/balance/balanceService"
 import { OrderWithAsset } from "@cometh/marketplace-sdk"
-import { BigNumber } from "ethers"
 import { formatUnits } from "ethers/lib/utils"
+import { Loader } from "lucide-react"
 import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
@@ -24,7 +24,7 @@ export type AcceptBuyOfferButtonProps = {
   offer: OrderWithAsset
 } & React.ComponentProps<typeof Button>
 
-const useValidateBuyOffer = (order: OrderWithAsset) => {
+const useValidateBuyOffer = (order: OrderWithAsset, isOpen: boolean) => {
   const [validationResult, setValidationResult] = useState<any>(null)
   const nftSwapSdk = useNFTSwapv4()
   const { balance: nativeBalance } = useNativeBalance(order.maker as Address)
@@ -45,9 +45,12 @@ const useValidateBuyOffer = (order: OrderWithAsset) => {
         setValidationResult(validationResults)
       }
     }
-
-    validate()
-  }, [order, nativeBalance, nftSwapSdk, erc20Balance])
+    if (isOpen) {
+      validate()
+    } else {
+      setValidationResult(null)
+    }
+  }, [order, nativeBalance, nftSwapSdk, erc20Balance, isOpen])
 
   return validationResult
 }
@@ -59,17 +62,17 @@ const generateErrorMessages = (validationResult: any) => {
   if (
     validationResult &&
     validationResult.missingBalance &&
-    !validationResult.missingBalance.isZero()
+    validationResult.missingBalance.isZero()
   ) {
     const missingBalanceValue = formatUnits(validationResult.missingBalance)
     title = "Insufficient Funds"
-    message = `The offer cannot be accepted because the maker of the offer does not have enough MATIC in their balance. Please ensure that the maker has sufficient funds to cover the offer amount of ${missingBalanceValue} MATIC before proceeding.`
+    message = `The offer cannot be accepted because the maker of the offer does not have enough MATIC in their balance. The transaction can only proceed if the maker ensures sufficient funds ${missingBalanceValue} MATIC are available.`
   }
 
   if (validationResult && validationResult.allowance) {
     title = "Allowance Required"
-    message =
-      "The maker of the offer has not granted the necessary allowance for this transaction. Please ask them to approve the required tokens and try again."
+    message = message =
+      "The transaction cannot proceed because the maker of the offer has not granted the necessary allowance for their tokens. Only the maker can approve the required tokens to continue with this transaction."
   }
 
   return { title, message }
@@ -83,14 +86,23 @@ export function AcceptBuyOfferButton({
     useAcceptBuyOfferAssetButton({ offer })
   const [open, setOpen] = useState(false)
   const [errorMessages, setErrorMessages] = useState({ title: "", message: "" })
+  const [isValidationLoading, setIsValidationLoading] = useState(false)
 
-  const validationResult = useValidateBuyOffer(offer)
+  const validationResult = useValidateBuyOffer(offer, open)
 
   useEffect(() => {
-    const newErrorMessages = generateErrorMessages(validationResult)
-    setErrorMessages(newErrorMessages)
-  }, [validationResult])
+    if (open) {
+      setIsValidationLoading(true)
+    }
+  }, [open])
 
+  useEffect(() => {
+    if (validationResult) {
+      const newErrorMessages = generateErrorMessages(validationResult)
+      setErrorMessages(newErrorMessages)
+    }
+    setIsValidationLoading(false)
+  }, [validationResult])
   if (!requiredSteps?.length || !currentStep) return null
 
   const closeDialog = () => {
@@ -106,7 +118,12 @@ export function AcceptBuyOfferButton({
     <TransactionDialogButton
       label="Accept"
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen)
+        if (!isOpen) {
+          setIsValidationLoading(false)
+        }
+      }}
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
@@ -122,12 +139,16 @@ export function AcceptBuyOfferButton({
           <CollectionApprovalStep asset={asset} onValid={nextStep} />
         </Case>
         <Case value="confirm-accept-buy-offer">
-          {errorMessages && errorMessages.title ? (
-            <div className="flex flex-col gap-5 text-red-400">
+          {isValidationLoading ? (
+            <div className="flex items-center justify-center ">
+              <Loader size={22} className="animate-spin" />
+            </div>
+          ) : errorMessages.title ? (
+            <div className="flex flex-col gap-5 ">
               <h3 className="w-full text-center text-xl font-semibold">
                 {errorMessages.title}
               </h3>
-              <p className="w-full text-center"> {errorMessages.message}</p>
+              <p className="w-full text-center">{errorMessages.message}</p>
             </div>
           ) : (
             <ConfirmAcceptBuyOfferStep offer={offer} onValid={closeDialog} />
