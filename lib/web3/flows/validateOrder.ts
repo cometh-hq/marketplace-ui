@@ -39,6 +39,7 @@ export const validateBuyOffer = async ({
     contractAddress: globalConfig.ordersErc20.address,
   })
 
+
   return {
     hasSufficientFunds,
     missingBalance,
