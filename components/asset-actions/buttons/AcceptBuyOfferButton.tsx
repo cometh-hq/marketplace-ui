@@ -10,7 +10,10 @@ import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 import { useAcceptBuyOfferAssetButton } from "@/lib/web3/flows/acceptBuyOffer"
-import { validateBuyOffer } from "@/lib/web3/flows/validateOrder"
+import {
+  validateBuyOffer,
+  ValidateBuyOfferResult,
+} from "@/lib/web3/flows/validateOrder"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 import { Button } from "@/components/ui/Button"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
@@ -25,7 +28,8 @@ export type AcceptBuyOfferButtonProps = {
 } & React.ComponentProps<typeof Button>
 
 const useValidateBuyOffer = (order: OrderWithAsset, isOpen: boolean) => {
-  const [validationResult, setValidationResult] = useState<any>(null)
+  const [validationResult, setValidationResult] =
+    useState<ValidateBuyOfferResult | null>(null)
   const nftSwapSdk = useNFTSwapv4()
   const { balance: nativeBalance } = useNativeBalance(order.maker as Address)
   const { balance: erc20Balance } = useERC20Balance(
@@ -55,14 +59,14 @@ const useValidateBuyOffer = (order: OrderWithAsset, isOpen: boolean) => {
   return validationResult
 }
 
-const generateErrorMessages = (validationResult: any) => {
+const generateErrorMessages = (validationResult: ValidateBuyOfferResult) => {
   let title = ""
   let message = ""
 
   if (
     validationResult &&
     validationResult.missingBalance &&
-    validationResult.missingBalance.isZero()
+    !validationResult.missingBalance.isZero()
   ) {
     const missingBalanceValue = formatUnits(validationResult.missingBalance)
     title = "Insufficient Funds"

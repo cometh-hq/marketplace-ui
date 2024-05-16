@@ -20,25 +20,34 @@ export type ValidateOrderOptions = {
   nftSwapSdk: NftSwapV4 | null
 }
 
+export type ValidateBuyOfferResult = {
+  hasSufficientFunds: boolean
+  missingBalance: BigNumber | undefined
+  allowance: boolean
+}
+
+export type ValidateSellListingResult = {
+  isOwner: boolean
+  allowance: boolean
+}
+
 export const validateBuyOffer = async ({
   order,
   erc20Balance,
   nativeBalance,
   nftSwapSdk,
-}: ValidateOrderOptions) => {
+}: ValidateOrderOptions): Promise<ValidateBuyOfferResult> => {
   const { hasSufficientFunds, missingBalance } = computeHasSufficientFunds({
     price: BigNumber.from(order.totalPrice),
     erc20Balance,
     nativeBalance,
   })
-
   const allowance = await fetchNeedsMoreAllowance({
     address: order?.maker as Address,
     spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
     price: BigNumber.from(order.totalPrice),
     contractAddress: globalConfig.ordersErc20.address,
   })
-
 
   return {
     hasSufficientFunds,
@@ -51,7 +60,8 @@ export const validateSellListing = async ({
   order,
   erc20Balance,
   nftSwapSdk,
-}: ValidateOrderOptions) => {
+}: ValidateOrderOptions): Promise<ValidateSellListingResult> => {
+
   const assetOwnersResponse =
     await comethMarketplaceClient.asset.getAssetOwners(
       order?.tokenAddress || "",
@@ -59,11 +69,9 @@ export const validateSellListing = async ({
       order?.maker || "",
       999999
     )
-
   const isOwner = assetOwnersResponse.some(
     (owner) => owner.owner.toLowerCase() === order?.maker.toLowerCase()
   )
-
   const allowance = await fetchNeedsMoreAllowance({
     address: order?.maker as Address,
     spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
