@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react"
-import {
-  useERC20Balance,
-  useNativeBalance,
-} from "@/services/balance/balanceService"
 import { OrderWithAsset } from "@cometh/marketplace-sdk"
 import { formatUnits } from "ethers/lib/utils"
 import { Loader } from "lucide-react"
-import { Address } from "viem"
 
-import globalConfig from "@/config/globalConfig"
 import { useAcceptBuyOfferAssetButton } from "@/lib/web3/flows/acceptBuyOffer"
 import {
-  validateBuyOffer,
   ValidateBuyOfferResult,
 } from "@/lib/web3/flows/validateOrder"
-import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
+import { useValidateBuyOffer } from "@/lib/web3/hooks/useValidateBuyOffer"
 import { Button } from "@/components/ui/Button"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
 import { Case, Switch } from "@/components/utils/Switch"
@@ -26,38 +19,6 @@ import { ConfirmAcceptBuyOfferStep } from "../transaction-steps/ConfirmAcceptBuy
 export type AcceptBuyOfferButtonProps = {
   offer: OrderWithAsset
 } & React.ComponentProps<typeof Button>
-
-const useValidateBuyOffer = (order: OrderWithAsset, isOpen: boolean) => {
-  const [validationResult, setValidationResult] =
-    useState<ValidateBuyOfferResult | null>(null)
-  const nftSwapSdk = useNFTSwapv4()
-  const { balance: nativeBalance } = useNativeBalance(order.maker as Address)
-  const { balance: erc20Balance } = useERC20Balance(
-    globalConfig.ordersErc20.address,
-    order.maker as Address
-  )
-
-  useEffect(() => {
-    async function validate() {
-      if (order.totalPrice && nftSwapSdk) {
-        const validationResults = await validateBuyOffer({
-          order,
-          erc20Balance,
-          nativeBalance,
-          nftSwapSdk,
-        })
-        setValidationResult(validationResults)
-      }
-    }
-    if (isOpen) {
-      validate()
-    } else {
-      setValidationResult(null)
-    }
-  }, [order, nativeBalance, nftSwapSdk, erc20Balance, isOpen])
-
-  return validationResult
-}
 
 const generateErrorMessages = (validationResult: ValidateBuyOfferResult) => {
   let title = ""
