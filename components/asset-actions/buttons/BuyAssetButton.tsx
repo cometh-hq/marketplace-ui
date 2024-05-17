@@ -7,9 +7,12 @@ import {
 } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
 
+import { OrderAsset } from "@/types/assets"
 import { useBuyAssetButton } from "@/lib/web3/flows/buy"
+import { useValidateSellListing } from "@/lib/web3/hooks/useValidateSellListing"
 import { Button } from "@/components/ui/Button"
 import { Price } from "@/components/ui/Price"
+import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
 import { Case, Switch } from "@/components/utils/Switch"
 
@@ -19,7 +22,6 @@ import { BuyQuantityStep } from "../transaction-steps/BuyQuantityStep"
 import { BuyStep } from "../transaction-steps/BuyStep"
 import { FundsStep } from "../transaction-steps/FundsStep"
 import { UnwrapStep } from "../transaction-steps/UnwrapStep"
-import { OrderAsset } from "@/types/assets"
 
 export type BuyAssetButtonProps = {
   asset: SearchAssetWithTradeData | AssetWithTradeData | OrderAsset
@@ -57,13 +59,22 @@ export function BuyAssetButton({
     () => (unitPrice ? BigInt(unitPrice) * quantity : BigInt(0)),
     [unitPrice, quantity]
   )
+  const isErc1155 = useAssetIs1155(asset)
+
+  const validationResult = useValidateSellListing(
+    asset,
+    order as OrderWithAsset,
+    isErc1155,
+    open
+  )
+
+  console.log({ validationResult })
   if (!requiredSteps?.length || !currentStep || !order) return null
 
   const closeDialog = () => {
     setQuantity(BigInt(1))
     setOpen(false)
   }
-
   return (
     <TransactionDialogButton
       label={
