@@ -51,8 +51,8 @@ export function ActivityTimestampCell({
     const luxonTimestamp = DateTime.fromMillis(activityTimestamp)
 
     return {
-      timeFromNow: luxonTimestamp.toRelative(),
-      readableDate: luxonTimestamp.toLocaleString(DateTime.DATETIME_FULL),
+      timeFromNow: luxonTimestamp.setLocale('en-US').toRelative(),
+      readableDate: luxonTimestamp.setLocale('en-US').toLocaleString(DateTime.DATETIME_FULL),
     }
   }, [activity])
 

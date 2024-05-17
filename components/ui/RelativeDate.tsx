@@ -23,8 +23,8 @@ const RelativeDate = ({ date, children }: RelativeDateProps) => {
           : DateTime.fromMillis(date)
 
     return {
-      timeFromNow: timestamp.toRelative(),
-      readableDate: timestamp.toLocaleString(DateTime.DATETIME_FULL),
+      timeFromNow: timestamp.setLocale('en-US').toRelative(),
+      readableDate: timestamp.setLocale('en-US').toLocaleString(DateTime.DATETIME_FULL),
     }
   }, [date])
 
