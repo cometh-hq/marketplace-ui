@@ -37,7 +37,6 @@ export type ValidateBuyOfferResult = {
 }
 
 export type ValidateSellListingResult = {
-  isOwner: boolean
   quantity: string
   hasApprovedCollection: boolean
 }
@@ -79,9 +78,7 @@ export const validateSellListing = async ({
       order.maker,
       999999
     )
-  const isOwner = assetOwnersResponse.some(
-    (owner) => owner.owner.toLowerCase() === order?.maker.toLowerCase()
-  )
+
   const hasApprovedCollection = await fetchHasApprovedCollection({
     address: order?.maker as Address,
     tokenId: order.tokenId,
@@ -91,7 +88,6 @@ export const validateSellListing = async ({
   })
 
   return {
-    isOwner,
     quantity: assetOwnersResponse[0].quantity,
     hasApprovedCollection,
   }

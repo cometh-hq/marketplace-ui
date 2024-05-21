@@ -23,14 +23,14 @@ export const useValidateSellListing = (
     useState<ValidateSellListingResult | null>(null)
   const nftSwapSdk = useNFTSwapv4()
 
-//   console.log({asset})
-//   console.log({order})
-//   console.log({isErc1155})
-  
+  // console.log({ asset })
+  // console.log({ order })
+  //   console.log({isErc1155})
+
   useEffect(() => {
     async function validate() {
-      if (order.totalPrice && nftSwapSdk) {
-        console.log('===> THERE')
+      if (order?.totalPrice && nftSwapSdk) {
+        console.log("===> THERE")
         const validationResults = await validateSellListing({
           asset,
           isErc1155,
