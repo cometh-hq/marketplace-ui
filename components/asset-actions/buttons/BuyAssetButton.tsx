@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/Button"
 import { Price } from "@/components/ui/Price"
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
+import { generateErrorMessages } from "@/components/utils/OrderErrorMessages"
 import { Case, Switch } from "@/components/utils/Switch"
 
 import { AddGasStep } from "../transaction-steps/AddGasStep"
@@ -23,7 +24,6 @@ import { BuyQuantityStep } from "../transaction-steps/BuyQuantityStep"
 import { BuyStep } from "../transaction-steps/BuyStep"
 import { FundsStep } from "../transaction-steps/FundsStep"
 import { UnwrapStep } from "../transaction-steps/UnwrapStep"
-import { generateErrorMessages } from "@/components/utils/OrderErrorMessages"
 
 export type BuyAssetButtonProps = {
   asset: SearchAssetWithTradeData | AssetWithTradeData | OrderAsset
@@ -71,6 +71,12 @@ export function BuyAssetButton({
     isErc1155,
     open
   )
+
+  useEffect(() => {
+    if (open) {
+      setIsValidationLoading(true)
+    }
+  }, [open])
 
   useEffect(() => {
     if (validationResult) {
