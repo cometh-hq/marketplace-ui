@@ -10,7 +10,6 @@ import { Loader } from "lucide-react"
 
 import { OrderAsset } from "@/types/assets"
 import { useBuyAssetButton } from "@/lib/web3/flows/buy"
-import { ValidateSellListingResult } from "@/lib/web3/flows/validateOrder"
 import { useValidateSellListing } from "@/lib/web3/hooks/useValidateSellListing"
 import { Button } from "@/components/ui/Button"
 import { Price } from "@/components/ui/Price"
@@ -24,6 +23,7 @@ import { BuyQuantityStep } from "../transaction-steps/BuyQuantityStep"
 import { BuyStep } from "../transaction-steps/BuyStep"
 import { FundsStep } from "../transaction-steps/FundsStep"
 import { UnwrapStep } from "../transaction-steps/UnwrapStep"
+import { generateErrorMessages } from "@/components/utils/OrderErrorMessages"
 
 export type BuyAssetButtonProps = {
   asset: SearchAssetWithTradeData | AssetWithTradeData | OrderAsset
@@ -39,29 +39,6 @@ const useDefinedOrCheapestOrder = (
 
   if (order) return order
   return cheapestListing
-}
-
-const generateErrorMessages = (validationResult: ValidateSellListingResult) => {
-  let title = ""
-  let message = ""
-
-  if (validationResult && !validationResult.hasApprovedCollection) {
-    title = "Approval Required"
-    message =
-      "The maker of the offer has not granted the necessary approval for this collection. Only the maker can approve the required collection to proceed with this transaction."
-  }
-
-  console.log(
-    "parseInt(validationResult.quantity)",
-    parseInt(validationResult.quantity)
-  )
-  if (validationResult && parseInt(validationResult.quantity) > 0) {
-    title = "Insufficient Asset"
-    message =
-      "The maker of the offer does not have enough assets in their balance to fulfill the offer. The transaction can only proceed if the maker ensures sufficient assets are available."
-  }
-
-  return { title, message }
 }
 
 export function BuyAssetButton({
@@ -95,15 +72,16 @@ export function BuyAssetButton({
     open
   )
 
-  console.log({ validationResult })
-
   useEffect(() => {
     if (validationResult) {
-      const newErrorMessages = generateErrorMessages(validationResult)
+      const newErrorMessages = generateErrorMessages(
+        validationResult,
+        order as OrderWithAsset
+      )
       setErrorMessages(newErrorMessages)
     }
     setIsValidationLoading(false)
-  }, [validationResult])
+  }, [validationResult, order])
   if (!requiredSteps?.length || !currentStep || !order) return null
 
   const closeDialog = () => {
@@ -131,7 +109,7 @@ export function BuyAssetButton({
       steps={requiredSteps}
       onClose={reset}
       size={size}
-      isLoading={isLoading}
+      isLoading={isLoading || isValidationLoading}
       error={errorMessages.title}
     >
       <Switch value={currentStep.value}>
@@ -139,13 +117,26 @@ export function BuyAssetButton({
           <AddGasStep onValid={nextStep} />
         </Case>
         <Case value="buy-quantity">
-          <BuyQuantityStep
-            asset={asset}
-            order={order}
-            quantity={quantity}
-            setQuantity={setQuantity}
-            onValid={nextStep}
-          />
+          {isErc1155 && isValidationLoading ? (
+            <div className="flex items-center justify-center ">
+              <Loader size={22} className="animate-spin" />
+            </div>
+          ) : errorMessages.title ? (
+            <div className="flex flex-col gap-5 ">
+              <h3 className="w-full text-center text-xl font-semibold">
+                {errorMessages.title}
+              </h3>
+              <p className="w-full text-center">{errorMessages.message}</p>
+            </div>
+          ) : (
+            <BuyQuantityStep
+              asset={asset}
+              order={order}
+              quantity={quantity}
+              setQuantity={setQuantity}
+              onValid={nextStep}
+            />
+          )}
         </Case>
         <Case value="add-funds">
           <FundsStep

@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react"
 import { OrderWithAsset } from "@cometh/marketplace-sdk"
-import { formatUnits } from "ethers/lib/utils"
 import { Loader } from "lucide-react"
 
 import { useAcceptBuyOfferAssetButton } from "@/lib/web3/flows/acceptBuyOffer"
-import {
-  ValidateBuyOfferResult,
-} from "@/lib/web3/flows/validateOrder"
 import { useValidateBuyOffer } from "@/lib/web3/hooks/useValidateBuyOffer"
 import { Button } from "@/components/ui/Button"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
+import { generateErrorMessages } from "@/components/utils/OrderErrorMessages"
 import { Case, Switch } from "@/components/utils/Switch"
 
 import { AddGasStep } from "../transaction-steps/AddGasStep"
@@ -19,29 +16,6 @@ import { ConfirmAcceptBuyOfferStep } from "../transaction-steps/ConfirmAcceptBuy
 export type AcceptBuyOfferButtonProps = {
   offer: OrderWithAsset
 } & React.ComponentProps<typeof Button>
-
-const generateErrorMessages = (validationResult: ValidateBuyOfferResult) => {
-  let title = ""
-  let message = ""
-
-  if (
-    validationResult &&
-    validationResult.missingBalance &&
-    !validationResult.missingBalance.isZero()
-  ) {
-    const missingBalanceValue = formatUnits(validationResult.missingBalance)
-    title = "Insufficient Funds"
-    message = `The offer cannot be accepted because the maker of the offer does not have enough MATIC in their balance. The transaction can only proceed if the maker ensures sufficient funds ${missingBalanceValue} MATIC are available.`
-  }
-
-  if (validationResult && validationResult.allowance) {
-    title = "Allowance Required"
-    message = message =
-      "The transaction cannot proceed because the maker of the offer has not granted the necessary allowance for their tokens. Only the maker can approve the required tokens to continue with this transaction."
-  }
-
-  return { title, message }
-}
 
 export function AcceptBuyOfferButton({
   offer,
@@ -93,7 +67,7 @@ export function AcceptBuyOfferButton({
       steps={requiredSteps}
       onClose={reset}
       size={size}
-      isLoading={isLoading}
+      isLoading={isLoading || isValidationLoading}
       error={errorMessages.title}
     >
       <Switch value={currentStep.value}>

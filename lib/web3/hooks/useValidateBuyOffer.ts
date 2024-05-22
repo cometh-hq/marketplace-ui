@@ -8,8 +8,11 @@ import { Address } from "viem"
 
 import globalConfig from "@/config/globalConfig"
 
+import {
+  validateBuyOffer,
+  ValidateBuyOfferResult,
+} from "../flows/validateOrder"
 import { useNFTSwapv4 } from "../nft-swap-sdk"
-import { validateBuyOffer, ValidateBuyOfferResult } from "../flows/validateOrder"
 
 export const useValidateBuyOffer = (order: OrderWithAsset, isOpen: boolean) => {
   const [validationResult, setValidationResult] =
