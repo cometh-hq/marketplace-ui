@@ -21,11 +21,13 @@ export const useValidateSellListing = (
 ) => {
   const [validationResult, setValidationResult] =
     useState<ValidateSellListingResult | null>(null)
+  const [isLoadingValidation, setIsLoadingValidation] = useState(false)
   const nftSwapSdk = useNFTSwapv4()
 
   useEffect(() => {
     async function validate() {
       if (order?.totalPrice && nftSwapSdk) {
+        setIsLoadingValidation(true)
         const validationResults = await validateSellListing({
           asset,
           isErc1155,
@@ -33,6 +35,7 @@ export const useValidateSellListing = (
           nftSwapSdk,
         })
         setValidationResult(validationResults)
+        setIsLoadingValidation(false)
       }
     }
 
@@ -40,8 +43,9 @@ export const useValidateSellListing = (
       validate()
     } else {
       setValidationResult(null)
+      setIsLoadingValidation(false)
     }
   }, [order, asset, nftSwapSdk, isErc1155, isOpen])
 
-  return validationResult
+  return { validationResult, isLoadingValidation }
 }

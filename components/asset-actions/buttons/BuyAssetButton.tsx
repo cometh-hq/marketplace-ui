@@ -6,12 +6,12 @@ import {
   SearchAssetWithTradeData,
 } from "@cometh/marketplace-sdk"
 import { BigNumber } from "ethers"
-import { Loader } from "lucide-react"
 
 import { OrderAsset } from "@/types/assets"
 import { useBuyAssetButton } from "@/lib/web3/flows/buy"
 import { useValidateSellListing } from "@/lib/web3/hooks/useValidateSellListing"
 import { Button } from "@/components/ui/Button"
+import { LoadingOrError } from "@/components/ui/LoadingOrError"
 import { Price } from "@/components/ui/Price"
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
@@ -57,26 +57,18 @@ export function BuyAssetButton({
   const [quantity, setQuantity] = useState(BigInt(1))
   const unitPrice = order?.totalUnitPrice
   const [errorMessages, setErrorMessages] = useState({ title: "", message: "" })
-  const [isValidationLoading, setIsValidationLoading] = useState(false)
 
   const transactionPrice = useMemo(
     () => (unitPrice ? BigInt(unitPrice) * quantity : BigInt(0)),
     [unitPrice, quantity]
   )
   const isErc1155 = useAssetIs1155(asset)
-
-  const validationResult = useValidateSellListing(
+  const { validationResult, isLoadingValidation } = useValidateSellListing(
     asset,
     order as OrderWithAsset,
     isErc1155,
     open
   )
-
-  useEffect(() => {
-    if (open) {
-      setIsValidationLoading(true)
-    }
-  }, [open])
 
   useEffect(() => {
     if (validationResult) {
@@ -86,7 +78,6 @@ export function BuyAssetButton({
       )
       setErrorMessages(newErrorMessages)
     }
-    setIsValidationLoading(false)
   }, [validationResult, order])
   if (!requiredSteps?.length || !currentStep || !order) return null
 
@@ -115,26 +106,18 @@ export function BuyAssetButton({
       steps={requiredSteps}
       onClose={reset}
       size={size}
-      isLoading={isLoading || isValidationLoading}
+      isLoading={isLoading || isLoadingValidation}
       error={errorMessages.title}
     >
-      <Switch value={currentStep.value}>
-        <Case value="add-gas">
-          <AddGasStep onValid={nextStep} />
-        </Case>
-        <Case value="buy-quantity">
-          {isErc1155 && isValidationLoading ? (
-            <div className="flex items-center justify-center ">
-              <Loader size={22} className="animate-spin" />
-            </div>
-          ) : errorMessages.title ? (
-            <div className="flex flex-col gap-5 ">
-              <h3 className="w-full text-center text-xl font-semibold">
-                {errorMessages.title}
-              </h3>
-              <p className="w-full text-center">{errorMessages.message}</p>
-            </div>
-          ) : (
+      <LoadingOrError
+        isLoading={isLoadingValidation}
+        errorMessages={errorMessages}
+      >
+        <Switch value={currentStep.value}>
+          <Case value="add-gas">
+            <AddGasStep onValid={nextStep} />
+          </Case>
+          <Case value="buy-quantity">
             <BuyQuantityStep
               asset={asset}
               order={order}
@@ -142,39 +125,26 @@ export function BuyAssetButton({
               setQuantity={setQuantity}
               onValid={nextStep}
             />
-          )}
-        </Case>
-        <Case value="add-funds">
-          <FundsStep
-            price={BigNumber.from(transactionPrice)}
-            onValid={nextStep}
-          />
-        </Case>
-        <Case value="unwrap-native-token">
-          <UnwrapStep
-            price={BigNumber.from(transactionPrice)}
-            onValid={nextStep}
-          />
-        </Case>
-        <Case value="allowance">
-          <AllowanceStep
-            price={BigNumber.from(transactionPrice)}
-            onValid={nextStep}
-          />
-        </Case>
-        <Case value="buy">
-          {isValidationLoading ? (
-            <div className="flex items-center justify-center ">
-              <Loader size={22} className="animate-spin" />
-            </div>
-          ) : errorMessages.title ? (
-            <div className="flex flex-col gap-5 ">
-              <h3 className="w-full text-center text-xl font-semibold">
-                {errorMessages.title}
-              </h3>
-              <p className="w-full text-center">{errorMessages.message}</p>
-            </div>
-          ) : (
+          </Case>
+          <Case value="add-funds">
+            <FundsStep
+              price={BigNumber.from(transactionPrice)}
+              onValid={nextStep}
+            />
+          </Case>
+          <Case value="unwrap-native-token">
+            <UnwrapStep
+              price={BigNumber.from(transactionPrice)}
+              onValid={nextStep}
+            />
+          </Case>
+          <Case value="allowance">
+            <AllowanceStep
+              price={BigNumber.from(transactionPrice)}
+              onValid={nextStep}
+            />
+          </Case>
+          <Case value="buy">
             <BuyStep
               asset={asset}
               order={order}
@@ -182,9 +152,9 @@ export function BuyAssetButton({
               quantity={quantity}
               transactionPrice={transactionPrice}
             />
-          )}
-        </Case>
-      </Switch>
+          </Case>
+        </Switch>
+      </LoadingOrError>
     </TransactionDialogButton>
   )
 }

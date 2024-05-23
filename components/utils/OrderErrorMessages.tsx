@@ -26,7 +26,7 @@ export const generateErrorMessages = (
   if (
     "quantity" in validationResult &&
     order &&
-    parseInt(validationResult.quantity) !==
+    parseInt(validationResult.quantity) <
       parseInt(order.tokenQuantityRemaining)
   ) {
     title = "Insufficient Asset"

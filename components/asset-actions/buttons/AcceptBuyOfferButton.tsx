@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
 import { OrderWithAsset } from "@cometh/marketplace-sdk"
-import { Loader } from "lucide-react"
 
 import { useAcceptBuyOfferAssetButton } from "@/lib/web3/flows/acceptBuyOffer"
 import { useValidateBuyOffer } from "@/lib/web3/hooks/useValidateBuyOffer"
 import { Button } from "@/components/ui/Button"
+import {
+  ErrorMessageDisplay,
+  LoadingOrError,
+} from "@/components/ui/LoadingOrError"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
 import { generateErrorMessages } from "@/components/utils/OrderErrorMessages"
 import { Case, Switch } from "@/components/utils/Switch"
@@ -25,22 +28,17 @@ export function AcceptBuyOfferButton({
     useAcceptBuyOfferAssetButton({ offer })
   const [open, setOpen] = useState(false)
   const [errorMessages, setErrorMessages] = useState({ title: "", message: "" })
-  const [isValidationLoading, setIsValidationLoading] = useState(false)
 
-  const validationResult = useValidateBuyOffer(offer, open)
-
-  useEffect(() => {
-    if (open) {
-      setIsValidationLoading(true)
-    }
-  }, [open])
+  const { validationResult, isLoadingValidation } = useValidateBuyOffer(
+    offer,
+    open
+  )
 
   useEffect(() => {
     if (validationResult) {
       const newErrorMessages = generateErrorMessages(validationResult)
       setErrorMessages(newErrorMessages)
     }
-    setIsValidationLoading(false)
   }, [validationResult])
   if (!requiredSteps?.length || !currentStep) return null
 
@@ -57,43 +55,30 @@ export function AcceptBuyOfferButton({
     <TransactionDialogButton
       label="Accept"
       open={open}
-      onOpenChange={(isOpen) => {
-        setOpen(isOpen)
-        if (!isOpen) {
-          setIsValidationLoading(false)
-        }
-      }}
+      onOpenChange={setOpen}
       currentStep={currentStep}
       steps={requiredSteps}
       onClose={reset}
       size={size}
-      isLoading={isLoading || isValidationLoading}
+      isLoading={isLoading || isLoadingValidation}
       error={errorMessages.title}
     >
-      <Switch value={currentStep.value}>
-        <Case value="add-gas">
-          <AddGasStep onValid={nextStep} />
-        </Case>
-        <Case value="token-approval">
-          <CollectionApprovalStep asset={asset} onValid={nextStep} />
-        </Case>
-        <Case value="confirm-accept-buy-offer">
-          {isValidationLoading ? (
-            <div className="flex items-center justify-center ">
-              <Loader size={22} className="animate-spin" />
-            </div>
-          ) : errorMessages.title ? (
-            <div className="flex flex-col gap-5 ">
-              <h3 className="w-full text-center text-xl font-semibold">
-                {errorMessages.title}
-              </h3>
-              <p className="w-full text-center">{errorMessages.message}</p>
-            </div>
-          ) : (
+      <LoadingOrError
+        isLoading={isLoadingValidation}
+        errorMessages={errorMessages}
+      >
+        <Switch value={currentStep.value}>
+          <Case value="add-gas">
+            <AddGasStep onValid={nextStep} />
+          </Case>
+          <Case value="token-approval">
+            <CollectionApprovalStep asset={asset} onValid={nextStep} />
+          </Case>
+          <Case value="confirm-accept-buy-offer">
             <ConfirmAcceptBuyOfferStep offer={offer} onValid={closeDialog} />
-          )}
-        </Case>
-      </Switch>
+          </Case>
+        </Switch>
+      </LoadingOrError>
     </TransactionDialogButton>
   )
 }
