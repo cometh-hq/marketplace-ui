@@ -257,6 +257,28 @@ const NETWORKS: Record<number, NetworkConfig> = {
     zeroExExchange: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
     minimumBalanceForGas: parseEther("1"),
   },
+  421614: {
+    chainId: 421614,
+    hexaId: "0x66eee",
+    name: "Arbitrum Sepolia",
+    chain: "ETH",
+    network: "testnet",
+    explorer: {
+      name: "Arbiscan",
+      url: "https://sepolia.arbiscan.io/",
+      standard: "EIP3091",
+      blockUrl: "https://sepolia.arbiscan.io/block",
+    },
+    nativeToken: { id: "aave-eth-v1", name: "Ether", symbol: "AETH", decimals: 18 },
+    wrappedNativeToken: {
+      name: "Wrapped Ether",
+      symbol: "WAETH",
+      decimals: 18,
+      address: "0x980B62Da83eFf3D4576C647993b0c1D7faf17c73",
+    },
+    zeroExExchange: "0xdd1de4ff6f558f21ac1a892923999fed87423560",
+    minimumBalanceForGas: parseEther("1"),
+  },
   42220: {
     chainId: 42220,
     hexaId: "0xa4ec",
