@@ -49,6 +49,7 @@ const ERC20TransferButton = ({
   const [amount, setAmount] = useState("")
   const [isPristine, setIsPristine] = useState(true)
   const {
+    data: txHash,
     sendTransaction,
     isPending: isPendingSendTransaction,
     isSuccess: isSuccessSendTransaction,
@@ -106,8 +107,9 @@ const ERC20TransferButton = ({
     decimalNumber,
   ])
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({ hash })
+  const { data: tx, isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({ hash: hash || txHash })
+  console.log("tx", tx)
 
   useEffect(() => {
     if (
