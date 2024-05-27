@@ -1,9 +1,15 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { OrderWithAsset } from "@cometh/marketplace-sdk"
 
 import { useAcceptBuyOfferAssetButton } from "@/lib/web3/flows/acceptBuyOffer"
+import { useValidateBuyOffer } from "@/lib/web3/hooks/useValidateBuyOffer"
 import { Button } from "@/components/ui/Button"
+import {
+  ErrorMessageDisplay,
+  LoadingOrError,
+} from "@/components/ui/LoadingOrError"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
+import { generateErrorMessages } from "@/components/utils/OrderErrorMessages"
 import { Case, Switch } from "@/components/utils/Switch"
 
 import { AddGasStep } from "../transaction-steps/AddGasStep"
@@ -21,7 +27,19 @@ export function AcceptBuyOfferButton({
   const { requiredSteps, isLoading, currentStep, nextStep, reset } =
     useAcceptBuyOfferAssetButton({ offer })
   const [open, setOpen] = useState(false)
+  const [errorMessages, setErrorMessages] = useState({ title: "", message: "" })
 
+  const { validationResult, isLoadingValidation } = useValidateBuyOffer(
+    offer,
+    open
+  )
+
+  useEffect(() => {
+    if (validationResult) {
+      const newErrorMessages = generateErrorMessages(validationResult)
+      setErrorMessages(newErrorMessages)
+    }
+  }, [validationResult])
   if (!requiredSteps?.length || !currentStep) return null
 
   const closeDialog = () => {
@@ -29,7 +47,6 @@ export function AcceptBuyOfferButton({
   }
 
   const asset = offer.asset
-
   if (!asset) {
     return <div>Asset not found</div>
   }
@@ -43,19 +60,25 @@ export function AcceptBuyOfferButton({
       steps={requiredSteps}
       onClose={reset}
       size={size}
-      isLoading={isLoading}
+      isLoading={isLoading || isLoadingValidation}
+      error={errorMessages.title}
     >
-      <Switch value={currentStep.value}>
-        <Case value="add-gas">
-          <AddGasStep onValid={nextStep} />
-        </Case>
-        <Case value="token-approval">
-          <CollectionApprovalStep asset={asset} onValid={nextStep} />
-        </Case>
-        <Case value="confirm-accept-buy-offer">
-          <ConfirmAcceptBuyOfferStep offer={offer} onValid={closeDialog} />
-        </Case>
-      </Switch>
+      <LoadingOrError
+        isLoading={isLoadingValidation}
+        errorMessages={errorMessages}
+      >
+        <Switch value={currentStep.value}>
+          <Case value="add-gas">
+            <AddGasStep onValid={nextStep} />
+          </Case>
+          <Case value="token-approval">
+            <CollectionApprovalStep asset={asset} onValid={nextStep} />
+          </Case>
+          <Case value="confirm-accept-buy-offer">
+            <ConfirmAcceptBuyOfferStep offer={offer} onValid={closeDialog} />
+          </Case>
+        </Switch>
+      </LoadingOrError>
     </TransactionDialogButton>
   )
 }

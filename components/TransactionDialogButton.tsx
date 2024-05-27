@@ -12,6 +12,7 @@ export type TransactionDialogProps<T extends Step> = {
   onClose: () => void
   children: React.ReactNode[] | React.ReactNode
   isLoading?: boolean
+  error?: string
 } & React.ComponentProps<typeof Button>
 
 export function TransactionDialogButton<T extends Step>({
@@ -23,6 +24,7 @@ export function TransactionDialogButton<T extends Step>({
   onOpenChange,
   onClose,
   isLoading,
+  error,
   size = "lg",
 }: TransactionDialogProps<T>) {
   const componentOnOpenChange = (newOpen: boolean) => {
@@ -51,7 +53,7 @@ export function TransactionDialogButton<T extends Step>({
           }
         }}
       >
-        <Stepper value={currentStep.value} steps={steps} />
+        {!error && <Stepper value={currentStep.value} steps={steps} />}
         {children}
       </DialogContent>
     </Dialog>
