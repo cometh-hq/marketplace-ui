@@ -116,7 +116,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
   const {
     data,
     refetch,
-    isLoading,
+    isFetching,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -149,15 +149,15 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     },
     initialPageParam: 1,
     gcTime: 0,
-    getNextPageParam: (_, lastPage) => {
-      return lastPage.length + 1
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.nfts.assets.length ? allPages.length + 1 : undefined
     },
   })
 
   return {
     data,
     refetch,
-    isLoading,
+    isFetching,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,

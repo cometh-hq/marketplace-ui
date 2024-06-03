@@ -25,7 +25,6 @@ export function WrapStep({ price, onValid }: WrapStepProps) {
   })
 
   useEffect(() => {
-    console.log("needsToWrap", needsToWrap)
     if (!needsToWrap) onValid()
   }, [needsToWrap, onValid])
 

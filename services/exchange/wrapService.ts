@@ -29,7 +29,7 @@ export const computeNeedsToWrap = ({
     nativeBalance,
     erc20Balance,
   })
-  if (!hasSufficientFunds) return false
+  if (!hasSufficientFunds) return true
 
   return balanceToBigNumber(erc20Balance).lt(price)
 }

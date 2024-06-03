@@ -45,8 +45,8 @@ export const AssetsSearchGrid = ({
 
   const {
     data: nfts,
-    refetch,
-    isLoading,
+    isFetching,
+    hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
   } = useFilterableNFTsQuery({
@@ -69,8 +69,8 @@ export const AssetsSearchGrid = ({
   }, [totalNbAssets, initialResults, setInitialResults])
 
   useEffect(() => {
-    if (inView && !isLoading) fetchNextPage()
-  }, [inView, isLoading, fetchNextPage])
+    if (inView && !isFetching && hasNextPage) fetchNextPage()
+  }, [inView, isFetching, hasNextPage, fetchNextPage])
 
   const { width } = useWindowSize()
   const isMobile = width < 768
@@ -109,9 +109,9 @@ export const AssetsSearchGrid = ({
         matching your search
       </p>
 
-      {isLoading && <Loading />}
+      {isFetching && <Loading />}
 
-      {!isLoading && assets.length === 0 ? (
+      {!isFetching && assets.length === 0 ? (
         <AssetsSearchEmpty />
       ) : (
         <>
