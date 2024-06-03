@@ -30,7 +30,7 @@ export const computeHasSufficientFunds = ({
   if (nativeBalance === undefined || erc20Balance === undefined) {
     return {
       hasSufficientFunds: false,
-      missingBalance: BigNumber.from(0),
+      missingBalance: BigNumber.from(price),
     }
   }
 

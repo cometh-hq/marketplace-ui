@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/Button"
 import { Price } from "@/components/ui/Price"
 import { UserLink } from "@/components/ui/user/UserLink"
 import { useUpdateTabQueryParam } from "@/components/activities/asset-details/tabs/pageTabHooks"
-import { AuthenticationButton } from "@/components/login/AuthenticationButton"
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import TokenQuantity from "@/components/erc1155/TokenQuantity"
+import { AuthenticationButton } from "@/components/login/AuthenticationButton"
 import {
   ProductBlockCenteredColumn,
   ProductBlockContainer,
@@ -71,8 +71,7 @@ export function ProductBlock({ asset }: ProductBlockProps) {
       <div className="flex w-full">
         {isAsset1155 && (
           <div className=" mr-2 rounded-lg border px-3 py-1 text-sm font-semibold">
-            Supply:{" "}
-            <TokenQuantity value={asset.supply} />
+            Supply: <TokenQuantity value={asset.supply} />
           </div>
         )}
         {isViewerAnOwner && (
