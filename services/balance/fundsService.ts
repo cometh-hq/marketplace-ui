@@ -26,10 +26,10 @@ export const computeHasSufficientFunds = ({
   includeWrappedNative = true,
 }: FetchHasSufficientFundsOptions) => {
   let availableFunds = BigNumber.from(0)
-  if (!nativeBalance || !erc20Balance) {
+  if (nativeBalance === undefined || erc20Balance === undefined) {
     return {
       hasSufficientFunds: false,
-      missingBalance: BigNumber.from(0),
+      missingBalance: BigNumber.from(price),
     }
   }
 
