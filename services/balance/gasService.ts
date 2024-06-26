@@ -10,10 +10,10 @@ export const computeHasEnoughGas = (
   walletAddress: Address | undefined,
   isComethWallet: boolean,
   nativeBalance?: bigint
-): { hasEnoughGas: boolean } => {
-  if (!walletAddress || !nativeBalance) return { hasEnoughGas: false }
+  ): { hasEnoughGas: boolean } => {
   if (isComethWallet && globalConfig.areContractsSponsored)
     return { hasEnoughGas: true }
+  if (!walletAddress || nativeBalance === undefined) return { hasEnoughGas: false }
 
   return {
     hasEnoughGas: nativeBalance > globalConfig.minimumBalanceForGas,
