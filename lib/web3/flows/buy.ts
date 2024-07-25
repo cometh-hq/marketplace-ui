@@ -139,7 +139,7 @@ export const useRequiredBuyingSteps = ({
       return steps
     },
 
-    enabled: !!viewerAddress,
+    enabled: !!viewerAddress && !!order,
   })
 }
 
