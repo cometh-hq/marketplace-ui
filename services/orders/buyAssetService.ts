@@ -11,6 +11,7 @@ import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetD
 
 import { useFillSignedOrder } from "../exchange/fillSignedOrderService"
 import { getViemSignedOrderFromOrder } from "../exchange/viemOrderHelper"
+import { waitForTransferTxIndexingAndStats } from "./indexingProgressService"
 
 export type BuyAssetOptions = {
   asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
@@ -47,7 +48,8 @@ export const useBuyAsset = () => {
       const fillTxReceipt = await viemPublicClient.waitForTransactionReceipt({
         hash: fillTxHash,
       })
-
+      await waitForTransferTxIndexingAndStats(fillTxHash)
+      
       console.log(
         `🎉 🥳 Order filled (buy-asset). TxHash: ${fillTxReceipt.transactionHash}`,
         fillTxReceipt

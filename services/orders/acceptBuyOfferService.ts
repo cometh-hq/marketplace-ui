@@ -10,6 +10,7 @@ import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetD
 import { useIsViewerAnOwner } from "../cometh-marketplace/assetOwners"
 import { useFillSignedOrder } from "../exchange/fillSignedOrderService"
 import { getViemSignedOrderFromOrder } from "../exchange/viemOrderHelper"
+import { waitForTransferTxIndexingAndStats } from "./indexingProgressService"
 
 export type AcceptBuyOfferOptions = {
   offer: OrderWithAsset
@@ -58,6 +59,7 @@ export const useAcceptBuyOffer = () => {
         hash: fillTxHash,
       })
 
+      await waitForTransferTxIndexingAndStats(fillTxHash)
       console.log(
         `🎉 🥳 Order filled (accept-buy-offer). TxHash: ${fillTxReceipt.transactionHash}`
       )
