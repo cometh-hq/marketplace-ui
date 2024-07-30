@@ -5,7 +5,6 @@ import { useAcceptBuyOfferAssetButton } from "@/lib/web3/flows/acceptBuyOffer"
 import { useValidateBuyOffer } from "@/lib/web3/hooks/useValidateBuyOffer"
 import { Button } from "@/components/ui/Button"
 import {
-  ErrorMessageDisplay,
   LoadingOrError,
 } from "@/components/ui/LoadingOrError"
 import { TransactionDialogButton } from "@/components/TransactionDialogButton"
