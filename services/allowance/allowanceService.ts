@@ -1,11 +1,13 @@
 import { wagmiConfig } from "@/providers/authentication/authenticationUiSwitch"
-import { useMutation } from "@tanstack/react-query"
+import { TradeDirection } from "@cometh/marketplace-sdk"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { readContract } from "@wagmi/core"
 import { BigNumber, BigNumberish } from "ethers"
 import { Address, erc20Abi } from "viem"
 import { usePublicClient, useWalletClient } from "wagmi"
 
 import globalConfig from "@/config/globalConfig"
+import { comethMarketplaceClient } from "@/lib/clients"
 import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
 
 export type FetchNeedsMoreAllowanceOptions = {
@@ -15,20 +17,42 @@ export type FetchNeedsMoreAllowanceOptions = {
   contractAddress: Address
 }
 
+const fetchSumOfOffers = async (
+  userAddress: string,
+  erc20Address: string
+): Promise<BigNumber> => {
+  const ordersResponse = await comethMarketplaceClient.order.searchOrders({
+    erc20Token: erc20Address,
+    maker: userAddress,
+    direction: TradeDirection.BUY,
+    limit: 99999,
+  })
+
+  let sumOfOffers = BigNumber.from(0)
+  ordersResponse.orders.forEach((order) => {
+    sumOfOffers = sumOfOffers.add(BigNumber.from(order.totalPrice))
+  })
+
+  return sumOfOffers
+}
+
 export const fetchNeedsMoreAllowance = async ({
   address,
   spender,
   price,
   contractAddress,
 }: FetchNeedsMoreAllowanceOptions): Promise<boolean> => {
-  const allowance = await fetchWrappedAllowance({
-    address,
-    spender,
-    contractAddress,
-  })
+  const [allowance, sumOfOffers] = await Promise.all([
+    fetchWrappedAllowance({
+      address,
+      spender,
+      contractAddress,
+    }),
+    fetchSumOfOffers(address, contractAddress),
+  ])
 
   if (!allowance) return true
-  return BigNumber.from(allowance).lt(price)
+  return BigNumber.from(allowance).lt(price.add(sumOfOffers))
 }
 
 export const fetchWrappedAllowance = async ({
@@ -61,6 +85,22 @@ export type UseAllowanceParameters = {
 
 export type WrappedTokenAllowParams = {
   amount: BigNumberish
+}
+
+export const useNeededAllowanceValue = (
+  userAddress: string | undefined,
+  erc20Address: string,
+  newOfferPrice: BigNumberish
+) => {
+  return useQuery({
+    queryKey: ["neededAllowance", userAddress, erc20Address, newOfferPrice],
+    queryFn: async (): Promise<BigNumber> => {
+      if (userAddress === undefined) return BigNumber.from(newOfferPrice)
+
+      const sumOfOffers = await fetchSumOfOffers(userAddress, erc20Address)
+      return sumOfOffers.add(BigNumber.from(newOfferPrice))
+    },
+  })
 }
 
 export const useERC20Allow = (
