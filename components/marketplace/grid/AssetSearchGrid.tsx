@@ -109,9 +109,9 @@ export const AssetsSearchGrid = ({
         matching your search
       </p>
 
-      {isFetching && <Loading />}
+      {!nfts && <Loading />}
 
-      {!isFetching && assets.length === 0 ? (
+      {nfts && assets.length === 0 ? (
         <AssetsSearchEmpty />
       ) : (
         <>
