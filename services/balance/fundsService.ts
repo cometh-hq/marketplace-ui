@@ -3,6 +3,7 @@ import { BigNumber } from "ethers"
 
 import globalConfig from "@/config/globalConfig"
 import { balanceToBigNumber } from "@/lib/utils/formatBalance"
+
 import { useERC20Balance, useNativeBalance } from "./balanceService"
 
 export type FetchHasSufficientFundsOptions = {
@@ -57,7 +58,9 @@ export const useHasSufficientFunds = ({
   includeWrappedNative = true,
 }: UseHasSufficientFundsOptions) => {
   const { balance: nativeBalance } = useNativeBalance()
-  const { balance: erc20Balance } = useERC20Balance(globalConfig.ordersErc20.address)
+  const { balance: erc20Balance } = useERC20Balance(
+    globalConfig.ordersErc20.address
+  )
   return useMemo(() => {
     return computeHasSufficientFunds({
       price,

@@ -72,9 +72,9 @@ export default function AssetDetails({ asset }: AssetDetailsProps) {
           <ShareButton />
         </div>
       </div>
-      <div className="text-2xl font-bold opacity-90">
+      {/* <div className="text-2xl font-bold opacity-90">
         #{shortenTokenId(asset.tokenId, 7)}
-      </div>
+      </div> */}
       <h1 className="text-3xl font-bold leading-[1.15] md:text-[48px]">
         {asset.metadata.name}
       </h1>

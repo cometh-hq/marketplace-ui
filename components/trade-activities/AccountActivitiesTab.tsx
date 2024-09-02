@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { useSearchFilledEvents } from "@/services/cometh-marketplace/searchFilledEventsService"
 import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
 import {
   FilterDirection,
@@ -9,7 +10,6 @@ import {
   TradeStatus,
 } from "@cometh/marketplace-sdk"
 import { Address } from "viem"
-import { useAccount } from "wagmi"
 
 import { TradeActivitiesTable } from "@/components/trade-activities/TradeActivitiesTable"
 
@@ -27,13 +27,24 @@ export const AccountActivitiesTab = ({
   const [filtersOverride, setFiltersOverride] = useState<
     Partial<SearchOrdersRequest>
   >({})
+  // Hack until activities have a dedicated endpoint
+  const hackedFiltersOverride = useMemo(() => {
+    const hackedFiltersOverride = { ...filtersOverride }
+    if (hackedFiltersOverride.statuses) {
+      hackedFiltersOverride.statuses = hackedFiltersOverride.statuses.filter(
+        (status) => status !== TradeStatus.FILLED
+      )
+    }
+    return hackedFiltersOverride
+  }, [filtersOverride])
+
   const { data: makerOrdersSearch, isPending: isPendingMakerOrders } =
     useSearchOrders({
       maker: walletAddress,
       limit: NB_COLLECTION_ORDERS_SHOWN,
       orderBy: SearchOrdersSortOption.UPDATED_AT,
       orderByDirection: FilterDirection.DESC,
-      ...filtersOverride,
+      ...hackedFiltersOverride,
     })
   const { data: takerOrdersSearch, isPending: isPendingTakerOrders } =
     useSearchOrders({
@@ -41,14 +52,51 @@ export const AccountActivitiesTab = ({
       limit: NB_COLLECTION_ORDERS_SHOWN,
       orderBy: SearchOrdersSortOption.UPDATED_AT,
       orderByDirection: FilterDirection.DESC,
-      ...filtersOverride,
+      ...hackedFiltersOverride,
     })
+
+  const searchFilledEventsLimit = hackedFiltersOverride?.statuses?.includes(
+    TradeStatus.FILLED
+  )
+    ? NB_COLLECTION_ORDERS_SHOWN
+    : 0
+  const {
+    data: takerFilledEventsSearch,
+    isPending: isPendingTakerFilledEvents,
+  } = useSearchFilledEvents({
+    taker: walletAddress,
+    limit: searchFilledEventsLimit,
+    attributes: hackedFiltersOverride.attributes
+  })
+  const {
+    data: makerFilledEventsSearch,
+    isPending: isPendingMakerFilledEvents,
+  } = useSearchFilledEvents({
+    maker: walletAddress,
+    limit: searchFilledEventsLimit,
+    attributes: hackedFiltersOverride.attributes
+  })
+
   const allOrders = useMemo(() => {
     return (makerOrdersSearch?.orders || []).concat(
       takerOrdersSearch?.orders || []
     )
   }, [makerOrdersSearch?.orders, takerOrdersSearch?.orders])
-  const isPending = isPendingMakerOrders || isPendingTakerOrders
+
+  const allFilledEvents = useMemo(() => {
+    return (makerFilledEventsSearch?.filledEvents || []).concat(
+      takerFilledEventsSearch?.filledEvents || []
+    )
+  }, [
+    makerFilledEventsSearch?.filledEvents,
+    takerFilledEventsSearch?.filledEvents,
+  ])
+
+  const isPending =
+    isPendingMakerOrders ||
+    isPendingTakerOrders ||
+    isPendingTakerFilledEvents ||
+    isPendingMakerFilledEvents
 
   return (
     <TabsContent value="account-activities" className="w-full">
@@ -68,7 +116,8 @@ export const AccountActivitiesTab = ({
           {
             <TradeActivitiesTable
               orders={allOrders}
-              display1155Columns={false}
+              orderFilledEvents={allFilledEvents}
+              display1155Columns={true}
               maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
               displayAssetColumns={true}
             />

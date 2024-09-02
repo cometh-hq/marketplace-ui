@@ -65,7 +65,7 @@ export const useSearchAssets = (searchFilters: Partial<AssetSearchFilters>) => {
     queryFn: async () => {
       const contractAddress = searchFilters.contractAddress
       if (contractAddress === undefined) {
-        return undefined
+        return null
       }
       return await comethMarketplaceClient.asset.searchAssets({
         ...searchFilters,
@@ -116,7 +116,7 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
   const {
     data,
     refetch,
-    isLoading,
+    isFetching,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -135,8 +135,8 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
         {
           contractAddress: currentCollectionAddress,
           isOnSale: filters.isOnSale,
-          orderBy: filters.orderBy ?? FilterOrderBy.LISTING_DATE,
-          direction: filters.direction ?? FilterDirection.DESC,
+          orderBy: filters.orderBy ?? FilterOrderBy.PRICE,
+          direction: filters.direction ?? FilterDirection.ASC,
           ...(currentAttributesFilters.length > 0
             ? { attributes: currentAttributesFilters }
             : {}),
@@ -149,15 +149,15 @@ export const useFilterableNFTsQuery = (options?: UseSearchOptions) => {
     },
     initialPageParam: 1,
     gcTime: 0,
-    getNextPageParam: (_, lastPage) => {
-      return lastPage.length + 1
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.nfts.assets.length ? allPages.length + 1 : undefined
     },
   })
 
   return {
     data,
     refetch,
-    isLoading,
+    isFetching,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,

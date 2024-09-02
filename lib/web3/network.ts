@@ -7,7 +7,7 @@ import { toast } from "@/components/ui/toast/hooks/useToast"
 
 export const useCorrectNetwork = () => {
   const { switchChain } = useSwitchChain()
-  
+
   const account = useAccount()
   const currentChainId = account.chainId
 

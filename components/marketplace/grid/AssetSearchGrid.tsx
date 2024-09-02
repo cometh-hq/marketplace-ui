@@ -45,8 +45,8 @@ export const AssetsSearchGrid = ({
 
   const {
     data: nfts,
-    refetch,
-    isLoading,
+    isFetching,
+    hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
   } = useFilterableNFTsQuery({
@@ -69,8 +69,8 @@ export const AssetsSearchGrid = ({
   }, [totalNbAssets, initialResults, setInitialResults])
 
   useEffect(() => {
-    if (inView && !isLoading) fetchNextPage()
-  }, [inView, isLoading, fetchNextPage])
+    if (inView && !isFetching && hasNextPage) fetchNextPage()
+  }, [inView, isFetching, hasNextPage, fetchNextPage])
 
   const { width } = useWindowSize()
   const isMobile = width < 768
@@ -85,10 +85,14 @@ export const AssetsSearchGrid = ({
           <SearchAsset onChange={setSearch} />
           <div className="flex gap-3">
             {isMobile ? (
-              <FiltersFullscreen attributeFilterOptions={attributesFilterOptions} />
+              <FiltersFullscreen
+                attributeFilterOptions={attributesFilterOptions}
+              />
             ) : (
               <>
-                <FiltersDropdown attributeFilterOptions={attributesFilterOptions} />
+                <FiltersDropdown
+                  attributeFilterOptions={attributesFilterOptions}
+                />
                 <FiltersResetBtn />
               </>
             )}
@@ -105,9 +109,9 @@ export const AssetsSearchGrid = ({
         matching your search
       </p>
 
-      {isLoading && <Loading />}
+      {!nfts && <Loading />}
 
-      {!isLoading && assets.length === 0 ? (
+      {nfts && assets.length === 0 ? (
         <AssetsSearchEmpty />
       ) : (
         <>
@@ -117,7 +121,14 @@ export const AssetsSearchGrid = ({
             ))}
           </AssetCardsList>
           <div ref={loadMoreRef} className="py-10">
-            {isFetchingNextPage ? "Loading more NFTs..." : <div></div>}
+            {isFetchingNextPage ? (
+              <div className="text-muted-foreground flex flex-col items-center font-medium ">
+                <div>Loading more NFTs... </div>
+                <Loading />
+              </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         </>
       )}

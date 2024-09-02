@@ -1,68 +1,58 @@
-import { AssetWithTradeData, SearchAssetWithTradeData } from "@cometh/marketplace-sdk"
+import {
+  AssetWithTradeData,
+  OrderWithAsset,
+  SearchAssetWithTradeData,
+} from "@cometh/marketplace-sdk"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { ContractTransaction } from "ethers"
-import { useAccount } from "wagmi"
+import { useAccount, usePublicClient } from "wagmi"
 
-import { useNFTSwapv4 } from "@/lib/web3/nft-swap-sdk"
-
-import { getFirstListing } from "../cometh-marketplace/buyOffersService"
+import { OrderAsset } from "@/types/assets"
 import { useInvalidateAssetQueries } from "@/components/marketplace/asset/AssetDataHook"
 
+import { useFillSignedOrder } from "../exchange/fillSignedOrderService"
+import { getViemSignedOrderFromOrder } from "../exchange/viemOrderHelper"
+import { waitForTransferTxIndexingAndStats } from "./indexingProgressService"
+
 export type BuyAssetOptions = {
-  asset: AssetWithTradeData | SearchAssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
+  order: OrderWithAsset
+  quantity: bigint
 }
 
 export const useBuyAsset = () => {
   const client = useQueryClient()
-  const nftSwapSdk = useNFTSwapv4()
   const account = useAccount()
   const viewerAddress = account.address
   const invalidateAssetQueries = useInvalidateAssetQueries()
+  const fillOrder = useFillSignedOrder()
+  const viemPublicClient = usePublicClient()
 
   return useMutation({
     mutationKey: ["buy-asset"],
-    mutationFn: async ({ asset }: BuyAssetOptions) => {
-      if (!nftSwapSdk || !viewerAddress)
+    mutationFn: async ({ order, quantity }: BuyAssetOptions) => {
+      if (!viewerAddress || !viemPublicClient)
         throw new Error("Could not initialize SDK")
 
-      const order = await getFirstListing(asset.tokenId)
+      const signedOrder = getViemSignedOrderFromOrder(order)
 
-      const signature = order.signature
-        ? order.signature
-        : {
-            signatureType: 4,
-            v: 0,
-            r: "0x0000000000000000000000000000000000000000000000000000000000000000",
-            s: "0x0000000000000000000000000000000000000000000000000000000000000000",
-          }
+      const fillTxHash = await fillOrder(
+        signedOrder,
+        quantity,
+        quantity * BigInt(order.totalUnitPrice)
+      )
 
-      const formattedZeroXOrder = {
-        direction: 0,
-        maker: order.maker,
-        taker: order.taker,
-        expiry: new Date(order.expiry).getTime() / 1000,
-        nonce: order.nonce,
-        erc20Token: order.erc20Token,
-        erc20TokenAmount: order.erc20TokenAmount,
-        fees: order.fees.map((fee) => {
-          return {
-            recipient: fee.recipient,
-            amount: fee.amount,
-            feeData: fee.feeData || "0x",
-          }
-        }),
-        erc721Token: order.tokenAddress,
-        erc721TokenId: order.tokenId,
-        erc721TokenProperties: [],
-        signature: signature,
+      if (!fillTxHash) {
+        throw new Error("Could not fill order")
       }
 
-      const fillTx: ContractTransaction =
-        await nftSwapSdk.fillSignedOrder(formattedZeroXOrder)
-
-      const fillTxReceipt = await fillTx.wait()
+      const fillTxReceipt = await viemPublicClient.waitForTransactionReceipt({
+        hash: fillTxHash,
+      })
+      await waitForTransferTxIndexingAndStats(fillTxHash)
+      
       console.log(
-        `🎉 🥳 Order filled (buy-asset). TxHash: ${fillTxReceipt.transactionHash}`
+        `🎉 🥳 Order filled (buy-asset). TxHash: ${fillTxReceipt.transactionHash}`,
+        fillTxReceipt
       )
       return fillTxReceipt
     },

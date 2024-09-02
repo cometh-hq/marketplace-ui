@@ -59,6 +59,9 @@
 
   --ring: 215 20.2% 65.1%;
 
+  /* Color for ownership borders and symbolic */
+  --owner: 50.58 100% 37.45%;
+
   --radius: 8px;
 }
 
@@ -77,4 +80,27 @@
   pointer-events: auto;
   position: fixed;
   z-index: 1000;
+}
+
+/* Radix animations */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.animated-tab-content[data-state='active'] {
+  animation: fadeIn 500ms ease-out;
 }

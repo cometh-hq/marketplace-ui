@@ -1,12 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useGetCollection } from "@/services/cometh-marketplace/collectionService"
+import { useSearchFilledEvents } from "@/services/cometh-marketplace/searchFilledEventsService"
 import { useSearchOrders } from "@/services/cometh-marketplace/searchOrdersService"
 import {
+  CollectionStandard,
   FilterDirection,
   SearchOrdersRequest,
   SearchOrdersSortOption,
+  TradeStatus,
 } from "@cometh/marketplace-sdk"
 import { ArrowLeftIcon } from "lucide-react"
 import { Address } from "viem"
@@ -30,15 +33,42 @@ export const CollectionActivities = ({
   const [filtersOverride, setFiltersOverride] = useState<
     Partial<SearchOrdersRequest>
   >({})
-  const { data: orderSearch, isPending } = useSearchOrders({
-    tokenAddress: contractAddress,
-    limit: NB_COLLECTION_ORDERS_SHOWN,
-    orderBy: SearchOrdersSortOption.UPDATED_AT,
-    orderByDirection: FilterDirection.DESC,
-    ...filtersOverride,
-  })
-  const collection = useGetCollection(contractAddress as Address)
 
+  // Hack until activities have a dedicated endpoint
+  const hackedFiltersOverride = useMemo(() => {
+    const hackedFiltersOverride = { ...filtersOverride }
+    if (hackedFiltersOverride.statuses) {
+      hackedFiltersOverride.statuses = hackedFiltersOverride.statuses.filter(
+        (status) => status !== TradeStatus.FILLED
+      )
+    }
+    return hackedFiltersOverride
+  }, [filtersOverride])
+
+  const { data: orderSearch, isPending: isPendingOrders } = useSearchOrders(
+    {
+      tokenAddress: contractAddress,
+      limit: NB_COLLECTION_ORDERS_SHOWN,
+      orderBy: SearchOrdersSortOption.UPDATED_AT,
+      orderByDirection: FilterDirection.DESC,
+      ...hackedFiltersOverride,
+    },
+    filtersOverride?.statuses?.includes(TradeStatus.FILLED) &&
+      filtersOverride?.statuses?.length === 1
+  )
+
+  const { data: filledEventsSearch, isPending: isPendingFilledEvents } =
+    useSearchFilledEvents(
+      {
+        tokenAddress: contractAddress,
+        limit: NB_COLLECTION_ORDERS_SHOWN,
+        attributes: hackedFiltersOverride.attributes
+      },
+      !filtersOverride?.statuses?.includes(TradeStatus.FILLED) &&
+        filtersOverride?.statuses?.length !== 0
+    )
+  const { data: collection } = useGetCollection(contractAddress as Address)
+  const isPending = isPendingOrders || isPendingFilledEvents
   return (
     <div className="w-full">
       <div className="mb-3">
@@ -52,11 +82,7 @@ export const CollectionActivities = ({
       <h1 className="mb-2 inline-flex items-center text-2xl font-medium sm:text-3xl">
         Activities for collection{" "}
         <span className="ml-2 font-bold">
-          {collection?.data?.name ? (
-            <>&quot;{collection?.data?.name}&quot;</>
-          ) : (
-            "..."
-          )}
+          {collection?.name ? <>&quot;{collection?.name}&quot;</> : "..."}
         </span>
       </h1>
       <ActivitiesFiltersControls onFiltersOverrideChange={setFiltersOverride} />
@@ -75,7 +101,10 @@ export const CollectionActivities = ({
           <div className="rounded-md border">
             <TradeActivitiesTable
               orders={orderSearch?.orders}
-              display1155Columns={false}
+              orderFilledEvents={filledEventsSearch?.filledEvents}
+              display1155Columns={
+                collection?.standard === CollectionStandard.ERC1155
+              }
               maxTransfersToShow={NB_COLLECTION_ORDERS_SHOWN}
               displayAssetColumns={true}
             />

@@ -9,18 +9,22 @@ import { computeHasEnoughGas } from "@/services/balance/gasService"
 import { computeNeedToUnwrap } from "@/services/exchange/unwrapService"
 import {
   AssetWithTradeData,
+  OrderWithAsset,
   SearchAssetWithTradeData,
+  TokenType
 } from "@cometh/marketplace-sdk"
 import { useQuery } from "@tanstack/react-query"
 import { BigNumber } from "ethers"
 import { Address } from "viem"
 import { useAccount } from "wagmi"
 
+import { OrderAsset } from "@/types/assets"
 import globalConfig from "@/config/globalConfig"
 import { useStepper } from "@/lib/utils/stepper"
 
 export type UseRequiredBuyingStepsOptions = {
-  asset: AssetWithTradeData | SearchAssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
+  order?: OrderWithAsset
 }
 
 export type BuyingStepValue = "add-funds" | "buy" | "confirmation"
@@ -33,7 +37,8 @@ export type BuyingStep = {
 const defaultSteps: BuyingStep[] = [{ label: "Payment", value: "buy" }]
 
 export type FetchRequiredBuyingStepsOptions = {
-  asset: AssetWithTradeData | SearchAssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
+  order?: OrderWithAsset
   address: Address
   isComethWallet: boolean
   nativeBalance?: bigint
@@ -42,18 +47,23 @@ export type FetchRequiredBuyingStepsOptions = {
 
 export const fetchRequiredBuyingSteps = async ({
   asset,
+  order,
   address,
   isComethWallet,
   nativeBalance,
   erc20Balance,
 }: FetchRequiredBuyingStepsOptions) => {
-  const rawPrice = asset.orderbookStats.lowestListingPrice
+  if (!order) {
+    return []
+  }
+  const rawPrice = order.totalPrice
   if (!rawPrice) {
     throw new Error(
       `Asset has an invalid price, expected BigNumber, got '${rawPrice}'`
     )
   }
   const price = BigNumber.from(rawPrice)
+  const isErc1155 = asset.tokenType === TokenType.ERC1155
 
   const displayAllowanceStep =
     !globalConfig.useNativeForOrders &&
@@ -87,6 +97,7 @@ export const fetchRequiredBuyingSteps = async ({
 
   const buyingSteps = [
     displayAddGasStep && { value: "add-gas", label: "Add gas" },
+    isErc1155 && { value: "buy-quantity", label: "Quantity" },
     displayAddFundsStep && { value: "add-funds", label: "Add funds" },
     displayAddUnwrappedNativeTokenStep && {
       value: "unwrap-native-token",
@@ -101,6 +112,7 @@ export const fetchRequiredBuyingSteps = async ({
 
 export const useRequiredBuyingSteps = ({
   asset,
+  order,
 }: UseRequiredBuyingStepsOptions) => {
   const account = useAccount()
   const viewerAddress = account.address
@@ -117,6 +129,7 @@ export const useRequiredBuyingSteps = ({
       }
       const steps = await fetchRequiredBuyingSteps({
         asset,
+        order: order,
         address: viewerAddress,
         nativeBalance,
         erc20Balance,
@@ -126,17 +139,21 @@ export const useRequiredBuyingSteps = ({
       return steps
     },
 
-    enabled: !!viewerAddress,
+    enabled: !!viewerAddress && !!order,
   })
 }
 
 export type UseBuyAssetButtonOptions = {
-  asset: AssetWithTradeData | SearchAssetWithTradeData
+  asset: AssetWithTradeData | SearchAssetWithTradeData | OrderAsset
+  order?: OrderWithAsset
 }
 
-export const useBuyAssetButton = ({ asset }: UseBuyAssetButtonOptions) => {
+export const useBuyAssetButton = ({
+  asset,
+  order,
+}: UseBuyAssetButtonOptions) => {
   const { data: requiredSteps, isLoading: requiredStepsLoading } =
-    useRequiredBuyingSteps({ asset })
+    useRequiredBuyingSteps({ asset, order })
   const { nextStep, currentStep, reset } = useStepper({ steps: requiredSteps })
 
   const isLoading = requiredStepsLoading

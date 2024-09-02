@@ -57,7 +57,7 @@ export function AssetFloorPriceDisplay({
       <div>
         <TooltipProvider delayDuration={200}>
           <Tooltip defaultOpen={false}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Link
                 href={`/nfts/${pageAsset.contractAddress}${attributeQueryFilters}`}
                 className="ml-1 font-semibold"
