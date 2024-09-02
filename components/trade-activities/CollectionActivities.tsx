@@ -62,6 +62,7 @@ export const CollectionActivities = ({
       {
         tokenAddress: contractAddress,
         limit: NB_COLLECTION_ORDERS_SHOWN,
+        attributes: hackedFiltersOverride.attributes
       },
       !filtersOverride?.statuses?.includes(TradeStatus.FILLED) &&
         filtersOverride?.statuses?.length !== 0

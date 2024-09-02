@@ -413,10 +413,10 @@
     siwe "^1.1.6"
     uuid "^9.0.0"
 
-"@cometh/marketplace-sdk@2.2.8":
-  version "2.2.8"
-  resolved "https://registry.yarnpkg.com/@cometh/marketplace-sdk/-/marketplace-sdk-2.2.8.tgz#2314e31a49b95ecc4091180707b4a9a2a238e144"
-  integrity sha512-IJryUgWcccQL3naA0hwZK4PWgVTqMg4XUqovBiUgkWri9VFB78E9DQy6F+UdhRajyU70izK5ezvf5Np+JBeIlg==
+"@cometh/marketplace-sdk@2.2.9":
+  version "2.2.9"
+  resolved "https://registry.yarnpkg.com/@cometh/marketplace-sdk/-/marketplace-sdk-2.2.9.tgz#627fc297d3bdedae3e17802375357fcf0c643003"
+  integrity sha512-o3M2FZGbEugtfp6RwTcVrDG73nAWAXY6ADS58I4JcUFDtOb3agcAoCxLl1douXwUBf1DbnaV7Ok43JbaBxtiuA==
   dependencies:
     axios "^1.6.2"
     form-data "4.x"
