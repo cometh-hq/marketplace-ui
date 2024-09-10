@@ -71,6 +71,7 @@ const ActivityRow = ({
   const collection = useActivityCollection(activity)
   const activityUnitPrice = useActivityUnitPrice(activity)
 
+  //log use to determine if the activity is an order, transfer or filled event
   //const id = useMemo(() => getActivityId(activity), [activity])
 
   const isErc1155 = useMemo(() => {
