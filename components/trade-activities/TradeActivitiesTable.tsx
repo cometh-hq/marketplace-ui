@@ -71,6 +71,7 @@ const ActivityRow = ({
   const collection = useActivityCollection(activity)
   const activityUnitPrice = useActivityUnitPrice(activity)
 
+  //const id = useMemo(() => getActivityId(activity), [activity])
 
   const isErc1155 = useMemo(() => {
     if (isOrderActivity(activity)) {
@@ -175,7 +176,6 @@ export function TradeActivitiesTable({
         {mergedActivities?.length ? (
           mergedActivities.map((activity, index) => (
             <ActivityRow
-              key={getActivityId(activity)}
               activity={activity}
               display1155Columns={display1155Columns}
               displayAssetColumns={displayAssetColumns}
