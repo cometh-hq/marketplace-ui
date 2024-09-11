@@ -178,16 +178,20 @@ export const fetchAsset = async ({
 
 export const useGetAsset = (contractAddress: Address, assetId: string) => {
   return useQuery({
-    queryKey: ["cometh", "getAsset", assetId],
+    queryKey: ["cometh", "getAsset", contractAddress, assetId],
     queryFn: () => fetchAsset({ contractAddress, assetId }),
   })
 }
 
-export const useAssetDetails = (contractAddress: Address, assetId: string) => {
+export const useAssetDetails = (
+  contractAddress: Address,
+  assetId: string,
+  refetchInterval: number = 60_000
+) => {
   const client = useQueryClient()
 
   return useQuery({
-    queryKey: ["cometh", "assets", assetId],
+    queryKey: ["cometh", "assets", contractAddress, assetId],
     queryFn: () => fetchAsset({ contractAddress, assetId }),
 
     initialData: () => {
@@ -196,6 +200,6 @@ export const useAssetDetails = (contractAddress: Address, assetId: string) => {
       >({ queryKey: ["cometh", "search"] })
       return findAssetInSearchResults(search, assetId)
     },
-    refetchInterval: 2000,
+    refetchInterval
   })
 }
