@@ -1,13 +1,7 @@
 "use client"
 
-import {
-  AssetTransfers,
-  Order,
-  OrderFilledEventWithAsset,
-  TradeDirection,
-  TradeStatus,
-} from "@cometh/marketplace-sdk"
-import { Address, isAddressEqual } from "viem"
+import {AssetTransfers, Order, OrderFilledEventWithAsset, TradeDirection, TradeStatus,} from "@cometh/marketplace-sdk"
+import {Address, isAddressEqual} from "viem"
 
 import {
   AssetActivity,
@@ -40,7 +34,7 @@ export const getActivityTimestamp = (assetActivity: AssetActivity) => {
   if (isTransferActivity(assetActivity)) {
     return assetActivity.transfer.timestamp
   } else if (isOrderActivity(assetActivity)) {
-    const { order } = assetActivity
+    const {order} = assetActivity
 
     let dateToUse = ''
     if (order.orderStatus === TradeStatus.FILLED) {
@@ -50,7 +44,7 @@ export const getActivityTimestamp = (assetActivity: AssetActivity) => {
     } else {
       dateToUse = order.cancelledAt as string
     }
-    
+
     return new Date(dateToUse).getTime()
   } else if (isFilledEventActivity(assetActivity)) {
     return new Date(assetActivity.filledEvent.blockTimestamp).getTime()
@@ -150,18 +144,22 @@ export const getMergedActivities = (
   assetFilledEvents: OrderFilledEventWithAsset[],
   maxActivitiesToShow?: number
 ): AssetActivity[] => {
-  const transferActivites = assetTransfers.map((asset) => ({
-    activityType: TRANSFER_TYPE,
-    transfer: asset,
-  }))
-  const orderActivities = assetOrders.map((order) => ({
-    activityType: ORDER_TYPE,
-    order,
-  }))
-  const filledEventActivities = assetFilledEvents.map((filledEvent) => ({
-    activityType: FILLED_EVENT_TYPE,
-    filledEvent,
-  }))
+  const transferActivites = assetTransfers
+    .map((asset) => ({
+      activityType: TRANSFER_TYPE,
+      transfer: asset,
+    }))
+  const orderActivities = assetOrders
+    .filter((order) => order.orderStatus !== TradeStatus.FILLED)
+    .map((order) => ({
+      activityType: ORDER_TYPE,
+      order,
+    }))
+  const filledEventActivities = assetFilledEvents
+    .map((filledEvent) => ({
+      activityType: FILLED_EVENT_TYPE,
+      filledEvent,
+    }))
   const activities = [
     ...transferActivites,
     ...orderActivities,
