@@ -23,7 +23,7 @@ export default function DetailsPage({
   params: { contractAddress: Address; assetId: string }
 }) {
   const { assetId, contractAddress } = params
-  const { data: asset } = useAssetDetails(contractAddress, assetId, 2_000)
+  const { data: asset } = useAssetDetails(contractAddress, assetId)
   const { data: assetTransfers } = useAssetTransfers(contractAddress, assetId)
   const { data: assetOwners } = useAssetOwners(contractAddress, assetId)
   const { data: assetOrdersSearch } = useSearchOrders({

@@ -185,8 +185,7 @@ export const useGetAsset = (contractAddress: Address, assetId: string) => {
 
 export const useAssetDetails = (
   contractAddress: Address,
-  assetId: string,
-  refetchInterval: number = 60_000
+  assetId: string
 ) => {
   const client = useQueryClient()
 
@@ -199,7 +198,6 @@ export const useAssetDetails = (
         UseInfiniteQueryResult<AssetWithTradeData[]>
       >({ queryKey: ["cometh", "search"] })
       return findAssetInSearchResults(search, assetId)
-    },
-    refetchInterval
+    }
   })
 }
