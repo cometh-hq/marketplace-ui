@@ -25,15 +25,14 @@ import { CancelListingButton } from "@/components/asset-actions/buttons/CancelLi
 import { MakeBuyOfferButton } from "@/components/asset-actions/buttons/MakeBuyOfferPriceDialog"
 import { SellAssetButton } from "@/components/asset-actions/buttons/SellAssetButton"
 import { SwitchNetwork } from "@/components/asset-actions/buttons/SwitchNetwork"
-
 import { useAssetIs1155 } from "@/components/erc1155/ERC1155Hooks"
 import TokenQuantity from "@/components/erc1155/TokenQuantity"
+import { AuthenticationButton } from "@/components/login/AuthenticationButton"
 
 import {
   useAssetOwnedQuantity,
   useIsViewerAnOwner,
 } from "../../../services/cometh-marketplace/assetOwners"
-import { AuthenticationButton } from "@/components/login/AuthenticationButton"
 
 export type AssetCardProps = {
   asset: SearchAssetWithTradeData & {
@@ -200,14 +199,15 @@ export function AssetCardBase({
 
 function AssetListingsButton({ asset }: { asset: SearchAssetWithTradeData }) {
   return (
-    <Link href={`/nfts/${asset.contractAddress}/${asset.tokenId}?tab=listings#tabs`}>
+    <Link
+      href={`/nfts/${asset.contractAddress}/${asset.tokenId}?tab=listings#tabs`}
+    >
       <Button className="w-full" size="lg">
         Listings
       </Button>
     </Link>
   )
 }
-
 
 function AssetActions({
   asset,
@@ -237,7 +237,7 @@ function AssetActions({
   } else if (!asset.orderbookStats.lowestListingPrice || isAsset1155) {
     if (isAsset1155 && asset.orderbookStats.lowestListingPrice) {
       button = (
-        <div className='flex flex-col items-center justify-center gap-2'>
+        <div className="flex flex-col items-center justify-center gap-2">
           <SellAssetButton asset={asset} />
           <AssetListingsButton asset={asset} />
         </div>

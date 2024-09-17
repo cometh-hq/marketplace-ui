@@ -4,7 +4,7 @@ import {
   useERC20Allow,
   useNeededAllowanceValue,
 } from "@/services/allowance/allowanceService"
-import { BigNumberish } from "ethers"
+import { BigNumber, BigNumberish } from "ethers"
 import { Loader } from "lucide-react"
 import { useAccount } from "wagmi"
 
@@ -33,6 +33,10 @@ export function AllowanceStep({
       price
     )
 
+  const sumOfOffers = allowanceValue
+    ? allowanceValue.sub(BigNumber.from(price))
+    : BigNumber.from(0)
+
   const { mutateAsync: approveToken, isPending } = useERC20Allow(
     allowanceValue || 0,
     {
@@ -54,15 +58,40 @@ export function AllowanceStep({
           <Loader size={22} className="mr-1.5 animate-spin" />
         </div>
       ) : (
-        <p>
-          You need to allow{" "}
-          <strong>
-            <Price isNativeToken={false} amount={allowanceValue} />
-          </strong>{" "}
-          to be spent by {manifest.marketplaceName} once your offer is accepted.
-          This value includes the price of this new offer as well as all your
-          currently active offers.
-        </p>
+        <div className="mb-6 flex flex-col gap-5">
+          <p className="text-lg">
+            To proceed, you&apos;ll need to authorize {manifest.marketplaceName}{" "}
+            to spend up to{" "}
+            <strong>
+              <Price isNativeToken={false} amount={allowanceValue} />
+            </strong>{" "}
+            on your behalf for all your active offers. If your offer is
+            accepted, <Price isNativeToken={false} amount={price} /> will be
+            deducted.
+          </p>
+          <hr></hr>
+          <p>
+            This amount covers the cost of your new offer as well as all other
+            active offers which are worth{" "}
+            {sumOfOffers && sumOfOffers !== BigNumber.from(0) && (
+              <Price isNativeToken={false} amount={sumOfOffers} />
+            )}
+            .{" "}
+          </p>
+          <p>
+            As offers are accepted, your allowance will decrease accordingly. If
+            your allowance or balance falls below the required amount for any of
+            your offers, those offers will be <b>automatically canceled</b>. To
+            avoid this, it&apos;s important to keep your allowance adequately
+            funded.
+          </p>
+          <p>
+            Please note that your allowance can be higher than your current
+            token balance. The allowance grants permission to a{" "}
+            <b>decentralized, publicly audited smart contract</b> to spend your
+            tokens, but only with your explicit approval.
+          </p>
+        </div>
       )}
 
       {isPending || isLoadingAllowance ? (
