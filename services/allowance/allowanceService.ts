@@ -61,7 +61,7 @@ export const getHasEnoughAllowance = async ({
   price,
   contractAddress,
 }: FetchNeedsMoreAllowanceOptions): Promise<boolean> => {
-  const allowance = fetchWrappedAllowance({
+  const allowance = await fetchWrappedAllowance({
     address,
     spender,
     contractAddress,
