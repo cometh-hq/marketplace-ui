@@ -1,4 +1,7 @@
-import { fetchNeedsMoreAllowance } from "@/services/allowance/allowanceService"
+import {
+  fetchNeedsMoreAllowance,
+  getHasEnoughAllowance,
+} from "@/services/allowance/allowanceService"
 import { computeHasSufficientFunds } from "@/services/balance/fundsService" // Assuming this is a non-hook version
 
 import { fetchHasApprovedCollection } from "@/services/token-approval/approveCollectionService"
@@ -33,7 +36,7 @@ export type ValidateSellListingOptions = ValidateBuyOfferOptions & {
 export type ValidateBuyOfferResult = {
   hasSufficientFunds: boolean
   missingBalance: BigNumber | undefined
-  allowance: boolean
+  needMoreAllowance: boolean
 }
 
 export type ValidateSellListingResult = {
@@ -52,17 +55,17 @@ export const validateBuyOffer = async ({
     erc20Balance,
     nativeBalance,
   })
-  const allowance = await fetchNeedsMoreAllowance({
+  const needMoreAllowance = !(await getHasEnoughAllowance({
     address: order?.maker as Address,
     spender: nftSwapSdk?.exchangeProxyContractAddress! as Address,
     price: BigNumber.from(order.totalPrice),
     contractAddress: globalConfig.ordersErc20.address,
-  })
+  }))
 
   return {
     hasSufficientFunds,
     missingBalance,
-    allowance,
+    needMoreAllowance,
   }
 }
 

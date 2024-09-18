@@ -55,6 +55,22 @@ export const fetchNeedsMoreAllowance = async ({
   return BigNumber.from(allowance).lt(price.add(sumOfOffers))
 }
 
+export const getHasEnoughAllowance = async ({
+  address,
+  spender,
+  price,
+  contractAddress,
+}: FetchNeedsMoreAllowanceOptions): Promise<boolean> => {
+  const allowance = fetchWrappedAllowance({
+    address,
+    spender,
+    contractAddress,
+  })
+
+  if (!allowance) return false
+  return BigNumber.from(allowance).gte(price)
+}
+
 export const fetchWrappedAllowance = async ({
   address,
   spender,
