@@ -92,7 +92,7 @@ The appearance of your marketplace is fully customizable via the provided CSS fi
 
 Additionally, for a deeper dive into theming and styling, we invite you to consult the [shacdn documentation](https://ui.shadcn.com/docs/theming).
 
-### 3. FAQ
+### 4. FAQ
 
 #### How do I sponsor my users transactions?
 
